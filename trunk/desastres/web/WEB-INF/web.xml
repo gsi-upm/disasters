@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-    <session-config>
+       <session-config>
         <session-timeout>
             30
         </session-timeout>
@@ -8,4 +8,40 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
         </welcome-file-list>
+        
+         <!-- Application class name -->
+   <context-param>
+      <param-name>org.restlet.application</param-name>
+      <param-value>
+         gsi.rest.DisasterApplication
+      </param-value>
+   </context-param>
+<!-- Restlet adapter -->
+   <servlet>
+      <servlet-name>RestletServlet</servlet-name>
+      <servlet-class>com.noelios.restlet.ext.servlet.ServerServlet</servlet-class>
+   </servlet>
+
+     <!-- Catch all requests -->
+    
+    <servlet>
+        <servlet-name>XpertServlet</servlet-name>
+        <servlet-class>gsi.disasters.XpertServlet</servlet-class>
+    </servlet>
+    
+        
+    
+   
+    
+    
+   <servlet-mapping>
+      <servlet-name>RestletServlet</servlet-name>
+      <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+      
+      <servlet-name>XpertServlet</servlet-name>
+      <url-pattern>/Xpert</url-pattern>
+    </servlet-mapping>   
+                
     </web-app>

@@ -509,11 +509,44 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
+        <basename file="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" property="included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar"/>
+        <copy-ear-war file="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" propname="included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar.X"/>
+        <basename file="${file.reference.com.noelios.restlet.jar}" property="included.lib.file.reference.com.noelios.restlet.jar"/>
+        <copy-ear-war file="${file.reference.com.noelios.restlet.jar}" propname="included.lib.file.reference.com.noelios.restlet.jar.X"/>
+        <basename file="${file.reference.hsqldb-2005-08-20.jar}" property="included.lib.file.reference.hsqldb-2005-08-20.jar"/>
+        <copy-ear-war file="${file.reference.hsqldb-2005-08-20.jar}" propname="included.lib.file.reference.hsqldb-2005-08-20.jar.X"/>
+        <basename file="${file.reference.jess.jar}" property="included.lib.file.reference.jess.jar"/>
+        <copy-ear-war file="${file.reference.jess.jar}" propname="included.lib.file.reference.jess.jar.X"/>
+        <basename file="${file.reference.json-taglib-0.4.1.jar}" property="included.lib.file.reference.json-taglib-0.4.1.jar"/>
+        <copy-ear-war file="${file.reference.json-taglib-0.4.1.jar}" propname="included.lib.file.reference.json-taglib-0.4.1.jar.X"/>
+        <basename file="${file.reference.jsr94.jar}" property="included.lib.file.reference.jsr94.jar"/>
+        <copy-ear-war file="${file.reference.jsr94.jar}" propname="included.lib.file.reference.jsr94.jar.X"/>
+        <basename file="${file.reference.jstl.jar}" property="included.lib.file.reference.jstl.jar"/>
+        <copy-ear-war file="${file.reference.jstl.jar}" propname="included.lib.file.reference.jstl.jar.X"/>
+        <basename file="${file.reference.mysql-connector-java-5.1.5-bin.jar}" property="included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar"/>
+        <copy-ear-war file="${file.reference.mysql-connector-java-5.1.5-bin.jar}" propname="included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar.X"/>
+        <basename file="${file.reference.org.restlet.jar}" property="included.lib.file.reference.org.restlet.jar"/>
+        <copy-ear-war file="${file.reference.org.restlet.jar}" propname="included.lib.file.reference.org.restlet.jar.X"/>
+        <basename file="${file.reference.slamd_server.jar}" property="included.lib.file.reference.slamd_server.jar"/>
+        <copy-ear-war file="${file.reference.slamd_server.jar}" propname="included.lib.file.reference.slamd_server.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
-        <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
+        <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
+            <attribute name="Class-Path" value="${included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar} ${included.lib.file.reference.com.noelios.restlet.jar} ${included.lib.file.reference.hsqldb-2005-08-20.jar} ${included.lib.file.reference.jess.jar} ${included.lib.file.reference.json-taglib-0.4.1.jar} ${included.lib.file.reference.jsr94.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar} ${included.lib.file.reference.org.restlet.jar} ${included.lib.file.reference.slamd_server.jar} "/>
+        </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
-    <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir"/>
+    <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
+        <copy file="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.com.noelios.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.hsqldb-2005-08-20.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.json-taglib-0.4.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jsr94.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jstl.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.mysql-connector-java-5.1.5-bin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.org.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.slamd_server.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+    </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
         <mkdir dir="${dist.jar.dir}"/>
