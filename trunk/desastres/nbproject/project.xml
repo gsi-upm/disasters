@@ -6,44 +6,88 @@
             <name>desastres</name>
             <minimum-ant-version>1.6</minimum-ant-version>
             <web-module-libraries>
-                <library files="1">
+                <library>
                     <file>${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.com.noelios.restlet.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.hsqldb-2005-08-20.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.jess.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.json-taglib-0.4.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.jsr94.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.jstl.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.mysql-connector-java-5.1.5-bin.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.org.restlet.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${file.reference.slamd_server.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="2">
+                    <file>${libs.jstl11.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.jess.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.com.noelios.restlet.ext.servlet_2.4.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.com.noelios.restlet.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.hsqldb-2005-08-20.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.json-taglib-0.4.1.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.jsr94.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.jstl.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.mysql-connector-java-5.1.5-bin.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.org.restlet.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${file.reference.slamd_server.jar-1}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
