@@ -1,5 +1,4 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="org.securityfilter.example.Constants"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@ page language = "java"  %>
 
@@ -260,24 +259,16 @@
                                         <h3>Sign in</h3>
                                         
                                         <div id="login">
-                                            
-                                            <form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="POST" id="loginform">
-                                            
-                                            Username:
-                                            <input type="text"
-                                                   name="<%=Constants.LOGIN_USERNAME_FIELD%>"
-                                                   id="username"
-                                                   ><p>
-                                            
-                                            Password:
-                                            <input type="password"
-                                                   name="<%=Constants.LOGIN_PASSWORD_FIELD%>"
-                                                   id="pwd"
-                                                   ><p>
-                                                       <a href="#" id="showkeyboard" title="Type in your password using a virtual keyboard.">Keyboard</a> <br />
-                                            
-                                            <input type="submit" name="Submit" id="submit_butt" value="Submit" />
-                                        </form>
+                                            <form action="j_security_check" method="post" id="loginform">
+                                                <label for="username">Username:</label>
+                                                <input type="text" name="j_username" id="username" />
+                                                
+                                                <label for="pwd">Password:</label>
+                                                <input type="password" name="j_password" id="pwd"/>
+                                                <a href="#" id="showkeyboard" title="Type in your password using a virtual keyboard.">Keyboard</a> <br />
+                                                
+                                                <input type="submit" name="Submit" id="submit_butt" value="Submit" />
+                                            </form>
                                         </div>
                                         
                                         <jsp:include page="keyboard.jsp"></jsp:include>

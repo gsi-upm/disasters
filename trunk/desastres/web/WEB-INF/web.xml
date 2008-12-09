@@ -6,7 +6,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>welcome.jsp</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
         
          <!-- Application class name -->
@@ -36,20 +36,48 @@
         <url-pattern>/Xpert</url-pattern>
     </servlet-mapping>
     
+    <!-- Filtering-->
+    <filter>
+      <filter-name>Security Filter</filter-name>
+      <filter-class>org.securityfilter.filter.SecurityFilter</filter-class>
+      <init-param>
+         <param-name>config</param-name>
+         <param-value>/WEB-INF/securityfilter-config.xml</param-value>
+      </init-param>
+      <init-param>
+         <param-name>validate</param-name>
+         <param-value>true</param-value>
+        <!-- <description>Validate config file if set to true</description>-->
+      </init-param>
+      <init-param>
+         <param-name>formPattern</param-name>
+         <param-value>/logMeIn</param-value>
+      </init-param>
+   </filter>
+
+   <!-- map all requests to the SecurityFilter, control what it does with configuration settings -->
+   <filter-mapping>
+      <filter-name>Security Filter</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+    
     <!-- Security -->
     <security-role>
         <description>Administrador</description>
         <role-name>administrador</role-name>
     </security-role>
+    
+    <!--
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Aplicacion</web-resource-name>
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/index.jsp</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>administrador</role-name>
         </auth-constraint>
     </security-constraint>
+    
     <security-constraint>
         <display-name>welcome</display-name>
         <web-resource-collection>
@@ -64,7 +92,21 @@
             <http-method>TRACE</http-method>
             <http-method>DELETE</http-method>
         </web-resource-collection>
-        </security-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>keyboard</display-name>
+        <web-resource-collection>
+            <web-resource-name>Keyboard</web-resource-name>
+            <description/>
+            <url-pattern>/css/keyboardstyle.css</url-pattern>
+            <url-pattern>/js/jquery-1.2.6.min.js</url-pattern>
+            <url-pattern>/js/jquery-fieldselection.js</url-pattern>
+            <url-pattern>/js/jquery-ui-personalized-1.5.2.min.js</url-pattern>
+            <url-pattern>/js/vkeyboard.js</url-pattern>
+            <url-pattern>/keyboard.jsp</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+    -->
     <login-config>
         <auth-method>FORM</auth-method>
         <form-login-config>
@@ -72,4 +114,5 @@
             <form-error-page>/loginError.jsp</form-error-page>
         </form-login-config>
     </login-config>
+    
 </web-app>
