@@ -242,57 +242,37 @@
                         </div>
             </td></tr></table>
             
+            <!-- If the user isn't autenticated, we show the login form -->
+            <% if (request.getRemoteUser()==null)%>
+            <% {%>
+            <h3>Sign in</h3>            
+            <div id="login">                
+                <form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="POST" id="loginform">                    
+                    Username:
+                    <input type="text"
+                           name="<%=Constants.LOGIN_USERNAME_FIELD%>"
+                           id="username"
+                           ><p>                    
+                    Password:
+                    <input type="password"
+                           name="<%=Constants.LOGIN_PASSWORD_FIELD%>"
+                           id="pwd"
+                           ><p>
+                    <a href="#" id="showkeyboard" title="Type in your password using a virtual keyboard.">Keyboard</a> <br />                    
+                    <input type="submit" name="Submit" id="submit_butt" value="Submit" />
+                </form>
+            </div>
+            <% }%>
+            <!-- and if the user is autenticated, we show the username and logout button -->
+            <% if (request.getRemoteUser()!=null)%>
+            <% {%>
+            <fmt:message key="eres"/> <%= request.getRemoteUser() %>
+            <a href="logout.jsp">Logout</a>
+            <% }%>
             
             <table cellpadding="0" cellspacing="0" border="0">
                 <tr><td  valign="top" >
                         <div id="left">
-                            
-                            <!--if the user ain't in role 'administrador' -->
-                            <% if (!request.isUserInRole("administrador")) {
-                            %>                            
-                            <div id="dhtmlgoodies_tabView1">
-                                
-                                <div class="dhtmlgoodies_aTab">
-                                    <form id="autenticacion">
-                                        <fmt:message key="eres"/>
-                                        <%= request.getRemoteUser()%>
-                                        <br><br>
-                                        <h3>Sign in</h3>
-                                        
-                                        <div id="login">
-                                            
-                                            <form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="POST" id="loginform">
-                                            
-                                            Username:
-                                            <input type="text"
-                                                   name="<%=Constants.LOGIN_USERNAME_FIELD%>"
-                                                   id="username"
-                                                   ><p>
-                                            
-                                            Password:
-                                            <input type="password"
-                                                   name="<%=Constants.LOGIN_PASSWORD_FIELD%>"
-                                                   id="pwd"
-                                                   ><p>
-                                                       <a href="#" id="showkeyboard" title="Type in your password using a virtual keyboard.">Keyboard</a> <br />
-                                            
-                                            <input type="submit" name="Submit" id="submit_butt" value="Submit" />
-                                        </form>
-                                        </div>
-                                        
-                                        <jsp:include page="keyboard.jsp"></jsp:include>
-                                    </form>
-                                    
-                                </div>
-                            </div>
-                            <!--aqui se cambia el tamaño y titulo de las tabs -->
-                            <script type="text/javascript">
-                                initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="autenticacion"/>'),0,240,440);
-                            </script>
-                            <% }
-                            %>
-                            
-
                             
                             <!-- if the user is in role 'administrador' -->
                             <% if (request.isUserInRole("administrador")) {
