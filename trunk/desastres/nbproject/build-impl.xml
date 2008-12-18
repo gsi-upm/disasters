@@ -533,8 +533,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.httpunit.jar}" propname="included.lib.file.reference.httpunit.jar.X"/>
         <basename file="${file.reference.jakarta-oro.jar}" property="included.lib.file.reference.jakarta-oro.jar"/>
         <copy-ear-war file="${file.reference.jakarta-oro.jar}" propname="included.lib.file.reference.jakarta-oro.jar.X"/>
-        <basename file="${file.reference.jess.jar}" property="included.lib.file.reference.jess.jar"/>
-        <copy-ear-war file="${file.reference.jess.jar}" propname="included.lib.file.reference.jess.jar.X"/>
         <basename file="${file.reference.js.jar}" property="included.lib.file.reference.js.jar"/>
         <copy-ear-war file="${file.reference.js.jar}" propname="included.lib.file.reference.js.jar.X"/>
         <basename file="${file.reference.json-taglib-0.4.1.jar}" property="included.lib.file.reference.json-taglib-0.4.1.jar"/>
@@ -557,9 +555,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.Tidy.jar}" propname="included.lib.file.reference.Tidy.jar.X"/>
         <basename file="${file.reference.standard.jar}" property="included.lib.file.reference.standard.jar"/>
         <copy-ear-war file="${file.reference.standard.jar}" propname="included.lib.file.reference.standard.jar.X"/>
+        <basename file="${file.reference.jess.jar}" property="included.lib.file.reference.jess.jar"/>
+        <copy-ear-war file="${file.reference.jess.jar}" propname="included.lib.file.reference.jess.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.ant-contrib.jar} ${included.lib.file.reference.catalina.jar} ${included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar} ${included.lib.file.reference.com.noelios.restlet.jar} ${included.lib.file.reference.commons-beanutils.jar} ${included.lib.file.reference.commons-codec.jar} ${included.lib.file.reference.commons-collections.jar} ${included.lib.file.reference.commons-digester.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.hsqldb-2005-08-20.jar} ${included.lib.file.reference.httpunit.jar} ${included.lib.file.reference.jakarta-oro.jar} ${included.lib.file.reference.jess.jar} ${included.lib.file.reference.js.jar} ${included.lib.file.reference.json-taglib-0.4.1.jar} ${included.lib.file.reference.jsr94.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.junit.jar} ${included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar} ${included.lib.file.reference.org.restlet.jar} ${included.lib.file.reference.servlet.jar} ${included.lib.file.reference.slamd_server.jar} ${included.lib.file.reference.Tidy.jar} ${included.lib.file.reference.standard.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.file.reference.ant-contrib.jar} ${included.lib.file.reference.catalina.jar} ${included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar} ${included.lib.file.reference.com.noelios.restlet.jar} ${included.lib.file.reference.commons-beanutils.jar} ${included.lib.file.reference.commons-codec.jar} ${included.lib.file.reference.commons-collections.jar} ${included.lib.file.reference.commons-digester.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.hsqldb-2005-08-20.jar} ${included.lib.file.reference.httpunit.jar} ${included.lib.file.reference.jakarta-oro.jar} ${included.lib.file.reference.js.jar} ${included.lib.file.reference.json-taglib-0.4.1.jar} ${included.lib.file.reference.jsr94.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.junit.jar} ${included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar} ${included.lib.file.reference.org.restlet.jar} ${included.lib.file.reference.servlet.jar} ${included.lib.file.reference.slamd_server.jar} ${included.lib.file.reference.Tidy.jar} ${included.lib.file.reference.standard.jar} ${included.lib.file.reference.jess.jar} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -576,7 +576,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${file.reference.hsqldb-2005-08-20.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.httpunit.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.jakarta-oro.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.js.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.json-taglib-0.4.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.jsr94.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
@@ -588,6 +587,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${file.reference.slamd_server.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.Tidy.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.standard.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
