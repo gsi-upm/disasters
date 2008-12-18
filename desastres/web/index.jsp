@@ -243,8 +243,7 @@
             </td></tr></table>
             
             <!-- If the user isn't autenticated, we show the login form -->
-            <% if (request.getRemoteUser()==null)%>
-            <% {%>
+            <% if (request.getRemoteUser()==null) {%>
             <h3>Sign in</h3>            
             <div id="login">                
                 <form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="POST" id="loginform">                    
@@ -264,8 +263,7 @@
             </div>
             <% }%>
             <!-- and if the user is autenticated, we show the username and logout button -->
-            <% if (request.getRemoteUser()!=null)%>
-            <% {%>
+            <% if (request.getRemoteUser()!=null) {%>
             <fmt:message key="eres"/> <%= request.getRemoteUser() %>
             <a href="logout.jsp">Logout</a>
             <% }%>
