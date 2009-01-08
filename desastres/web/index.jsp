@@ -62,8 +62,23 @@
                     $('#close_screen').hide();
                     $('#console').hide();
                     $('#visualize').hide();
+                    $('#showXoptions').hide();
 
-        
+       
+                    $('#minitab3').toggle(
+                    function() {
+                        $('#showXoptions').slideDown();
+                        $('#hideXoptions').click(function(){
+                            $('#showXoptions').slideUp();
+                            return false;
+                        });
+                    }
+                    ,function(){
+                        $('#showXoptions').slideUp();
+                    }  );
+                    
+                    
+                    
                     $('#minitab2').toggle(
                     function() {
                         $('#visualize').slideDown();
@@ -232,6 +247,9 @@
                         
                         <!-- minitabs top -right -->
                         <div id="minitabs">
+                            <div id="minitab3" class="minitab">
+                                <img alt="opciones" src="images/tab_tool.png">
+                            </div>
                             <div id="minitab2" class="minitab">
                                 <img alt="ver" src="images/tab_building.png">
                             </div>
@@ -505,8 +523,14 @@
                     <input type="checkbox" name="firemenStation" value="firemenStation" checked="checked" onchange="visualize(this.checked,'firemenStation');"><fmt:message key="parquesbomberos"/></input><br><br><br>
                     
                     <a id="hideVisualize" href="#"><fmt:message key="ocultar"/></a>
-                </form>
-                
+                </form>                
+            </div>
+            <div id="showXoptions" class="slideMenu">
+                <form name="Xoptions" id="Xoptions">
+                    <p><fmt:message key="Xopciones"/></p>
+                    <input type="checkbox" name="fireSpread" value="fireSpread" checked="checked" onchange="" ><fmt:message key="fireSpread"/></input><br>
+                    <a id="hideXoptions" href="#"><fmt:message key="ocultar"/></a>
+                </form>                
             </div>
             
             <!-- Screen for the servlet information -->
