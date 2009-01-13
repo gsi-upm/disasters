@@ -338,7 +338,7 @@
                                             <fmt:message key="puntoalmacenado"/><br><br>
                                             <center> <button onclick="crearCatastrofe(
                                                 marcador.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
-                                                descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);$('#dialog1').jqm().jqmHide();borrarFormulario(this.form,1);return false;"><fmt:message key="añadir"/></button>
+                                                descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);$('#dialog1').jqm().jqmHide();borrarFormulario(this.form,1);return false;"><fmt:message key="añadir"/></button>                                                
                                                 <button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
                                             </center>
                                         </div>
@@ -352,6 +352,10 @@
                                         
                                         <input type=button  id="submit" value="<fmt:message key="añadir"/>" class="btn" onclick="crearCatastrofe(
                                             marcador.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
+                                            descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);borrarFormulario(this.form,1);return false;"/>
+                                            
+                                            <input type=button  id="submit" value="<fmt:message key="añadir2"/>" class="btn" onclick="crearCatastrofe(
+                                            marcador.value,seleccionRadio(this.form,1),cantidad.value,nombre.value,info.value,
                                             descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);borrarFormulario(this.form,1);return false;"/>
                                         
                                     </form>
