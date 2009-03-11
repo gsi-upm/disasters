@@ -25,9 +25,7 @@ class Connection {
          //DataInputStream(yahooConnection.getInputStream());
          String inputLine;
          StringBuffer buff = new StringBuffer();
-         
          BufferedReader dis = new BufferedReader(new InputStreamReader(direccionConnection.getInputStream()));
-         
          
          while ((inputLine = dis.readLine()) != null) {
 

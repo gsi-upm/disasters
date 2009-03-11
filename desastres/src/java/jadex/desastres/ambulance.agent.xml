@@ -1,0 +1,90 @@
+<!--
+  <H3>Ambulancia.</H3>
+
+  Agente que recoge heridos y los lleva al hospital.
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex 
+	                    http://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="ambulance"
+	package="jadex.desastres">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>jadex.adapter.fipa.SFipa</import>
+		<import>java.util.logging.*</import>
+	</imports>
+
+	<beliefs>
+		<!-- Creamos el agente como instancia del Entorno. Por defecto, en un hospital de Madrid -->
+		<belief name="env" class="Environment">
+			<fact>Environment.getInstance($agent.getType(), $agent.getName(),$beliefbase.hospitalMadrid)</fact>
+ 		</belief>		
+		
+		<!-- Definimos la posicion del hospital de Madrid -->
+		<belief name="hospitalMadrid" class="Position">
+			<fact>new Position(40.418702, -3.670573)</fact> <!-- Gregorio Marañon -->
+			
+			
+		</belief>
+		
+		<!-- Posción del agente evaluada dinámicamente-->
+		<belief name="pos" class="Position">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+ 		
+ 		<!-- id del herido que atiendo-->
+		<belief name="idHerido" class="Integer">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+
+	</beliefs>
+
+	<goals>
+		<!-- Objetivo para estar en el hospital a menos que haya heridos que recoger.  -->
+		<performgoal name="hospital" retry="true" exclude="never"/>
+		
+		<!-- Objetivo para ir a recoger heridos -->
+		<achievegoal name="recogeHeridos"/>
+	</goals>
+
+	<plans>
+		<!-- Plan para ir al hospital. -->
+		<plan name="hospital-plan">
+			<body class="HospitalPlan"/>
+			<trigger>
+				<goal ref="hospital"/>
+			</trigger>
+		</plan>
+		<!-- Plan para ir a recoger heridos. -->
+		<plan name="recogeHeridos-plan">
+			<body class="RecogeHeridosPlan"/>
+			<trigger>
+				<messageevent ref="aviso" /> 
+			</trigger>
+		</plan>
+	</plans>
+	<events>
+    <messageevent name="aviso" type="fipa" direction="receive">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.QUERY_REF</value>
+        </parameter>
+        <parameter name="content" class="String">
+            <value>"go"</value>
+        </parameter>
+    </messageevent>
+    </events>
+ 	<!-- Inicialmente activamos el objetivo con nombre hospital -->
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="hospital"/>
+			</goals>
+		</configuration>
+	</configurations>
+
+</agent>
