@@ -557,9 +557,51 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.standard.jar}" propname="included.lib.file.reference.standard.jar.X"/>
         <basename file="${file.reference.jess.jar}" property="included.lib.file.reference.jess.jar"/>
         <copy-ear-war file="${file.reference.jess.jar}" propname="included.lib.file.reference.jess.jar.X"/>
+        <basename file="${file.reference.bsf-2.3.jar}" property="included.lib.file.reference.bsf-2.3.jar"/>
+        <copy-ear-war file="${file.reference.bsf-2.3.jar}" propname="included.lib.file.reference.bsf-2.3.jar.X"/>
+        <basename file="${file.reference.bsh-2.0b4.jar}" property="included.lib.file.reference.bsh-2.0b4.jar"/>
+        <copy-ear-war file="${file.reference.bsh-2.0b4.jar}" propname="included.lib.file.reference.bsh-2.0b4.jar.X"/>
+        <basename file="${file.reference.commons-logging-1.0.4.jar}" property="included.lib.file.reference.commons-logging-1.0.4.jar"/>
+        <copy-ear-war file="${file.reference.commons-logging-1.0.4.jar}" propname="included.lib.file.reference.commons-logging-1.0.4.jar.X"/>
+        <basename file="${file.reference.commons-validator-1.1.4.jar}" property="included.lib.file.reference.commons-validator-1.1.4.jar"/>
+        <copy-ear-war file="${file.reference.commons-validator-1.1.4.jar}" propname="included.lib.file.reference.commons-validator-1.1.4.jar.X"/>
+        <basename file="${file.reference.dwr.jar}" property="included.lib.file.reference.dwr.jar"/>
+        <copy-ear-war file="${file.reference.dwr.jar}" propname="included.lib.file.reference.dwr.jar.X"/>
+        <basename file="${file.reference.jakarta-oro-2.0.8.jar}" property="included.lib.file.reference.jakarta-oro-2.0.8.jar"/>
+        <copy-ear-war file="${file.reference.jakarta-oro-2.0.8.jar}" propname="included.lib.file.reference.jakarta-oro-2.0.8.jar.X"/>
+        <basename file="${file.reference.log4j-1.2.12.jar}" property="included.lib.file.reference.log4j-1.2.12.jar"/>
+        <copy-ear-war file="${file.reference.log4j-1.2.12.jar}" propname="included.lib.file.reference.log4j-1.2.12.jar.X"/>
+        <basename file="${file.reference.bcel.jar}" property="included.lib.file.reference.bcel.jar"/>
+        <copy-ear-war file="${file.reference.bcel.jar}" propname="included.lib.file.reference.bcel.jar.X"/>
+        <basename file="${file.reference.GraphLayout.jar}" property="included.lib.file.reference.GraphLayout.jar"/>
+        <copy-ear-war file="${file.reference.GraphLayout.jar}" propname="included.lib.file.reference.GraphLayout.jar.X"/>
+        <basename file="${file.reference.jadex_examples.jar}" property="included.lib.file.reference.jadex_examples.jar"/>
+        <copy-ear-war file="${file.reference.jadex_examples.jar}" propname="included.lib.file.reference.jadex_examples.jar.X"/>
+        <basename file="${file.reference.jadex_rt.jar}" property="included.lib.file.reference.jadex_rt.jar"/>
+        <copy-ear-war file="${file.reference.jadex_rt.jar}" propname="included.lib.file.reference.jadex_rt.jar.X"/>
+        <basename file="${file.reference.jadex_standalone.jar}" property="included.lib.file.reference.jadex_standalone.jar"/>
+        <copy-ear-war file="${file.reference.jadex_standalone.jar}" propname="included.lib.file.reference.jadex_standalone.jar.X"/>
+        <basename file="${file.reference.jadex_tools.jar}" property="included.lib.file.reference.jadex_tools.jar"/>
+        <copy-ear-war file="${file.reference.jadex_tools.jar}" propname="included.lib.file.reference.jadex_tools.jar.X"/>
+        <basename file="${file.reference.janino.jar}" property="included.lib.file.reference.janino.jar"/>
+        <copy-ear-war file="${file.reference.janino.jar}" propname="included.lib.file.reference.janino.jar.X"/>
+        <basename file="${file.reference.jhall.jar}" property="included.lib.file.reference.jhall.jar"/>
+        <copy-ear-war file="${file.reference.jhall.jar}" propname="included.lib.file.reference.jhall.jar.X"/>
+        <basename file="${file.reference.jibx-bind.jar}" property="included.lib.file.reference.jibx-bind.jar"/>
+        <copy-ear-war file="${file.reference.jibx-bind.jar}" propname="included.lib.file.reference.jibx-bind.jar.X"/>
+        <basename file="${file.reference.jibx-extras.jar}" property="included.lib.file.reference.jibx-extras.jar"/>
+        <copy-ear-war file="${file.reference.jibx-extras.jar}" propname="included.lib.file.reference.jibx-extras.jar.X"/>
+        <basename file="${file.reference.jibx-run.jar}" property="included.lib.file.reference.jibx-run.jar"/>
+        <copy-ear-war file="${file.reference.jibx-run.jar}" propname="included.lib.file.reference.jibx-run.jar.X"/>
+        <basename file="${file.reference.nuggets.jar}" property="included.lib.file.reference.nuggets.jar"/>
+        <copy-ear-war file="${file.reference.nuggets.jar}" propname="included.lib.file.reference.nuggets.jar.X"/>
+        <basename file="${file.reference.xmlpull_1_1_4.jar}" property="included.lib.file.reference.xmlpull_1_1_4.jar"/>
+        <copy-ear-war file="${file.reference.xmlpull_1_1_4.jar}" propname="included.lib.file.reference.xmlpull_1_1_4.jar.X"/>
+        <basename file="${file.reference.xpp3.jar}" property="included.lib.file.reference.xpp3.jar"/>
+        <copy-ear-war file="${file.reference.xpp3.jar}" propname="included.lib.file.reference.xpp3.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.ant-contrib.jar} ${included.lib.file.reference.catalina.jar} ${included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar} ${included.lib.file.reference.com.noelios.restlet.jar} ${included.lib.file.reference.commons-beanutils.jar} ${included.lib.file.reference.commons-codec.jar} ${included.lib.file.reference.commons-collections.jar} ${included.lib.file.reference.commons-digester.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.hsqldb-2005-08-20.jar} ${included.lib.file.reference.httpunit.jar} ${included.lib.file.reference.jakarta-oro.jar} ${included.lib.file.reference.js.jar} ${included.lib.file.reference.json-taglib-0.4.1.jar} ${included.lib.file.reference.jsr94.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.junit.jar} ${included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar} ${included.lib.file.reference.org.restlet.jar} ${included.lib.file.reference.servlet.jar} ${included.lib.file.reference.slamd_server.jar} ${included.lib.file.reference.Tidy.jar} ${included.lib.file.reference.standard.jar} ${included.lib.file.reference.jess.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.file.reference.ant-contrib.jar} ${included.lib.file.reference.catalina.jar} ${included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar} ${included.lib.file.reference.com.noelios.restlet.jar} ${included.lib.file.reference.commons-beanutils.jar} ${included.lib.file.reference.commons-codec.jar} ${included.lib.file.reference.commons-collections.jar} ${included.lib.file.reference.commons-digester.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.hsqldb-2005-08-20.jar} ${included.lib.file.reference.httpunit.jar} ${included.lib.file.reference.jakarta-oro.jar} ${included.lib.file.reference.js.jar} ${included.lib.file.reference.json-taglib-0.4.1.jar} ${included.lib.file.reference.jsr94.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.junit.jar} ${included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar} ${included.lib.file.reference.org.restlet.jar} ${included.lib.file.reference.servlet.jar} ${included.lib.file.reference.slamd_server.jar} ${included.lib.file.reference.Tidy.jar} ${included.lib.file.reference.standard.jar} ${included.lib.file.reference.jess.jar} ${included.lib.file.reference.bsf-2.3.jar} ${included.lib.file.reference.bsh-2.0b4.jar} ${included.lib.file.reference.commons-logging-1.0.4.jar} ${included.lib.file.reference.commons-validator-1.1.4.jar} ${included.lib.file.reference.dwr.jar} ${included.lib.file.reference.jakarta-oro-2.0.8.jar} ${included.lib.file.reference.log4j-1.2.12.jar} ${included.lib.file.reference.bcel.jar} ${included.lib.file.reference.GraphLayout.jar} ${included.lib.file.reference.jadex_examples.jar} ${included.lib.file.reference.jadex_rt.jar} ${included.lib.file.reference.jadex_standalone.jar} ${included.lib.file.reference.jadex_tools.jar} ${included.lib.file.reference.janino.jar} ${included.lib.file.reference.jhall.jar} ${included.lib.file.reference.jibx-bind.jar} ${included.lib.file.reference.jibx-extras.jar} ${included.lib.file.reference.jibx-run.jar} ${included.lib.file.reference.nuggets.jar} ${included.lib.file.reference.xmlpull_1_1_4.jar} ${included.lib.file.reference.xpp3.jar} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -588,6 +630,27 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${file.reference.Tidy.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.standard.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.jess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.bsf-2.3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.bsh-2.0b4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.commons-logging-1.0.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.commons-validator-1.1.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.dwr.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jakarta-oro-2.0.8.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.log4j-1.2.12.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.bcel.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.GraphLayout.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jadex_examples.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jadex_rt.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jadex_standalone.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jadex_tools.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.janino.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jhall.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jibx-bind.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jibx-extras.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.jibx-run.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.nuggets.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.xmlpull_1_1_4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${file.reference.xpp3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
