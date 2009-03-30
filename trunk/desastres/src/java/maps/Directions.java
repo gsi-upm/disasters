@@ -42,7 +42,7 @@ public class Directions {
             lng2 = DBManager.getField(disID, "longitud");
         }
         
-        
+        System.out.println("directions to send: "+lat+","+lng+"  "+lat2+","+lng2);
         directions = new DirectionsBean(lat+" , "+lng , lat2+" , "+lng2);
         WebContext wctx = WebContextFactory.get();
         String currentPage = wctx.getCurrentPage();

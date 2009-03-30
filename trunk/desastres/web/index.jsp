@@ -56,7 +56,6 @@
                 });
             </script>
             <script>
-     
                 $(document).ready(function() {
                     $('#screen').hide();
                     $('#close_screen').hide();
@@ -76,7 +75,6 @@
                     ,function(){
                         $('#showXoptions').slideUp();
                     }  );
-                    
                     
                     
                     $('#minitab2').toggle(
@@ -105,7 +103,6 @@
                         $('#console').slideUp();
                     });
                 });
-     
             </script>
             
             <!-- Style and javaScript for the virtual keyboard -->
@@ -131,6 +128,23 @@
                 src='js/vkeyboard.js'>
             </script>
             
+            <%-- DWR.These files are created in the runtime --%>
+            <script type='text/javascript' src='/Disasters/dwr/util.js'></script>        
+            <script type='text/javascript' src='/Disasters/dwr/interface/Directions.js'></script>
+            <script type='text/javascript' src='/Disasters/dwr/engine.js'></script>
+            
+            <%-- Adds various Methods to GPolygon and GPolyline --%>
+            <script type="text/javascript" src="js/epoly.js"></script>
+            
+            <%-- Agents movement through roads --%>
+            <script type="text/javascript">
+                var id=0;
+                function getDirections() {
+                    alert('getDirections()');
+                    id=document.getElementById("AgentID").value;
+                    Directions.sendDirections(id);
+                }
+            </script>
             
         </head>
         
@@ -213,19 +227,20 @@
                                 borrarFormulario(this.form,1);$('#modificar').jqm().jqmHide();return false;"/>
                             
                 </td></tr></table>
-                
-                
-                
-                
-                
             </form>
-            
         </div>
         <!-- Ventana de modificacion -->
 
 
         <!-- Cabecera con imagen y hora -->
-        <body onload="initialize();IniciarReloj24();" onunload="GUnload()">
+        <body onload="initialize();IniciarReloj24();dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+            
+            <input type="text" id="start"/><br />
+            <input type="text" id="end"/><br />
+            <input type="submit" value="fill form" onclick="getDirections();"/>
+            <br>
+            Agent id
+            <input type="text" id="AgentID"/>
             
             <table  cellpadding="0" cellspacing="0" width="100%" border="0"><tr><td>
                         <div id="cabecera"><img src="images/<fmt:message key="header"/>.gif" alt="" /></div>
@@ -261,7 +276,7 @@
             </td></tr></table>
             
             <!-- If the user isn't autenticated, we show the login form -->
-            <% if (request.getRemoteUser()==null) {%>
+            <% if (request.getRemoteUser() == null) {%>
             <h3>Sign in</h3>            
             <div id="login">                
                 <form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="POST" id="loginform">                    
@@ -281,8 +296,8 @@
             </div>
             <% }%>
             <!-- and if the user is autenticated, we show the username and logout button -->
-            <% if (request.getRemoteUser()!=null) {%>
-            <fmt:message key="eres"/> <%= request.getRemoteUser() %>
+            <% if (request.getRemoteUser() != null) {%>
+            <fmt:message key="eres"/> <%= request.getRemoteUser()%>
             <a href="logout.jsp">Logout</a>
             <% }%>
             
@@ -353,8 +368,8 @@
                                         <input type=button  id="submit" value="<fmt:message key="añadir"/>" class="btn" onclick="crearCatastrofe(
                                             marcador.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
                                             descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);borrarFormulario(this.form,1);return false;"/>
-                                            
-                                            <input type=button  id="submit" value="<fmt:message key="añadir2"/>" class="btn" onclick="crearCatastrofe(
+                                        
+                                        <input type=button  id="submit" value="<fmt:message key="añadir2"/>" class="btn" onclick="crearCatastrofe(
                                             marcador.value,seleccionRadio(this.form,1),cantidad.value,nombre.value,info.value,
                                             descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);borrarFormulario(this.form,1);return false;"/>
                                         
