@@ -45,6 +45,11 @@
 		<belief name="desastreActual" class="Integer">
 			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
  		</belief>
+                
+                <!-- id del desastre que tiene asignado-->
+		<belief name="desastreActual" class="Integer">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
  		
 
 	</beliefs>

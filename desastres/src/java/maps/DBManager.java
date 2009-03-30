@@ -60,18 +60,6 @@ public class DBManager {
     }
     
     /**
-     * Creates a new event in the database and returns the id the database has
-     * assigned to the new event.
-     * @return the id given by the database to the new event
-     */
-    public int createEvent (){
-        int id=0;
-        
-        
-        return id;
-    }
-    
-    /**
      * Sends a get request to the database and extracts the number of firemen currently
      * assigned to a certain event
      * @param eventId - The id of the event
@@ -106,5 +94,18 @@ public class DBManager {
         String value = new Double(response.substring(field.length()+2,response.indexOf(','))).toString();
         System.out.println("getField, return: "+value);
         return value;
-    }    
+    }
+    
+    /**
+     * Modifies a parameter value for an element in the database.
+     * @param Id - The id of the element.
+     * @param parameter - The parameter to modify.
+     * @param value - The new value.
+     * @return the response code sent by the database.
+     */
+    public static String setField(int Id, String parameter, String value){
+        String response = sendToDB("http://localhost:8080/Disasters/rest/put/"+Id+"/"+parameter+"/"+value);
+        return response;
+    }
+    
 }

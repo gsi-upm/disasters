@@ -88,11 +88,8 @@ public class ReteDisasterDB {
 	private Hashtable getResources() throws JSONException {
 		list = new Hashtable();
 		
-                System.out.println("before URL_BASE");
                 String freeResources = Connection.connect(URL_BASE+"free");
-                System.out.println("URL_BASE: "+freeResources);
                 JSONArray resources = new JSONArray(freeResources);
-                System.out.println("freeResources");
                 
                 //Por cada recurso disponible:
                for (int i=0;i<resources.length();i++){
