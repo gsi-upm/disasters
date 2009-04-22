@@ -1,17 +1,16 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="org.securityfilter.example.Constants"%>
-
-<%@ page language = "java"  %>
-
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page language = "java" %>
+<%@ page isELIgnored = "false" %>
+<%@ page import = "org.securityfilter.example.Constants"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
     
-    <fmt:bundle basename="fmt.eji8n">
+  <fmt:bundle basename="fmt.eji8n">
     
         <head>
             <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
