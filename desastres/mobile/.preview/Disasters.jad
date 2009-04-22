@@ -1,0 +1,15 @@
+MIDlet-Name: mojax 2.0
+MIDlet-1: mojax,,com.mfoundry.mjx.core.MJXMIDlet
+MIDlet-Vendor: mFoundry
+MIDlet-Version: 2.0.0
+MIDlet-Jar-URL: http://localhost:9180/Disasters/.preview/GenericMJX.jar
+MIDlet-Jar-Size: 145625
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.0
+MJX-Moblet-Url: http://localhost:9180/Disasters/index.mjx
+MJX-Gateway-Url: http://localhost:9180/mjxgateway
+MJX-From: MJXApplet
+MJX-Referer: MJXApplet
+MJX-User-Agent: ME4SE Emulator
+MJX-Force-Reload: true
+MJX-Debug-Metadata: true
