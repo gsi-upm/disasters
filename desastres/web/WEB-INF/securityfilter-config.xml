@@ -4,20 +4,6 @@
     "-//SecurityFilter.org//DTD Security Filter Configuration 2.0//EN"
     "http://www.securityfilter.org/dtd/securityfilter-config_2_0.dtd">
 <securityfilter-config>
-
-<!-- security-constraints -->
-<!--
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name></web-resource-name>
-            <url-pattern></url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name></role-name>
-        </auth-constraint>
-    </security-constraint>
-    -->
-    
     <login-config>
         <auth-method>FORM</auth-method>
         <form-login-config>
@@ -29,7 +15,6 @@
             <form-default-page>/index.jsp</form-default-page>
         </form-login-config>
     </login-config>
-    
     <realm className="security.MySecurityRealm">
       <!-- <realm-param name="" value="" /> -->
     </realm>

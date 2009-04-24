@@ -29,18 +29,6 @@ var estado_Experto = "off";
 var tiempoActualizacion = 1500;
 var tiempoInicial = 5000;
 
-// Agents on roads
-var dirn = new GDirections();
-var step = 50; // metres
-var poly;
-var eol;
-var car = new GIcon();
-car.image="markers/bombero1.png"
-car.iconSize=new GSize(32,18);
-car.iconAnchor=new GPoint(16,9);
-var marker;
-var stepnum=0;
-var d=0;
 
 function initialize() {
     if (GBrowserIsCompatible()) {
@@ -102,30 +90,9 @@ function initialize() {
 	ultimamodif = obtiene_fecha();
         
         
-        
 
-        
-        //Agents on roads
-        GEvent.addListener(dirn,"load", function() {
-            poly=dirn.getPolyline();
-            eol=poly.Distance();
-            //map.setCenter(poly.getVertex(0),17);
-            map.addOverlay(new GMarker(poly.getVertex(0),G_START_ICON));
-            map.addOverlay(new GMarker(poly.getVertex(poly.getVertexCount()-1),G_END_ICON));
-            marker = new GMarker(poly.getVertex(0),{icon:car});
-            map.addOverlay(marker);
-        });
-
-        GEvent.addListener(dirn,"error", function() {
-            alert("Location(s) not recognised. Code: "+dirn.getStatus().code);
-        });
-        
-        Directions.sendDirections(7);
-        //alert('setting timeout startRoute');
-        setTimeout("startRoute()",2000);
-        //alert('after timeout');
+        setTimeout("moveAgents()",2000);
         setTimeout("actualizar()",tiempoInicial);
-        //document.
     }
 }
 
@@ -199,46 +166,14 @@ function actualizar(){
             }
         });
     }); 
-        
-    ultimamodif = obtiene_fecha();
     
-    animate(d);
+    
+    
+    ultimamodif = obtiene_fecha();
     timeout = setTimeout("actualizar()", tiempoActualizacion);
 }
 
 
-function startRoute() {
-    var startpoint = document.getElementById("start").value;
-    var endpoint = document.getElementById("end").value;
-    //alert('startpoint: '+startpoint);
-    //startpoint = "28 Antonio Machado, Madrid";
-    //endpoint = "28 Noviciado, Madrid"
-    dirn.loadFromWaypoints([startpoint,endpoint],{getPolyline:true,getSteps:true});
-}
-
-
-function animate(dist) {
-    if (dist>eol) {
-        return;
-    }
-    var p = poly.GetPointAtDistance(dist);
-    marker.setPoint(p);
-    if (stepnum+1 < dirn.getRoute(0).getNumSteps()) {
-        if (dirn.getRoute(0).getStep(stepnum).getPolylineIndex() < poly.GetIndexAtDistance(dist)) {
-            stepnum++;
-            var stepdist = dirn.getRoute(0).getStep(stepnum-1).getDistance().meters;
-            var steptime = dirn.getRoute(0).getStep(stepnum-1).getDuration().seconds;
-            var stepspeed = ((stepdist/steptime) * 20.24).toFixed(0);
-            step = stepspeed/2.5;
-        }
-    } else {
-        if (dirn.getRoute(0).getStep(stepnum).getPolylineIndex() < poly.GetIndexAtDistance(dist)) {
-        }
-    }
-    d+=step;
-}
-
-	
 function showHospitals(){
     generateBuilding("hospital","Hospital Gregorio Marañon",40.418702, -3.670573);
     // generateBuilding("hospital","Hospital La Paz",40.480726, -3.685672);
@@ -476,7 +411,10 @@ function generaMarcador(evento, caracter){
         });
 		
     }
-    map.addOverlay(marker);				
+    
+    if (!(evento.marcador=="resource" && caracter==1)){
+        map.addOverlay(marker);
+    }
     return marker;
 }
 

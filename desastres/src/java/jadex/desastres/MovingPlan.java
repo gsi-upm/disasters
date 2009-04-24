@@ -1,6 +1,6 @@
 package jadex.desastres;
 
-import maps.*;
+import roads.*;
 import java.util.*;
 import jadex.runtime.*;
 import java.net.*;
@@ -12,7 +12,7 @@ import org.directwebremoting.proxy.dwr.Util;
 
 public class MovingPlan extends Plan {
     //Plan attributes.
-    Directions dirn;
+    DirectionsBean dirn;
 
     public MovingPlan() {
         // Initialization code.
@@ -31,8 +31,8 @@ public class MovingPlan extends Plan {
                 String to = st.substring(st.indexOf("to:") + 4);
                 System.out.println("from: " + from);
                 System.out.println("to: " + to);
-                dirn = new Directions();
-                dirn.setDirections(from, to);
+                //dirn = new DirectionsBean();
+                //dirn.setDirections(from, to);
             } catch (Exception ioe) {
                 System.out.println("IOException: " + ioe);
             }

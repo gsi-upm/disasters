@@ -1,11 +1,16 @@
-package maps;
+package roads;
 
 import java.util.*;
 import java.net.*;
 import java.io.*;
 
 public class DBManager {
-    
+
+    /**
+     * URL for Disasters2.0 application REST interface
+     **/
+    private final static String URL_BASE = "http://localhost:8080/Disasters/rest/";
+
     public DBManager() {
     }
 
@@ -16,7 +21,7 @@ public class DBManager {
      * @return the response returned by the database
      */
     public static String sendToDB(String st) {
-        String response= new String();
+        String response = new String();
         try {
             URL url = new URL(st);
             URLConnection workingConnection = url.openConnection();
@@ -26,7 +31,7 @@ public class DBManager {
             while ((inputLine = dis.readLine()) != null) {
                 buff.append(inputLine);
             }
-            response = buff.toString();            
+            response = buff.toString();
             dis.close();
         } catch (MalformedURLException me) {
             System.out.println("MalformedURLException: " + me);
@@ -35,28 +40,41 @@ public class DBManager {
         }
         return response;
     }
-    
+
     /**
      * Reads through a String and extracts the ids present in a response, placed after the "id:" field.
      * @param response - The String containing the response given by REST
      * @return an int array with the indexes of the resources
      */
-    private static int[] getIds (String response){
+    private static int[] getIds(String response) {
         StringTokenizer stnizer = new StringTokenizer(response);
-        int [] ids = new int [100];
+        int aux[] = new int[100];
         int number = 0;
         String tk = stnizer.nextToken("{");
-        while (stnizer.hasMoreElements()){
+        while (stnizer.hasMoreElements()) {
             tk = stnizer.nextToken("{");
-            tk = tk.substring(5,tk.indexOf(','));
+            tk = tk.substring(5, tk.indexOf(','));
             int id = new Integer(tk).intValue();
-            ids[number] = id;
+            aux[number] = id;
             number++;
         }
-        for (int i=0; i<number; i++){
-            System.out.println(ids[i]);
+        int[] ids = new int[number];
+        for (int i = 0; i < number; i++) {
+            ids[i] = aux[i];
         }
         return ids;
+    }
+    
+
+    /**
+     * Performs a database query and builds a list with the ids of all the resources
+     * contained in the database.
+     * @return an array with the list of resources in the database.
+     */
+    public static int[] getResources() {
+        String request = URL_BASE + "resources";
+        String response = sendToDB(request);
+        return getIds(response);
     }
     
     /**
@@ -66,7 +84,7 @@ public class DBManager {
      * @return the number of firemen assigned to that event
     
     public static int getNumberOfAssignedFiremen (int eventId) {
-        String request = "http://localhost:8084/Disasters/rest/resources/firemen";
+        String request = URL_BASE + "resources/firemen";
         int []ids = getIds(request);
         int number=0;
         //we have the ids of all the firemen in the database
@@ -85,17 +103,14 @@ public class DBManager {
      * @return the value of the specified field for that element
      */
     public static String getField(int Id, String field){
-        System.out.println("getField, requested: "+Id + " , "+field);
-        String response = sendToDB("http://localhost:8080/Disasters/rest/id/"+Id);
-        System.out.println("getField, response.length: "+response.length());
-        while (!response.startsWith(field)){
-            response=response.substring(1);
+        String response = sendToDB(URL_BASE + "id/" + Id);
+        while (!response.startsWith(field)) {
+            response = response.substring(1);
         }
-        String value = new Double(response.substring(field.length()+2,response.indexOf(','))).toString();
-        System.out.println("getField, return: "+value);
+        String value = new Double(response.substring(field.length() + 2, response.indexOf(','))).toString();
         return value;
     }
-    
+
     /**
      * Modifies a parameter value for an element in the database.
      * @param Id - The id of the element.
@@ -103,9 +118,8 @@ public class DBManager {
      * @param value - The new value.
      * @return the response code sent by the database.
      */
-    public static String setField(int Id, String parameter, String value){
-        String response = sendToDB("http://localhost:8080/Disasters/rest/put/"+Id+"/"+parameter+"/"+value);
+    public static String setField(int Id, String parameter, String value) {
+        String response = sendToDB(URL_BASE + "put/" + Id + "/" + parameter + "/" + value);
         return response;
     }
-    
 }
