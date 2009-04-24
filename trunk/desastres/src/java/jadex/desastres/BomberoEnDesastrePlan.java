@@ -10,7 +10,7 @@ import jadex.examples.hunterprey.WorldObjectData;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
-import maps.*;
+import roads.*;
 
 /**
  * Plan de BOMBEROS

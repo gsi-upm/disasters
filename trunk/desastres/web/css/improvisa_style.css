@@ -100,7 +100,7 @@ float: left;}
 
 
 #minitabs{
-width: 120px;
+width: 80px;
 height: 10px;
 
 }
@@ -114,8 +114,6 @@ height: 10px;
 
 }
 
-#minitab3{
-}
 
 .minitab{
 position: relative;
@@ -151,7 +149,7 @@ overflow: scroll;
 
 #close_screen{
 text-decoration: none;
-background-color: cccccc;
+background-color: #CCCCCC;
 border: 1px #919b9c solid;
 color: black;
 /*width: 30px;
@@ -235,4 +233,9 @@ color:#666666;
 * html .jqmWindow {
      position: absolute;
      top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
+}
+
+
+#signeduser {
+    font-weight: bolder;
 }

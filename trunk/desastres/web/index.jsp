@@ -19,10 +19,11 @@
             <link href="css/improvisa_style.css" rel="stylesheet" type="text/css" />
             <link rel="stylesheet" href="css/tab-view.css" type="text/css" media="screen">
             <script src="js/jquery.js" type="text/javascript" ></script>
+            <script src="js/directionsInfo.js" type="text/javascript"></script> <!-- Object directionsInfo for agents on roads -->            
             <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA_pvzu2eEg9OhdvcrhLRkgRSXZ-vMQ48x4C6FPZ72aXwxrdjUDxSASm6YS5fgxM4XDiwIpFkrYCIdUQ" type="text/javascript"></script>
             <script src="js/mapa.js" type="text/javascript"></script>
             <!-- Objeto Marcador -->
-            <script src="js/marcador.js" type="text/javascript"></script>
+            <script src="js/marcador.js" type="text/javascript"></script>            
             <!--Hora y Fecha -->
             <script src="js/hora_fecha.js" type="text/javascript"></script>
             
@@ -63,18 +64,6 @@
                     $('#showXoptions').hide();
 
        
-                    $('#minitab3').toggle(
-                    function() {
-                        $('#showXoptions').slideDown();
-                        $('#hideXoptions').click(function(){
-                            $('#showXoptions').slideUp();
-                            return false;
-                        });
-                    }
-                    ,function(){
-                        $('#showXoptions').slideUp();
-                    }  );
-                    
                     
                     $('#minitab2').toggle(
                     function() {
@@ -104,16 +93,6 @@
                 });
             </script>
             
-            <!-- Style and javaScript for the virtual keyboard -->
-            <style type='text/css'>
-                @import 'css/keyboardstyle.css';
-            </style>
-            <%--
-            <script
-                type='text/javascript'
-                src='js/jquery-1.2.6.min.js'>
-            </script>
-            --%>
             <script
                 type='text/javascript'
                 src='js/jquery-fieldselection.js'>
@@ -122,28 +101,17 @@
                 type='text/javascript'
                 src='js/jquery-ui-personalized-1.5.2.min.js'>
             </script>
-            <script
-                type='text/javascript'
-                src='js/vkeyboard.js'>
-            </script>
             
             <%-- DWR.These files are created in the runtime --%>
             <script type='text/javascript' src='/Disasters/dwr/util.js'></script>        
-            <script type='text/javascript' src='/Disasters/dwr/interface/Directions.js'></script>
+            <script type='text/javascript' src='/Disasters/dwr/interface/DirectionsBean.js'></script>
             <script type='text/javascript' src='/Disasters/dwr/engine.js'></script>
             
             <%-- Adds various Methods to GPolygon and GPolyline --%>
             <script type="text/javascript" src="js/epoly.js"></script>
             
             <%-- Agents movement through roads --%>
-            <script type="text/javascript">
-                var id=0;
-                function getDirections() {
-                    alert('getDirections()');
-                    id=document.getElementById("AgentID").value;
-                    Directions.sendDirections(id);
-                }
-            </script>
+            <script src="js/resourcesOnRoads.js" type="text/javascript"></script>
             
         </head>
         
@@ -234,12 +202,6 @@
         <!-- Cabecera con imagen y hora -->
         <body onload="initialize();IniciarReloj24();dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
             
-            <input type="text" id="start"/><br />
-            <input type="text" id="end"/><br />
-            <input type="submit" value="fill form" onclick="getDirections();"/>
-            <br>
-            Agent id
-            <input type="text" id="AgentID"/>
             
             <table  cellpadding="0" cellspacing="0" width="100%" border="0"><tr><td>
                         <div id="cabecera"><img src="images/<fmt:message key="header"/>.gif" alt="" /></div>
@@ -261,9 +223,6 @@
                         
                         <!-- minitabs top -right -->
                         <div id="minitabs">
-                            <div id="minitab3" class="minitab">
-                                <img alt="opciones" src="images/tab_tool.png">
-                            </div>
                             <div id="minitab2" class="minitab">
                                 <img alt="ver" src="images/tab_building.png">
                             </div>
@@ -289,14 +248,13 @@
                            name="<%=Constants.LOGIN_PASSWORD_FIELD%>"
                            id="pwd"
                            ><p>
-                    <a href="#" id="showkeyboard" title="Type in your password using a virtual keyboard.">Keyboard</a> <br />                    
                     <input type="submit" name="Submit" id="submit_butt" value="Submit" />
                 </form>
             </div>
             <% }%>
             <!-- and if the user is autenticated, we show the username and logout button -->
             <% if (request.getRemoteUser() != null) {%>
-            <fmt:message key="eres"/> <%= request.getRemoteUser()%>
+            <fmt:message key="eres"/> <div id="signeduser"> <%= request.getRemoteUser()%> </div>
             <a href="logout.jsp">Logout</a>
             <% }%>
             
@@ -367,11 +325,7 @@
                                         <input type=button  id="submit" value="<fmt:message key="añadir"/>" class="btn" onclick="crearCatastrofe(
                                             marcador.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
                                             descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);borrarFormulario(this.form,1);return false;"/>
-                                        
-                                        <input type=button  id="submit" value="<fmt:message key="añadir2"/>" class="btn" onclick="crearCatastrofe(
-                                            marcador.value,seleccionRadio(this.form,1),cantidad.value,nombre.value,info.value,
-                                            descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);borrarFormulario(this.form,1);return false;"/>
-                                        
+                                                                                
                                     </form>
                                 </div>
                                 
@@ -558,6 +512,17 @@
                 
                 
             </div>
+            
+            <jsp:useBean class="roads.DirectionsBean" id="resources" scope="session"/>
+            <%
+            int[] rscs = resources.getResourcesList();
+            for (int i = 0; i < rscs.length; i++) {
+                String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\"/>";
+                out.println(st);
+                String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\"/><br/>";
+                out.println(ed);
+            }
+            %>
             
         </body>
         
