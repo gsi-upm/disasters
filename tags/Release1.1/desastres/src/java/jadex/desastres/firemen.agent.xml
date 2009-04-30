@@ -1,0 +1,117 @@
+<!--
+  <H3>Bombero.</H3>
+
+  Agente que acude a cualquier desastre para ayudar a solucionarlo.
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex 
+	                    http://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="firemen"
+	package="jadex.desastres">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>jadex.adapter.fipa.SFipa</import>
+		<import>java.util.logging.*</import>
+	</imports>
+
+	<beliefs>
+		<!-- Creamos el agente como instancia del Entorno. Por defecto, en el centro de Madrid -->
+		<belief name="env" class="Environment">
+			<fact>Environment.getInstance($agent.getType(), $agent.getName(),$beliefbase.parqueDeBomberos)</fact>
+ 		</belief>		
+		
+		<!-- Definimos la posicion de la Estacion de bomberos de Madrid -->
+		<belief name="parqueDeBomberos" class="Position">
+			<fact>new Position(40.414691, -3.706996)</fact> 
+	
+		</belief>
+		
+		<!-- Posción del agente evaluada dinámicamente-->
+		<belief name="pos" class="Position">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+ 		
+ 		<!-- id del herido atrapado si lo hay-->
+		<belief name="idAtrapado" class="Integer">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+ 		
+ 		<!-- desastre que está atendiendo-->
+		<belief name="desastreActual" class="Integer">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+                
+                <!-- id del desastre que tiene asignado-->
+		<belief name="desastreActual" class="Integer">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+ 		
+
+	</beliefs>
+
+	<goals>
+		<!-- Objetivo para estar en la estación de bomberos a menos que haya ocurrido algún desastre.  -->
+		<performgoal name="estacionBomberos" retry="true" exclude="never"/>
+		
+		<!-- Objetivo para socorrer algún desastre que haya ocurrido -->
+		<achievegoal name="bomberoEnDesastre"/>
+	</goals>
+
+	<plans>
+		<!-- Plan para ir a la estación de bomberos a menos que haya ocurrido algún desastre. -->
+		<plan name="estacionBomberos-plan">
+			<body class="EstacionBomberosPlan"/>
+			<trigger>
+				<goal ref="estacionBomberos"/>
+			</trigger>
+		</plan>
+		<!-- Plan para ir a socorrer algún desastre que haya ocurrido. -->
+		<plan name="bomberoEnDesastre-plan">
+			<body class="BomberoEnDesastrePlan"/>
+			<trigger>
+				<messageevent ref="aviso" />
+			</trigger>
+		</plan>
+	</plans>
+	<events>
+    <messageevent name="aviso" type="fipa" direction="receive">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.QUERY_REF</value>
+        </parameter>
+        <parameter name="content" class="String">
+            <value>"go"</value>
+        </parameter>
+    </messageevent>
+    <messageevent name="terminado" type="fipa" direction="send">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.QUERY_REF</value>
+        </parameter>
+        <parameter name="content" class="String" direction="fixed">
+            <value>"done"</value>
+        </parameter>
+    </messageevent>
+ 
+    </events>
+ 	<!-- Inicialmente activamos el objetivo con nombre estacionBomberos -->
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="estacionBomberos"/>
+			</goals>
+		</configuration>
+		
+		
+	</configurations>
+
+	
+</agent>
+
+<properties>
+   <property name="logging.level">Level.INFO</property>
+   <property name="logging.useParentHandlers">true</property>
+</properties>

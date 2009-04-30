@@ -1,0 +1,250 @@
+<moblet>
+	<prototype name="item" extends="Box" width="100%" layout="horizontal"  focusable="true"  valign="top"  class="item">
+		<attribute name="image" >
+			this.children[0].children[0].url = this.image;
+			
+		</attribute> 
+		<attribute name="name">
+			this.children[1].children[0].value = this.name;
+		</attribute>
+		<attribute name="description">
+			this.children[1].children[1].value = this.description;
+		</attribute>
+		<attribute name="address">
+			this.children[1].children[2].value = this.address;
+		</attribute>
+		<attribute name="info">
+			this.children[1].children[3].value = this.info;
+		</attribute>
+		<attribute name="state">
+			this.children[1].children[4].value = this.state;
+		</attribute>
+		<attribute name="size">
+			this.children[1].children[5].value = this.size;
+		</attribute>
+		<attribute name="traffic">
+			this.children[1].children[6].value = this.traffic;
+		</attribute>
+		<attribute name="type">
+			this.children[1].children[7].value = this.type;
+		</attribute>
+		<attribute name="quantity">
+			this.children[1].children[8].value = this.quantity;
+		</attribute>
+		<attribute name="idAssigned">
+			this.children[1].children[9].value = this.idAssigned;
+		</attribute>
+		<attribute name="date">
+			this.children[1].children[10].value = this.date;
+		</attribute>
+		<attribute name="username">
+			this.children[1].children[11].value = this.username;
+		</attribute>
+		<attribute name="usertype">
+			this.children[1].children[12].value = this.usertype;
+		</attribute>
+		<attribute name="latitud">
+			this.children[1].children[13].value = this.latitud;
+		</attribute>
+		<attribute name="longitud">
+			this.children[1].children[14].value = this.longitud;
+		</attribute>
+		<attribute name="idNumber">
+			this.children[1].children[15].value = this.idNumber;
+		</attribute>
+		
+		
+		<method name="onClick">
+			if(this.type=='fire'||this.type=='flood'||this.type=='collapse'){			
+				detailsEvents.reset();
+				show(detailsEvents);
+				}
+			if(this.type=='police'||this.type=='firemen'||this.type=='ambulance'){			
+				detailsResources.reset();
+				show(detailsResources);
+				}
+			if(this.type=='slight'||this.type=='serious'||this.type=='dead'||this.type=='trapped'){			
+				detailsPeople.reset();
+				show(detailsPeople);
+				}	
+				
+		</method>
+		
+		<box layout="vertical" width="15%" halign="center">
+			<imagebox class="item_image" width="90%" halign="center"  transform="fit"/>
+		</box>
+		
+		<box layout="vertical" width="100%" halign="left">
+			<textbox class="item_title">Title</textbox>
+			<textbox class="item_body" maxLines="1" width="100%">Description</textbox>
+			<textbox  visible="false">Address</textbox>
+			<textbox  visible="false">info</textbox>
+			<textbox  visible="false">state</textbox>
+			<textbox  visible="false">size</textbox>
+			<textbox  visible="false">traffic</textbox>
+			<textbox  visible="false">type</textbox>
+			<textbox  visible="false">quantity</textbox>
+			<textbox  visible="false">idAssigned</textbox>
+			<textbox  visible="false">date</textbox>
+			<textbox  visible="false">username</textbox>
+			<textbox  visible="false">usertype</textbox>
+			<textbox  visible="false">latitud</textbox>
+			<textbox  visible="false">longitud</textbox>
+			<textbox  visible="false">idNumber</textbox>
+		</box>
+		<imagebox class="item_arrow"  width="10%" transform="fit"/>
+	</prototype> 
+	
+	<prototype name="title" extends="Box" height="5%" width="100%" layout="horizontal" halign="left" valign="top">
+			<textbox class="top-img">
+				disasters2.0
+			</textbox>
+			
+	</prototype> 
+	
+	
+	<prototype name="tabs" extends="Box" layout="horizontal" width="100%" class="top-tabs" halign="left" style="margin: 0 0 0 5px;">
+		<attribute name="selected" >
+			this.children[0].class = "tab";
+			this.children[1].class = "tab";
+			this.children[2].class = "tab";
+			this.children[this.selected].class = "tabSelected";
+		</attribute> 
+				<textbox focusable="false" >Events</textbox>
+				<textbox focusable="false" >Resources</textbox>
+				<textbox focusable="false" >Victims</textbox>
+	</prototype> 
+	
+	
+		<prototype name="card" layout="vertical" width="100%" height="100%" extends="Box" focusable="false">
+		<attribute name="id"/>
+		<attribute name="title">
+			this.header.value = this.title;
+		</attribute>
+		<attribute name="text">
+			this.question.value = this.text;
+		</attribute>
+		<textbox id="header" width="100%" halign="center">
+			Question
+		</textbox>
+		<textbox id="question" width="100%" halign="center" maxLines="4"/>
+	</prototype>
+	
+	<prototype name="radiobox" extends="Box" width="100%" layout="horizontal" focusable="true">
+		<method name="onFocus">
+			this.children[0].cropX=10;
+		</method>
+		<method name="onBlur">
+			this.children[0].cropX=0;
+		</method>
+		<method name="isSelected">
+			return this.children[0].cropX == 10;
+		</method>
+		<attribute name="label">
+			this.children[1].value = this.label;
+		</attribute>
+		<attribute name="value"/>
+		<imagebox url="images/radio.png" 
+			cropX="0" cropY="0" cropW="10" cropH="10" 
+			halign="right" valign="center" height="100%" style="padding-right: 4px"/>
+		<textbox width="100%" maxLines="1" halign="left" valign="center">
+			Label Here
+		</textbox>
+	</prototype> 
+	
+	<prototype name="radiogroup" extends="ScrollBox" width="100%" layout="vertical" focusable="false">
+		<method name="getAnswer">
+			for (rbox in this.children) {
+				if (rbox.isSelected()) 
+					return rbox.value;
+			}
+			return null;
+		</method>
+	</prototype>
+	
+	<prototype name="assEvent" extends="Box" width="100%" layout="horizontal"  focusable="true"  valign="top"  class="item">
+		<attribute name="image" >
+			this.children[0].children[0].url = this.image;
+			
+		</attribute> 
+		<attribute name="name">
+			this.children[1].children[0].value = this.name;
+		</attribute>
+		<attribute name="description">
+			this.children[1].children[1].value = this.description;
+		</attribute>
+		<attribute name="address">
+			this.children[1].children[2].value = this.address;
+		</attribute>
+		<attribute name="info">
+			this.children[1].children[3].value = this.info;
+		</attribute>
+		<attribute name="state">
+			this.children[1].children[4].value = this.state;
+		</attribute>
+		<attribute name="size">
+			this.children[1].children[5].value = this.size;
+		</attribute>
+		<attribute name="traffic">
+			this.children[1].children[6].value = this.traffic;
+		</attribute>
+		<attribute name="type">
+			this.children[1].children[7].value = this.type;
+		</attribute>
+		<attribute name="quantity">
+			this.children[1].children[8].value = this.quantity;
+		</attribute>
+		<attribute name="idAssigned">
+			this.children[1].children[9].value = this.idAssigned;
+		</attribute>
+		<attribute name="date">
+			this.children[1].children[10].value = this.date;
+		</attribute>
+		<attribute name="username">
+			this.children[1].children[11].value = this.username;
+		</attribute>
+		<attribute name="usertype">
+			this.children[1].children[12].value = this.usertype;
+		</attribute>
+		<attribute name="latitud">
+			this.children[1].children[13].value = this.latitud;
+		</attribute>
+		<attribute name="longitud">
+			this.children[1].children[14].value = this.longitud;
+		</attribute>
+		<attribute name="idNumber">
+			this.children[1].children[15].value = this.idNumber;
+		</attribute>
+		
+		<method name="onClick">
+			debug("######### Este es el id que paso: "+this.idNumber);
+			associate(this.idNumber);
+			send();
+				
+		</method>
+		
+		<box layout="vertical" width="15%" halign="center">
+			<imagebox class="item_image" width="90%" halign="center"  transform="fit"/>
+		</box>
+		
+		<box layout="vertical" width="100%" halign="left">
+			<textbox class="item_title">Title</textbox>
+			<textbox class="item_body" maxLines="1" width="100%">Description</textbox>
+			<textbox  visible="false">Address</textbox>
+			<textbox  visible="false">info</textbox>
+			<textbox  visible="false">state</textbox>
+			<textbox  visible="false">size</textbox>
+			<textbox  visible="false">traffic</textbox>
+			<textbox  visible="false">type</textbox>
+			<textbox  visible="false">quantity</textbox>
+			<textbox  visible="false">idAssigned</textbox>
+			<textbox  visible="false">date</textbox>
+			<textbox  visible="false">username</textbox>
+			<textbox  visible="false">usertype</textbox>
+			<textbox  visible="false">latitud</textbox>
+			<textbox  visible="false">longitud</textbox>
+			<textbox  visible="false">id</textbox>
+		</box>
+		<imagebox class="item_arrow"  width="10%" transform="fit"/>
+	</prototype> 
+</moblet>
