@@ -1,0 +1,1379 @@
+<moblet name="Disasters3.0" default="main" icon="images/logoa.png" version="3.0" onStart="loadData();">
+	<script src="mapScript.mjs" />
+	<script src="jsonScript.mjs" />
+	<script src="formScript.mjs" />
+	<script src="disaster.mjs" />
+	<script>
+		Moblet.REQUIRES_COMMANDS = "true" == Moblet["MJX-Native-Commands"];
+	</script>
+	<style src="disastersStyle.mcss" />
+	<include src="common.mjx" static="true"/>
+	
+	
+	<resource url="images/header_en.png" persist="true" width="once{3*Moblet.width/4}" />
+	<resource url="images/world.png" persist="true" width="once{2*Moblet.width/9}" />
+	<resource url="images/arrow.png" persist="true" width="once{2*Moblet.width/9}" />
+	<resource url="images/person.png" persist="true" width="once{2*Moblet.width/9}" />
+	<resource url="images/top_title.png" persist="true" width="once{Moblet.height/30}" />
+	<resource url="images/radio.png" persist="true"  />
+	<resource url="images/markers/fire.png" persist="true"  />
+	<resource url="images/markers/flood.png" persist="true"  />
+	<resource url="images/markers/collapse.png" persist="true"  />
+	
+
+	
+
+	
+	<screen id="main" layout="vertical" onLeftSoftkey="exit()" onRightSoftkey="actualize()">
+		
+		<imagebox width="100%" class="title" halign="center" url="images/header_en.png"/>
+		
+		<textbox width="100%" class="subtitle" valign="center" halign="center" >
+				d i t   -   U P M
+			</textbox>
+		
+		
+		<box class="content" layout="horizontal" width="100%" height="100%" halign="center" valign="top">
+			<box class="menuitem" layout="vertical" focusable="true" onClick="show(visualizeEvents)" halign="center" valign="center">
+					<imagebox  class="menuimg"  url="images/world.png"/>
+					<textbox class="menutext">Visualize</textbox>
+			</box>
+			<box class="menuitem" layout="vertical" focusable="true" onClick="show(postEvent)" halign="center" valign="center">
+					<imagebox  class="menuimg"  url="images/arrow.png"/>
+					<textbox class="menutext">Add</textbox>
+			</box>
+			<box class="menuitem" layout="vertical" focusable="true" onClick="show(aboutUs)" halign="center" valign="center">
+					<imagebox  class="menuimg"  url="images/person.png"/>
+					<textbox class="menutext">About us</textbox>
+			</box>
+			
+		</box>
+			
+					
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Exit" onClick="exit()" priority="1"/>
+				<command label="Refresh" onClick="actualize()" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Exit
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Refresh
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+
+	<screen id="visualizeEvents" layout="vertical" onLeftSoftkey="show(main);" onRightSoftkey="detailsEvents.reset();show(detailsEvents);" onRightKey="show(visualizeResources);" onLeftKey="show(visualizePeople);">
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="0"/>
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<foreach var="iterate" items="Events">
+					<script>var imageUrl = "images/markers/"+iterate.type+".png";</script>
+					<item image="once{imageUrl}" name="once{iterate.name}" description="once{iterate.description}" 
+					info="once{iterate.info}"  size="once{iterate.size}" traffic="once{iterate.traffic}"
+					state="once{iterate.state}" type="once{iterate.type}" address="once{iterate.address}"
+					date="once{iterate.date}" username="once{iterate.nameuser}" usertype="once{iterate.typeuser}" 
+					latitud="once{iterate.latitud}" longitud="once{iterate.longitud}" idNumber="once{iterate.id}"/>
+				</foreach>
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Select
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	<screen id="visualizeResources" layout="vertical" onLeftSoftkey="show(main);" onRightSoftkey="detailsResources.reset();show(detailsResources);" onRightKey="show(visualizePeople);" onLeftKey="show(visualizeEvents);">
+					
+		<title></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="1"/>
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<foreach var="iterate" items="Resources">
+					<script>var imageUrl = "images/markers/"+iterate.type+iterate.quantity+".png";</script>
+					<item image="once{imageUrl}" name="once{iterate.name}" description="once{iterate.description}" 
+					info="once{iterate.info}"  idAssigned="once{iterate.idAssigned}" quantity="once{iterate.quantity}"
+					state="once{iterate.state}" type="once{iterate.type}" address="once{iterate.address}"
+					date="once{iterate.date}" username="once{iterate.nameuser}" usertype="once{iterate.typeuser}" 
+					latitud="once{iterate.latitud}" longitud="once{iterate.longitud}" idNumber="once{iterate.id}"/>
+				</foreach>
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Select
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+
+
+<screen id="visualizePeople" layout="vertical" onLeftSoftkey="show(main);" onRightSoftkey="detailsPeople.reset();show(detailsPeople);" onRightKey="show(visualizeEvents);" onLeftKey="show(visualizeResources);">
+					
+		<title></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="2"/>
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<foreach var="iterate" items="People">
+					<script>var imageUrl = "images/markers/"+iterate.type+iterate.quantity+".png";</script>
+					<item image="once{imageUrl}" name="once{iterate.name}" description="once{iterate.description}" 
+					info="once{iterate.info}"  idAssigned="once{iterate.idAssigned}" quantity="once{iterate.quantity}"
+					state="once{iterate.state}" type="once{iterate.type}" address="once{iterate.address}"
+					date="once{iterate.date}" username="once{iterate.nameuser}" usertype="once{iterate.typeuser}" 
+					latitud="once{iterate.latitud}" longitud="once{iterate.longitud}" idNumber="once{iterate.id}"/>
+				</foreach>
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Select
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+
+
+	
+	<screen id="detailsEvents" layout="vertical" onLeftSoftkey="show(visualizeEvents);" 
+	onRightkey="getAddress(visualizeEvents.focus.address,visualizeEvents.focus.latitud,visualizeEvents.focus.longitud);" 
+	onRightSoftkey="getAddress(visualizeEvents.focus.address,visualizeEvents.focus.latitud,visualizeEvents.focus.longitud);" >
+		<title></title>
+		
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<box layout="horizontal" width="100%" class="top-tabs" halign="left" style="margin: 0 0 0 5px;" >
+				<script>
+				
+				var title2 = visualizeEvents.focus.name+" ("+visualizeEvents.focus.type+") ";</script>
+				<textbox focusable="false" class="tab">bind{title2}</textbox>
+				
+			</box>
+			<box layout="vertical" width="100%"  height="100%" class="content">
+				<scrollbox scrollbar="true" layout="vertical">
+					
+						<script>var imageUrl = "images/markers/"+visualizeEvents.focus.type+".png";</script>
+						
+						<box layout="vertical" width="100%" halign="left">
+							<imagebox  halign="center" url="once{imageUrl}" class="details_img"/>						
+						</box>
+							<box layout="vertical" width="100%" class="details_body">
+							<script>var description = "Description: "+visualizeEvents.focus.description;</script>
+							<textbox>
+							bind{description}
+							</textbox>
+							
+							<script>var info = "Info: "+visualizeEvents.focus.info;</script>
+							<textbox >
+							bind{info}
+							</textbox>
+							
+							<script>var address = "Address: "+visualizeEvents.focus.address;</script>
+							<textbox >
+							bind{address}
+							</textbox>
+						
+							<script>var state = "State: "+visualizeEvents.focus.state;</script>
+							<textbox >
+							bind{state}
+							</textbox>
+						
+							<script>var traffic = "Traffic: "+visualizeEvents.focus.traffic;</script>
+							<textbox >
+							bind{traffic}
+							</textbox>
+					
+							<script>var size = "Size: "+visualizeEvents.focus.size;</script>
+							<textbox >
+							bind{size}
+							</textbox>
+							
+							<script>var user = "Added by: "+visualizeEvents.focus.username+" ("+visualizeEvents.focus.usertype+")";</script>
+							<textbox >
+							bind{user}
+							</textbox>
+							
+							<script>var date = "Dated: "+visualizeEvents.focus.date;</script>
+							<textbox >
+							bind{date}
+							</textbox>
+							
+					</box>
+					<box width="100%" layout="horizontal" halign="center">
+					
+				
+				<textbox class="button" focusable="true"  onClick="getAddress(visualizeEvents.focus.address,visualizeEvents.focus.latitud,visualizeEvents.focus.longitud);">
+					map
+				</textbox>
+				<textbox class="button" focusable="true" onClick="delete(visualizeEvents.focus.idNumber);" >
+					delete
+				</textbox>
+				</box>
+					
+					
+					
+				</scrollbox>
+				
+				
+				
+			</box>
+		</box>
+		
+		
+		
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(visualizeEvents)" priority="1"/>
+				<command label="Map" onClick="getAddress(visualizeEvents.focus.address);" priority="1"/>
+			</when>
+			<otherwise>
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					<box class="softkeys" layout="horizontal" width="100%">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Map
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+		</screen>
+		
+		
+		<screen id="detailsResources" layout="vertical" onLeftSoftkey="show(visualizeResources);" 
+		onRightkey="getAddress(visualizeResources.focus.address,visualizeEvents.focus.latitud,visualizeEvents.focus.longitud);" 
+		onRightSoftkey="getAddress(visualizeEvents.focus.address,visualizeEvents.focus.latitud,visualizeEvents.focus.longitud);" >
+		<title></title>
+		
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<box layout="horizontal" width="100%" class="top-tabs" halign="left" style="margin: 0 0 0 5px;" >
+				<script>
+				
+				var title2 = visualizeResources.focus.name+" ("+visualizeResources.focus.type+") ";
+				
+				</script>
+				<textbox focusable="false" class="tab">bind{title2}</textbox>
+				
+			</box>
+			<box layout="vertical" width="100%"  height="100%" class="content">
+				<scrollbox scrollbar="true" layout="vertical">
+					
+						<script>var imageUrl = "images/markers/"+visualizeResources.focus.type+visualizeResources.focus.quantity+".png";</script>
+						
+						<box layout="vertical" width="100%" halign="left">
+							<imagebox  halign="center" url="once{imageUrl}" class="details_img"/>						
+						</box>
+							<box layout="vertical" width="100%" class="details_body">
+							<script>
+							
+							var description = "Description: "+visualizeResources.focus.description;</script>
+							<textbox>
+							bind{description}
+							</textbox>
+							
+							<script>var info = "Info: "+visualizeResources.focus.info;
+							</script>
+							<textbox >
+							bind{info}
+							</textbox>
+							
+							<script>var address = "Address: "+visualizeResources.focus.address;</script>
+							<textbox >
+							bind{address}
+							</textbox>
+						
+							<script>var state = "State: "+visualizeResources.focus.state;</script>
+							<textbox >
+							bind{state}
+							</textbox>
+						
+							<script>var quantity = "Number of units: "+visualizeResources.focus.quantity;</script>
+							<textbox >
+							bind{quantity}
+							</textbox>
+					
+							<script>
+							var id = visualizeResources.focus.idAssigned;
+							var idAssigned = "Disaster assigned: ";
+							if(id!=0){
+								if(Events[id]!=Undefined){
+									idAssigned = idAssigned + Events[id].name;
+								}
+								else{idAssigned = idAssigned + "none";}
+							}
+							else{idAssigned = idAssigned + "none";}
+							</script>
+							<textbox >
+							bind{idAssigned}
+							</textbox>
+							
+							<script>var user = "Added by: "+visualizeResources.focus.username+" ("+visualizeResources.focus.usertype+")";</script>
+							<textbox >
+							bind{user}
+							</textbox>
+							
+							<script>var date = "Dated: "+visualizeResources.focus.date;</script>
+							<textbox >
+							bind{date}
+							</textbox>
+							
+					</box>
+					<box width="100%" layout="horizontal" halign="center">
+					
+				
+				<textbox class="button" focusable="true"  onClick="getAddress(visualizeResources.focus.address,visualizeResources.focus.latitud,visualizeResources.focus.longitud);">
+					map
+				</textbox>
+				<textbox class="button" focusable="true" onClick="delete(visualizeResources.focus.idNumber);" >
+					delete
+				</textbox>
+				</box>
+					
+					
+				</scrollbox>
+				
+				
+				
+			</box>
+		</box>
+		
+		
+		
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(visualizeResources)" priority="1"/>
+				<command label="Map" onClick="getAddress(visualizeResources.focus.address);" priority="1"/>
+			</when>
+			<otherwise>
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					<box class="softkeys" layout="horizontal" width="100%">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Map
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+		</screen>
+		
+		
+		
+	<screen id="detailsPeople" layout="vertical" onLeftSoftkey="show(visualizePeople);" 
+	onRightkey="getAddress(visualizePeople.focus.address,visualizePeople.focus.latitud,visualizePeople.focus.longitud);" 
+	onRightSoftkey="getAddress(visualizePeople.focus.address,visualizePeople.focus.latitud,visualizePeople.focus.longitud);" >
+		<title></title>
+		
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<box layout="horizontal" width="100%" class="top-tabs" halign="left" style="margin: 0 0 0 5px;" >
+				<script>
+				
+				var nombre = visualizePeople.focus.name;
+				
+				var title2 = nombre+" ("+visualizePeople.focus.type+") ";</script>
+				<textbox focusable="false" class="tab">bind{title2}</textbox>
+				
+			</box>
+			<box layout="vertical" width="100%"  height="100%" class="content">
+				<scrollbox scrollbar="true" layout="vertical">
+					
+						<script>
+						
+						var imageUrl = "images/markers/"+visualizePeople.focus.type+visualizePeople.focus.quantity+".png";</script>
+						
+						<box layout="vertical" width="100%" halign="left">
+							<imagebox  halign="center" url="once{imageUrl}" class="details_img"/>						
+						</box>
+							<box layout="vertical" width="100%" class="details_body">
+							<script>var description = "Description: "+visualizePeople.focus.description;</script>
+							<textbox>
+							bind{description}
+							</textbox>
+							
+							<script>var info = "Info: "+visualizePeople.focus.info;</script>
+							<textbox >
+							bind{info}
+							</textbox>
+							
+							<script>var address = "Address: "+visualizePeople.focus.address;</script>
+							<textbox >
+							bind{address}
+							</textbox>
+						
+							<script>var state = "State: "+visualizePeople.focus.state;</script>
+							<textbox >
+							bind{state}
+							</textbox>
+						
+							<script>var quantity = "Number of people: "+visualizePeople.focus.quantity;</script>
+							<textbox >
+							bind{quantity}
+							</textbox>
+					
+							<script>
+							var id = visualizePeople.focus.idAssigned;
+							var idAssigned = "Disaster assigned: ";
+							if(id!=0){
+								if(Events[id]!=Undefined){
+									idAssigned = idAssigned + Events[id].name;
+								}
+								else{idAssigned = idAssigned + "none";}
+							}
+							else{idAssigned = idAssigned + "none";}
+							</script>
+							<textbox >
+							bind{idAssigned}
+							</textbox>
+							
+							<script>var user = "Added by: "+visualizePeople.focus.username+" ("+visualizePeople.focus.usertype+")";</script>
+							<textbox >
+							bind{user}
+							</textbox>
+							
+							<script>var date = "Dated: "+visualizePeople.focus.date;</script>
+							<textbox >
+							bind{date}
+							</textbox>
+							
+					</box>
+					
+					<box width="100%" layout="horizontal" halign="center">
+					
+				
+				<textbox class="button" focusable="true"  onClick="getAddress(visualizePeople.focus.address,visualizePeople.focus.latitud,visualizePeople.focus.longitud);">
+					map
+				</textbox>
+				<textbox class="button" focusable="true" onClick="delete(visualizePeople.focus.idNumber);" >
+					delete
+				</textbox>
+				</box>
+					
+				</scrollbox>
+				
+				
+				
+			</box>
+		</box>
+		
+		
+		
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(visualizePeople)" priority="1"/>
+				<command label="Map" onClick="getAddress(visualizePeople.focus.address);" priority="1"/>
+			</when>
+			<otherwise>
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					<box class="softkeys" layout="horizontal" width="100%">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Map
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+		</screen>	
+
+	<!--screen id="post" layout="vertical" onLeftSoftkey="show(main);" onRightSoftKey="send()">
+		
+		<box height="5%" layout="horizontal" width="100%"  halign="left" valign="top">
+					
+			<imagebox  height="100%" class="top-img" transform="fit" halign="left" url="images/top_title.png"/>
+			
+		</box>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			
+			<box layout="horizontal" width="100%" class="top-tabs" halign="left" style="margin: 0 0 0 5px;" >
+				<textbox focusable="true" class="tab">Events</textbox>
+				<textbox focusable="true" class="tab">Resources</textbox>
+				<textbox focusable="true" class="tab">Victims</textbox>
+			</box>
+			
+			<box layout="vertical" width="100%"  height="100%" class="content">
+				
+			</box>
+		</box>
+		
+		
+		
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					<box class="softkeys" layout="horizontal" width="100%">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen-->
+
+
+
+	<screen id="loading" class="progress" layout="vertical" halign="center" valign="center">
+		<textbox class="loading">LOADING ...</textbox>	
+	</screen>
+	
+	
+	<screen id="mapviewer" >
+		<method name="onClick">
+			zoomIn();
+		</method>
+		<method name="onLeftSoftkey">
+			show(main);
+		</method>
+		<method name="onRightSoftkey">
+			zoomOut();
+		</method>
+		<method name="start">
+			show(loading, 1);
+		</method>
+		<method name="stop">
+			hide(loading);
+		</method>
+		<scrollbox width="100%" height="100%" layout="none" contentX="once{Moblet.width/2 - 250}" contentY="once{Moblet.height/2 - 200}" contentWidth="500" contentHeight="400">
+			<imagebox id="map" image="bind{zoomLevels[zoom]}" width="500" height="400" transform="none"/>
+			<script>
+				mapviewer.map = this.map;
+			</script>
+		</scrollbox>
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Back" onClick="show(main)" priority="1"/>
+				<command label="Zoom Out" onClick="zoomOut();" priority="1"/>
+			</when>
+			<otherwise>
+				<box class="softkey_container" layout="vertical" height="10%" valign="center">
+					
+				
+				
+				</box>
+				<box  layout="vertical"  height="100%" width="100%" valign="bottom">
+					<box class="softkeys" layout="horizontal" width="100%">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Zoom out
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	
+	
+	<screen id="postEvent" layout="vertical" onLeftSoftkey="show(main);" onRightSoftkey="saveType('event',radio.getAnswer());show(postEvent2);" onRightKey="show(postResource);" onLeftKey="show(postPeople);" >
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="0"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox width="100%" class="" focusable="false">
+					Select the type of event from the list below and press Next.
+				</textbox>
+				
+				<radiogroup class="radio_options" id="radio">
+					<radiobox label="Fire" value="fire"/>
+					<radiobox label="Flood" value="flood"/>
+					<radiobox label="Collapse" value="collapse"/>
+				</radiogroup>
+				
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Next
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	
+	
+	<screen id="postResource" layout="vertical" onLeftSoftkey="show(main);" onRightSoftkey="saveType('resource',radio.getAnswer());show(postResource2);" onRightKey="show(postPeople);" onLeftKey="show(postEvent);">
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="1"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox width="100%" class="" focusable="false">
+					Select the type of resource from the list below and press Next.
+				</textbox>
+				
+				<radiogroup class="radio_options" id="radio">
+					<radiobox label="Police" value="police"/>
+					<radiobox label="Firemen" value="firemen"/>
+					<radiobox label="Ambulance" value="ambulance"/>
+				</radiogroup>
+				
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Next
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	<screen id="postPeople" layout="vertical" onLeftSoftkey="show(main);" onRightSoftkey="saveType('people',radio.getAnswer());show(postPeople2);" onRightKey="show(postEvent);" onLeftKey="show(postResource);">
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="2"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox width="100%" class="" focusable="false">
+					Select the type of victim from the list below and press Next.
+				</textbox>
+				
+				<radiogroup class="radio_options" id="radio">
+					<radiobox label="Slight injured" value="slight"/>
+					<radiobox label="Serious injured" value="serious"/>
+					<radiobox label="Dead" value="dead"/>
+					<radiobox label="Trapped" value="trapped"/>
+				</radiogroup>
+				
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Next
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	
+	<screen id="postEvent2" layout="vertical" onLeftSoftkey="show(postEvent);" onRightSoftkey="saveInfo(address.value,name.value, info.value, description.value);send();">
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="0"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox >
+					bind{type}
+				</textbox>
+				<textbox >
+					Address:
+				</textbox>
+				
+				<textinput id="address" class="input" title="Address :" onDownKey="validateAddress(this.value)"/>
+				<textbox id="validAddress" visible="false" class="valid">
+					Address validated. OK
+				</textbox>	
+				<textbox id="invalidAddress" visible="false" class="invalid">
+					NOT valid Address
+				</textbox>	
+					
+				<textbox >
+					Name:
+				</textbox>
+				
+				<textinput id="name"  class="input" title="Name: "/>
+					
+				<textbox >
+					Information:
+				</textbox>
+				
+				<textinput id="info"  class="input" title="Information: "/>
+				<textbox >
+					Description:
+				</textbox>
+				
+				<textinput id="description"  class="input" title="Description: "/>
+				<box width="100%" layout="horizontal" halign="center">
+					
+				
+				<textbox class="button" focusable="true" onClick="saveInfo(address.value,name.value, info.value, description.value);show(postSize);" >
+					+info
+				</textbox>
+				<textbox class="button" focusable="true" onClick="saveInfo(address.value,name.value, info.value, description.value);send();" >
+					send
+				</textbox>
+				</box>
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Send
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+		<screen id="postSize" layout="vertical" onLeftSoftkey="show(postEvent2);" onRightSoftkey="saveSize(radio.getAnswer());show(postTraffic);" >
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="0"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox width="100%" class="" focusable="false">
+					Select the size of the Disaster.
+				</textbox>
+				
+				<radiogroup class="radio_options" id="radio">
+					<radiobox label="Small" value="small"/>
+					<radiobox label="Medium" value="medium"/>
+					<radiobox label="Big" value="big"/>
+					<radiobox label="Huge" value="huge"/>
+				</radiogroup>
+				
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Next
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	<screen id="postTraffic" layout="vertical" onLeftSoftkey="show(postSize);" onRightSoftkey="saveTraffic(radio.getAnswer());send();" >
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="0"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox width="100%" class="" focusable="false">
+					Select the density of traffic around the disaster.
+				</textbox>
+				
+				<radiogroup class="radio_options" id="radio">
+					<radiobox label="Low" value="low"/>
+					<radiobox label="Medium" value="medium"/>
+					<radiobox label="High" value="high"/>
+				
+				</radiogroup>
+				
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Send
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	
+	
+	<screen id="postResource2" layout="vertical" onLeftSoftkey="show(postResource);" onRightSoftkey="saveQuantity(radio.getAnswer());show(postResource3);">
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="1"/> 
+						
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox width="100%" class="" focusable="false">
+					Select the number of units.
+				</textbox>
+				
+				<radiogroup class="radio_options" id="radio">
+					<radiobox label="1" value="1"/>
+					<radiobox label="2" value="2"/>
+					<radiobox label="3" value="3"/>
+					<radiobox label="4" value="4"/>
+					<radiobox label="5" value="5"/>
+					<radiobox label="6" value="6"/>
+					<radiobox label="7" value="7"/>
+					<radiobox label="8" value="8"/>
+					<radiobox label="9" value="9"/>
+					<radiobox label="10 or more" value="10"/>
+				</radiogroup>
+				
+				
+				
+				
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Next
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	<screen id="postPeople2" layout="vertical" onLeftSoftkey="show(postPeople);" onRightSoftkey="saveQuantity(radio.getAnswer());show(postPeople3);">
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="2"/> 
+						
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox width="100%" class="" focusable="false">
+					Select the number of victims.
+				</textbox>
+				
+				<radiogroup class="radio_options" id="radio">
+					<radiobox label="1" value="1"/>
+					<radiobox label="2" value="2"/>
+					<radiobox label="3" value="3"/>
+					<radiobox label="4" value="4"/>
+					<radiobox label="5" value="5"/>
+					<radiobox label="6" value="6"/>
+					<radiobox label="7" value="7"/>
+					<radiobox label="8" value="8"/>
+					<radiobox label="9" value="9"/>
+					<radiobox label="10 or more" value="10"/>
+				</radiogroup>
+				
+				
+				
+				
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Next
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	<screen id="postResource3" layout="vertical" onLeftSoftkey="show(postResource2);" onRightSoftkey="saveInfo(address.value,name.value, info.value, description.value);send();">
+
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="1"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox >
+					bind{type}
+				</textbox>
+				<textbox >
+					Address:
+				</textbox>
+				
+				<textinput id="address" class="input" title="Address :" onDownKey="validateAddress(this.value)"/>
+				<textbox id="validAddress" visible="false" class="valid">
+					Address validated. OK
+				</textbox>	
+				<textbox id="invalidAddress" visible="false" class="invalid">
+					NOT valid Address
+				</textbox>	
+					
+				<textbox >
+					Name:
+				</textbox>
+				
+				<textinput id="name"  class="input" title="Name: "/>
+					
+				<textbox >
+					Information:
+				</textbox>
+				
+				<textinput id="info"  class="input" title="Information: "/>
+				<textbox >
+					Description:
+				</textbox>
+				
+				<textinput id="description"  class="input" title="Description: "/>
+				<box width="100%" layout="horizontal" halign="center">
+					
+				
+				<textbox class="button" focusable="true"  onClick="saveInfo(address.value,name.value, info.value, description.value);show(associateResource);">
+					associate
+				</textbox>
+				<textbox class="button" focusable="true" onClick="saveInfo(address.value,name.value, info.value, description.value);send();" >
+					send
+				</textbox>
+				</box>
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Send
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	<screen id="postPeople3" layout="vertical" onLeftSoftkey="show(postPeople2);" onRightSoftkey="saveInfo(address.value,name.value, info.value, description.value);send();">
+
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="2"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox >
+					bind{type}
+				</textbox>
+				<textbox >
+					Address:
+				</textbox>
+				
+				<textinput id="address" class="input" title="Address :" onDownKey="validateAddress(this.value)"/>
+				<textbox id="validAddress" visible="false" class="valid">
+					Address validated. OK
+				</textbox>	
+				<textbox id="invalidAddress" visible="false" class="invalid">
+					NOT valid Address
+				</textbox>	
+					
+				<textbox >
+					Name:
+				</textbox>
+				
+				<textinput id="name"  class="input" title="Name: "/>
+					
+				<textbox >
+					Information:
+				</textbox>
+				
+				<textinput id="info"  class="input" title="Information: "/>
+				<textbox >
+					Description:
+				</textbox>
+				
+				<textinput id="description"  class="input" title="Description: "/>
+				<box width="100%" layout="horizontal" halign="center">
+					
+				
+				<textbox class="button" focusable="true" onClick="saveInfo(address.value,name.value, info.value, description.value);show(associatePeople);" >
+					associate
+				</textbox>
+				<textbox class="button" focusable="true" onclick="saveInfo(address.value,name.value, info.value, description.value);send();" >
+					send
+				</textbox>
+				</box>
+			</scrollbox>
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Send
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	
+	<screen id="associateResource" layout="vertical" onLeftSoftkey="show(postResource3);" onRightSoftkey="associate(this.focus.id);send();">
+
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="1"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox focusable="false">
+					Click on the Disaster you would like to associate.
+				</textbox>
+				<foreach var="iterate" items="Events">
+					<script>var imageUrl = "images/markers/"+iterate.type+".png";</script>
+					<assEvent image="once{imageUrl}" name="once{iterate.name}" description="once{iterate.description}" 
+					info="once{iterate.info}"  size="once{iterate.size}" traffic="once{iterate.traffic}"
+					state="once{iterate.state}" type="once{iterate.type}" address="once{iterate.address}"
+					date="once{iterate.date}" username="once{iterate.nameuser}" usertype="once{iterate.typeuser}" 
+					latitud="once{iterate.latitud}" longitud="once{iterate.longitud}" idNumber="once{iterate.id}"/>
+				</foreach>
+			</scrollbox>
+			
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Select
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+		<screen id="associatePeople" layout="vertical" onLeftSoftkey="show(postPeople3);" onRightSoftkey="associate(this.focus.id);send();">
+
+					
+		<title ></title>
+		
+		<box layout="vertical" width="100%" height="95%" halign="center"  class="body">
+			<tabs selected="1"/>
+			
+			<scrollbox scrollbar="true" layout="vertical" width="100%"  height="100%" class="content">
+				<textbox focusable="false">
+					Click on the Disaster you would like to associate.
+				</textbox>
+				<foreach var="iterate" items="Events">
+					<script>var imageUrl = "images/markers/"+iterate.type+".png";</script>
+					<assEvent image="once{imageUrl}" name="once{iterate.name}" description="once{iterate.description}" 
+					info="once{iterate.info}"  size="once{iterate.size}" traffic="once{iterate.traffic}"
+					state="once{iterate.state}" type="once{iterate.type}" address="once{iterate.address}"
+					date="once{iterate.date}" username="once{iterate.nameuser}" usertype="once{iterate.typeuser}" 
+					latitud="once{iterate.latitud}" longitud="once{iterate.longitud}" idNumber="once{iterate.id}"/>
+				</foreach>
+			</scrollbox>
+			
+		</box>
+		
+				
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							Select
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	<screen id="aboutUs" layout="vertical" onLeftSoftkey="show(main)" >
+		<imagebox width="100%" class="title" halign="center" url="images/header_en.png"/>
+		
+		<box class="content" layout="vertical" width="100%" height="100%" halign="center" valign="top">
+			<textbox width="90%" >
+				Disasters2.0 is a project developed by GSI Group in DIT Department from Universidad Politecnica de Madrid.
+				
+			</textbox>
+			<imagebox halign="center" valign="center" url="images/dit.gif" width="30%" transform="fit" style="margin-top:'20%'"/>
+			
+		</box>
+			
+		
+			
+					
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Select" onClick="this.focus.onClick()" priority="1"/>
+				<command label="Exit" onClick="exit()" priority="1"/>
+				<command label="Refresh" onClick="actualize()" priority="1"/>
+			</when>
+			<otherwise>
+				
+				<box  layout="vertical" y="5" width="100%" valign="bottom">
+					
+					<box layout="horizontal" width="100%" class="softkeys">
+						<textbox width="50%" halign="left" style="margin: 0 0 0 5px;">
+							Back
+						</textbox>
+						<textbox width="50%" halign="right" style="margin: 0 5px 0 0;">
+							
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+	
+	
+	
+	<screen id="error" layout="vertical" onShow="this.reset()" onLeftSoftkey="show(main)">
+		<box width="100%" class="banner" halign="center"  layout="none">
+			<imagebox url="images/header_en.png"/>
+		</box>
+		<box width="100%" layout="vertical" class="header" halign="center" valign="center" height="23">
+			<textbox>ERROR</textbox>
+		</box>
+		<textbox width="100%" class="content" focusable="true" valign="center" halign="center" onClick="show(main)">
+			bind{errorMsg}
+		</textbox>
+		
+		<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+		<!-- Changed width="once{Moblet.width}" height="once{Moblet.height}" -->
+		<!-- to width="100%" height="100%" as softkey was not appearing.     -->      
+		<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+		<choose>
+			<when test="Moblet.REQUIRES_COMMANDS">
+				<command label="Back" onClick="show(main)" priority="1"/>
+			</when>
+			<otherwise>
+				<box id="softkeys" layout="vertical" y="5" width="100%" height="100%" valign="bottom">
+					<box layout="horizontal" width="100%">
+						<textbox class="softkey" width="50%" halign="left">
+							Back
+						</textbox>
+					</box>
+				</box>
+			</otherwise>
+		</choose>
+	</screen>
+</moblet>

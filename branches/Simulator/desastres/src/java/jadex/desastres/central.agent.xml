@@ -1,0 +1,106 @@
+<!--
+  <H3>Central.</H3>
+
+  Agente que recoge heridos y los lleva al hospital.
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex 
+	                    http://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="central"
+	package="jadex.desastres">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>jadex.adapter.fipa.SFipa</import>
+		<import>jadex.adapter.fipa.AgentIdentifier</import>
+		<import>java.util.logging.*</import>
+		 
+	</imports>
+	
+
+	<beliefs>
+		<!-- Creamos el agente como instancia del Entorno. Por defecto, una posición en el centro de madrid -->
+		<belief name="env" class="Environment">
+			<fact>Environment.getInstance($agent.getType(), $agent.getName(),$beliefbase.centralMadrid)</fact>
+ 		</belief>		
+		
+		<!-- Definimos la posicion de la central en Madrid -->
+		<belief name="centralMadrid" class="Position">
+			<fact>new Position(40.45, -3.70)</fact> <!-- Posición aleatoria de la central -->
+			
+			
+		</belief>
+		
+		<!-- Posción del agente evaluada dinámicamente-->
+		<belief name="pos" class="Position">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+ 		
+ 		<!-- id del desastre que tienen que atender-->
+		<belief name="desastreActual" class="Integer">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+	</beliefs>
+
+	<goals>
+		<!-- Objetivo para buscar desastres a menos que se esté tratando uno.  -->
+		<performgoal name="buscaDesastre" retry="true" exclude="never"/>
+		
+		<!-- Objetivo para esperar a la finalización de un desastre -->
+		<achievegoal name="esperaSolucion"/>
+	</goals>
+
+	<plans>
+		<!-- Plan para buscar desastres. -->
+		<plan name="buscaDesastre-plan">
+			<body class="BuscaDesastrePlan"/>
+			<trigger>
+				<goal ref="buscaDesastre"/>
+			</trigger>
+			
+		</plan>
+		<!-- Plan para esperar la solución del Desastre. -->
+		<plan name="esperaSolucion-plan">
+			<body class="EsperaSolucionPlan"/>
+			<trigger>
+				<goal ref="esperaSolucion"/>
+			</trigger>
+		</plan>
+	</plans>
+	<events>
+    <messageevent name="aviso" type="fipa" direction="send">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.QUERY_REF</value>
+        </parameter>
+        <parameter name="content" class="String" direction="fixed">
+            <value>"go"</value>
+        </parameter>
+    </messageevent>
+     <messageevent name="terminado" type="fipa" direction="receive">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.QUERY_REF</value>
+        </parameter>
+        <parameter name="content" class="String" direction="fixed">
+            <value>"done"</value>
+        </parameter>
+    </messageevent>
+    </events>
+ 	<!-- Inicialmente activamos el objetivo con nombre hospital -->
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="buscaDesastre"/>
+			</goals>
+		</configuration>
+	</configurations>
+
+</agent>
+
+<properties>
+   <property name="logging.level">Level.INFO</property>
+   <property name="logging.useParentHandlers">true</property>
+</properties>

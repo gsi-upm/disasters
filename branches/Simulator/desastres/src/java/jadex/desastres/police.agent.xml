@@ -1,0 +1,90 @@
+<!--
+  <H3>Policia.</H3>
+
+  Agente que patrulla y acude a los desastres en Madrid.
+-->
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex 
+	                    http://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="police"
+	package="jadex.desastres">
+
+	<imports>
+		<import>jadex.adapter.fipa.SFipa</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>java.util.logging.*</import>
+	</imports>
+
+<beliefs>
+		<!-- Creamos el agente como instancia del Entorno. Por defecto, en el centro de Madrid -->
+		<belief name="env" class="Environment">
+			<fact>Environment.getInstance($agent.getType(), $agent.getName(),$beliefbase.Comisaria)</fact>
+ 		</belief>		
+		
+		<!-- Definimos el centro de Madrid -->
+		<belief name="Comisaria" class="Position">
+			<fact>new Position(40.421565, -3.710095)</fact> <!-- comisaria centro de madrid: calle leganitos, 19 -->
+			
+			<!-- Página con todas las comisarías: http://www.valledelkas.com/servicios/InformacionCiudadana/comisarias.asp-->
+		</belief>
+		
+		<!-- Posicion del agente evaluada dinamicamente-->
+		<belief name="pos" class="Position">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+
+
+		<!-- desastre que está atendiendo-->
+		<belief name="desastreActual" class="Integer">
+			<fact evaluationmode="dynamic">$beliefbase.env.getAgentPosition($agent.getName())</fact>
+ 		</belief>
+
+</beliefs>
+
+<goals>
+		<!-- Objetivo: patrullar por el mapa indefinidamente.  -->
+		<performgoal name="patrulla" retry="true" exclude="never"/>
+		
+		<!-- Objetivo: Llega un desastre que atender y el policía va a dar soporte hasta que se solucione -->
+		<achievegoal name="llega-desastre"/>
+</goals>
+
+<plans>
+		<!-- Plan para patrullar.-->
+		<plan name="patrulla-plan">
+			<body class="PatrullaPlan"/>
+			<trigger>
+				<goal ref="patrulla"/>
+			</trigger>
+		</plan>
+		<!-- Plan para llegar al lugar de un desastre y esperar a que se solucione -->
+		<plan name="llega-desastre-plan">
+			<body class="LlegaDesastrePlan"/>
+			<trigger>
+  				<messageevent ref="aviso" /> 
+ 			</trigger>
+		</plan>
+	</plans>
+	<events>
+    <messageevent name="aviso" type="fipa" direction="receive">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.QUERY_REF</value>
+        </parameter>
+        <parameter name="content" class="String">
+            <value>"go"</value>
+        </parameter>
+    </messageevent>
+    </events>
+ 	<!-- Inicialmente activamos el objetivo con nombre patrullar -->
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="patrulla"/>
+			</goals>
+		</configuration>
+	</configurations>
+
+</agent>

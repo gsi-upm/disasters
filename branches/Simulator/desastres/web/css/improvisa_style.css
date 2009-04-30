@@ -1,0 +1,241 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+/*background:url(fondo_azul.jpg) repeat-x #ffffff;*/
+font-family: trebuchet ms, arial, Verdana, Helvetica;
+font-size:12px;
+font-weight:normal;
+color: #999999;
+margin: 8px;
+padding: 0px;
+}
+h5{
+font-family: trebuchet ms, arial, Verdana, Helvetica;
+font-size:14px;
+font-weight:normal;
+color: #666666;
+padding: 0px;
+margin: 0px;}
+
+#fecha{
+font-family:  trebuchet ms, arial, Verdana, Helvetica;
+font-weight:normal;
+color: #999999;
+}
+
+#reloj{
+right:0px;
+color: #999999;
+}
+
+/*FORMULARIO con TABS* ----------------------------------*/
+form, textarea, input, form table{
+font-family:  trebuchet ms, arial, Verdana, Helvetica;
+font-weight: normal;
+font-size: 12px;
+color: #666666;
+}
+
+input:focus, textarea:focus {
+border: 2px solid #FFC83C;
+}
+
+
+form table img{
+margin-bottom: 10px;
+padding: 8px;
+
+}
+
+.rayas{
+border: 1px dashed #cccccc;
+padding: 10px;
+margin: 3px;
+}
+.info, .descripcion, .nombre{
+width: 100%;
+margin-top:5px;}
+
+.direccion{
+width: 100%;
+height: 65px;
+margin-top: 5px;
+margin-bottom: 5px;}
+.botones{
+margin-top: 5px;
+margin-bottom: 0px;
+padding: 0px;}
+
+textarea, input{
+/*width: 160px;*/
+}
+
+#quantity{
+    margin: 0px;
+    padding: 0px;
+
+}
+#size-traffic{}
+/*AQUI ACABA EL FORMULARIO---------------------------------------*/
+
+
+
+#left{
+width: 240px;
+/*float:left;
+left:0;*/
+
+}
+
+#right{
+margin-left: 10px;
+/*width: 100%;*/
+/*float: left;*/
+}
+
+
+#cabecera{
+float: left;}
+
+
+#minitabs{
+width: 80px;
+height: 10px;
+
+}
+
+#minitab1{
+    
+/*left:150px;*/}
+
+#minitab2{
+/*left: 150px;*/
+
+}
+
+
+.minitab{
+position: relative;
+top:6px;
+float:left;
+/*float:left;*/
+/*top: -10px;
+right: 10px;
+z-index: 10;*/
+}
+
+.minitab :hover{
+position: relative;
+top:-6px;
+}
+
+#screen{
+font-family: "courier", "monospace";
+font-size: 12px;
+margin: auto;
+margin-top: 10px;
+width: 98%;
+height: 150px;
+padding: 10px;
+
+border: 1px solid #919b9c;
+
+background-color: #efefef;
+color: #000000;
+overflow: scroll;
+
+}
+
+#close_screen{
+text-decoration: none;
+background-color: #CCCCCC;
+border: 1px #919b9c solid;
+color: black;
+/*width: 30px;
+height: 20px;*/
+padding: 0px 3px 0px 3px;
+position: absolute;
+right: 10px;
+margin: 0px;
+margin-top:10px;
+
+}
+
+
+
+#visualize{
+
+}
+.slideMenu{
+position: absolute;
+top: 88px;
+right: 6px;
+width: 290px;
+/*height: 150px;*/
+padding: 10px;
+left-padding: 20px;
+border: 1px solid #c4d6e1;
+boder-top: 0px;
+background-color: #eef8fa;
+color: #666666;
+list-style: none;
+list-style-type: none;
+}
+
+#bocadillo{
+font-family: trebuchet ms, arial, Verdana, Helvetica;
+font-size: 12px;
+
+color: #666666;
+}
+
+#bocadillo_links{}
+
+
+
+
+#no-link{
+color: #666666;
+}
+
+
+
+
+/* POP - UPS */
+.jqmWindow {
+    display: none;
+    
+    position: fixed;
+    top: 12%;
+    left: 60%;
+    
+    margin-left: -300px;
+    width: 250px;
+    
+    background-color: #eeeeee;
+    color: #333;
+    border: 1px solid  #333333;
+    padding: 12px;
+    
+}
+#error_texto{
+font-family: trebuchet ms, arial, Verdana, Helvetica;
+font-size:12px;
+font-weight:normal;
+color:#666666;
+}
+
+.jqmOverlay { background-color: #000; }
+ /*Fixed posistioning emulation for IE6
+     Star selector used to hide definition from browsers other than IE6
+     For valid CSS, use a conditional include instead */
+* html .jqmWindow {
+     position: absolute;
+     top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
+}
+
+
+#signeduser {
+    font-weight: bolder;
+}

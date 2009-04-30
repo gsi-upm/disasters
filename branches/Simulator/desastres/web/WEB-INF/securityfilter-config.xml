@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE securityfilter-config PUBLIC
+    "-//SecurityFilter.org//DTD Security Filter Configuration 2.0//EN"
+    "http://www.securityfilter.org/dtd/securityfilter-config_2_0.dtd">
+<securityfilter-config>
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+         <!-- login form -->
+            <form-login-page>/index.jsp</form-login-page>
+         <!-- login error page -->
+            <form-error-page>/loginError.jsp</form-error-page>
+         <!-- send users here on spontaneous login submittal -->
+            <form-default-page>/index.jsp</form-default-page>
+        </form-login-config>
+    </login-config>
+    <realm className="security.MySecurityRealm">
+      <!-- <realm-param name="" value="" /> -->
+    </realm>
+</securityfilter-config>
