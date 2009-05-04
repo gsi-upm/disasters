@@ -12,9 +12,9 @@ import java.lang.*;
  */
 public class Conecta {
 	
-	
+
 	/**
-	 * Creamos evento/agente teniendo du tipo, nombre, información y posición.
+	 * Creamos evento/agente teniendo du tipo, nombre, informaciï¿½n y posiciï¿½n.
 	 */
 	public Conecta(Position position,String type,String name,String info){
 		//Pasamos a String la latitud y la longitud
