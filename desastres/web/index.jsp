@@ -102,7 +102,6 @@
                 src='js/jquery-ui-personalized-1.5.2.min.js'>
             </script>
 
-            <%-- Test-purpose comment  --%>
             
             <%-- DWR.These files are created in the runtime --%>
             <script type='text/javascript' src='/Disasters/dwr/util.js'></script>        
