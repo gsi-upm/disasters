@@ -94,7 +94,7 @@ public class Event {
      * @return event
      */
     public static Event generateRefresh(Event lastRefresh, RandomGenerator generator) {
-        long instant = generator.refreshTime();
+        long instant = generator.refreshTime(); // This method or similar should be programmed
         if (lastRefresh != null) instant += lastRefresh.instant;
         Event newEvent =
                 new Event(instant, EventType.REFRESH);
@@ -110,7 +110,7 @@ public class Event {
      * @return event
      */
     public static Event generateAskingAgents(Event lastAsking, RandomGenerator generator) {
-        long instant = generator.agentsTime();
+        long instant = generator.agentsTime(); // This method or similar should be programmed
         if (lastAsking != null) instant += lastAsking.instant;
         Event newEvent =
                 new Event(instant, EventType.ASKING_FOR_AGENTS);
@@ -125,7 +125,7 @@ public class Event {
      * @return event
      */
     public static Event generateFiremenArrival(RandomGenerator generator) {
-        long instant = generator.firemenArrivalTime();
+        long instant = generator.firemenArrivalTime(); // This method or similar should be programmed
         Event newEvent =
                 new Event(instant, EventType.FIREMEN_ARRIVAL);
         LOGGER.info("Generate Firemen Arrival " + newEvent);
@@ -139,7 +139,7 @@ public class Event {
      * @return event
      */
     public static Event generateAmbulanceArrival(RandomGenerator generator) {
-        long instant = generator.ambulanceArrivalTime();
+        long instant = generator.ambulanceArrivalTime(); // This method or similar should be programmed
         Event newEvent =
                 new Event(instant, EventType.AMBULANCE_ARRIVAL);
         LOGGER.info("Generate Ambulance Arrival " + newEvent);
