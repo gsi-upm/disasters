@@ -51,6 +51,8 @@ private List<Event> queue;
         return (queue.size());
     }
 
+
+    @Override
     public String toString() {
         if (isEmpty())
             return null;
