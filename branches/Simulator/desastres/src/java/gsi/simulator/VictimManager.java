@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gsi.simulator;
 
 /**
@@ -10,20 +5,27 @@ package gsi.simulator;
  * @author luis
  */
 public class VictimManager {
-    public static int LIMIT_SEVERE_SLIGHT = 50;
+    public static final int MAX_HEALTH_POINTS = 100;
+    public static final int MIN_HEALTH_POINTS = 0;
+    public static final int LIMIT_SEVERE_SLIGHT = 50;
 
     public static InjuryDegree getVictimDegree(Person person) {
-        if(person.getLifePoints() >= LIMIT_SEVERE_SLIGHT) {
+        if (person.getHealthPoints() == MAX_HEALTH_POINTS) {
+            return InjuryDegree.TRAPPED;
+        }
+        else if (person.getHealthPoints() >= LIMIT_SEVERE_SLIGHT) {
             return InjuryDegree.SLIGHT;
         }
-        else if(person.getLifePoints() > 0) {
+        else if (person.getHealthPoints() > MIN_HEALTH_POINTS) {
             return InjuryDegree.SEVERE;
         }
-        return InjuryDegree.DEAD;
+        else {
+            return InjuryDegree.DEAD;
+        }
     }
 
     public static Person generateVictim() {
-        int lifePoints = (int) Math.floor(Person.MAX_LIFE_POINTS * Math.random() + 1);
-        return new Person(lifePoints);
+        int healthPoints = RandomGenerator.randomInteger(MIN_HEALTH_POINTS, MAX_HEALTH_POINTS);
+        return new Person(healthPoints);
     }
 }
