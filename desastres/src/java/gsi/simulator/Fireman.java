@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gsi.simulator;
 
 /**
@@ -11,6 +6,6 @@ package gsi.simulator;
  */
 public class Fireman extends Person {
     public Fireman() {
-        super(Person.MAX_LIFE_POINTS);
+        super(Person.MAX_HEALTH_POINTS);
     }
 }
