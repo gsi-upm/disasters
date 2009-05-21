@@ -38,26 +38,14 @@ public class Event {
     private static int eventCount = 0;
 
     /**
-     * Constructor of event with automatic id
+     * Constructor of event associated to a fire
      *
+     * @param idDisaster assigns the event with an existing disaster (if != 0) or with a new one (if == 0)
      * @param instant when event happens
      * @param type event type
      */
     public Event(long instant, EventType type) {
         this.idEvent = eventCount++;
-        this.instant = instant;
-        this.type = type;
-    }
-
-    /**
-     * Constructor of event with id assigned by user
-     *
-     * @param idEvent event identifier
-     * @param instant when event happens
-     * @param type event type
-     */
-    public Event(long idEvent, long instant, EventType type) {
-        this.idEvent = idEvent;
         this.instant = instant;
         this.type = type;
     }
@@ -90,13 +78,13 @@ public class Event {
      * Factory generating a refresh event
      *
      * @param lastRefresh last REFRESH event happened or null if it doesn't exist
-     * @param generator random generator
+     * @param period amount of time between two refresh events
      * @return event
      */
-    public static Event generateRefresh(Event lastRefresh, RandomGenerator generator) {
-        //long instant = generator.refreshTime(); This method or similar should be programmed
-        long instant = 0;
-        if (lastRefresh != null) instant += lastRefresh.instant;
+    public static Event generateRefresh(Event lastRefresh, long period) {
+        long instant = period;
+        if (lastRefresh != null)
+            instant += lastRefresh.instant;
         Event newEvent =
                 new Event(instant, EventType.REFRESH);
         LOGGER.info("Generate Refresh " + newEvent);
@@ -263,6 +251,7 @@ public class Event {
      *
      * @return String describing the event: (identifier, instant, type)
      */
+    @Override
     public String toString() {
         return "Event - idEvent: " + this.idEvent + ", T = " + this.instant + " , tipo: " + this.type;
     }
