@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package gsi.simulator;
 
@@ -13,33 +9,59 @@ import java.util.Properties;
  * This class contains the diferent parameters which define a simulation
  *
  * @author Sergio
+ * @author al.lopezf
  */
 public class Parameters {
 
     /*
-	 * Parameters value
-	 */
-	private final long seed;
-	private final int frequency;
+     * Defines if the simulation is going to refresh constantly.
+     */
+    private final boolean constant;
+    /*
+     * Seed for the number generation.
+     */
+    private final long seed;
+    /*
+     * If 'constant' is true, we need to know what the value of the frequency of simulation is.
+     */
+    private final int frequency;
+    /*
+     * Mean of the time beetween new and random fires.
+     */
+    private final double timeBeetwenFires;
+    /*
+     * Standard deviation of the gaussian generating new fires.
+     */
+    private final double deviationForFires;
 
 	/*
-	 * Parameteres default value
+	 * Default parameters value
 	 */
+    private final boolean DEFAULT_CONSTANT = true;
 	private final long DEFAULT_SEED = 1;
 	private final int DEFAULT_FREQUENCY = 1;
+    private final double DEFAULT_TIME_BEETWEN_FIRES = 600;
+    private final double DEFAULT_DEVIATION_FOR_FIRES = 1;
+
 
 	/*
 	 * Tags to read parameteres from file
 	 */
-	private static final String SEED = "seed";
-	private static final String FREQUENCY = "frequency";
+    private static final String CONSTANT = "constant";
+    private static final String SEED = "seed";
+    private static final String FREQUENCY = "frequency";
+    private static final String TIME_BEETWEN_FIRES = "time beetwen fires";
+    private static final String DEVIATION_FOR_FIRES = "deviation for fires";
 
 	/**
-	 * Default constructor
+	 * Default constructor, with default parameters.
 	 */
 	public Parameters() {
+        constant = DEFAULT_CONSTANT;
 		seed = DEFAULT_SEED;
 		frequency = DEFAULT_FREQUENCY;
+        timeBeetwenFires = DEFAULT_TIME_BEETWEN_FIRES;
+        deviationForFires = DEFAULT_DEVIATION_FOR_FIRES;
 	}
 
 	/**
@@ -61,20 +83,33 @@ public class Parameters {
 		// Creo unas nuevas variables intermedias para cada parametro, inicializadas
 		// al valor por defecto, que tomaran el valor leido del fichero en el caso
 		// en que este tenga un formato adecuado.
-		long newSeed = DEFAULT_SEED;
-		int newFrequency = DEFAULT_FREQUENCY;
+        boolean newConstant = DEFAULT_CONSTANT;
+        long newSeed = DEFAULT_SEED;
+        int newFrequency = DEFAULT_FREQUENCY;
+        double newTimeBeetwenFires = DEFAULT_TIME_BEETWEN_FIRES;
+        double newDeviationForFires = DEFAULT_DEVIATION_FOR_FIRES;
 
 		try {
 
-			Properties properties = new Properties();
-			in = new FileInputStream(file);
-			properties.load(in);
+            Properties properties = new Properties();
+            in = new FileInputStream(file);
+            properties.load(in);
 
-			String fileSeed = properties.getProperty(SEED);
+            String fileConstant = properties.getProperty(CONSTANT);
+            newConstant = Boolean.parseBoolean(fileConstant);
+
+            String fileSeed = properties.getProperty(SEED);
             newSeed = Long.parseLong(fileSeed);
 
-			String fileFrequency = properties.getProperty(FREQUENCY);
-			newFrequency = Integer.parseInt(fileFrequency);
+            String fileFrequency = properties.getProperty(FREQUENCY);
+            newFrequency = Integer.parseInt(fileFrequency);
+
+            String fileTimeBeetwenFires = properties.getProperty(TIME_BEETWEN_FIRES);
+            newTimeBeetwenFires = Double.parseDouble(fileTimeBeetwenFires);
+
+            String fileDeviationForFires = properties.getProperty(DEVIATION_FOR_FIRES);
+            newDeviationForFires = Double.parseDouble(fileDeviationForFires);
+
 
 			in.close();
 
@@ -84,9 +119,11 @@ public class Parameters {
 			throw new IOException("File not found.");
 
 		} finally {
-
+            constant = newConstant;
 			seed = newSeed;
 			frequency = newFrequency;
+            timeBeetwenFires = newTimeBeetwenFires;
+            deviationForFires = newDeviationForFires;
 
 			checkParameters();
 
@@ -101,13 +138,20 @@ public class Parameters {
 	/**
 	 * Constructor from explicit values
 	 *
-	 * @param seed            to get a repetitive behaviour at random number sequences
-	 * @param frequency       how often we refesh the simulator
+     * @param constant           Defines if the simulation is going to refresh constantly.
+	 * @param seed               to get a repetitive behaviour at random number sequences
+	 * @param frequency          how often we refesh the simulator
+     * @param timeBeetwenFires   Mean of the time beetween new and random fires.
+     * @param deviationForFires  Standard deviation of the gaussian generating new fires.
 	 * @throws IllegalArgumentException if any value is out of range
 	 */
-	public Parameters(long seed, int frequency) throws IllegalArgumentException{
+	public Parameters(boolean constant,long seed, int frequency,double timeBeetwenFires, double deviationForFires) throws IllegalArgumentException{
+        this.constant=constant;
 		this.seed = seed;
 		this.frequency = frequency;
+        this.timeBeetwenFires = timeBeetwenFires;
+        this.deviationForFires = deviationForFires;
+
 		checkParameters();
 	}
 
@@ -117,8 +161,15 @@ public class Parameters {
 	 * @throws IllegalArgumentException if any value is out of range
 	 */
 	private void checkParameters() {
-		if (frequency < 0)
+		if (frequency < 0){
 			wrongParameter(Integer.toString(frequency), FREQUENCY);
+        }
+        if (timeBeetwenFires < 0){
+            wrongParameter(Double.toString(timeBeetwenFires), TIME_BEETWEN_FIRES);
+        }
+        if (deviationForFires < 0){
+            wrongParameter(Double.toString(deviationForFires), DEVIATION_FOR_FIRES);
+        }
 	}
 
 	/**
@@ -137,30 +188,42 @@ public class Parameters {
 	 *
 	 * @return every parameter
 	 */
+    @Override
 	public String toString() {
 		String a = "\n";
+        if(isConstant()){
+            a += "\t" + CONSTANT + "=true" + "\n";
+        }else{
+            a += "\t" + CONSTANT + "=false" + "\n";
+        }
 		a += "\t" + SEED + "=" + getSeed() + "\n";
 		a += "\t" + FREQUENCY + "=" + getFrequency();
+        a += "\t" + TIME_BEETWEN_FIRES + "=" + getTimeBeetwenFires();
+        a += "\t" + DEVIATION_FOR_FIRES + "=" + getDeviationForFires();
 		return a;
 	}
 
-	/**
-	 * Seed can force a repetitive behaviour of random number generator.
-	 * If it's 0, the number series is diferent in every running.
-	 * Any other value forces a repetitive series.
-	 *
-	 * @return seed to force a repetitive behaviour at random number sequences
-	 */
-	public long getSeed() {
-		return seed;
-	}
+    /*
+     * Getters 
+     */
+    public int getFrequency() {
+        return frequency;
+    }
 
-	/**
-	 * Frequency of refreshing the simulator
-	 *
-	 * @return simulator frequency
-	 */
-	public int getFrequency() {
-		return frequency;
-	}
+    public boolean isConstant() {
+        return constant;
+    }
+
+    public long getSeed() {
+        return seed;
+    }
+
+    public double getTimeBeetwenFires() {
+        return timeBeetwenFires;
+    }
+
+    public double getDeviationForFires() {
+        return deviationForFires;
+    }
+
 }
