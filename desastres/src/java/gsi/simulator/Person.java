@@ -74,4 +74,37 @@ public class Person {
     public InjuryDegree getInjuryDegree() {
         return this.injuryDegree;
     }
+
+    /**
+     * Reduces the person's number of health points passed as parameter.
+     * @param loss
+     */
+    public void reduceHealthPoints(int loss) {
+        this.healthPoints -= loss;
+        this.setInjuryDegree();
+    }
+
+    /**
+     * Check if the person is a slight victim
+     * @return if the person is a slight victim
+     */
+    public boolean isSlight() {
+        return this.injuryDegree == InjuryDegree.SLIGHT;
+    }
+
+    /**
+     * Check if the person is a severe victim
+     * @return if the person is a severe victim
+     */
+    public boolean isSevere() {
+        return this.injuryDegree == InjuryDegree.SEVERE;
+    }
+
+    /**
+     * Check if the person is dead
+     * @return if the person is dead
+     */
+    public boolean isDead() {
+        return this.injuryDegree == InjuryDegree.DEAD;
+    }
 }

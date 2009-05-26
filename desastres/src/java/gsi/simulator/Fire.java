@@ -71,6 +71,7 @@ public class Fire extends Disaster {
     public void setAssociateTrapped(List<Person> associateTrapped) {
         this.associateTrapped = associateTrapped;
     }
+
     public List<Fireman> getAssociateFiremen() {
         return associateFiremen;
     }

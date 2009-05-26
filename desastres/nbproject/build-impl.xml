@@ -76,21 +76,12 @@
         <condition property="do.compile.jsps">
             <istrue value="${compile.jsps}"/>
         </condition>
-        <condition property="enable.jsdebugger">
-            <and>
-                <isset property="debug.client.available"/>
-                <istrue value="${debug.client.available}"/>
-            </and>
-        </condition>
         <condition property="do.debug.server">
             <or>
                 <not>
                     <isset property="debug.server"/>
                 </not>
                 <istrue value="${debug.server}"/>
-                <not>
-                    <isset property="enable.jsdebugger"/>
-                </not>
                 <and>
                     <not>
                         <istrue value="${debug.server}"/>
@@ -102,10 +93,7 @@
             </or>
         </condition>
         <condition property="do.debug.client">
-            <and>
-                <istrue value="${debug.client}"/>
-                <isset property="enable.jsdebugger"/>
-            </and>
+            <istrue value="${debug.client}"/>
         </condition>
         <condition property="do.display.browser">
             <istrue value="${display.browser}"/>
@@ -119,7 +107,7 @@
             </and>
         </condition>
         <available file="${conf.dir}/MANIFEST.MF" property="has.custom.manifest"/>
-        <available file="${conf.dir}/persistence.xml" property="has.persistence.xml"/>
+        <available file="${persistence.xml.dir}/persistence.xml" property="has.persistence.xml"/>
         <condition property="do.war.package.with.custom.manifest">
             <isset property="has.custom.manifest"/>
         </condition>
@@ -161,11 +149,19 @@
             </and>
         </condition>
         <property name="javadoc.encoding.used" value="${source.encoding}"/>
+        <property name="includes" value="**"/>
+        <property name="excludes" value=""/>
         <condition else="" property="javac.compilerargs.jaxws" value="-Djava.endorsed.dirs='${jaxws.endorsed.dir}'">
             <and>
                 <isset property="jaxws.endorsed.dir"/>
                 <available file="nbproject/jaxws-build.xml"/>
             </and>
+        </condition>
+        <property name="runmain.jvmargs" value=""/>
+    </target>
+    <target depends="init" name="-init-cos" unless="deploy.on.save">
+        <condition property="deploy.on.save" value="true">
+            <istrue value="${j2ee.deploy.on.save}"/>
         </condition>
     </target>
     <target name="-post-init">
@@ -207,10 +203,12 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${src.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}:${j2ee.platform.classpath}" name="classpath"/>
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" includeantruntime="false" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}">
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" includeantruntime="false" includes="@{includes}" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}">
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
@@ -222,11 +220,15 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target name="-init-macrodef-junit">
         <macrodef name="junit" uri="http://www.netbeans.org/ns/web-project/2">
-            <attribute default="**/*Test.java" name="includes"/>
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
             <sequential>
                 <junit dir="${basedir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" showoutput="true">
                     <batchtest todir="${build.test.results.dir}">
-                        <fileset dir="${test.src.dir}" includes="@{includes}"/>
+                        <fileset dir="${test.src.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
+                            <filename name="@{testincludes}"/>
+                        </fileset>
                     </batchtest>
                     <classpath>
                         <path path="${run.test.classpath}:${j2ee.platform.classpath}"/>
@@ -237,6 +239,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     </syspropertyset>
                     <formatter type="brief" usefile="false"/>
                     <formatter type="xml"/>
+                    <jvmarg line="${runmain.jvmargs}"/>
                 </junit>
             </sequential>
         </macrodef>
@@ -260,7 +263,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             </sequential>
         </macrodef>
     </target>
-    <target if="enable.jsdebugger" name="-init-macrodef-nbjsdebug">
+    <target name="-init-macrodef-nbjsdebug">
         <macrodef name="nbjsdebugstart" uri="http://www.netbeans.org/ns/web-project/1">
             <attribute default="${client.url}" name="webUrl"/>
             <sequential>
@@ -268,12 +271,12 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             </sequential>
         </macrodef>
     </target>
-    <target name="-init-macrodef-nbjpda">
+    <target depends="-init-debug-args" name="-init-macrodef-nbjpda">
         <macrodef name="nbjpdastart" uri="http://www.netbeans.org/ns/web-project/1">
             <attribute default="${main.class}" name="name"/>
             <attribute default="${debug.classpath}:${j2ee.platform.classpath}" name="classpath"/>
             <sequential>
-                <nbjpdastart addressproperty="jpda.address" name="@{name}" transport="dt_socket">
+                <nbjpdastart addressproperty="jpda.address" name="@{name}" transport="${debug-transport}">
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
@@ -309,6 +312,12 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <condition else="-Xdebug" property="debug-args-line" value="-Xdebug -Xnoagent -Djava.compiler=none">
             <istrue value="${have-jdk-older-than-1.4}"/>
         </condition>
+        <condition else="dt_socket" property="debug-transport-by-os" value="dt_shmem">
+            <os family="windows"/>
+        </condition>
+        <condition else="${debug-transport-by-os}" property="debug-transport" value="${debug.transport}">
+            <isset property="debug.transport"/>
+        </condition>
     </target>
     <target depends="-init-debug-args" name="-init-macrodef-debug">
         <macrodef name="debug" uri="http://www.netbeans.org/ns/web-project/1">
@@ -319,7 +328,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <sequential>
                 <java classname="@{classname}" fork="true">
                     <jvmarg line="${debug-args-line}"/>
-                    <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+                    <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
                     <jvmarg line="${runmain.jvmargs}"/>
                     <classpath>
                         <path path="@{classpath}"/>
@@ -334,38 +343,20 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             </sequential>
         </macrodef>
     </target>
-    <target name="-init-macrodef-copy-ear-war">
-        <macrodef name="copy-ear-war">
-            <attribute name="file"/>
-            <attribute name="propname"/>
-            <sequential>
-                <basename file="@{file}" property="base_@{propname}"/>
-                <zipfileset id="tld.files_@{propname}" includes="META-INF/*.tld META-INF/tlds/*.tld" src="@{file}"/>
-                <pathconvert property="tld.files.path_@{propname}" refid="tld.files_@{propname}"/>
-                <condition property="hastlds_@{propname}" value="yes">
-                    <contains casesensitive="false" string="${tld.files.path_@{propname}}" substring=".tld"/>
-                </condition>
-                <condition property="copy.to.dir_@{propname}" value="${build.web.dir}/WEB-INF/lib">
-                    <isset property="hastlds_@{propname}"/>
-                </condition>
-                <condition property="copy.to.dir_@{propname}" value="${dist.ear.dir}">
-                    <not>
-                        <isset property="hastlds_@{propname}"/>
-                    </not>
-                </condition>
-                <copy file="@{file}" todir="${copy.to.dir_@{propname}}"/>
-                <condition property="@{propname}" value="${base_@{propname}}">
-                    <not>
-                        <isset property="hastlds_@{propname}"/>
-                    </not>
-                </condition>
-                <condition property="@{propname}" value="">
-                    <isset property="hastlds_@{propname}"/>
-                </condition>
-            </sequential>
-        </macrodef>
+    <target name="-init-taskdefs">
+        <fail unless="libs.CopyLibs.classpath">
+The libs.CopyLibs.classpath property is not set up.
+This property must point to 
+org-netbeans-modules-java-j2seproject-copylibstask.jar file which is part
+of NetBeans IDE installation and is usually located at 
+&lt;netbeans_installation&gt;/java&lt;version&gt;/ant/extra folder.
+Either open the project in the IDE and make sure CopyLibs library
+exists or setup the property manually. For example like this:
+ ant -Dlibs.CopyLibs.classpath=a/path/to/org-netbeans-modules-java-j2seproject-copylibstask.jar
+                </fail>
+        <taskdef classpath="${libs.CopyLibs.classpath}" resource="org/netbeans/modules/java/j2seproject/copylibstask/antlib.xml"/>
     </target>
-    <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init,-post-init,-init-check,-init-macrodef-property,-init-macrodef-javac,-init-macrodef-junit,-init-macrodef-java,-init-macrodef-nbjpda,-init-macrodef-nbjsdebug,-init-macrodef-debug,-init-macrodef-copy-ear-war" name="init"/>
+    <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init,-post-init,-init-check,-init-macrodef-property,-init-macrodef-javac,-init-macrodef-junit,-init-macrodef-java,-init-macrodef-nbjpda,-init-macrodef-nbjsdebug,-init-macrodef-debug,-init-taskdefs" name="init"/>
     <!--
                 COMPILATION SECTION
             -->
@@ -381,7 +372,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target name="-copy-webdir">
         <copy todir="${build.web.dir}">
-            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes}"/>
+            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes}" includes="${includes}"/>
         </copy>
         <copy todir="${build.web.dir}/WEB-INF">
             <fileset dir="${webinf.dir}" excludes="${build.web.excludes}"/>
@@ -391,7 +382,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <target depends="init, deps-jar, -pre-pre-compile, -pre-compile, -copy-manifest, -copy-persistence-xml, -copy-webdir, library-inclusion-in-archive,library-inclusion-in-manifest,-do-ws-compile" if="have.sources" name="-do-compile">
         <webproject2:javac destdir="${build.classes.dir}"/>
         <copy todir="${build.classes.dir}">
-            <fileset dir="${src.dir}" excludes="${build.classes.excludes}"/>
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target if="has.custom.manifest" name="-copy-manifest">
@@ -403,7 +394,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <target if="has.persistence.xml" name="-copy-persistence-xml">
         <mkdir dir="${build.web.dir}/WEB-INF/classes/META-INF"/>
         <copy todir="${build.web.dir}/WEB-INF/classes/META-INF">
-            <fileset dir="${conf.dir}" includes="persistence.xml"/>
+            <fileset dir="${persistence.xml.dir}" includes="persistence.xml"/>
         </copy>
     </target>
     <target name="-post-compile">
@@ -417,13 +408,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,deps-jar,-pre-pre-compile" name="-do-compile-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
-        <webproject2:javac>
-            <customize>
-                <patternset includes="${javac.includes}"/>
-            </customize>
-        </webproject2:javac>
+        <webproject2:javac excludes="" includes="${javac.includes}"/>
         <copy todir="${build.classes.dir}">
-            <fileset dir="${src.dir}" excludes="${build.classes.excludes}"/>
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target name="-post-compile-single">
@@ -441,7 +428,8 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <arg value="-die1"/>
             <arg value="-compilerSourceVM ${javac.source}"/>
             <arg value="-compilerTargetVM ${javac.target}"/>
-            <classpath path="${java.home}/../lib/tools.jar:${copyfiles.classpath}:${jspcompilation.classpath}"/>
+            <arg value="-javaEncoding ${source.encoding}"/>
+            <classpath path="${java.home}/../lib/tools.jar:${jspctask.classpath}:${jspcompilation.classpath}"/>
         </java>
         <mkdir dir="${build.generated.dir}/classes"/>
         <webproject2:javac classpath="${j2ee.platform.classpath}:${build.classes.dir}:${jspcompilation.classpath}" destdir="${build.generated.dir}/classes" srcdir="${build.generated.dir}/src"/>
@@ -459,7 +447,8 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <arg path="${jsp.includes}"/>
             <arg value="-compilerSourceVM ${javac.source}"/>
             <arg value="-compilerTargetVM ${javac.target}"/>
-            <classpath path="${java.home}/../lib/tools.jar:${copyfiles.classpath}:${jspcompilation.classpath}"/>
+            <arg value="-javaEncoding ${source.encoding}"/>
+            <classpath path="${java.home}/../lib/tools.jar:${jspctask.classpath}:${jspcompilation.classpath}"/>
         </java>
         <mkdir dir="${build.generated.dir}/classes"/>
         <webproject2:javac classpath="${j2ee.platform.classpath}:${build.classes.dir}:${jspcompilation.classpath}" destdir="${build.generated.dir}/classes" srcdir="${build.generated.dir}/src">
@@ -509,148 +498,102 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
-        <basename file="${file.reference.ant-contrib.jar}" property="included.lib.file.reference.ant-contrib.jar"/>
-        <copy-ear-war file="${file.reference.ant-contrib.jar}" propname="included.lib.file.reference.ant-contrib.jar.X"/>
-        <basename file="${file.reference.catalina.jar}" property="included.lib.file.reference.catalina.jar"/>
-        <copy-ear-war file="${file.reference.catalina.jar}" propname="included.lib.file.reference.catalina.jar.X"/>
-        <basename file="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" property="included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar"/>
-        <copy-ear-war file="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" propname="included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar.X"/>
-        <basename file="${file.reference.com.noelios.restlet.jar}" property="included.lib.file.reference.com.noelios.restlet.jar"/>
-        <copy-ear-war file="${file.reference.com.noelios.restlet.jar}" propname="included.lib.file.reference.com.noelios.restlet.jar.X"/>
-        <basename file="${file.reference.commons-beanutils.jar}" property="included.lib.file.reference.commons-beanutils.jar"/>
-        <copy-ear-war file="${file.reference.commons-beanutils.jar}" propname="included.lib.file.reference.commons-beanutils.jar.X"/>
-        <basename file="${file.reference.commons-codec.jar}" property="included.lib.file.reference.commons-codec.jar"/>
-        <copy-ear-war file="${file.reference.commons-codec.jar}" propname="included.lib.file.reference.commons-codec.jar.X"/>
-        <basename file="${file.reference.commons-collections.jar}" property="included.lib.file.reference.commons-collections.jar"/>
-        <copy-ear-war file="${file.reference.commons-collections.jar}" propname="included.lib.file.reference.commons-collections.jar.X"/>
-        <basename file="${file.reference.commons-digester.jar}" property="included.lib.file.reference.commons-digester.jar"/>
-        <copy-ear-war file="${file.reference.commons-digester.jar}" propname="included.lib.file.reference.commons-digester.jar.X"/>
-        <basename file="${file.reference.commons-logging.jar}" property="included.lib.file.reference.commons-logging.jar"/>
-        <copy-ear-war file="${file.reference.commons-logging.jar}" propname="included.lib.file.reference.commons-logging.jar.X"/>
-        <basename file="${file.reference.hsqldb-2005-08-20.jar}" property="included.lib.file.reference.hsqldb-2005-08-20.jar"/>
-        <copy-ear-war file="${file.reference.hsqldb-2005-08-20.jar}" propname="included.lib.file.reference.hsqldb-2005-08-20.jar.X"/>
-        <basename file="${file.reference.httpunit.jar}" property="included.lib.file.reference.httpunit.jar"/>
-        <copy-ear-war file="${file.reference.httpunit.jar}" propname="included.lib.file.reference.httpunit.jar.X"/>
-        <basename file="${file.reference.jakarta-oro.jar}" property="included.lib.file.reference.jakarta-oro.jar"/>
-        <copy-ear-war file="${file.reference.jakarta-oro.jar}" propname="included.lib.file.reference.jakarta-oro.jar.X"/>
-        <basename file="${file.reference.js.jar}" property="included.lib.file.reference.js.jar"/>
-        <copy-ear-war file="${file.reference.js.jar}" propname="included.lib.file.reference.js.jar.X"/>
-        <basename file="${file.reference.json-taglib-0.4.1.jar}" property="included.lib.file.reference.json-taglib-0.4.1.jar"/>
-        <copy-ear-war file="${file.reference.json-taglib-0.4.1.jar}" propname="included.lib.file.reference.json-taglib-0.4.1.jar.X"/>
-        <basename file="${file.reference.jsr94.jar}" property="included.lib.file.reference.jsr94.jar"/>
-        <copy-ear-war file="${file.reference.jsr94.jar}" propname="included.lib.file.reference.jsr94.jar.X"/>
-        <basename file="${file.reference.jstl.jar}" property="included.lib.file.reference.jstl.jar"/>
-        <copy-ear-war file="${file.reference.jstl.jar}" propname="included.lib.file.reference.jstl.jar.X"/>
-        <basename file="${file.reference.junit.jar}" property="included.lib.file.reference.junit.jar"/>
-        <copy-ear-war file="${file.reference.junit.jar}" propname="included.lib.file.reference.junit.jar.X"/>
-        <basename file="${file.reference.mysql-connector-java-5.1.5-bin.jar}" property="included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar"/>
-        <copy-ear-war file="${file.reference.mysql-connector-java-5.1.5-bin.jar}" propname="included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar.X"/>
-        <basename file="${file.reference.org.restlet.jar}" property="included.lib.file.reference.org.restlet.jar"/>
-        <copy-ear-war file="${file.reference.org.restlet.jar}" propname="included.lib.file.reference.org.restlet.jar.X"/>
-        <basename file="${file.reference.servlet.jar}" property="included.lib.file.reference.servlet.jar"/>
-        <copy-ear-war file="${file.reference.servlet.jar}" propname="included.lib.file.reference.servlet.jar.X"/>
-        <basename file="${file.reference.slamd_server.jar}" property="included.lib.file.reference.slamd_server.jar"/>
-        <copy-ear-war file="${file.reference.slamd_server.jar}" propname="included.lib.file.reference.slamd_server.jar.X"/>
-        <basename file="${file.reference.Tidy.jar}" property="included.lib.file.reference.Tidy.jar"/>
-        <copy-ear-war file="${file.reference.Tidy.jar}" propname="included.lib.file.reference.Tidy.jar.X"/>
-        <basename file="${file.reference.standard.jar}" property="included.lib.file.reference.standard.jar"/>
-        <copy-ear-war file="${file.reference.standard.jar}" propname="included.lib.file.reference.standard.jar.X"/>
-        <basename file="${file.reference.jess.jar}" property="included.lib.file.reference.jess.jar"/>
-        <copy-ear-war file="${file.reference.jess.jar}" propname="included.lib.file.reference.jess.jar.X"/>
-        <basename file="${file.reference.bsf-2.3.jar}" property="included.lib.file.reference.bsf-2.3.jar"/>
-        <copy-ear-war file="${file.reference.bsf-2.3.jar}" propname="included.lib.file.reference.bsf-2.3.jar.X"/>
-        <basename file="${file.reference.bsh-2.0b4.jar}" property="included.lib.file.reference.bsh-2.0b4.jar"/>
-        <copy-ear-war file="${file.reference.bsh-2.0b4.jar}" propname="included.lib.file.reference.bsh-2.0b4.jar.X"/>
-        <basename file="${file.reference.commons-logging-1.0.4.jar}" property="included.lib.file.reference.commons-logging-1.0.4.jar"/>
-        <copy-ear-war file="${file.reference.commons-logging-1.0.4.jar}" propname="included.lib.file.reference.commons-logging-1.0.4.jar.X"/>
-        <basename file="${file.reference.commons-validator-1.1.4.jar}" property="included.lib.file.reference.commons-validator-1.1.4.jar"/>
-        <copy-ear-war file="${file.reference.commons-validator-1.1.4.jar}" propname="included.lib.file.reference.commons-validator-1.1.4.jar.X"/>
-        <basename file="${file.reference.dwr.jar}" property="included.lib.file.reference.dwr.jar"/>
-        <copy-ear-war file="${file.reference.dwr.jar}" propname="included.lib.file.reference.dwr.jar.X"/>
-        <basename file="${file.reference.jakarta-oro-2.0.8.jar}" property="included.lib.file.reference.jakarta-oro-2.0.8.jar"/>
-        <copy-ear-war file="${file.reference.jakarta-oro-2.0.8.jar}" propname="included.lib.file.reference.jakarta-oro-2.0.8.jar.X"/>
-        <basename file="${file.reference.log4j-1.2.12.jar}" property="included.lib.file.reference.log4j-1.2.12.jar"/>
-        <copy-ear-war file="${file.reference.log4j-1.2.12.jar}" propname="included.lib.file.reference.log4j-1.2.12.jar.X"/>
-        <basename file="${file.reference.bcel.jar}" property="included.lib.file.reference.bcel.jar"/>
-        <copy-ear-war file="${file.reference.bcel.jar}" propname="included.lib.file.reference.bcel.jar.X"/>
-        <basename file="${file.reference.GraphLayout.jar}" property="included.lib.file.reference.GraphLayout.jar"/>
-        <copy-ear-war file="${file.reference.GraphLayout.jar}" propname="included.lib.file.reference.GraphLayout.jar.X"/>
-        <basename file="${file.reference.jadex_examples.jar}" property="included.lib.file.reference.jadex_examples.jar"/>
-        <copy-ear-war file="${file.reference.jadex_examples.jar}" propname="included.lib.file.reference.jadex_examples.jar.X"/>
-        <basename file="${file.reference.jadex_rt.jar}" property="included.lib.file.reference.jadex_rt.jar"/>
-        <copy-ear-war file="${file.reference.jadex_rt.jar}" propname="included.lib.file.reference.jadex_rt.jar.X"/>
-        <basename file="${file.reference.jadex_standalone.jar}" property="included.lib.file.reference.jadex_standalone.jar"/>
-        <copy-ear-war file="${file.reference.jadex_standalone.jar}" propname="included.lib.file.reference.jadex_standalone.jar.X"/>
-        <basename file="${file.reference.jadex_tools.jar}" property="included.lib.file.reference.jadex_tools.jar"/>
-        <copy-ear-war file="${file.reference.jadex_tools.jar}" propname="included.lib.file.reference.jadex_tools.jar.X"/>
-        <basename file="${file.reference.janino.jar}" property="included.lib.file.reference.janino.jar"/>
-        <copy-ear-war file="${file.reference.janino.jar}" propname="included.lib.file.reference.janino.jar.X"/>
-        <basename file="${file.reference.jhall.jar}" property="included.lib.file.reference.jhall.jar"/>
-        <copy-ear-war file="${file.reference.jhall.jar}" propname="included.lib.file.reference.jhall.jar.X"/>
-        <basename file="${file.reference.jibx-bind.jar}" property="included.lib.file.reference.jibx-bind.jar"/>
-        <copy-ear-war file="${file.reference.jibx-bind.jar}" propname="included.lib.file.reference.jibx-bind.jar.X"/>
-        <basename file="${file.reference.jibx-extras.jar}" property="included.lib.file.reference.jibx-extras.jar"/>
-        <copy-ear-war file="${file.reference.jibx-extras.jar}" propname="included.lib.file.reference.jibx-extras.jar.X"/>
-        <basename file="${file.reference.jibx-run.jar}" property="included.lib.file.reference.jibx-run.jar"/>
-        <copy-ear-war file="${file.reference.jibx-run.jar}" propname="included.lib.file.reference.jibx-run.jar.X"/>
-        <basename file="${file.reference.nuggets.jar}" property="included.lib.file.reference.nuggets.jar"/>
-        <copy-ear-war file="${file.reference.nuggets.jar}" propname="included.lib.file.reference.nuggets.jar.X"/>
-        <basename file="${file.reference.xmlpull_1_1_4.jar}" property="included.lib.file.reference.xmlpull_1_1_4.jar"/>
-        <copy-ear-war file="${file.reference.xmlpull_1_1_4.jar}" propname="included.lib.file.reference.xmlpull_1_1_4.jar.X"/>
-        <basename file="${file.reference.xpp3.jar}" property="included.lib.file.reference.xpp3.jar"/>
-        <copy-ear-war file="${file.reference.xpp3.jar}" propname="included.lib.file.reference.xpp3.jar.X"/>
+        <copyfiles files="${file.reference.ant-contrib.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.ant-contrib.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.catalina.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.catalina.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.com.noelios.restlet.ext.servlet_2.4.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.com.noelios.restlet.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.com.noelios.restlet.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.commons-beanutils.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.commons-beanutils.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.commons-codec.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.commons-codec.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.commons-collections.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.commons-collections.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.commons-digester.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.commons-digester.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.commons-logging.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.commons-logging.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.hsqldb-2005-08-20.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.hsqldb-2005-08-20.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.httpunit.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.httpunit.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jakarta-oro.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jakarta-oro.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.js.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.js.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.json-taglib-0.4.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.json-taglib-0.4.1.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jsr94.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jsr94.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jstl.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jstl.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.junit.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.junit.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.mysql-connector-java-5.1.5-bin.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.mysql-connector-java-5.1.5-bin.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.org.restlet.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.org.restlet.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.servlet.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.servlet.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.slamd_server.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.slamd_server.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.Tidy.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.Tidy.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.standard.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.standard.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jess.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jess.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.bsf-2.3.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.bsf-2.3.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.bsh-2.0b4.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.bsh-2.0b4.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.commons-logging-1.0.4.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.commons-logging-1.0.4.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.commons-validator-1.1.4.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.commons-validator-1.1.4.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.dwr.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.dwr.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jakarta-oro-2.0.8.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jakarta-oro-2.0.8.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.log4j-1.2.12.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.log4j-1.2.12.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.bcel.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.bcel.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.GraphLayout.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.GraphLayout.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jadex_examples.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jadex_examples.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jadex_rt.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jadex_rt.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jadex_standalone.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jadex_standalone.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jadex_tools.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jadex_tools.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.janino.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.janino.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jhall.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jhall.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jibx-bind.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jibx-bind.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jibx-extras.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jibx-extras.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.jibx-run.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.jibx-run.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.nuggets.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.nuggets.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.xmlpull_1_1_4.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.xmlpull_1_1_4.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${file.reference.xpp3.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.file.reference.xpp3.jar" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.ant-contrib.jar} ${included.lib.file.reference.catalina.jar} ${included.lib.file.reference.com.noelios.restlet.ext.servlet_2.4.jar} ${included.lib.file.reference.com.noelios.restlet.jar} ${included.lib.file.reference.commons-beanutils.jar} ${included.lib.file.reference.commons-codec.jar} ${included.lib.file.reference.commons-collections.jar} ${included.lib.file.reference.commons-digester.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.hsqldb-2005-08-20.jar} ${included.lib.file.reference.httpunit.jar} ${included.lib.file.reference.jakarta-oro.jar} ${included.lib.file.reference.js.jar} ${included.lib.file.reference.json-taglib-0.4.1.jar} ${included.lib.file.reference.jsr94.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.junit.jar} ${included.lib.file.reference.mysql-connector-java-5.1.5-bin.jar} ${included.lib.file.reference.org.restlet.jar} ${included.lib.file.reference.servlet.jar} ${included.lib.file.reference.slamd_server.jar} ${included.lib.file.reference.Tidy.jar} ${included.lib.file.reference.standard.jar} ${included.lib.file.reference.jess.jar} ${included.lib.file.reference.bsf-2.3.jar} ${included.lib.file.reference.bsh-2.0b4.jar} ${included.lib.file.reference.commons-logging-1.0.4.jar} ${included.lib.file.reference.commons-validator-1.1.4.jar} ${included.lib.file.reference.dwr.jar} ${included.lib.file.reference.jakarta-oro-2.0.8.jar} ${included.lib.file.reference.log4j-1.2.12.jar} ${included.lib.file.reference.bcel.jar} ${included.lib.file.reference.GraphLayout.jar} ${included.lib.file.reference.jadex_examples.jar} ${included.lib.file.reference.jadex_rt.jar} ${included.lib.file.reference.jadex_standalone.jar} ${included.lib.file.reference.jadex_tools.jar} ${included.lib.file.reference.janino.jar} ${included.lib.file.reference.jhall.jar} ${included.lib.file.reference.jibx-bind.jar} ${included.lib.file.reference.jibx-extras.jar} ${included.lib.file.reference.jibx-run.jar} ${included.lib.file.reference.nuggets.jar} ${included.lib.file.reference.xmlpull_1_1_4.jar} ${included.lib.file.reference.xpp3.jar} "/>
+            <attribute name="Class-Path" value="${manifest.file.reference.ant-contrib.jar} ${manifest.file.reference.catalina.jar} ${manifest.file.reference.com.noelios.restlet.ext.servlet_2.4.jar} ${manifest.file.reference.com.noelios.restlet.jar} ${manifest.file.reference.commons-beanutils.jar} ${manifest.file.reference.commons-codec.jar} ${manifest.file.reference.commons-collections.jar} ${manifest.file.reference.commons-digester.jar} ${manifest.file.reference.commons-logging.jar} ${manifest.file.reference.hsqldb-2005-08-20.jar} ${manifest.file.reference.httpunit.jar} ${manifest.file.reference.jakarta-oro.jar} ${manifest.file.reference.js.jar} ${manifest.file.reference.json-taglib-0.4.1.jar} ${manifest.file.reference.jsr94.jar} ${manifest.file.reference.jstl.jar} ${manifest.file.reference.junit.jar} ${manifest.file.reference.mysql-connector-java-5.1.5-bin.jar} ${manifest.file.reference.org.restlet.jar} ${manifest.file.reference.servlet.jar} ${manifest.file.reference.slamd_server.jar} ${manifest.file.reference.Tidy.jar} ${manifest.file.reference.standard.jar} ${manifest.file.reference.jess.jar} ${manifest.file.reference.bsf-2.3.jar} ${manifest.file.reference.bsh-2.0b4.jar} ${manifest.file.reference.commons-logging-1.0.4.jar} ${manifest.file.reference.commons-validator-1.1.4.jar} ${manifest.file.reference.dwr.jar} ${manifest.file.reference.jakarta-oro-2.0.8.jar} ${manifest.file.reference.log4j-1.2.12.jar} ${manifest.file.reference.bcel.jar} ${manifest.file.reference.GraphLayout.jar} ${manifest.file.reference.jadex_examples.jar} ${manifest.file.reference.jadex_rt.jar} ${manifest.file.reference.jadex_standalone.jar} ${manifest.file.reference.jadex_tools.jar} ${manifest.file.reference.janino.jar} ${manifest.file.reference.jhall.jar} ${manifest.file.reference.jibx-bind.jar} ${manifest.file.reference.jibx-extras.jar} ${manifest.file.reference.jibx-run.jar} ${manifest.file.reference.nuggets.jar} ${manifest.file.reference.xmlpull_1_1_4.jar} ${manifest.file.reference.xpp3.jar} "/>
         </manifest>
-        <delete dir="${dist.ear.dir}/temp"/>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
-        <copy file="${file.reference.ant-contrib.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.catalina.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.com.noelios.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-beanutils.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-codec.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-collections.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-digester.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-logging.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.hsqldb-2005-08-20.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.httpunit.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jakarta-oro.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.js.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.json-taglib-0.4.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jsr94.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jstl.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.junit.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.mysql-connector-java-5.1.5-bin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.org.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.servlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.slamd_server.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.Tidy.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.standard.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.bsf-2.3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.bsh-2.0b4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-logging-1.0.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.commons-validator-1.1.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.dwr.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jakarta-oro-2.0.8.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.log4j-1.2.12.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.bcel.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.GraphLayout.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jadex_examples.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jadex_rt.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jadex_standalone.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jadex_tools.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.janino.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jhall.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jibx-bind.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jibx-extras.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.jibx-run.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.nuggets.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.xmlpull_1_1_4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.xpp3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.ant-contrib.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.catalina.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.com.noelios.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-beanutils.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-codec.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-collections.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-digester.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-logging.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.hsqldb-2005-08-20.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.httpunit.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jakarta-oro.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.js.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.json-taglib-0.4.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jsr94.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jstl.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.junit.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.mysql-connector-java-5.1.5-bin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.org.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.servlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.slamd_server.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.Tidy.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.standard.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.bsf-2.3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.bsh-2.0b4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-logging-1.0.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-validator-1.1.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.dwr.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jakarta-oro-2.0.8.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.log4j-1.2.12.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.bcel.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.GraphLayout.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex_examples.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex_rt.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex_standalone.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex_tools.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.janino.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jhall.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jibx-bind.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jibx-extras.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jibx-run.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.nuggets.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.xmlpull_1_1_4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.xpp3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
@@ -664,7 +607,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="init,compile,-pre-dist,do-dist,-post-dist" description="Build distribution (WAR)." name="dist"/>
-    <target depends="init,compile,-pre-dist,do-ear-dist,-post-dist" description="Build distribution (WAR) to be packaged into an EAR." name="dist-ear"/>
+    <target depends="init,-init-cos,compile,-pre-dist,do-ear-dist,-post-dist" description="Build distribution (WAR) to be packaged into an EAR." name="dist-ear"/>
     <!--
                 EXECUTION SECTION
             -->
@@ -688,7 +631,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <target name="-run-deploy-am">
         <!-- Task to deploy to the Access Manager runtime. -->
     </target>
-    <target depends="init,compile,compile-jsps,-do-compile-single-jsp,-pre-dist,-do-tmp-dist-with-manifest,-do-tmp-dist-without-manifest,-pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,-post-run-deploy" name="run-deploy">
+    <target depends="init,-init-cos,compile,compile-jsps,-do-compile-single-jsp,-pre-dist,-do-tmp-dist-with-manifest,-do-tmp-dist-without-manifest,-pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,-post-run-deploy" name="run-deploy">
         <nbjpdaappreloaded/>
     </target>
     <target if="netbeans.home" name="-run-deploy-nb">
@@ -768,7 +711,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <arg line="${browser.args} ${browse.url}"/>
         </exec>
     </target>
-    <target depends="init,compile-single" name="run-main">
+    <target depends="init,-init-cos,compile-single" name="run-main">
         <fail unless="run.class">Must select one file in the IDE or set run.class</fail>
         <webproject1:java classname="${run.class}"/>
     </target>
@@ -784,10 +727,10 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <target if="do.debug.server" name="connect-debugger" unless="is.debugged">
         <nbjpdaconnect address="${jpda.address}" host="${jpda.host}" name="${name}" transport="${jpda.transport}">
             <classpath>
-                <path path="${debug.classpath}:${j2ee.platform.classpath}:${ws.debug.classpaths}"/>
+                <path path="${debug.classpath}:${j2ee.platform.classpath}"/>
             </classpath>
             <sourcepath>
-                <path path="${web.docbase.dir}:${ws.web.docbase.dirs}"/>
+                <path path="${web.docbase.dir}"/>
             </sourcepath>
         </nbjpdaconnect>
     </target>
@@ -823,11 +766,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <classpath>
                 <path path="${javac.classpath}:${j2ee.platform.classpath}"/>
             </classpath>
-            <sourcepath>
-                <pathelement location="${src.dir}"/>
-            </sourcepath>
-            <packageset dir="${src.dir}" includes="*/**"/>
-            <fileset dir="${src.dir}" includes="*.java"/>
+            <fileset dir="${src.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
         </javadoc>
     </target>
     <target depends="init,javadoc-build" if="netbeans.home" name="javadoc-browse" unless="no.javadoc.preview">
@@ -848,7 +789,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <target depends="init,compile,-pre-pre-compile-test,-pre-compile-test" if="have.tests" name="-do-compile-test">
         <webproject2:javac classpath="${javac.test.classpath}:${j2ee.platform.classpath}" debug="true" destdir="${build.test.classes.dir}" srcdir="${test.src.dir}"/>
         <copy todir="${build.test.classes.dir}">
-            <fileset dir="${test.src.dir}" excludes="**/*.java"/>
+            <fileset dir="${test.src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target name="-post-compile-test">
@@ -862,13 +803,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,compile,-pre-pre-compile-test,-pre-compile-test-single" if="have.tests" name="-do-compile-test-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
-        <webproject2:javac classpath="${javac.test.classpath}:${j2ee.platform.classpath}" debug="true" destdir="${build.test.classes.dir}" srcdir="${test.src.dir}">
-            <customize>
-                <patternset includes="${javac.includes}"/>
-            </customize>
-        </webproject2:javac>
+        <webproject2:javac classpath="${javac.test.classpath}:${j2ee.platform.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}" srcdir="${test.src.dir}"/>
         <copy todir="${build.test.classes.dir}">
-            <fileset dir="${test.src.dir}" excludes="**/*.java"/>
+            <fileset dir="${test.src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target name="-post-compile-test-single">
@@ -884,7 +821,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <mkdir dir="${build.test.results.dir}"/>
     </target>
     <target depends="init,compile-test,-pre-test-run" if="have.tests" name="-do-test-run">
-        <webproject2:junit/>
+        <webproject2:junit testincludes="**/*Test.java"/>
     </target>
     <target depends="init,compile-test,-pre-test-run,-do-test-run" if="have.tests" name="-post-test-run">
         <fail if="tests.failed">Some tests failed; see details above.</fail>
@@ -897,7 +834,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,compile-test-single,-pre-test-run-single" if="have.tests" name="-do-test-run-single">
         <fail unless="test.includes">Must select some files in the IDE or set test.includes</fail>
-        <webproject2:junit includes="${test.includes}"/>
+        <webproject2:junit excludes="" includes="${test.includes}"/>
     </target>
     <target depends="init,compile-test-single,-pre-test-run-single,-do-test-run-single" if="have.tests" name="-post-test-run-single">
         <fail if="tests.failed">Some tests failed; see details above.</fail>
@@ -950,10 +887,13 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <echo message="Warning: unable to delete some files in ${build.web.dir}/WEB-INF/lib - they are probably locked by the J2EE server. "/>
         <echo level="info" message="To delete all files undeploy the module from Server Registry in Runtime tab and then use Clean again."/>
     </target>
+    <target depends="init" if="netbeans.home" name="undeploy-clean">
+        <nbundeploy failOnError="false" startServer="false"/>
+    </target>
     <target name="-post-clean">
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target depends="init,deps-clean,do-clean,check-clean,-post-clean" description="Clean build products." name="clean"/>
+    <target depends="init,undeploy-clean,deps-clean,do-clean,check-clean,-post-clean" description="Clean build products." name="clean"/>
     <target depends="clean" description="Clean build products." name="clean-ear"/>
 </project>
