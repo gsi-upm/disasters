@@ -33,7 +33,11 @@ public class Parameters {
      * Standard deviation of the gaussian generating new fires.
      */
     private final double deviationForFires;
-
+    /**
+     * Probability in a refresh for a trapped to turn into a victim.
+     * 0 <= trappedToVictim <= 1
+     */
+    private final double trappedToVictim;
 	/*
 	 * Default parameters value
 	 */
@@ -42,6 +46,7 @@ public class Parameters {
 	private final int DEFAULT_FREQUENCY = 1;
     private final double DEFAULT_TIME_BEETWEN_FIRES = 600;
     private final double DEFAULT_DEVIATION_FOR_FIRES = 1;
+    private final double DEFAULT_TRAPPED_TO_VICTIM = 0.1;
 
 
 	/*
@@ -52,6 +57,7 @@ public class Parameters {
     private static final String FREQUENCY = "frequency";
     private static final String TIME_BEETWEN_FIRES = "time beetwen fires";
     private static final String DEVIATION_FOR_FIRES = "deviation for fires";
+    private static final String TRAPPED_TO_VICTIM = "trapped to victim";
 
 	/**
 	 * Default constructor, with default parameters.
@@ -62,6 +68,7 @@ public class Parameters {
 		frequency = DEFAULT_FREQUENCY;
         timeBeetwenFires = DEFAULT_TIME_BEETWEN_FIRES;
         deviationForFires = DEFAULT_DEVIATION_FOR_FIRES;
+        trappedToVictim = DEFAULT_TRAPPED_TO_VICTIM;
 	}
 
 	/**
@@ -88,6 +95,7 @@ public class Parameters {
         int newFrequency = DEFAULT_FREQUENCY;
         double newTimeBeetwenFires = DEFAULT_TIME_BEETWEN_FIRES;
         double newDeviationForFires = DEFAULT_DEVIATION_FOR_FIRES;
+        double newTrappedToVictim = DEFAULT_TRAPPED_TO_VICTIM;
 
 		try {
 
@@ -110,6 +118,8 @@ public class Parameters {
             String fileDeviationForFires = properties.getProperty(DEVIATION_FOR_FIRES);
             newDeviationForFires = Double.parseDouble(fileDeviationForFires);
 
+            String fileTrappedToVictim = properties.getProperty(TRAPPED_TO_VICTIM);
+            newTrappedToVictim = Double.parseDouble(fileTrappedToVictim);
 
 			in.close();
 
@@ -124,6 +134,7 @@ public class Parameters {
 			frequency = newFrequency;
             timeBeetwenFires = newTimeBeetwenFires;
             deviationForFires = newDeviationForFires;
+            trappedToVictim = newTrappedToVictim;
 
 			checkParameters();
 
@@ -145,13 +156,16 @@ public class Parameters {
      * @param deviationForFires  Standard deviation of the gaussian generating new fires.
 	 * @throws IllegalArgumentException if any value is out of range
 	 */
-	public Parameters(boolean constant,long seed, int frequency,double timeBeetwenFires, double deviationForFires) throws IllegalArgumentException{
+	public Parameters(boolean constant,long seed, int frequency,
+            double timeBeetwenFires, double deviationForFires,
+            double trappedToVictim) throws IllegalArgumentException{
         this.constant=constant;
 		this.seed = seed;
 		this.frequency = frequency;
         this.timeBeetwenFires = timeBeetwenFires;
         this.deviationForFires = deviationForFires;
-
+        this.trappedToVictim = trappedToVictim;
+        
 		checkParameters();
 	}
 
@@ -169,6 +183,9 @@ public class Parameters {
         }
         if (deviationForFires < 0){
             wrongParameter(Double.toString(deviationForFires), DEVIATION_FOR_FIRES);
+        }
+        if(trappedToVictim < 0 || trappedToVictim > 1) {
+            wrongParameter(Double.toString(trappedToVictim), TRAPPED_TO_VICTIM);
         }
 	}
 
@@ -196,10 +213,11 @@ public class Parameters {
         }else{
             a += "\t" + CONSTANT + "=false" + "\n";
         }
-		a += "\t" + SEED + "=" + getSeed() + "\n";
-		a += "\t" + FREQUENCY + "=" + getFrequency();
-        a += "\t" + TIME_BEETWEN_FIRES + "=" + getTimeBeetwenFires();
-        a += "\t" + DEVIATION_FOR_FIRES + "=" + getDeviationForFires();
+		a += "\t" + SEED + "=" + this.seed + "\n";
+		a += "\t" + FREQUENCY + "=" + this.frequency;
+        a += "\t" + TIME_BEETWEN_FIRES + "=" + this.timeBeetwenFires;
+        a += "\t" + DEVIATION_FOR_FIRES + "=" + this.deviationForFires;
+        a += "\t" + TRAPPED_TO_VICTIM + "=" + this.trappedToVictim;
 		return a;
 	}
 

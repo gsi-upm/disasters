@@ -84,9 +84,8 @@ public class Event {
     public static Event generateRefresh(Event lastRefresh, long period) {
         long instant = period;
         if (lastRefresh != null)
-            instant += lastRefresh.instant;
-        Event newEvent =
-                new Event(instant, EventType.REFRESH);
+            instant += lastRefresh.getInstant();
+        Event newEvent = new Event(instant, EventType.REFRESH);
         LOGGER.info("Generate Refresh " + newEvent);
         return newEvent;
     }
@@ -101,9 +100,8 @@ public class Event {
     public static Event generateAskingAgents(Event lastAsking, RandomGenerator generator) {
         // long instant = generator.agentsTime(); This method or similar should be programmed
         long instant = 0;
-        if (lastAsking != null) instant += lastAsking.instant;
-        Event newEvent =
-                new Event(instant, EventType.ASKING_FOR_AGENTS);
+        if (lastAsking != null) instant += lastAsking.getInstant();
+        Event newEvent = new Event(instant, EventType.ASKING_FOR_AGENTS);
         LOGGER.info("Generate Asking for Agents " + newEvent);
         return newEvent;
     }
@@ -117,8 +115,7 @@ public class Event {
     public static Event generateFiremenArrival(RandomGenerator generator) {
         // long instant = generator.firemenArrivalTime(); This method or similar should be programmed
         long instant = 0;
-        Event newEvent =
-                new Event(instant, EventType.FIREMEN_ARRIVAL);
+        Event newEvent = new Event(instant, EventType.FIREMEN_ARRIVAL);
         LOGGER.info("Generate Firemen Arrival " + newEvent);
         return newEvent;
     }
@@ -132,8 +129,7 @@ public class Event {
     public static Event generateAmbulanceArrival(RandomGenerator generator) {
         // long instant = generator.ambulanceArrivalTime(); This method or similar should be programmed
         long instant = 0;
-        Event newEvent =
-                new Event(instant, EventType.AMBULANCE_ARRIVAL);
+        Event newEvent = new Event(instant, EventType.AMBULANCE_ARRIVAL);
         LOGGER.info("Generate Ambulance Arrival " + newEvent);
         return newEvent;
     }

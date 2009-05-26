@@ -48,7 +48,7 @@ public class EventQueue {
     }
 
     /**
-     * It extracts the first non yet extracte event (by time order). If two events
+     * It extracts the first non yet extracted event (by time order). If two events
      * occur at the same time, it selects the first which was inserted
      *
      * @return first event in the queue; or NULL if it's empty

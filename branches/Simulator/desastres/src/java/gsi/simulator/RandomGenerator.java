@@ -76,4 +76,23 @@ public class RandomGenerator {
         double standardDeviation = params.getDeviationForFires();
         return this.randomGaussian(mean, standardDeviation);
     }
+
+    /**
+     * Returns an integer random value of the health points that a person
+     * looses in a refresh.
+     * @return the number of healthpoints lost
+     */
+    public static int healthPointsDecrease() {
+        return randomInteger(2,6);
+    }
+
+    /**
+     * Generates a random value of health points for a victim to get initialized.
+     * @return the number of health points
+     */
+    public static int initialHealthPoints() {
+        return randomInteger(VictimManager.MIN_HEALTH_POINTS, 
+                VictimManager.MAX_HEALTH_POINTS);
+    }
+
 }
