@@ -9,13 +9,7 @@ import java.util.Random;
 public class RandomGenerator {
 
      Random random;
-
-    /**
-     * Default constructor.
-     */
-    public RandomGenerator() {
-        random = new Random();
-    }
+     Parameters params;
 
     /**
      * Constructor with parameters.
@@ -24,9 +18,10 @@ public class RandomGenerator {
     public RandomGenerator(Parameters params) {
 
         if (params == null) {
-            random = new Random();
             throw new IllegalArgumentException("Parameters could not load correctly");
         }
+
+        this.params= params;
 
         long seed = params.getSeed();
 
@@ -44,7 +39,7 @@ public class RandomGenerator {
      * @param standardDeviation The standard deviation of the Gaussian
      * @return The result of the execution of a Gaussian variable.
      */
-    public  int randomGaussian(double mean, double standardDeviation){
+    public int randomGaussian(double mean, double standardDeviation){
 
         return (int) Math.round((random.nextGaussian()*standardDeviation) + mean);
 
@@ -60,7 +55,7 @@ public class RandomGenerator {
     }
 
     //TODO : Genearate random value for refresh period of the simulator.
-    public int refreshPeriod(Parameters params){
+    public int refreshPeriod(){
         if(params.isConstant()){
             return params.getFrequency();
         }
@@ -71,10 +66,10 @@ public class RandomGenerator {
     }
 
         //TODO : Return a random value to generate random fires.
-    public int fireGeneratePeriod(Parameters params){
+    public int fireGeneratePeriod(){
         double mean = params.getTimeBeetwenFires();
         double standardDeviation = params.getDeviationForFires();
-        return this.randomGaussian(mean, standardDeviation);
+        return randomGaussian(mean, standardDeviation);
     }
 
     /**
