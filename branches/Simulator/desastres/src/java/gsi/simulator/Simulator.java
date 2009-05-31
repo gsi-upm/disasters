@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package gsi.simulator;
 
 import gsi.simulator.Logger.Logger;
@@ -9,6 +5,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 import gsi.disasters.Disaster;
+import gsi.disasters.People;
+import gsi.disasters.DisasterType;
+import gsi.disasters.StateType;
+import gsi.disasters.SizeType;
+import gsi.disasters.DensityType;
+import gsi.disasters.InjuryDegree;
 
 /**
  *
@@ -33,7 +35,7 @@ public class Simulator {
     public static long FIRE_GENERATION_PERIOD = 600;
 
     /**
-     * List containing the fires generated in the simulation
+     * List containing the disasters generated in the simulation
      */
     private List<Disaster> disasters;
 
@@ -41,6 +43,12 @@ public class Simulator {
      * Number of active disasters, used in loops
      */
     private static int disastersCount = 0;
+
+    /**
+     * List containing the people generated with each disaster
+     */
+    private List<People> people;
+
     /**
      * Queue where events are inserted
      */
@@ -50,21 +58,23 @@ public class Simulator {
      * Random generator
      */
     private RandomGenerator generator;
-   
+
     /**
      * Constructor for empty simulator
      */
     public Simulator() {
         disasters = new ArrayList<Disaster>();
+        people = new ArrayList<People>();
         queue = new EventQueue();
     }
 
-     /**
+    /**
      * Constructor with file parameters
      */
     public Simulator(Parameters parameters) {
-        // generator = new RandomGenerator(parameters);
+        generator = new RandomGenerator(parameters);
         disasters = new ArrayList<Disaster>();
+        people = new ArrayList<People>();
         queue = new EventQueue();
     }
 
@@ -83,9 +93,21 @@ public class Simulator {
 
             if(currentEvent.isFireGeneration()) {
                 //Generation of a new fire
-                disasters.add(new Disaster(disastersCount, "Fire", "First fire", "INFO", "DESCRIPTION", "ADDRESS",
-                        0, 0, "active", "small", "TRAFFIC", 5, 2, 0, 3));
-                // TODO This constructor should be changed for another one with a numeric strength attribute
+                String size = "small"; // TODO RandomGenerator method to get random size (as String)
+                int strength = generator.randomInteger(1,100); // Limits should come from Parameters
+                String density = "medium"; //TODO RandomGenerator method to get random density (as String)
+                int slight = generator.randomInteger(0,10); // Limits should come from Parameters
+                int severe = generator.randomInteger(0,10); // Limits should come from Parameters
+                int dead = generator.randomInteger(0,10); // Limits should come from Parameters
+                int trapped = generator.randomInteger(0,10); // Limits should come from Parameters
+
+                disasters.add(new Disaster(disastersCount, DisasterType.FIRE, "First fire", "INFO", "DESCRIPTION", "ADDRESS",
+                    0, 0, StateType.ACTIVE, SizeType.getType(size), strength, DensityType.getType(density), slight, severe, dead, trapped));
+
+                people.add(new People(disastersCount, InjuryDegree.SLIGHT, "NAME", "INFO", "DESCRIPTION", 0, slight));
+                people.add(new People(disastersCount, InjuryDegree.SEVERE, "NAME", "INFO", "DESCRIPTION", 0, severe));
+                people.add(new People(disastersCount, InjuryDegree.DEAD, "NAME", "INFO", "DESCRIPTION", 0, dead));
+                people.add(new People(disastersCount, InjuryDegree.TRAPPED, "NAME", "INFO", "DESCRIPTION", 0, trapped));
                 disastersCount++;
 
                 //Every fire generation event generates the next one
@@ -96,27 +118,49 @@ public class Simulator {
 
             //Refresh fires and victims
             else if(currentEvent.isRefresh()) {
-                //Code that refreshes the fire
-                for (int i = 0; i < disastersCount; i++) {
-                    Disaster currentDisaster = disasters.remove(i);
-                    if (currentDisaster.getState() == "active") {
-                        if (currentDisaster.getFiremen() < 10) { // Number 10 should be changed by a value depending on the disaster size
-                            //Here the disaster strength should be increased, but there
-                            //is not a numeric attribute yet
-                        }
-                        else {
-                            //Here the disaster's strength should be decreased
-                            //Besides, if strength < threshold (umbral), state should change to "controlled"
+
+                for (Disaster currentDisaster : disasters) {
+
+                    //Code that refreshes the fire
+                    if (currentDisaster.isActive()) {
+                        int increase = 1; // Should be random
+                        currentDisaster.increaseStrength(increase);
+
+                        if (currentDisaster.getFiremen() >= currentDisaster.necessaryFiremen()) {
+                            currentDisaster.setState(StateType.CONTROLLED);
                         }
                     }
-                    else if (currentDisaster.getState() == "controlled") {
-                        //Decrease of disaster strength
-                        //If strength == 0, state should change to "erased"
-                    }                    
-                    disasters.add(i, currentDisaster); // So as not to modify the arraylist
+
+                    else if (currentDisaster.isControlled()) {
+                        int decrease = 1; // Should be random
+                        currentDisaster.reduceStrength(decrease);
+
+                        if (currentDisaster.getStrength() <= 0) {
+                            currentDisaster.setState(StateType.ERASED);
+                        }
+                    }
+
+                    //Code that refreshes the victims
+                    for (People currentPeople: people) {
+                        if (currentPeople.getId() == currentDisaster.getId()) {
+                            if (currentDisaster.isActive()) {
+                                if (currentPeople.areSlight() || currentPeople.areSevere()) {
+                                    if (currentDisaster.getAmbulances() < currentPeople.necessaryAmbulances()) {
+                                        currentPeople.reduceHealthPoints(generator.healthPointsDecrease());
+                                    }
+                                }
+                                if (currentPeople.areTrapped()) {
+                                    //If people are trapped, they can be victims (their health decreases) or not
+                                    //(they stay as before).
+                                        if(Math.random() < currentDisaster.getStrength()*0.05) {
+                                            currentPeople.reduceHealthPoints(generator.healthPointsDecrease());
+                                        }
+                                }    
+                            }
+                        }
+                    }
                 }
-                //Code that refreshes the victims
- 
+
                 //Every refresh generates the next refresh event
                 queue.insert(Event.generateRefresh(currentEvent, REFRESH_PERIOD));
             }
