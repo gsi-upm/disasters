@@ -10,6 +10,7 @@ import java.util.Properties;
  *
  * @author Sergio
  * @author al.lopezf
+ * @author Miguel
  */
 public class Parameters {
 
@@ -38,6 +39,23 @@ public class Parameters {
      * 0 <= trappedToVictim <= 1
      */
     private final double trappedToVictim;
+    /**
+     * Minimum and maximum values for fire strength
+     */
+    private final int minFireStrength;
+    private final int maxFireStrength;
+    /**
+     * Minimum and maximum number of persons in each status
+     */
+    private final int minTrappedVictims;
+    private final int maxTrappedVictims;
+    private final int minSlightVictims;
+    private final int maxSlightVictims;
+    private final int minSevereVictims;
+    private final int maxSevereVictims;
+    private final int minDeadVictims;
+    private final int maxDeadVictims;
+
 	/*
 	 * Default parameters value
 	 */
@@ -47,6 +65,17 @@ public class Parameters {
     private final double DEFAULT_TIME_BEETWEN_FIRES = 600;
     private final double DEFAULT_DEVIATION_FOR_FIRES = 1;
     private final double DEFAULT_TRAPPED_TO_VICTIM = 0.1;
+    private final int DEFAULT_MIN_FIRE_STRENGTH = 1;
+    private final int DEFAULT_MAX_FIRE_STRENGTH = 100;
+    //TODO: determine limits
+    private final int DEFAULT_MIN_TRAPPED_VICTIMS = 0;
+    private final int DEFAULT_MAX_TRAPPED_VICTIMS = 10;
+    private final int DEFAULT_MIN_SLIGHT_VICTIMS = 0;
+    private final int DEFAULT_MAX_SLIGHT_VICTIMS = 10;
+    private final int DEFAULT_MIN_SEVERE_VICTIMS = 0;
+    private final int DEFAULT_MAX_SEVERE_VICTIMS = 10;
+    private final int DEFAULT_MIN_DEAD_VICTIMS = 0;
+    private final int DEFAULT_MAX_DEAD_VICTIMS = 10;
 
 
 	/*
@@ -58,6 +87,16 @@ public class Parameters {
     private static final String TIME_BEETWEN_FIRES = "time beetwen fires";
     private static final String DEVIATION_FOR_FIRES = "deviation for fires";
     private static final String TRAPPED_TO_VICTIM = "trapped to victim";
+    private static final String MIN_FIRE_STRENGTH = "minimum fire strength";
+    private static final String MAX_FIRE_STRENGTH = "maximum fire strength";
+    private static final String MIN_TRAPPED_VICTIMS = "minimum number of trapped victims";
+    private static final String MAX_TRAPPED_VICTIMS = "maximum number of trapped victims";
+    private static final String MIN_SLIGHT_VICTIMS = "minimum number of slight victims";
+    private static final String MAX_SLIGHT_VICTIMS = "maximum number of slight victims";
+    private static final String MIN_SEVERE_VICTIMS = "minimum number of severe victims";
+    private static final String MAX_SEVERE_VICTIMS = "maximum number of severe victims";
+    private static final String MIN_DEAD_VICTIMS = "minimum number of dead victims";
+    private static final String MAX_DEAD_VICTIMS = "maximum number of dead victims";
 
 	/**
 	 * Default constructor, with default parameters.
@@ -69,6 +108,16 @@ public class Parameters {
         timeBeetwenFires = DEFAULT_TIME_BEETWEN_FIRES;
         deviationForFires = DEFAULT_DEVIATION_FOR_FIRES;
         trappedToVictim = DEFAULT_TRAPPED_TO_VICTIM;
+        minFireStrength = DEFAULT_MIN_FIRE_STRENGTH;
+        maxFireStrength = DEFAULT_MAX_FIRE_STRENGTH;
+        minTrappedVictims = DEFAULT_MIN_TRAPPED_VICTIMS;
+        maxTrappedVictims = DEFAULT_MAX_TRAPPED_VICTIMS;
+        minSlightVictims = DEFAULT_MIN_SLIGHT_VICTIMS;
+        maxSlightVictims = DEFAULT_MAX_SLIGHT_VICTIMS;
+        minSevereVictims = DEFAULT_MIN_SEVERE_VICTIMS;
+        maxSevereVictims = DEFAULT_MAX_SEVERE_VICTIMS;
+        minDeadVictims = DEFAULT_MIN_DEAD_VICTIMS;
+        maxDeadVictims = DEFAULT_MAX_DEAD_VICTIMS;
 	}
 
 	/**
@@ -96,6 +145,16 @@ public class Parameters {
         double newTimeBeetwenFires = DEFAULT_TIME_BEETWEN_FIRES;
         double newDeviationForFires = DEFAULT_DEVIATION_FOR_FIRES;
         double newTrappedToVictim = DEFAULT_TRAPPED_TO_VICTIM;
+        int newMinFireStrength = DEFAULT_MIN_FIRE_STRENGTH;
+        int newMaxFireStrength = DEFAULT_MAX_FIRE_STRENGTH;
+        int newMinTrappedVictims = DEFAULT_MIN_TRAPPED_VICTIMS;
+        int newMaxTrappedVictims = DEFAULT_MAX_TRAPPED_VICTIMS;
+        int newMinSlightVictims = DEFAULT_MIN_SLIGHT_VICTIMS;
+        int newMaxSlightVictims = DEFAULT_MAX_SLIGHT_VICTIMS;
+        int newMinSevereVictims = DEFAULT_MIN_SEVERE_VICTIMS;
+        int newMaxSevereVictims = DEFAULT_MAX_SEVERE_VICTIMS;
+        int newMinDeadVictims = DEFAULT_MIN_DEAD_VICTIMS;
+        int newMaxDeadVictims = DEFAULT_MAX_DEAD_VICTIMS;
 
 		try {
 
@@ -103,23 +162,28 @@ public class Parameters {
             in = new FileInputStream(file);
             properties.load(in);
 
-            String fileConstant = properties.getProperty(CONSTANT);
-            newConstant = Boolean.parseBoolean(fileConstant);
+            newConstant = Boolean.parseBoolean(properties.getProperty(CONSTANT));
+            newSeed = Long.parseLong(properties.getProperty(SEED));
+            newFrequency = Integer.parseInt(properties.getProperty(FREQUENCY));
 
-            String fileSeed = properties.getProperty(SEED);
-            newSeed = Long.parseLong(fileSeed);
+            newTimeBeetwenFires = Double.parseDouble(properties.getProperty(TIME_BEETWEN_FIRES));
+            newDeviationForFires = Double.parseDouble(properties.getProperty(DEVIATION_FOR_FIRES));
+            newTrappedToVictim = Double.parseDouble(properties.getProperty(TRAPPED_TO_VICTIM));
 
-            String fileFrequency = properties.getProperty(FREQUENCY);
-            newFrequency = Integer.parseInt(fileFrequency);
+            newMinFireStrength = Integer.parseInt(properties.getProperty(MIN_FIRE_STRENGTH));
+            newMaxFireStrength = Integer.parseInt(properties.getProperty(MAX_FIRE_STRENGTH));
 
-            String fileTimeBeetwenFires = properties.getProperty(TIME_BEETWEN_FIRES);
-            newTimeBeetwenFires = Double.parseDouble(fileTimeBeetwenFires);
+            newMinTrappedVictims = Integer.parseInt(properties.getProperty(MIN_TRAPPED_VICTIMS));
+            newMaxTrappedVictims = Integer.parseInt(properties.getProperty(MAX_TRAPPED_VICTIMS));
 
-            String fileDeviationForFires = properties.getProperty(DEVIATION_FOR_FIRES);
-            newDeviationForFires = Double.parseDouble(fileDeviationForFires);
+            newMinSlightVictims = Integer.parseInt(properties.getProperty(MIN_SLIGHT_VICTIMS));
+            newMaxSlightVictims = Integer.parseInt(properties.getProperty(MAX_SLIGHT_VICTIMS));
 
-            String fileTrappedToVictim = properties.getProperty(TRAPPED_TO_VICTIM);
-            newTrappedToVictim = Double.parseDouble(fileTrappedToVictim);
+            newMinSevereVictims = Integer.parseInt(properties.getProperty(MIN_SEVERE_VICTIMS));
+            newMaxSevereVictims = Integer.parseInt(properties.getProperty(MAX_SEVERE_VICTIMS));
+
+            newMinDeadVictims = Integer.parseInt(properties.getProperty(MIN_DEAD_VICTIMS));
+            newMaxDeadVictims = Integer.parseInt(properties.getProperty(MAX_DEAD_VICTIMS));
 
 			in.close();
 
@@ -135,6 +199,16 @@ public class Parameters {
             timeBeetwenFires = newTimeBeetwenFires;
             deviationForFires = newDeviationForFires;
             trappedToVictim = newTrappedToVictim;
+            minFireStrength = newMinFireStrength;
+            maxFireStrength = newMaxFireStrength;
+            minTrappedVictims = newMinTrappedVictims;
+            maxTrappedVictims = newMaxTrappedVictims;
+            minSlightVictims = newMinSlightVictims;
+            maxSlightVictims = newMaxSlightVictims;
+            minSevereVictims = newMinSevereVictims;
+            maxSevereVictims = newMaxSevereVictims;
+            minDeadVictims = newMinDeadVictims;
+            maxDeadVictims = newMaxDeadVictims;
 
 			checkParameters();
 
@@ -158,14 +232,29 @@ public class Parameters {
 	 */
 	public Parameters(boolean constant,long seed, int frequency,
             double timeBeetwenFires, double deviationForFires,
-            double trappedToVictim) throws IllegalArgumentException{
+            double trappedToVictim, int minFireStrength, int maxFireStrength,
+            int minTrappedVictims, int maxTrappedVictims,
+            int minSlightVictims, int maxSlightVictims,
+            int minSevereVictims, int maxSevereVictims,
+            int minDeadVictims, int maxDeadVictims
+            ) throws IllegalArgumentException {
         this.constant=constant;
 		this.seed = seed;
 		this.frequency = frequency;
         this.timeBeetwenFires = timeBeetwenFires;
         this.deviationForFires = deviationForFires;
         this.trappedToVictim = trappedToVictim;
-        
+        this.minFireStrength = minFireStrength;
+        this.maxFireStrength = maxFireStrength;
+        this.minTrappedVictims = minTrappedVictims;
+        this.maxTrappedVictims = maxTrappedVictims;
+        this.minSlightVictims = minSlightVictims;
+        this.maxSlightVictims = maxSlightVictims;
+        this.minSevereVictims = minSevereVictims;
+        this.maxSevereVictims = maxSevereVictims;
+        this.minDeadVictims = minDeadVictims;
+        this.maxDeadVictims = maxDeadVictims;
+
 		checkParameters();
 	}
 
@@ -184,9 +273,22 @@ public class Parameters {
         if (deviationForFires < 0){
             wrongParameter(Double.toString(deviationForFires), DEVIATION_FOR_FIRES);
         }
-        if(trappedToVictim < 0 || trappedToVictim > 1) {
+        if (trappedToVictim < 0 || trappedToVictim > 1) {
             wrongParameter(Double.toString(trappedToVictim), TRAPPED_TO_VICTIM);
         }
+        if (maxFireStrength < 1 || maxFireStrength > 100) {
+            wrongParameter(Integer.toString(maxFireStrength), MAX_FIRE_STRENGTH);
+        }
+        if (minFireStrength < 1 || minFireStrength > maxFireStrength) {
+            wrongParameter(Integer.toString(minFireStrength), MIN_FIRE_STRENGTH);
+        }
+        if (maxTrappedVictims < 0) {
+            wrongParameter(Integer.toString(maxTrappedVictims), MAX_TRAPPED_VICTIMS);
+        }
+        if (minTrappedVictims < 0 || minTrappedVictims > maxTrappedVictims) {
+            wrongParameter(Integer.toString(minTrappedVictims), MIN_TRAPPED_VICTIMS);
+        }
+
 	}
 
 	/**
@@ -218,11 +320,24 @@ public class Parameters {
         a += "\t" + TIME_BEETWEN_FIRES + "=" + this.timeBeetwenFires;
         a += "\t" + DEVIATION_FOR_FIRES + "=" + this.deviationForFires;
         a += "\t" + TRAPPED_TO_VICTIM + "=" + this.trappedToVictim;
-		return a;
+
+        a += "\t" + MIN_FIRE_STRENGTH + "=" + this.minFireStrength;
+        a += "\t" + MAX_FIRE_STRENGTH + "=" + this.maxFireStrength;
+
+        a += "\t" + MIN_TRAPPED_VICTIMS + "=" + this.minTrappedVictims;
+        a += "\t" + MAX_TRAPPED_VICTIMS + "=" + this.maxTrappedVictims;
+        a += "\t" + MIN_SLIGHT_VICTIMS + "=" + this.minSlightVictims;
+        a += "\t" + MAX_SLIGHT_VICTIMS + "=" + this.maxSlightVictims;
+        a += "\t" + MIN_SEVERE_VICTIMS + "=" + this.minSevereVictims;
+        a += "\t" + MAX_SEVERE_VICTIMS + "=" + this.maxSevereVictims;
+        a += "\t" + MIN_DEAD_VICTIMS + "=" + this.minDeadVictims;
+        a += "\t" + MAX_DEAD_VICTIMS + "=" + this.maxDeadVictims;
+
+        return a;
 	}
 
     /*
-     * Getters 
+     * Getters
      */
     public int getFrequency() {
         return frequency;
@@ -242,6 +357,46 @@ public class Parameters {
 
     public double getDeviationForFires() {
         return deviationForFires;
+    }
+
+    public int getMinFireStrength() {
+        return minFireStrength;
+    }
+
+    public int getMaxFireStrength() {
+        return maxFireStrength;
+    }
+
+    public int getMinTrappedVictims() {
+        return minTrappedVictims;
+    }
+
+    public int getMaxTrappedVictims() {
+        return maxTrappedVictims;
+    }
+
+    public int getMinSlightVictims() {
+        return minSlightVictims;
+    }
+
+    public int getMaxSlightVictims() {
+        return maxSlightVictims;
+    }
+
+    public int getMinSevereVictims() {
+        return minSevereVictims;
+    }
+
+    public int getMaxSevereVictims() {
+        return maxSevereVictims;
+    }
+
+    public int getMinDeadVictims() {
+        return minDeadVictims;
+    }
+
+    public int getMaxDeadVictims() {
+        return maxDeadVictims;
     }
 
 }

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gsi.simulator;
 
 import java.util.List;
@@ -12,6 +7,9 @@ import java.util.ArrayList;
  *
  * @author Luis Delgado
  */
+
+//TODO now there are methods for generating random numbers of persons in different health status
+//at class RandomGenerator
 public class FireGenerator {
     public static int MIN_INITIAL_SIZE = 3;
     public static int MAX_INITIAL_SIZE = 7;

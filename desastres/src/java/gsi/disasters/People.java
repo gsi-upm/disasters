@@ -16,17 +16,17 @@ public class People {
 	 * Assigned Resource id
 	 **/
 	private int idAssigned;
-	
+
 	/**
 	 * Type of injured (slight, serious, dead, trapped)
 	 **/
 	private InjuryDegree type;
-	
+
 	/**
 	 * Name of the resource
 	 **/
 	private String name;
-     
+
     /**
 	 * Info about the resource
 	 */
@@ -41,12 +41,12 @@ public class People {
 	 * State of the resource (usually active)
 	 */
      private StateType state;
-	
+
     /**
  	 * Quantity of people
  	 */
  	private int quantity;
-	
+
 	/**
 	 * Id of the user who added the injured
 	 */
@@ -176,7 +176,7 @@ public class People {
 		this.name = name;
 	}
 
-	
+
 
 	/**
 	 * @return the info
@@ -261,14 +261,17 @@ public class People {
     public void setHealthPoints(int healthPoints) {
         this.healthPoints = healthPoints;
     }
-	
+
 	/**
      * Calculates the InjuryDegree associated to a number of health points
      * @param healthPoints
      * @return the InjuryDegree
      */
     public static InjuryDegree getVictimDegree(int healthPoints) {
-        if (healthPoints >= 50) {
+        if (healthPoints == 100) {
+            return InjuryDegree.TRAPPED;
+        }
+        else if (healthPoints >= 50) {
             return InjuryDegree.SLIGHT;
         }
         else if (healthPoints > 0) {
