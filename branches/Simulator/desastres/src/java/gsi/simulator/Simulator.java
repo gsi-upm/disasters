@@ -93,13 +93,16 @@ public class Simulator {
 
             if(currentEvent.isFireGeneration()) {
                 //Generation of a new fire
-                String size = "small"; // TODO RandomGenerator method to get random size (as String)
-                int strength = generator.randomInteger(1,100); // Limits should come from Parameters
+                String size = generator.fireDefineSize(); // Size of the fire
+                int strength = generator.fireDefineStrength(); // Strength of the fire
                 String density = "medium"; //TODO RandomGenerator method to get random density (as String)
-                int slight = generator.randomInteger(0,10); // Limits should come from Parameters
-                int severe = generator.randomInteger(0,10); // Limits should come from Parameters
-                int dead = generator.randomInteger(0,10); // Limits should come from Parameters
-                int trapped = generator.randomInteger(0,10); // Limits should come from Parameters
+
+                // TODO: determine these limits (in parameters.ini)
+                // numbers of initial victims (and their status)
+                int trapped = generator.initialTrappedVictims();
+                int slight = generator.initialSlightVictims();
+                int severe = generator.initialSevereVictims();
+                int dead = generator.initialDeadVictims();
 
                 disasters.add(new Disaster(disastersCount, DisasterType.FIRE, "First fire", "INFO", "DESCRIPTION", "ADDRESS",
                     0, 0, StateType.ACTIVE, SizeType.getType(size), strength, DensityType.getType(density), slight, severe, dead, trapped));
@@ -155,7 +158,7 @@ public class Simulator {
                                         if(Math.random() < currentDisaster.getStrength()*0.05) {
                                             currentPeople.reduceHealthPoints(generator.healthPointsDecrease());
                                         }
-                                }    
+                                }
                             }
                         }
                     }
@@ -197,12 +200,14 @@ public class Simulator {
 		 */
         //Simulation of 10.000 seconds
         long howLong = 10000;
+        Parameters parameters = new Parameters();
         LOGGER.info("Simulation beginning. Duration = " + howLong);
-        Simulator sim = new Simulator();
+        Simulator sim = new Simulator(parameters);
 
         /*
 		 * Simulation loop running
 		 */
+        LOGGER.info("Simulation beginning. Duration = " + howLong);
         sim.simulateLoop(howLong);
         LOGGER.info("End of simulation");
     }
