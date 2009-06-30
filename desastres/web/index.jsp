@@ -61,9 +61,20 @@
                     $('#close_screen').hide();
                     $('#console').hide();
                     $('#visualize').hide();
-                    $('#showXoptions').hide();
-
-       
+                    $('#showSimOptions').hide();
+                    
+                    $('#minitab3').toggle(
+                    function() {
+                        $('#showSimOptions').slideDown();
+                        $('#hideSimOptions').click(function(){
+                            $('#showSimOptions').slideUp();
+                            return false;
+                        });
+                    }
+                    ,function(){
+                        $('#showSimOptions').slideUp();
+                    }  );
+                    
                     
                     $('#minitab2').toggle(
                     function() {
@@ -72,10 +83,6 @@
                             $('#visualize').slideUp();
                             return false;
                         });
-                        //$('#visualize').click(function() {
-                        //$(this).slideUp();});
-                        //  return false;
-    
                     }
                     ,function(){
                         $('#visualize').slideUp();
@@ -113,6 +120,9 @@
             
             <%-- Agents movement through roads --%>
             <script src="js/resourcesOnRoads.js" type="text/javascript"></script>
+            
+            <%-- Areas around fires --%>
+            <script src="js/einsert.js" type="text/javascript"></script>
             
         </head>
         
@@ -224,6 +234,9 @@
                         
                         <!-- minitabs top -right -->
                         <div id="minitabs">
+                            <div id="minitab3" class="minitab">
+                                <img alt="ver" src="images/tab_building.png">
+                            </div>
                             <div id="minitab2" class="minitab">
                                 <img alt="ver" src="images/tab_building.png">
                             </div>
@@ -493,17 +506,22 @@
                     <p><fmt:message key="edificios"/></p>
                     <input type="checkbox" name="hospital" value="hospital" checked="checked" onchange="visualize(this.checked,'hospital');" ><fmt:message key="hospitales"/></input><br>
                     <input type="checkbox" name="policeStation" value="policeStation" checked="checked" onchange="visualize(this.checked,'policeStation');"><fmt:message key="comisarias"/></input><br>
-                    <input type="checkbox" name="firemenStation" value="firemenStation" checked="checked" onchange="visualize(this.checked,'firemenStation');"><fmt:message key="parquesbomberos"/></input><br><br><br>
-                    
+                    <input type="checkbox" name="firemenStation" value="firemenStation" checked="checked" onchange="visualize(this.checked,'firemenStation');"><fmt:message key="parquesbomberos"/></input><br>
+                    <br>
+                    <br>
                     <a id="hideVisualize" href="#"><fmt:message key="ocultar"/></a>
-                </form>                
+                </form>
             </div>
-            <div id="showXoptions" class="slideMenu">
-                <form name="Xoptions" id="Xoptions">
-                    <p><fmt:message key="Xopciones"/></p>
-                    <input type="checkbox" name="fireSpread" value="fireSpread" checked="checked" onchange="" ><fmt:message key="fireSpread"/></input><br>
-                    <a id="hideXoptions" href="#"><fmt:message key="ocultar"/></a>
-                </form>                
+            <div id="showSimOptions" class="slideMenu">
+                <form name="SimOptions" id="SimOptions">
+                    <p><fmt:message key="opcionesSimulador"/></p>
+                    <p><fmt:message key="victimas"/><input type="text" name="victims" size="3"/></p>
+                    <p><fmt:message key="incendios"/><input type="text" name="incendios" size="3"/></p>
+                    <input type="submit" name="arrancaSimulador" value="<fmt:message key="arrancaSimulador"/>" id="submit_simulador"></input><br>
+                    <br>
+                    <br>
+                    <a id="hideSimOptions" href="#"><fmt:message key="ocultar"/></a>
+                </form>
             </div>
             
             <!-- Screen for the servlet information -->
