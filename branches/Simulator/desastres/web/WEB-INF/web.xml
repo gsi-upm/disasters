@@ -85,4 +85,14 @@
         <servlet-name>dwr-invoker</servlet-name>
         <url-pattern>/dwr/*</url-pattern>
     </servlet-mapping>
+    
+    <!-- Simulator -->
+    <servlet>
+        <servlet-name>SimulatorServlet</servlet-name>
+        <servlet-class>simulator.SimulatorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimulatorServlet</servlet-name>
+        <url-pattern>/SimulatorServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
