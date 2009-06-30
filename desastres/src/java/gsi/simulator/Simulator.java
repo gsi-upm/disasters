@@ -95,7 +95,7 @@ public class Simulator {
                 //Generation of a new fire
                 String size = generator.fireDefineSize(); // Size of the fire
                 int strength = generator.fireDefineStrength(); // Strength of the fire
-                String density = "medium"; //TODO RandomGenerator method to get random density (as String)
+                String density = generator.trafficDefineDensity(); // Traffic density around the fire
 
                 // TODO: determine these limits (in parameters.ini)
                 // numbers of initial victims (and their status)
