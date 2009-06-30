@@ -77,23 +77,44 @@ public class RandomGenerator {
         double standardDeviation = params.getDeviationForFires();
         return randomGaussian(mean, standardDeviation);
     }
-
+    /**
+     * Defines a size for a fire
+     * @return random size for a new fire
+     */
     public String fireDefineSize() {
-        double size = Math.random() * 3.0;
-        if (size < 1.0) {
+        double size = Math.random();
+        if (size < 0.25) {
             return "small";
-        } else if (size < 2.0) {
+        } else if (size < 0.5) {
             return "medium";
+        } else if (size < 0.75) {
+            return "big";
         } else {
-            return "large";
+            return "huge";
         }
     }
+
+    /**
+     * Defines the strength of fires
+     * @return random number of strength for a new fire
+     */
     public int fireDefineStrength() {
         return randomInteger(params.getMinFireStrength(),params.getMaxFireStrength());
     }
-        //TODO: What is density? Determine density degrees
-    public String fireDefineDensity() {
-        return "";
+
+    /**
+     * Defines the density of traffic
+     * @return random traffic density around the fire
+     */
+    public String trafficDefineDensity() {
+        double density = (Math.random() * 3);
+        if (density < 1.0) {
+            return "low";
+        } else if (density < 2.0) {
+            return "medium";
+        } else {
+            return "high";
+        }
     }
 
     /**
