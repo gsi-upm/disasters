@@ -60,18 +60,15 @@ public class RandomGenerator {
         return min + (int) Math.floor((max - min + 1) * Math.random());
     }
 
-    //TODO : Genearate random value for refresh period of the simulator.
     public int refreshPeriod(){
         if(params.isConstant()){
             return params.getFrequency();
         }
         else{
-            // TODO:  What should return? Maybe queue(1) time - queue(0) time...
-            return 60;
+            return randomInteger(0,10);
         }
     }
 
-        //TODO : Return a random value to generate random fires.
     public int fireGeneratePeriod(){
         double mean = params.getTimeBeetwenFires();
         double standardDeviation = params.getDeviationForFires();
@@ -119,12 +116,28 @@ public class RandomGenerator {
 
     /**
      * Returns an integer random value of the health points that a person
-     * looses in a refresh.
+     * looses in a refresh depending on the strength of the disaster
+     * @param strength strength of the disaster affecting the people
+     * @return the number of healthpoints lost
+     */
+    public static int healthPointsDecrease(int strength) {
+        if (strength >= 80)
+            return randomInteger(7,10);
+        else if (strength >=40)
+            return randomInteger(4,7);
+        else
+            return randomInteger(0,4);
+    }
+
+    /**
+     * Same method than previous, but without strength. Used to compile,
+     * should be deleted later.
      * @return the number of healthpoints lost
      */
     public static int healthPointsDecrease() {
         return randomInteger(2,6);
     }
+
 
     /**
      * Generates a random value of health points for a victim to get initialized.

@@ -1,5 +1,7 @@
 package gsi.disasters;
 
+import gsi.simulator.RandomGenerator;
+
 /**
  * Class that represents a disaster
  * @author julio camarero
@@ -622,7 +624,7 @@ public class Disaster {
         else if (this.isMedium()) number=2;
         else if (this.isBig()) number = 3;
         else if (this.isHuge()) number=4;
-        number *= this.strength/10 + 10*Math.random();
+        number *= ((int) this.strength/10) + RandomGenerator.randomInteger(0,10);
         return number;
     }
 }

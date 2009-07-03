@@ -56,6 +56,11 @@ public class Parameters {
     private final int minDeadVictims;
     private final int maxDeadVictims;
 
+    /**
+     * Length of the simulation, in seconds
+     */
+    private final int length;
+
 	/*
 	 * Default parameters value
 	 */
@@ -76,6 +81,7 @@ public class Parameters {
     private final int DEFAULT_MAX_SEVERE_VICTIMS = 10;
     private final int DEFAULT_MIN_DEAD_VICTIMS = 0;
     private final int DEFAULT_MAX_DEAD_VICTIMS = 10;
+    private final int DEFAULT_LENGTH = 1000;
 
 
 	/*
@@ -97,6 +103,7 @@ public class Parameters {
     private static final String MAX_SEVERE_VICTIMS = "maximum number of severe victims";
     private static final String MIN_DEAD_VICTIMS = "minimum number of dead victims";
     private static final String MAX_DEAD_VICTIMS = "maximum number of dead victims";
+    private static final String LENGTH = "length";
 
 	/**
 	 * Default constructor, with default parameters.
@@ -118,6 +125,7 @@ public class Parameters {
         maxSevereVictims = DEFAULT_MAX_SEVERE_VICTIMS;
         minDeadVictims = DEFAULT_MIN_DEAD_VICTIMS;
         maxDeadVictims = DEFAULT_MAX_DEAD_VICTIMS;
+        length = DEFAULT_LENGTH;
 	}
 
 	/**
@@ -155,6 +163,7 @@ public class Parameters {
         int newMaxSevereVictims = DEFAULT_MAX_SEVERE_VICTIMS;
         int newMinDeadVictims = DEFAULT_MIN_DEAD_VICTIMS;
         int newMaxDeadVictims = DEFAULT_MAX_DEAD_VICTIMS;
+        int newLength = DEFAULT_LENGTH;
 
 		try {
 
@@ -185,6 +194,8 @@ public class Parameters {
             newMinDeadVictims = Integer.parseInt(properties.getProperty(MIN_DEAD_VICTIMS));
             newMaxDeadVictims = Integer.parseInt(properties.getProperty(MAX_DEAD_VICTIMS));
 
+            newLength = Integer.parseInt(properties.getProperty(LENGTH));
+
 			in.close();
 
 		} catch (FileNotFoundException e) {
@@ -209,6 +220,7 @@ public class Parameters {
             maxSevereVictims = newMaxSevereVictims;
             minDeadVictims = newMinDeadVictims;
             maxDeadVictims = newMaxDeadVictims;
+            length = newLength;
 
 			checkParameters();
 
@@ -236,7 +248,7 @@ public class Parameters {
             int minTrappedVictims, int maxTrappedVictims,
             int minSlightVictims, int maxSlightVictims,
             int minSevereVictims, int maxSevereVictims,
-            int minDeadVictims, int maxDeadVictims
+            int minDeadVictims, int maxDeadVictims, int length
             ) throws IllegalArgumentException {
         this.constant=constant;
 		this.seed = seed;
@@ -254,6 +266,7 @@ public class Parameters {
         this.maxSevereVictims = maxSevereVictims;
         this.minDeadVictims = minDeadVictims;
         this.maxDeadVictims = maxDeadVictims;
+        this.length = length;
 
 		checkParameters();
 	}
@@ -288,7 +301,10 @@ public class Parameters {
         if (minTrappedVictims < 0 || minTrappedVictims > maxTrappedVictims) {
             wrongParameter(Integer.toString(minTrappedVictims), MIN_TRAPPED_VICTIMS);
         }
-
+        if (length <= 0) {
+            wrongParameter(Integer.toString(length), LENGTH);
+        }
+        
 	}
 
 	/**
@@ -332,6 +348,7 @@ public class Parameters {
         a += "\t" + MAX_SEVERE_VICTIMS + "=" + this.maxSevereVictims;
         a += "\t" + MIN_DEAD_VICTIMS + "=" + this.minDeadVictims;
         a += "\t" + MAX_DEAD_VICTIMS + "=" + this.maxDeadVictims;
+        a += "\t" + LENGTH + "=" + this.length;
 
         return a;
 	}
@@ -397,6 +414,10 @@ public class Parameters {
 
     public int getMaxDeadVictims() {
         return maxDeadVictims;
+    }
+
+    public int getLength() {
+        return length;
     }
 
 }
