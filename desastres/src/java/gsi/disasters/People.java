@@ -1,5 +1,7 @@
 package gsi.disasters;
 
+import gsi.simulator.RandomGenerator;
+
 /**
  * Class that represents a group of victims
  * @author julio camarero
@@ -288,7 +290,9 @@ public class People {
      */
     public void reduceHealthPoints(int loss) {
         this.healthPoints -= loss;
-        this.type = getVictimDegree(this.healthPoints);
+        if (this.healthPoints < 0)
+            this.healthPoints = 0;
+        //this.type = getVictimDegree(this.healthPoints); This line isn't needed in the new Simulator logic
     }
 
     /**
@@ -331,7 +335,7 @@ public class People {
         int number = this.quantity;
         if (this.areSlight()) number*=2;
         else if (this.areSevere()) number *=3;
-        number += (int) 10*Math.random();
+        number += RandomGenerator.randomInteger(0,10);
         return number;
     }
 
