@@ -1,0 +1,189 @@
+package gsi.simulator.rest;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+
+/**
+ * This class provides an interface for using the REST API.
+ * @author al.lopezf
+ */
+public class EventsManagement {
+
+    private static final String URL_BASE = "http://localhost:8080/Disasters/rest";
+    private static final String POST = "/post/";
+    private static final String PUT = "/put/";
+    private static final String DELETE = "/delete/";
+    private static final String LIST = "/events/";
+    //private static final String URL_BASE = "http://localhost:8080/Disasters/";
+    //private static final String URL_BASE = "http://localhost:8080/Disasters/";
+
+
+    /*
+     * List all the events in the app
+     * @return a String with all the events, in a JSON notation.
+     */
+    public static String listAllEvents() {
+        WebFile web;
+        String response = "error";
+        try {
+            web = new WebFile(URL_BASE + LIST);
+            response = (String) web.getContent();
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return response.trim();
+    }
+
+
+    /*
+     * Inserts a fire into the database.
+     *
+     * @param lat Latitude
+     * @param lon Longitude
+     * @param name the name of the fire (i.e. "Big fire in /street")
+     * @param size (it can be huge, big, medium or small)
+     * @param traffic (it can be low , medium or high)
+     *
+     * @return the unique ID of the fire. This is important if you want to modify
+     * or erase this fire later.
+     */
+    public static int insertFire(double lat, double lon, String name, String size, String traffic) {
+        WebFile web;
+        int response = -1;
+        String content = "error";
+        String URL = "";
+        try {
+            URL += URL_BASE + POST + "type=fire&latitud=" + lat + "&longitud=" + lon;
+            if (name != null) {
+                URL += "&name=" + name;
+            }
+
+            if (size != null) {
+                if (size.equals("small")) {
+                    URL += "&size=small";
+                }
+                if (size.equals("medium")) {
+                    URL += "&size=medium";
+                }
+                if (size.equals("big")) {
+                    URL += "&size=big";
+                }
+                if (size.equals("huge")) {
+                    URL += "&size=huge";
+                }
+            }
+            if (traffic != null) {
+                if (traffic.equals("low")) {
+                    URL += "&traffic=low";
+                }
+                if (traffic.equals("medium")) {
+                    URL += "&traffic=medium";
+                }
+                if (traffic.equals("high")) {
+                    URL += "&traffic=high";
+                }
+            }
+            web = new WebFile(URL);
+            System.out.println(URL);
+            content = (String) web.getContent();
+            System.out.println(content.trim());
+            content = content.substring(content.indexOf("\"id\":") + 5, content.indexOf("}"));
+            response = Integer.parseInt(content);
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return response;
+    }
+
+       /**
+        *
+        * @param type It can be police, firemen, ambulance, if it is referring
+        * to a resource, or slight, serious, dead or trapped, if referring to a victim.
+        * @param name Name of the resource or victim
+        * @param quantity Number of resources or victims to insert
+        * @param lat latitude
+        * @param lon longitude
+        * @param idAssigned id of the disaster which this resource or victim is assigned
+        *  If it is -1 , the resource or victim is nos associated to any disaster.
+        *
+        * @return the id of the resource or victim. This is important if you want to modify
+        * or erase it later.
+        */
+       public static int insertResourcesOrVictims(String type,String name, int quantity,
+               double lat, double lon,int idAssigned) {
+        WebFile web;
+        int response = -1;
+        String content = "error";
+        String URL = "";
+        try {
+            URL += URL_BASE + POST + "&type="+type + "&quantity=" + quantity + "&latitud=" + lat +
+                    "&longitud=" + lon;
+            if (name != null) {
+                URL += "&name=" + name;
+            }
+
+            if (idAssigned !=  -1 ) {
+                URL += "&idAssigned=" + idAssigned;
+            }
+
+            web = new WebFile(URL);
+            content = (String) web.getContent();
+            System.out.println(content.trim());
+            content = content.substring(content.indexOf("\"id\":") + 5, content.indexOf("}"));
+            response = Integer.parseInt(content);
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return response;
+    }
+
+    /**
+     * Deletes a disaster, resource or victim
+     * @param id The id of the disaster, resource or victim to delete. This id
+     * is the one given when you created it (the id in the database).
+     */
+    public static void delete(int id) {
+        WebFile web;
+        String content = "";
+        String URL = "";
+        try {
+            URL += URL_BASE + DELETE + "id/" + id;
+
+            web = new WebFile(URL);
+            content = (String) web.getContent();
+            System.out.println(content.trim());
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Tests
+
+
+    public static void main(String[] args) {
+
+        try {
+        System.out.println(listAllEvents());
+            //Draw a fire and put it out
+            int id = insertFire(40, -4.2, "Info", "huge", null);
+           // System.out.println(id);
+            insertResourcesOrVictims("serious","nombre",3,40,-4.1,id);
+            Thread.sleep(5000); //Waits 5 seconds
+            System.out.println("Wake up...");
+            delete(id); //End
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }  */
+}
