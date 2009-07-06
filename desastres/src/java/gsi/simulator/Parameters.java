@@ -51,8 +51,8 @@ public class Parameters {
     private final int maxTrappedVictims;
     private final int minSlightVictims;
     private final int maxSlightVictims;
-    private final int minSevereVictims;
-    private final int maxSevereVictims;
+    private final int minSeriousVictims;
+    private final int maxSeriousVictims;
     private final int minDeadVictims;
     private final int maxDeadVictims;
 
@@ -77,8 +77,8 @@ public class Parameters {
     private final int DEFAULT_MAX_TRAPPED_VICTIMS = 10;
     private final int DEFAULT_MIN_SLIGHT_VICTIMS = 0;
     private final int DEFAULT_MAX_SLIGHT_VICTIMS = 10;
-    private final int DEFAULT_MIN_SEVERE_VICTIMS = 0;
-    private final int DEFAULT_MAX_SEVERE_VICTIMS = 10;
+    private final int DEFAULT_MIN_SERIOUS_VICTIMS = 0;
+    private final int DEFAULT_MAX_SERIOUS_VICTIMS = 10;
     private final int DEFAULT_MIN_DEAD_VICTIMS = 0;
     private final int DEFAULT_MAX_DEAD_VICTIMS = 10;
     private final int DEFAULT_LENGTH = 1000;
@@ -99,8 +99,8 @@ public class Parameters {
     private static final String MAX_TRAPPED_VICTIMS = "maximum number of trapped victims";
     private static final String MIN_SLIGHT_VICTIMS = "minimum number of slight victims";
     private static final String MAX_SLIGHT_VICTIMS = "maximum number of slight victims";
-    private static final String MIN_SEVERE_VICTIMS = "minimum number of severe victims";
-    private static final String MAX_SEVERE_VICTIMS = "maximum number of severe victims";
+    private static final String MIN_SERIOUS_VICTIMS = "minimum number of serious victims";
+    private static final String MAX_SERIOUS_VICTIMS = "maximum number of serious victims";
     private static final String MIN_DEAD_VICTIMS = "minimum number of dead victims";
     private static final String MAX_DEAD_VICTIMS = "maximum number of dead victims";
     private static final String LENGTH = "length";
@@ -121,8 +121,8 @@ public class Parameters {
         maxTrappedVictims = DEFAULT_MAX_TRAPPED_VICTIMS;
         minSlightVictims = DEFAULT_MIN_SLIGHT_VICTIMS;
         maxSlightVictims = DEFAULT_MAX_SLIGHT_VICTIMS;
-        minSevereVictims = DEFAULT_MIN_SEVERE_VICTIMS;
-        maxSevereVictims = DEFAULT_MAX_SEVERE_VICTIMS;
+        minSeriousVictims = DEFAULT_MIN_SERIOUS_VICTIMS;
+        maxSeriousVictims = DEFAULT_MAX_SERIOUS_VICTIMS;
         minDeadVictims = DEFAULT_MIN_DEAD_VICTIMS;
         maxDeadVictims = DEFAULT_MAX_DEAD_VICTIMS;
         length = DEFAULT_LENGTH;
@@ -159,8 +159,8 @@ public class Parameters {
         int newMaxTrappedVictims = DEFAULT_MAX_TRAPPED_VICTIMS;
         int newMinSlightVictims = DEFAULT_MIN_SLIGHT_VICTIMS;
         int newMaxSlightVictims = DEFAULT_MAX_SLIGHT_VICTIMS;
-        int newMinSevereVictims = DEFAULT_MIN_SEVERE_VICTIMS;
-        int newMaxSevereVictims = DEFAULT_MAX_SEVERE_VICTIMS;
+        int newMinSeriousVictims = DEFAULT_MIN_SERIOUS_VICTIMS;
+        int newMaxSeriousVictims = DEFAULT_MAX_SERIOUS_VICTIMS;
         int newMinDeadVictims = DEFAULT_MIN_DEAD_VICTIMS;
         int newMaxDeadVictims = DEFAULT_MAX_DEAD_VICTIMS;
         int newLength = DEFAULT_LENGTH;
@@ -188,8 +188,8 @@ public class Parameters {
             newMinSlightVictims = Integer.parseInt(properties.getProperty(MIN_SLIGHT_VICTIMS));
             newMaxSlightVictims = Integer.parseInt(properties.getProperty(MAX_SLIGHT_VICTIMS));
 
-            newMinSevereVictims = Integer.parseInt(properties.getProperty(MIN_SEVERE_VICTIMS));
-            newMaxSevereVictims = Integer.parseInt(properties.getProperty(MAX_SEVERE_VICTIMS));
+            newMinSeriousVictims = Integer.parseInt(properties.getProperty(MIN_SERIOUS_VICTIMS));
+            newMaxSeriousVictims = Integer.parseInt(properties.getProperty(MAX_SERIOUS_VICTIMS));
 
             newMinDeadVictims = Integer.parseInt(properties.getProperty(MIN_DEAD_VICTIMS));
             newMaxDeadVictims = Integer.parseInt(properties.getProperty(MAX_DEAD_VICTIMS));
@@ -216,8 +216,8 @@ public class Parameters {
             maxTrappedVictims = newMaxTrappedVictims;
             minSlightVictims = newMinSlightVictims;
             maxSlightVictims = newMaxSlightVictims;
-            minSevereVictims = newMinSevereVictims;
-            maxSevereVictims = newMaxSevereVictims;
+            minSeriousVictims = newMinSeriousVictims;
+            maxSeriousVictims = newMaxSeriousVictims;
             minDeadVictims = newMinDeadVictims;
             maxDeadVictims = newMaxDeadVictims;
             length = newLength;
@@ -247,7 +247,7 @@ public class Parameters {
             double trappedToVictim, int minFireStrength, int maxFireStrength,
             int minTrappedVictims, int maxTrappedVictims,
             int minSlightVictims, int maxSlightVictims,
-            int minSevereVictims, int maxSevereVictims,
+            int minSeriousVictims, int maxSeriousVictims,
             int minDeadVictims, int maxDeadVictims, int length
             ) throws IllegalArgumentException {
         this.constant=constant;
@@ -262,8 +262,8 @@ public class Parameters {
         this.maxTrappedVictims = maxTrappedVictims;
         this.minSlightVictims = minSlightVictims;
         this.maxSlightVictims = maxSlightVictims;
-        this.minSevereVictims = minSevereVictims;
-        this.maxSevereVictims = maxSevereVictims;
+        this.minSeriousVictims = minSeriousVictims;
+        this.maxSeriousVictims = maxSeriousVictims;
         this.minDeadVictims = minDeadVictims;
         this.maxDeadVictims = maxDeadVictims;
         this.length = length;
@@ -344,8 +344,8 @@ public class Parameters {
         a += "\t" + MAX_TRAPPED_VICTIMS + "=" + this.maxTrappedVictims;
         a += "\t" + MIN_SLIGHT_VICTIMS + "=" + this.minSlightVictims;
         a += "\t" + MAX_SLIGHT_VICTIMS + "=" + this.maxSlightVictims;
-        a += "\t" + MIN_SEVERE_VICTIMS + "=" + this.minSevereVictims;
-        a += "\t" + MAX_SEVERE_VICTIMS + "=" + this.maxSevereVictims;
+        a += "\t" + MIN_SERIOUS_VICTIMS + "=" + this.minSeriousVictims;
+        a += "\t" + MAX_SERIOUS_VICTIMS + "=" + this.maxSeriousVictims;
         a += "\t" + MIN_DEAD_VICTIMS + "=" + this.minDeadVictims;
         a += "\t" + MAX_DEAD_VICTIMS + "=" + this.maxDeadVictims;
         a += "\t" + LENGTH + "=" + this.length;
@@ -400,12 +400,12 @@ public class Parameters {
         return maxSlightVictims;
     }
 
-    public int getMinSevereVictims() {
-        return minSevereVictims;
+    public int getMinSeriousVictims() {
+        return minSeriousVictims;
     }
 
-    public int getMaxSevereVictims() {
-        return maxSevereVictims;
+    public int getMaxSeriousVictims() {
+        return maxSeriousVictims;
     }
 
     public int getMinDeadVictims() {

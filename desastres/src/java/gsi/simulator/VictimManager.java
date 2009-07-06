@@ -1,5 +1,8 @@
 package gsi.simulator;
 
+import gsi.disasters.*;
+import gsi.simulator.*;
+
 /**
  * Generates new victims and manages the refreshment of the victims
  * @author luis
@@ -15,10 +18,18 @@ public class VictimManager {
      */
     public static final int MAX_HEALTH_POINTS = 100;
     /**
-     * Limit of the transition SEVERE - SLIGHT. People with this or more
+     * Limit of the transition SERIOUS - SLIGHT. People with this or more
      * amount of health points are considered SLIGTH.
      */
-    public static final int LIMIT_SEVERE_SLIGHT = 50;
+    public static final int LIMIT_SERIOUS_SLIGHT = 50;
+    /**
+     * Default value for slight victims
+     */
+    public static final int DEFAULT_SLIGHT = 80;
+    /**
+     * Default value for serious victims
+     */
+    public static final int DEFAULT_SERIOUS = 30;
 
     /**
      * Calculates the InjuryDegree of a Person
@@ -26,11 +37,11 @@ public class VictimManager {
      * @return the InjuryDegree
      */
     public static InjuryDegree getVictimDegree(Person person) {
-        if (person.getHealthPoints() >= LIMIT_SEVERE_SLIGHT) {
+        if (person.getHealthPoints() >= LIMIT_SERIOUS_SLIGHT) {
             return InjuryDegree.SLIGHT;
         }
         else if (person.getHealthPoints() > MIN_HEALTH_POINTS) {
-            return InjuryDegree.SEVERE;
+            return InjuryDegree.SERIOUS;
         }
         else {
             return InjuryDegree.DEAD;
@@ -38,12 +49,21 @@ public class VictimManager {
     }
 
     /**
-     * Generates a new victim
+     * Generates a new slight victim
      * @return
      */
-    public static Person generateVictim() {
-        int healthPoints = RandomGenerator.initialHealthPoints();
-        return new Person(healthPoints);
+    public static Person generateSlightVictim(int id, Parameters param) {
+        RandomGenerator generator = new RandomGenerator(param);
+        return new Person(id, generator.initialHealthPointsSlight());
+    }
+
+    /**
+     * Generates a new slight victim
+     * @return
+     */
+    public static Person generateSeriousVictim(int id, Parameters param) {
+        RandomGenerator generator = new RandomGenerator(param);
+        return new Person(id, generator.initialHealthPointsSerious());
     }
 
     /**
@@ -51,7 +71,44 @@ public class VictimManager {
      * refreshes his InjuryDegree.
      * @param victim
      */
-    public static void refreshVictim(Person victim) {
-        victim.reduceHealthPoints(RandomGenerator.healthPointsDecrease());
+    public static void refreshVictim(Person victim, Parameters param) {
+        RandomGenerator generator = new RandomGenerator(param);
+        victim.reduceHealthPoints(generator.healthPointsDecrease());
+    }
+
+    /**
+     * Generates a default slight victim
+     * @param id identifier of the person
+     * @return the created slight victim
+     */
+    public static Person generateDefaultSlight(int id) {
+        return new Person(id, DEFAULT_SLIGHT);
+    }
+
+    /**
+     * Generates a default serious victim
+     * @param id identifier of the person
+     * @return the created slight victim
+     */
+    public static Person generateDefaultSerious(int id) {
+        return new Person(id, DEFAULT_SERIOUS);
+    }
+
+    /**
+     * Generates a default trapped
+     * @param id identifier of the person
+     * @return the created trapped person
+     */
+    public static Person generateDefaultTrapped(int id) {
+        return new Person(id, Person.MAX_HEALTH_POINTS);
+    }
+
+    /**
+     * Generates a default dead
+     * @param id identifier dead
+     * @return the created dead
+     */
+    public static Person generateDefaultDead(int id) {
+        return new Person(id, Person.MIN_HEALTH_POINTS);
     }
 }

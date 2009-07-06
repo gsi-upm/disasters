@@ -1,10 +1,18 @@
-package gsi.simulator;
+package gsi.disasters;
+
+import gsi.simulator.VictimManager;
+import gsi.simulator.*;
 
 /**
  *
  * @author Luis Delgado
  */
 public class Person {
+
+    /**
+     * Identifier
+     */
+    private int id;
 
     /**
      * Persons' health points
@@ -17,27 +25,38 @@ public class Person {
     private  InjuryDegree injuryDegree;
 
     /**
-     * Health bounds
+     * Minimum life points
      */
     public static final int MIN_HEALTH_POINTS = 0;
+    /**
+     * Maximum life points
+     */
     public static final int MAX_HEALTH_POINTS = 100;
 
     /**
      * Default constructor. Intact person
+     * @param id identifier of the person
      */
-    public Person() {
-        this.healthPoints = MAX_HEALTH_POINTS;
-        this.setInjuryDegree();
+    public Person(int id) {
+        this(id, MAX_HEALTH_POINTS);
     }
 
     /**
      * Creates a new person from health points
-     *
+     * @param id identifier of the person
      * @param healthPoints person's health points
      */
-    public Person(int healthPoints) {
+    public Person(int id, int healthPoints) {
         this.healthPoints = healthPoints;
         this.setInjuryDegree();
+    }
+
+    /**
+     * Returns the person's identifier
+     * @return the person's identifier
+     */
+    public int getId() {
+        return id;
     }
 
     /**
@@ -96,8 +115,8 @@ public class Person {
      * Check if the person is a severe victim
      * @return if the person is a severe victim
      */
-    public boolean isSevere() {
-        return this.injuryDegree == InjuryDegree.SEVERE;
+    public boolean isSerious() {
+        return this.injuryDegree == InjuryDegree.SERIOUS;
     }
 
     /**

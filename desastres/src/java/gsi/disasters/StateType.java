@@ -8,13 +8,13 @@ public enum StateType {
     ACTIVE, CONTROLLED, ERASED;
 
         public static StateType getType(String str){
-        if (str.equals("active") || str.equals("ACTIVE") || str.equals("Active")) {
+        if (str.toLowerCase().equals("active")) {
             return StateType.ACTIVE;
         }
-            else if (str.equals("controlled") || str.equals("CONTROLLED") || str.equals("Controlled")) {
+            else if (str.toLowerCase().equals("controlled")) {
             return StateType.CONTROLLED;
         }
-        else if (str.equals("erased") || str.equals("ERASED") || str.equals("Erased")) {
+        else if (str.toLowerCase().equals("erased")) {
             return StateType.ERASED;
         }
         else return null;
@@ -22,16 +22,6 @@ public enum StateType {
 
     @Override
     public String toString(){
-        String str;
-        switch (this) {
-            case ACTIVE: str = "active";
-                       break;
-            case CONTROLLED: str = "controlled";
-                         break;
-            case ERASED: str = "erased";
-                       break;
-            default: str="";
-        }
-        return str;
+        return super.toString().toLowerCase();
     }
 }

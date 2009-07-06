@@ -15,9 +15,9 @@ public class People {
 	private int id;
 
 	/**
-	 * Assigned Resource id
+	 * Assigned disaster id
 	 **/
-	private int idAssigned;
+	private int idAssignedDisaster;
 
 	/**
 	 * Type of injured (slight, serious, dead, trapped)
@@ -73,10 +73,11 @@ public class People {
      *
      * Constructor with Injury Degree and without healthPoints, they're assigned automatically
 	 */
-	public People(int id, InjuryDegree type, String name, String info, String description, int idAssigned, int quantity) {
+	public People(int id, InjuryDegree type, String name, String info,
+            String description, int idAssigned, int quantity) {
 		super();
 		this.id = id;
-		this.idAssigned = idAssigned;
+		this.idAssignedDisaster = idAssigned;
 		this.type = type;
 		this.name = name;
 		this.quantity= quantity;
@@ -86,7 +87,7 @@ public class People {
 		this.user = 1;
         if (type == InjuryDegree.SLIGHT)
             this.healthPoints = 80;
-        else if (type == InjuryDegree.SEVERE)
+        else if (type == InjuryDegree.SERIOUS)
             this.healthPoints = 30;
         else if (type == InjuryDegree.TRAPPED)
             this.healthPoints = 100;
@@ -108,10 +109,11 @@ public class People {
      *
      * Constructor with healthPoints, Injury Degree is assigned automatically
 	 */
-	public People(int id, String name, String info, String description, int idAssigned, int quantity, int healthPoints) {
+	public People(int id, String name, String info, String description,
+            int idAssigned, int quantity, int healthPoints) {
 		super();
 		this.id = id;
-		this.idAssigned = idAssigned;
+		this.idAssignedDisaster = idAssigned;
 		this.name = name;
 		this.quantity= quantity;
 		this.info = info;
@@ -137,17 +139,17 @@ public class People {
 	}
 
 	/**
-	 * @return the idAssigned
+	 * @return idAssigned the identifier of the associate Disaster
 	 */
 	public int getIdAssigned() {
-		return idAssigned;
+		return idAssignedDisaster;
 	}
 
 	/**
-	 * @param idAssigned the idAssigned to set
+	 * @param idAssigned the identifier of the associate Disaster
 	 */
 	public void setIdAssigned(int idAssigned) {
-		this.idAssigned = idAssigned;
+		this.idAssignedDisaster = idAssigned;
 	}
 
 	/**
@@ -277,7 +279,7 @@ public class People {
             return InjuryDegree.SLIGHT;
         }
         else if (healthPoints > 0) {
-            return InjuryDegree.SEVERE;
+            return InjuryDegree.SERIOUS;
         }
         else {
             return InjuryDegree.DEAD;
@@ -308,7 +310,7 @@ public class People {
      * @return if people are severe victims
      */
     public boolean areSevere() {
-        return this.type == InjuryDegree.SEVERE;
+        return this.type == InjuryDegree.SERIOUS;
     }
 
     /**

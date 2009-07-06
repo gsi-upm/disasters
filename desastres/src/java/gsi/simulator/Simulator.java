@@ -10,7 +10,10 @@ import gsi.disasters.DisasterType;
 import gsi.disasters.StateType;
 import gsi.disasters.SizeType;
 import gsi.disasters.DensityType;
+import gsi.disasters.Person;
 import gsi.disasters.InjuryDegree;
+import gsi.simulator.VictimManager;
+import java.util.Hashtable;
 
 /**
  *
@@ -30,13 +33,14 @@ public class Simulator {
 
     /**
      * Number used to assign an id to disasters, people and resources
+     * ¿????? Who generates the id's in the api?
      */
     private static int idCount = 0;
 
     /**
      * List containing the people generated with each disaster
      */
-    private List<People> people;
+    //private List<People> people;
 
     /**
      * Queue where events are inserted
@@ -47,35 +51,37 @@ public class Simulator {
      * Random generator
      */
     private RandomGenerator generator;
-
+    /**
+     * Parameters
+     */
+     private Parameters parameters;
     /**
      * Constructor for empty simulator
      */
     public Simulator() {
-        disasters = new ArrayList<Disaster>();
-        people = new ArrayList<People>();
-        queue = new EventQueue();
+        this.disasters = new ArrayList<Disaster>();
+        //this.people = new ArrayList<People>();
+        this.queue = new EventQueue();
     }
 
     /**
      * Constructor with file parameters
      */
     public Simulator(Parameters parameters) {
-        generator = new RandomGenerator(parameters);
-        disasters = new ArrayList<Disaster>();
-        people = new ArrayList<People>();
-        queue = new EventQueue();
+        this.parameters = parameters;
+        this.generator = new RandomGenerator(parameters);
+        this.disasters = new ArrayList<Disaster>();
+        //this.people = new ArrayList<People>();
+        this.queue = new EventQueue();
     }
 
     /**
      * Runs a simulation loop which lasts the specified time
-     *
      * @param howLong length of the simulation
      */
     private void simulateLoop(int howLong) {
         Event currentEvent = Event.generateNewFire(0);
         Event firstRefresh = Event.generateRefresh(null, generator.refreshPeriod());
-
         queue.insert(firstRefresh);
 
         while (currentEvent.getInstant() <= howLong) {
@@ -88,23 +94,39 @@ public class Simulator {
 
                 // TODO: determine these limits (in parameters.ini)
                 // numbers of initial victims (and their status)
-                int trapped = generator.initialTrappedVictims();
-                int slight = generator.initialSlightVictims();
-                int severe = generator.initialSevereVictims();
-                int dead = generator.initialDeadVictims();
+                List<Person> slight = new ArrayList<Person>();
+                for(int i = 0; i < generator.initialSlightVictims(); i++) {
+                    slight.add(VictimManager.generateSlightVictim(0, parameters));
+                }
+                List<Person> serious = new ArrayList<Person>();
+                for(int i = 0; i < generator.initialSeriousVictims(); i++) {
+                    serious.add(VictimManager.generateSeriousVictim(0, parameters));
+                }
+                List<Person> trapped = new ArrayList<Person>();
+                for(int i = 0; i < generator.initialTrappedVictims(); i++) {
+                    trapped.add(VictimManager.generateDefaultTrapped(0));
+                }
+                List<Person> dead = new ArrayList<Person>();
+                for(int i = 0; i < generator.initialDeadVictims(); i++) {
+                    dead.add(VictimManager.generateDefaultDead(0));
+                }
 
-                disasters.add(new Disaster(idCount, DisasterType.FIRE, "First fire", "INFO", "DESCRIPTION", "ADDRESS", 0, 0,
-                        StateType.ACTIVE, SizeType.getType(size), strength, DensityType.getType(density), slight, severe, dead, trapped));
+                disasters.add(new Disaster(idCount, DisasterType.FIRE, "First fire",
+                        "INFO", "DESCRIPTION", "ADDRESS", 0, 0, StateType.ACTIVE,
+                        SizeType.getType(size), DensityType.getType(density),
+                        slight, serious, dead, trapped, null, null, null,
+                        strength));
 
+                /**
                 int disasterId = idCount; // We save the disaster id so that we can assign people to it
 
                 // These lines generate People with assigned injury degree (health points assigned automatically).
                 // It is possible to create People with assigned health points (automatic injury degree).
                 people.add(new People(++idCount, InjuryDegree.SLIGHT, "NAME", "INFO", "DESCRIPTION", disasterId, slight));
-                people.add(new People(++idCount, InjuryDegree.SEVERE, "NAME", "INFO", "DESCRIPTION", disasterId, severe));
+                people.add(new People(++idCount, InjuryDegree.SERIOUS, "NAME", "INFO", "DESCRIPTION", disasterId, severe));
                 people.add(new People(++idCount, InjuryDegree.DEAD, "NAME", "INFO", "DESCRIPTION", disasterId, dead));
                 people.add(new People(++idCount, InjuryDegree.TRAPPED, "NAME", "INFO", "DESCRIPTION", disasterId, trapped));
-
+                */
                 queue.insert(Event.generateNewFire(currentEvent.getInstant()
                         + generator.fireGeneratePeriod()));
 
@@ -120,7 +142,7 @@ public class Simulator {
                     if (currentDisaster.isActive()) {
                         currentDisaster.increaseStrength(RandomGenerator.randomInteger(0,10));
 
-                        if (currentDisaster.getFiremen() >= currentDisaster.necessaryFiremen()) {
+                        if (currentDisaster.getFireEnginesNum() >= currentDisaster.necessaryFiremen()) {
                             currentDisaster.setState(StateType.CONTROLLED);
                             //TODO: Change fire image in the map
                         }
@@ -132,36 +154,37 @@ public class Simulator {
                         else if (currentDisaster.getStrength() < 0)
                             currentDisaster.setStrength(0);
                         else {
-                            if ((currentDisaster.getTrapped() == 0) && (currentDisaster.getSerious() == 0)
-                                    && (currentDisaster.getSlight() == 0))
+                            if ((currentDisaster.getTrappedNum() == 0)
+                                    && (currentDisaster.getSeriousNum() == 0)
+                                    && (currentDisaster.getSlightNum() == 0))
                                 currentDisaster.setState(StateType.ERASED);
                                 //TODO: Erase fire image
                         }
                     }
-
+                    /*
                     //Code that refreshes the victims assigned to the current disaster
                     for (People currentPeople: people) {
                         if (currentPeople.getIdAssigned() == currentDisaster.getId()) {
                             if (currentDisaster.isActive() || currentDisaster.isControlled()) {
                                 if (currentPeople.areTrapped()) {
-                                    int decrease = RandomGenerator.healthPointsDecrease(currentDisaster.getStrength());
+                                    int decrease = generator.healthPointsDecrease(currentDisaster.getStrength());
                                     currentPeople.reduceHealthPoints(decrease);
                                 }
                                 else if (currentPeople.areSlight() || currentPeople.areSevere()) {
-                                    if (currentDisaster.getAmbulances() < currentPeople.necessaryAmbulances()) {
-                                        int decrease = RandomGenerator.healthPointsDecrease(currentDisaster.getStrength());
+                                    if (currentDisaster.getAmbulancesNum() < currentPeople.necessaryAmbulances()) {
+                                        int decrease = generator.healthPointsDecrease(currentDisaster.getStrength());
                                         currentPeople.reduceHealthPoints(decrease);
 
                                         //Checks if injury degree should change. If so, we change the number of
                                         //victims in the disaster.
                                         if (currentPeople.getHealthPoints() <= 0) {
                                             currentPeople.setType(InjuryDegree.DEAD);
-                                            currentDisaster.setDead(currentDisaster.getDead() + currentPeople.getQuantity());
+                                            //currentDisaster.setDead(currentDisaster.getDeadNum() + currentPeople.getQuantity());
                                             //TODO: Change people image from severe to dead (we may have two images of dead people)
                                         }
                                         else if ((currentPeople.getType() == InjuryDegree.SLIGHT) && (currentPeople.getHealthPoints() < 50)) {
-                                            currentPeople.setType(InjuryDegree.SEVERE);
-                                            currentDisaster.setSerious(currentDisaster.getSerious() + currentPeople.getQuantity());
+                                            currentPeople.setType(InjuryDegree.SERIOUS);
+                                            //currentDisaster.setSerious(currentDisaster.getSerious() + currentPeople.getQuantity());
                                             //TODO: Change people image from slight to severe (we may have two images of severe people)
                                         }
                                     }
@@ -169,6 +192,7 @@ public class Simulator {
                             }
                         }
                     }
+                     * */
                 }
 
                 //Every refresh generates the next refresh event
