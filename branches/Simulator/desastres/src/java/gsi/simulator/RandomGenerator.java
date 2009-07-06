@@ -120,7 +120,7 @@ public class RandomGenerator {
      * @param strength strength of the disaster affecting the people
      * @return the number of healthpoints lost
      */
-    public static int healthPointsDecrease(int strength) {
+    public int healthPointsDecrease(int strength) {
         if (strength >= 80)
             return randomInteger(7,10);
         else if (strength >=40)
@@ -134,7 +134,7 @@ public class RandomGenerator {
      * should be deleted later.
      * @return the number of healthpoints lost
      */
-    public static int healthPointsDecrease() {
+    public int healthPointsDecrease() {
         return randomInteger(2,6);
     }
 
@@ -149,16 +149,29 @@ public class RandomGenerator {
     public int initialSlightVictims() {
         return randomInteger(params.getMinSlightVictims(),params.getMaxSlightVictims());
     }
-    public int initialSevereVictims() {
-        return randomInteger(params.getMinSevereVictims(),params.getMaxSevereVictims());
+    public int initialSeriousVictims() {
+        return randomInteger(params.getMinSeriousVictims(),params.getMaxSeriousVictims());
     }
     public int initialDeadVictims() {
         return randomInteger(params.getMinDeadVictims(),params.getMaxDeadVictims());
     }
 
-    public static int initialHealthPoints() {
+    /**
+     * Initial random number of health points for slight victims
+     * @return the number of health points
+     */
+    public int initialHealthPointsSlight() {
+        return randomInteger(VictimManager.LIMIT_SERIOUS_SLIGHT,
+                VictimManager.MAX_HEALTH_POINTS - 1);
+    }
+
+    /**
+     * Initial random number of health points for serious victims
+     * @return the number of health points
+     */
+    public int initialHealthPointsSerious() {
         return randomInteger(VictimManager.MIN_HEALTH_POINTS,
-                VictimManager.MAX_HEALTH_POINTS);
+                VictimManager.LIMIT_SERIOUS_SLIGHT - 1);
     }
 
 }

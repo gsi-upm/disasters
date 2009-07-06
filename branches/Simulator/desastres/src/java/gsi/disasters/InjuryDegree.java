@@ -5,38 +5,26 @@ package gsi.disasters;
  * @author Luis Delgado
  */
 public enum InjuryDegree {
-    SLIGHT, SEVERE, DEAD, TRAPPED;
+    SLIGHT, SERIOUS, DEAD, TRAPPED;
 
     public static InjuryDegree getType(String str){
-        if (str.equals("slight") || str.equals("SLIGHT") || str.equals("Slight")) {
+        if (str.toLowerCase().equals("slight")) {
             return InjuryDegree.SLIGHT;
         }
-        else if (str.equals("severe") || str.equals("SEVERE") || str.equals("Severe")) {
-            return InjuryDegree.SEVERE;
+        else if (str.toLowerCase().equals("serious")) {
+            return InjuryDegree.SERIOUS;
         }
-        else if (str.equals("dead") || str.equals("DEAD") || str.equals("Dead")) {
+        else if (str.toLowerCase().equals("dead")) {
             return InjuryDegree.DEAD;
         }
-        else if (str.equals("trapped") || str.equals("TRAPPED") || str.equals("Trapped")) {
+        else if (str.toLowerCase().equals("trapped")) {
             return InjuryDegree.TRAPPED;
         }
         else return null;
     }
 
     @Override
-    public String toString(){
-        String str;
-        switch (this) {
-            case SLIGHT: str = "slight";
-                       break;
-            case SEVERE: str = "severe";
-                         break;
-            case DEAD: str = "dead";
-                       break;
-            case TRAPPED: str = "trapped";
-                       break;
-            default: str="";
-        }
-        return str;
+    public String toString() {
+        return super.toString().toLowerCase();
     }
 }

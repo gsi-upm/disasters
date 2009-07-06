@@ -1,12 +1,16 @@
+/**
 package gsi.simulator;
 
+import gsi.simulator.VictimManager;
+import gsi.disasters.Fireman;
+import gsi.disasters.Person;
 import java.util.List;
 import java.util.ArrayList;
 
 /**
  *
  * @author Luis Delgado
- */
+
 
 //TODO now there are methods for generating random numbers of persons in different health status
 //at class RandomGenerator
@@ -26,7 +30,7 @@ public class FireGenerator {
     
     public static Fire generateFire() {
         /* We'll have to insert random values. This also generates a Fire with
-         * size 5, strength 3, 2 firemen and 5 victims.*/
+         * size 5, strength 3, 2 firemen and 5 victims.
         //Size and Strength
         int size = RandomGenerator.randomInteger(MIN_INITIAL_SIZE, MAX_INITIAL_SIZE);
         int strength = RandomGenerator.randomInteger(MIN_STRENGTH, MAX_STRENGTH);
@@ -61,3 +65,4 @@ public class FireGenerator {
         return new Fire(size, strength, victims, dead, trapped, firemen);
     }
 }
+*/

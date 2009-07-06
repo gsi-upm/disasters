@@ -1,14 +1,18 @@
+/*
 package gsi.simulator;
+
+import gsi.simulator.VictimManager;
+import gsi.disasters.Person;
 
 /**
  *
  * @author Luis Delgado
- */
+ 
 public class FireManager {
 
     /**
      *
-     */
+    
     private static final double TRAPPED_TO_VICTIMS_INTENSITY1 = 0.05;
 
 
@@ -16,7 +20,7 @@ public class FireManager {
      * Refreshes the status of a fire: refrehes its size, its victims and
      * if the trapped have turned into victims.
      * @param fire
-     */
+     
     public static void refreshFire(Fire fire) {
         refreshFireSize(fire);
         refreshFireTrapped(fire);
@@ -29,7 +33,7 @@ public class FireManager {
      * strength of the fire, the number of firemen and a random value.
      * @param fire
      * @param generator
-     */
+     
     public static void refreshFireSize(Fire fire) {
 
     }
@@ -39,7 +43,7 @@ public class FireManager {
      * to the victims list.
      * @param fire
      * @param generator
-     */
+     
     public static void refreshFireTrapped(Fire fire) {
         int numAsociateTrapped = fire.getAssociateTrapped().size();
         for(int i = 0; i < numAsociateTrapped; i++) {
@@ -56,7 +60,7 @@ public class FireManager {
      * moved into the dead list.
      * @param fire
      * @param generator
-     */
+     
     public static void refreshFireVictims(Fire fire) {
         for(Person victim: fire.getAssociateVictims()) {
             VictimManager.refreshVictim(victim);
@@ -67,3 +71,4 @@ public class FireManager {
         }
     }
 }
+*/

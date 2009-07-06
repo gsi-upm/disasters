@@ -1,6 +1,8 @@
 package gsi.disasters;
 
 import gsi.simulator.RandomGenerator;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Class that represents a disaster
@@ -9,355 +11,296 @@ import gsi.simulator.RandomGenerator;
  */
 public class Disaster {
 
-	/**
-	 * Disaster id
-	 **/
-	private int id;
-
-	/**
-	 * Type of disaster (fire, flood, collapse)
-	 **/
-	private DisasterType type;
-
-	/**
-	 * Address (to represent disasters in a map)
-	 */
-	private String address;
-
-	/**
-	 * Longitude
-	 */
-	private double longitud;
-
-	/**
-	 * Latitud
-	 */
-	private double latitud;
-
-     /**
-	 * Name of the Disaster
-	 */
-     private String name;
-
     /**
-	 * Name of the Information
-	 */
-     private String info;
-
+     * Disaster id
+     **/
+    private int id;
     /**
-	 * Name of the Description
-	 */
-     private String description;
-
-	/**
-	 * State of the disaster (active, controlled, erased)
-	 */
-	private StateType state;
-
-	/**
-	 * Size of the Disaster
-	 */
-	private SizeType size;
-
+     * Type of disaster (fire, flood, collapse)
+     **/
+    private DisasterType type;
+    /**
+     * Address (to represent disasters in a map)
+     */
+    private String address;
+    /**
+     * Longitude
+     */
+    private double longitude;
+    /**
+     * Latitud
+     */
+    private double latitude;
+    /**
+     * Name of the Disaster
+     */
+    private String name;
+    /**
+     * Name of the Information
+     */
+    private String info;
+    /**
+     * Name of the Description
+     */
+    private String description;
+    /**
+     * State of the disaster (active, controlled, erased)
+     */
+    private StateType state;
+    /**
+     * Size of the Disaster
+     */
+    private SizeType size;
     /**
      * Strength of the disaster
      */
     private int strength;
-
-	/**
-	 * Density of traffic (high, medium, low)
-	 */
-	private DensityType traffic;
-
-	/**
-	 * Number of slight injuries
-	 */
-	private int slight;
-
-	/**
-	 * Number of serious injuries
-	 */
-	private int serious;
-
-	/**
-	 * Number of dead people
-	 */
-	private int dead;
-
-	/**
-	 * Number of trapped people
-	 */
-	private int trapped;
-
-	/**
-	 * Number of policemen cars assigned
-	 */
-	private int policemen;
-
-	/**
-	 * Number of firemen cars assigned
-	 */
-	private int firemen;
-
-	/**
-	 * Number of ambulances assigned
-	 */
-	private int ambulances;
-
-	/**
-	 * id of the user who added the disaster
-	 */
-	private int user;
-
-	/**
-	 * id police marker already in the map
-	 */
+    /**
+     * Density of traffic (high, medium, low)
+     */
+    private DensityType traffic;
+    /**
+     * id of the user who added the disaster
+     */
+    private int user;
+    /**
+     * id police marker already in the map
+     */
     private int policeMarker;
-
     /**
-	 * id police marker already in the map
-	 */
+     * id police marker already in the map
+     */
     private int ambulanceMarker;
-
     /**
-	 * id police marker already in the map
-	 */
+     * id police marker already in the map
+     */
     private int firemenMarker;
-
-	/**
-	 * @param id
-	 * @param type
-	 * @param address
-	 * @param longitud
-	 * @param latitud
-	 * @param name
-	 * @param info
-	 * @param description
-	 * @param state
-	 * @param size
-	 * @param traffic
-	 * @param slight
-	 * @param serious
-	 * @param dead
-	 * @param trapped
-	 * Constructor without assigned id and without strength attribute
-	 */
-	public Disaster(int id, DisasterType type, String name, String info, String description, String address, double longitud,
-			double latitud, StateType state, SizeType size, DensityType traffic, int slight, int serious,
-			int dead, int trapped) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.address = address;
-		this.longitud = longitud;
-		this.latitud = latitud;
-		this.name = name;
-		this.info = info;
-		this.description = description;
-		this.state = state;
-		this.size = size;
-        this.strength = 50;
-		this.traffic = traffic;
-		this.slight = slight;
-		this.serious = serious;
-		this.dead = dead;
-		this.trapped = trapped;
-		this.user=1;
-		this.policemen=0;
-		this.firemen=0;
-		this.ambulances=0;
-        this.policeMarker=0;
-        this.ambulanceMarker=0;
-        this.firemenMarker=0;
-	}
+    /**
+     * Associate slight victims
+     */
+    private List<Person> slight;
+    /**
+     * Associate slight victims
+     */
+    private List<Person> serious;
+    /**
+     * Associate dead
+     */
+    private List<Person> dead;
+    /**
+     * Associate trapped
+     */
+    private List<Person> trapped;
+    /**
+     * Associate police cars
+     */
+    private List<PoliceCar> policeCars;
+    /**
+     * Associate ambulances
+     */
+    private List<Ambulance> ambulances;
+    /**
+     * Associate fire engines
+     */
+    private List<FireEngine> fireEngines;
 
     /**
-	 * @param id
-	 * @param type
-	 * @param address
-	 * @param longitud
-	 * @param latitud
-	 * @param name
-	 * @param info
-	 * @param description
-	 * @param state
-	 * @param size
+     * 
+     * @param id
+     * @param type
+     * @param name
+     * @param info
+     * @param description
+     * @param address
+     * @param longitud
+     * @param latitud
+     * @param state
+     * @param size
+     * @param traffic
+     * @param slight
+     * @param serious
+     * @param dead
+     * @param trapped
+     * @param policeCars
+     * @param ambulances
+     * @param fireEngines
      * @param strength
-	 * @param traffic
-	 * @param slight
-	 * @param serious
-	 * @param dead
-	 * @param trapped
-	 * Constructor with strength attribute to use in the simulation
-	 */
-	public Disaster(int id, DisasterType type, String name, String info, String description, String address, double longitud,
-			double latitud, StateType state, SizeType size, int strength, DensityType traffic, int slight, int serious,
-			int dead, int trapped) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.address = address;
-		this.longitud = longitud;
-		this.latitud = latitud;
-		this.name = name;
-		this.info = info;
-		this.description = description;
-		this.state = state;
-		this.size = size;
+     */
+    public Disaster(int id, DisasterType type, String name, String info,
+            String description, String address, double longitud, double latitud,
+            StateType state, SizeType size, DensityType traffic,
+            List<Person> slight, List<Person> serious, List<Person> dead,
+            List<Person> trapped, List<PoliceCar> policeCars,
+            List<Ambulance> ambulances, List<FireEngine> fireEngines,
+            int strength) {
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.info = info;
+        this.description = description;
+        this.address = address;
+        this.longitude = longitud;
+        this.latitude = latitud;
+        this.state = state;
+        this.size = size;
+        this.traffic = traffic;
+
         this.strength = strength;
-		this.traffic = traffic;
-		this.slight = slight;
-		this.serious = serious;
-		this.dead = dead;
-		this.trapped = trapped;
-		this.user=1;
-		this.policemen=0;
-		this.firemen=0;
-		this.ambulances=0;
-        this.policeMarker=0;
-        this.ambulanceMarker=0;
-        this.firemenMarker=0;
-	}
+        this.user = 1;
 
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
+        this.slight= slight;
+        this.serious = serious;
+        this.dead = dead;
+        this.trapped = trapped;
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
+        this.policeCars = policeCars;
+        this.fireEngines = fireEngines;
+        this.ambulances = ambulances;
 
-	/**
-	 * @return the type
-	 */
-	public DisasterType getType() {
-		return type;
-	}
+        this.policeMarker = 0;
+        this.ambulanceMarker = 0;
+        this.firemenMarker = 0;
+    }
 
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(DisasterType type) {
-		this.type = type;
-	}
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
 
-	/**
-	 * @return the address
-	 */
-	public String getAddress() {
-		return address;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	/**
-	 * @param address the address to set
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    /**
+     * @return the type
+     */
+    public DisasterType getType() {
+        return type;
+    }
 
-	/**
-	 * @return the longitud
-	 */
-	public double getLongitud() {
-		return longitud;
-	}
+    /**
+     * @param type the type to set
+     */
+    public void setType(DisasterType type) {
+        this.type = type;
+    }
 
-	/**
-	 * @param longitud the longitud to set
-	 */
-	public void setLongitud(double longitud) {
-		this.longitud = longitud;
-	}
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
 
-	/**
-	 * @return the latitud
-	 */
-	public double getLatitud() {
-		return latitud;
-	}
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	/**
-	 * @param latitud the latitud to set
-	 */
-	public void setLatitud(double latitud) {
-		this.latitud = latitud;
-	}
+    /**
+     * @return the longitud
+     */
+    public double getLongitude() {
+        return longitude;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @param longitud the longitud to set
+     */
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * @return the latitud
+     */
+    public double getLatitude() {
+        return latitude;
+    }
 
-	/**
-	 * @return the info
-	 */
-	public String getInfo() {
-		return info;
-	}
+    /**
+     * @param latitud the latitud to set
+     */
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
-	/**
-	 * @param info the info to set
-	 */
-	public void setInfo(String info) {
-		this.info = info;
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @return the info
+     */
+    public String getInfo() {
+        return info;
+    }
 
-	/**
-	 * @return the state
-	 */
-	public StateType getState() {
-		return state;
-	}
+    /**
+     * @param info the info to set
+     */
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(StateType state) {
-		this.state = state;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * @return the size
-	 */
-	public SizeType getSize() {
-		return size;
-	}
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    } 
 
-	/**
-	 * @param size the size to set
-	 */
-	public void setSize(SizeType size) {
-		this.size = size;
-	}
+    /**
+     * @return the state
+     */
+    public StateType getState() {
+        return state;
+    }
+
+    /**
+     * @param state the state to set
+     */
+    public void setState(StateType state) {
+        this.state = state;
+    }
+
+    /**
+     * @return the size
+     */
+    public SizeType getSize() {
+        return size;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(SizeType size) {
+        this.size = size;
+    }
 
     /**
      * @return the strength
@@ -373,170 +316,289 @@ public class Disaster {
         this.strength = strength;
     }
 
-	/**
-	 * @return the traffic
-	 */
-	public DensityType getTraffic() {
-		return traffic;
-	}
-
-	/**
-	 * @param traffic the traffic to set
-	 */
-	public void setTraffic(DensityType traffic) {
-		this.traffic = traffic;
-	}
-
-	/**
-	 * @return the slight
-	 */
-	public int getSlight() {
-		return slight;
-	}
-
-	/**
-	 * @param slight the slight to set
-	 */
-	public void setSlight(int slight) {
-		this.slight = slight;
-	}
-
-	/**
-	 * @return the serious
-	 */
-	public int getSerious() {
-		return serious;
-	}
-
-	/**
-	 * @param serious the serious to set
-	 */
-	public void setSerious(int serious) {
-		this.serious = serious;
-	}
-
-	/**
-	 * @return the dead
-	 */
-	public int getDead() {
-		return dead;
-	}
-
-	/**
-	 * @param dead the dead to set
-	 */
-	public void setDead(int dead) {
-		this.dead = dead;
-	}
-
-	/**
-	 * @return the trapped
-	 */
-	public int getTrapped() {
-		return trapped;
-	}
-
-	/**
-	 * @param trapped the trapped to set
-	 */
-	public void setTrapped(int trapped) {
-		this.trapped = trapped;
-	}
-
-	/**
-	 * @return the policemen
-	 */
-	public int getPolicemen() {
-		return policemen;
-	}
-
-	/**
-	 * @param policemen the policemen to set
-	 */
-	public void setPolicemen(int policemen) {
-		this.policemen = policemen;
-	}
-
-	/**
-	 * @return the firemen
-	 */
-	public int getFiremen() {
-		return firemen;
-	}
-
-	/**
-	 * @param firemen the firemen to set
-	 */
-	public void setFiremen(int firemen) {
-		this.firemen = firemen;
-	}
-
-	/**
-	 * @return the ambulances
-	 */
-	public int getAmbulances() {
-		return ambulances;
-	}
-
-	/**
-	 * @param ambulances the ambulances to set
-	 */
-	public void setAmbulances(int ambulances) {
-		this.ambulances = ambulances;
-	}
-
-	/**
-	 * @return the user
-	 */
-	public int getUser() {
-		return user;
-	}
-
-	/**
-	 * @param user the user to set
-	 */
-	public void setUser(int user) {
-		this.user = user;
-	}
+    /**
+     * @return the traffic
+     */
+    public DensityType getTraffic() {
+        return traffic;
+    }
 
     /**
-	 * @return the number of ambulances assigned
-	 */
+     * @param traffic the traffic to set
+     */
+    public void setTraffic(DensityType traffic) {
+        this.traffic = traffic;
+    }
+
+    /**
+     * Returns the number of slight victims
+     * @return the number of slight victims
+     */
+    public int getSlightNum() {
+        return slight.size();
+    }
+
+    /**
+     * Returns the list of slight victims
+     * @return the list of slight victims
+     */
+    public List<Person> getSlight() {
+        return slight;
+    }
+
+    /**
+     * Sets the list of slight victims
+     * @param the list of slight victims
+     */
+    public void setSlight(List<Person> slight) {
+        this.slight = slight;
+    }
+
+    /**
+     * Adds a new slight victim to the list
+     */
+    public void addSlight(Person slight) {
+        this.slight.add(slight);
+    }
+
+        /**
+     * Returns the number of serious victims
+     * @return the number of serious victims
+     */
+    public int getSeriousNum() {
+        return serious.size();
+    }
+
+    /**
+     * Returns the list of serious victims
+     * @return the list of serious victims
+     */
+    public List<Person> getSerious() {
+        return serious;
+    }
+
+    /**
+     * Sets the list of serious victims
+     * @param the list of serious victims
+     */
+    public void setSerious(List<Person> serious) {
+        this.serious = serious;
+    }
+
+    /**
+     * Adds a new serious victim to the list
+     */
+    public void addSerious(Person serious) {
+        this.serious.add(serious);
+    }
+
+    /**
+     * Returns the number of dead
+     * @return the number of dead
+     */
+    public int getDeadNum() {
+        return dead.size();
+    }
+
+    /**
+     * Returns the list of dead
+     * @return the list of dead
+     */
+    public List<Person> getDead() {
+        return dead;
+    }
+
+    /**
+     * Sets the list of dead
+     * @param the list of dead
+     */
+    public void setDead(List<Person> dead) {
+        this.dead = dead;
+    }
+
+    /**
+     * Adds a new dead person to the list
+     */
+    public void addDead(Person dead) {
+        this.dead.add( dead);
+    }
+
+    /**
+     * Returns the number of trapped
+     * @return the number of trapped
+     */
+    public int getTrappedNum() {
+        return trapped.size();
+    }
+
+    /**
+     * Returns the list of trapped
+     * @return the list of trapped
+     */
+    public List<Person> getTrapped() {
+        return trapped;
+    }
+
+    /**
+     * Sets the list of trapped
+     * @param the list of trapped
+     */
+    public void setTrapped(List<Person> trapped) {
+        this.trapped = trapped;
+    }
+
+    /**
+     * Adds a new dead person to the list
+     */
+    public void addTrapped(Person trapped) {
+        this.trapped.add(trapped);
+    }
+
+     /**
+     * Returns the number of police cars
+     * @return the number of police cars
+     */
+    public int getPoliceCarsNum() {
+        return policeCars.size();
+    }
+
+    /**
+     * Returns the list of police cars
+     * @return the list of police cars
+     */
+    public List<PoliceCar> getPoliceCars() {
+        return policeCars;
+    }
+
+    /**
+     * Sets the list of police cars
+     * @param the list of police cars
+     */
+    public void setPoliceCars(List<PoliceCar> policeCars) {
+        this.policeCars = policeCars;
+    }
+
+    /**
+     * Adds a new police car to the list
+     */
+    public void addPoliceCar(PoliceCar policeCar) {
+        this.policeCars.add(policeCar);
+    }
+
+    /**
+     * Returns the number of fire engines
+     * @return the number of fire engines
+     */
+    public int getFireEnginesNum() {
+        return fireEngines.size();
+    }
+
+    /**
+     * Returns the list of fire engines
+     * @return the list of fire engines
+     */
+    public List<FireEngine> getFireEngines() {
+        return fireEngines;
+    }
+
+    /**
+     * Sets the list of fire engines
+     * @param the list of fire engines
+     */
+    public void setFireEngines(List<FireEngine> fireEngines) {
+        this.fireEngines = fireEngines;
+    }
+
+    /**
+     * Adds a new fire engine to the list
+     */
+    public void addFireEngine(FireEngine fireEngine) {
+        this.fireEngines.add(fireEngine);
+    }
+
+    /**
+     * Returns the number of ambulances
+     * @return the number of ambulances
+     */
+    public int getAmbulancesNum() {
+        return ambulances.size();
+    }
+
+    /**
+     * Returns the list of ambulances
+     * @return the list of ambulances
+     */
+    public List<Ambulance> getAmbulancess() {
+        return ambulances;
+    }
+
+    /**
+     * Sets the list of ambulances
+     * @param the list of ambulances
+     */
+    public void setAmbulances(List<Ambulance> ambulances) {
+        this.ambulances = ambulances;
+    }
+
+    /**
+     * Adds a new ambulance to the list
+     */
+    public void addAmbulances(Ambulance ambulance) {
+        this.ambulances.add(ambulance);
+    }
+
+    /**
+     * @return the user
+     */
+    public int getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(int user) {
+        this.user = user;
+    }
+
+    /**
+     * @return the number of ambulances assigned
+     */
     public int getAmbulanceMarker() {
         return ambulanceMarker;
     }
 
     /**
-	 * @param number of ambulances assigned
-	 */
+     * @param number of ambulances assigned
+     */
     public void setAmbulanceMarker(int ambulanceMarker) {
         this.ambulanceMarker = ambulanceMarker;
     }
 
     /**
-	 * @return the number of firemen assigned
-	 */
+     * @return the number of firemen assigned
+     */
     public int getFiremenMarker() {
         return firemenMarker;
     }
 
     /**
-	 * @param number of firmen assigned
-	 */
+     * @param number of firmen assigned
+     */
     public void setFiremenMarker(int firemenMarker) {
         this.firemenMarker = firemenMarker;
     }
 
     /**
-	 * @return the number of policemen assigned
-	 */
+     * @return the number of policemen assigned
+     */
     public int getPoliceMarker() {
         return policeMarker;
     }
 
     /**
-	 * @param number of policemen assigned
-	 */
+     * @param number of policemen assigned
+     */
     public void setPoliceMarker(int policeMarker) {
         this.policeMarker = policeMarker;
     }
@@ -619,12 +681,17 @@ public class Disaster {
      * @return number of necessary firemen to control the disaster
      */
     public int necessaryFiremen() {
-        int number =0;
-        if (this.isSmall()) number=1;
-        else if (this.isMedium()) number=2;
-        else if (this.isBig()) number = 3;
-        else if (this.isHuge()) number=4;
-        number *= ((int) this.strength/10) + RandomGenerator.randomInteger(0,10);
+        int number = 0;
+        if (this.isSmall()) {
+            number = 1;
+        } else if (this.isMedium()) {
+            number = 2;
+        } else if (this.isBig()) {
+            number = 3;
+        } else if (this.isHuge()) {
+            number = 4;
+        }
+        number *= ((int) this.strength / 10) + RandomGenerator.randomInteger(0, 10);
         return number;
     }
 }
