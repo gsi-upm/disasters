@@ -156,6 +156,7 @@ public class ReteDisasterDB {
         rete.run();
         //rete.runUntilHalt();
 
+        //Only iterates the Assingment objects
         Iterator it = rete.getObjects(new Filter() {
             public boolean accept(Object o) {
                 return (o instanceof Assignment);
@@ -297,12 +298,12 @@ public class ReteDisasterDB {
         //Only the first time
         disastersHash = new Hashtable();
 
-        //Disasters JSON
+        //All the initial disasters from JSON
         String events = Connection.connect(URL_BASE + "events");
         JSONArray disastersJSON = new JSONArray(events);
         System.out.println(disastersJSON);
 
-        //Victims JSON
+        //All the initial victims from JSON
         String people = Connection.connect(URL_BASE + "people");
         JSONArray victims = new JSONArray(people);
 
@@ -360,47 +361,44 @@ public class ReteDisasterDB {
              * lifepoints saved. */
             if (newPeople.getType().equals(InjuryDegree.SLIGHT)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    //TODO: ¿Who generates the ID????
-                    dis.addSlight(VictimManager.generateDefaultSlight(0));
+                    //TODO: All the Person from the same People will have the same id
+                    dis.addSlight(VictimManager.generateDefaultSlight(newPeople.getId()));
                 }               
             }
             if (newPeople.getType().equals(InjuryDegree.SERIOUS)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addSerious(VictimManager.generateDefaultSerious(0));
+                    dis.addSerious(VictimManager.generateDefaultSerious(newPeople.getId()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.DEAD)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addDead(VictimManager.generateDefaultDead(0));
+                    dis.addDead(VictimManager.generateDefaultDead(newPeople.getId()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.TRAPPED)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addTrapped(VictimManager.generateDefaultTrapped(0));
+                    dis.addTrapped(VictimManager.generateDefaultTrapped(newPeople.getId()));
                 }
             }
             evaluateDisaster(dis);
         }
     }
 
+    /**
+     * Updates the application with the modifications in the JSON
+     * @throws org.json.me.JSONException
+     * @throws jess.JessException
+     */
     public void call() throws JSONException, JessException {
 
-        //TO UPDATE
-
-
-
-
-
-        //get the JSON to update
-        //Disasters JSON ordering by date
+        //Disasters JSON since the last modification
         String events = Connection.connect(URL_BASE + "events/modified/" + now);
         JSONArray disasters = new JSONArray(events);
 
-        //Victims JSON
+        //Victims JSON since the last modification
         String people = Connection.connect(URL_BASE + "people/modified/" + now);
         JSONArray victims = new JSONArray(people);
-
-        now = new Timestamp(new Date().getTime()).toString();
+        
         for (int i = 0; i < disasters.length(); i++) {
             JSONObject JSONObject = disasters.getJSONObject(i);
             Disaster newDisaster = new Disaster(
@@ -417,9 +415,8 @@ public class ReteDisasterDB {
                     DensityType.getType(JSONObject.getString("traffic")),
                     null, null, null, null, null, null, null, 0);
             
-
+            //It's not a new Disaster, it has just been modified
             if (disastersHash.containsKey(newDisaster.getId())) {
-                //Update the existing
                 System.out.println("*** Updating Disaster... "
                         + newDisaster.getName() + " - " + newDisaster.getState());
                 out.println("*** Updating Disaster... " + newDisaster.getName()
@@ -438,6 +435,7 @@ public class ReteDisasterDB {
                 old.setTraffic(newDisaster.getTraffic());
                 evaluateDisaster(old); //I think it's not necessary
 
+            //It's a completely new disaster
             } else {
                 System.out.println("### New Disaster: " + newDisaster.getType() 
                         + " - " + newDisaster.getName() + " (id:"
@@ -451,7 +449,7 @@ public class ReteDisasterDB {
             }
         }
 
-        //For each victim
+        //For each NEW victim
         for (int i = 0; i < victims.length(); i++) {
             JSONObject JSONObject = victims.getJSONObject(i);
             People newPeople = new People(
@@ -462,6 +460,7 @@ public class ReteDisasterDB {
                     JSONObject.getString("description"),
                     JSONObject.getInt("idAssigned"),
                     JSONObject.getInt("quantity"));
+            //TODO: What should we do with the erased people??
             if (newPeople.getState().equals(StateType.ERASED)) {
                 newPeople.setQuantity(0);
             }
@@ -482,27 +481,29 @@ public class ReteDisasterDB {
              * lifepoints saved. */
             if (newPeople.getType().equals(InjuryDegree.SLIGHT)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    //TODO: ¿Who generates the ID????
-                    dis.addSlight(VictimManager.generateDefaultSlight(0));
+                    //TODO: All the Person from the same People will have the same id
+                    dis.addSlight(VictimManager.generateDefaultSlight(newPeople.getId()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.SERIOUS)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addSerious(VictimManager.generateDefaultSerious(0));
+                    dis.addSerious(VictimManager.generateDefaultSerious(newPeople.getId()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.DEAD)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addDead(VictimManager.generateDefaultDead(0));
+                    dis.addDead(VictimManager.generateDefaultDead(newPeople.getId()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.TRAPPED)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addTrapped(VictimManager.generateDefaultTrapped(0));
+                    dis.addTrapped(VictimManager.generateDefaultTrapped(newPeople.getId()));
                 }
             }
             evaluateDisaster(dis);
         }
+        //Refreshes the time for the next update
+        now = new Timestamp(new Date().getTime()).toString();
     }
 
     /**
