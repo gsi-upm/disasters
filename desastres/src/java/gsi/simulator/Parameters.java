@@ -104,7 +104,27 @@ public class Parameters {
     private static final String MIN_DEAD_VICTIMS = "minimum number of dead victims";
     private static final String MAX_DEAD_VICTIMS = "maximum number of dead victims";
     private static final String LENGTH = "length";
+    
+    /**
+     * Limits for latitude and longitude in Madrid
+     */
+    public final double MIN_LATITUDE = 40.40;
+    public final double MAX_LATITUDE = 40.45;
+    public final double MIN_LONGITUDE = -3.73;
+    public final double MAX_LONGITUDE = -3.68;
+    /**
+     * Differences for marker's latitudes and longitudes
+     */
+     public final double SLIGHT_LATITUDE_DIFFERENCE = - 0.00025;
+     public final double SERIOUS_LATITUDE_DIFFERENCE = - 0.00025;
+     public final double TRAPPED_LATITUDE_DIFFERENCE = + 0.00025;
+     public final double DEAD_LATITUDE_DIFFERENCE = + 0.00025;
+     public final double SLIGHT_LONGITUDE_DIFFERENCE = - 0.00025;
+     public final double SERIOUS_LONGITUDE_DIFFERENCE = + 0.00025;
+     public final double TRAPPED_LONGITUDE_DIFFERENCE = - 0.00025;
+     public final double DEAD_LONGITUDE_DIFFERENCE = + 0.00025;
 
+     public final double TRAPPED_TO_VICTIM_PROBABILITY = 0.05;
 	/**
 	 * Default constructor, with default parameters.
 	 */

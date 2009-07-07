@@ -60,6 +60,19 @@ public class RandomGenerator {
         return min + (int) Math.floor((max - min + 1) * Math.random());
     }
 
+    /**
+     * @param min minimum number wanted
+     * @param max maximum number wanted
+     * @return a random number between min and max, both included
+     */
+    public static double randomDouble(double min, double max)
+            throws IllegalArgumentException {
+        if (min > max) {
+            throw new IllegalArgumentException("Maximum value cannot be greater than the minimum one");
+        }
+        return min + Math.floor((max - min) * Math.random());
+    }
+
     public int refreshPeriod(){
         if(params.isConstant()){
             return params.getFrequency();
@@ -172,6 +185,22 @@ public class RandomGenerator {
     public int initialHealthPointsSerious() {
         return randomInteger(VictimManager.MIN_HEALTH_POINTS,
                 VictimManager.LIMIT_SERIOUS_SLIGHT - 1);
+    }
+
+    /**
+     * Returns a random value for the latitude with the specified limits
+     * @return
+     */
+    public double randomLatitude() {
+        return randomDouble(params.MIN_LATITUDE, params.MAX_LATITUDE);
+    }
+
+    /**
+     * Returns a random value for the longlitude with the specified limits
+     * @return
+     */
+    public double randomLongitude() {
+        return randomDouble(params.MIN_LONGITUDE, params.MAX_LONGITUDE);
     }
 
 }

@@ -60,6 +60,14 @@ public class Person {
     }
 
     /**
+     * Sets the person's identifier
+     * @param the person's identifier
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
      * Setter. It updates the injury degree
      *
      * @param healthPoints health points to assign
@@ -86,6 +94,13 @@ public class Person {
     }
 
     /**
+     * This sets the injury degree 
+     */
+    public void setInjuryDegree(InjuryDegree degree) {
+        this.injuryDegree = degree;
+    }
+
+    /**
      * Getter
      *
      * @return injury degree
@@ -100,6 +115,9 @@ public class Person {
      */
     public void reduceHealthPoints(int loss) {
         this.healthPoints -= loss;
+        if(this.healthPoints < MIN_HEALTH_POINTS) {
+            this.healthPoints = MIN_HEALTH_POINTS;
+        }
         this.setInjuryDegree();
     }
 
