@@ -3,6 +3,9 @@ package gsi.simulator.rest;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import gsi.disasters.SizeType;
+import gsi.disasters.DensityType;
+
 
 /**
  * This class provides an interface for using the REST API.
@@ -50,7 +53,8 @@ public class EventsManagement {
      * @return the unique ID of the fire. This is important if you want to modify
      * or erase this fire later.
      */
-    public static int insertFire(double lat, double lon, String name, String size, String traffic) {
+    public static int insertFire(double lat, double lon, String name, SizeType size,
+            DensityType traffic) {
         WebFile web;
         int response = -1;
         String content = "error";
@@ -62,27 +66,27 @@ public class EventsManagement {
             }
 
             if (size != null) {
-                if (size.equals("small")) {
+                if (size.equals(SizeType.SMALL)) {
                     URL += "&size=small";
                 }
-                if (size.equals("medium")) {
+                if (size.equals(SizeType.MEDIUM)) {
                     URL += "&size=medium";
                 }
-                if (size.equals("big")) {
+                if (size.equals(SizeType.BIG)) {
                     URL += "&size=big";
                 }
-                if (size.equals("huge")) {
+                if (size.equals(SizeType.HUGE)) {
                     URL += "&size=huge";
                 }
             }
             if (traffic != null) {
-                if (traffic.equals("low")) {
+                if (traffic.equals(DensityType.LOW)) {
                     URL += "&traffic=low";
                 }
-                if (traffic.equals("medium")) {
+                if (traffic.equals(DensityType.MEDIUM)) {
                     URL += "&traffic=medium";
                 }
-                if (traffic.equals("high")) {
+                if (traffic.equals(DensityType.HIGH)) {
                     URL += "&traffic=high";
                 }
             }
@@ -114,8 +118,8 @@ public class EventsManagement {
         * @return the id of the resource or victim. This is important if you want to modify
         * or erase it later.
         */
-       public static int insertResourcesOrVictims(String type,String name, int quantity,
-               double lat, double lon,int idAssigned) {
+       public static int insertResourcesOrVictims(String type, String name,
+               int quantity, double lat, double lon, int idAssigned) {
         WebFile web;
         int response = -1;
         String content = "error";
@@ -164,8 +168,9 @@ public class EventsManagement {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
     }
+
+    
 
     /**
      * Tests

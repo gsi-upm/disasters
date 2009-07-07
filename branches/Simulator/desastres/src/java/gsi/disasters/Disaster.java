@@ -693,4 +693,17 @@ public class Disaster {
         number *= ((int) this.strength / 10) + RandomGenerator.randomInteger(0, 10);
         return number;
     }
+
+
+    /**
+     * Calculates the number of ambulances necessary to control people
+     * @return number of ambulances required
+     */
+    public static int necessaryAmbulances(int quantity, InjuryDegree degree) {
+        int number = quantity;
+        if (degree.equals(InjuryDegree.SLIGHT)) number*=2;
+        else if (degree.equals(InjuryDegree.SERIOUS)) number *=3;
+        number += RandomGenerator.randomInteger(0,10);
+        return number;
+    }
 }
