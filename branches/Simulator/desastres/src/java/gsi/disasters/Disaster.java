@@ -1,7 +1,6 @@
 package gsi.disasters;
 
 import gsi.simulator.RandomGenerator;
-import java.util.Enumeration;
 import java.util.List;
 
 /**

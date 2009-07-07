@@ -1,7 +1,5 @@
 package gsi.disasters;
 
-import java.util.List;
-
 /**
  * Class that represents a Resource (ambulance, fire engine or police car)
  * Classes Ambulance, PoliceCar and FireEngine will inherit from this one.
@@ -56,7 +54,7 @@ public class Resource {
     /**
      * state of the resource (usually active)
      */
-    private String state;
+    private StateType state;
     /**
      * Associate Persons (FIREMAN, POLICEMAN, DOCTOR)
      */
@@ -111,7 +109,7 @@ public class Resource {
         this.name = name;
         this.info = info;
         this.description = description;
-        this.state = "active";
+        this.state = StateType.ACTIVE;
         this.user = 1;
     // System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
     }
@@ -143,22 +141,6 @@ public class Resource {
     public void setIdAssigned(int idAssigned) {
         this.idAssigned = idAssigned;
     }
-
-    /**
-     * TODO: deprecated!
-     * @return the type
-     
-    public String getType() {
-        return type;
-    }
-
-    
-     * TODO: Deprecated
-     * @param type the type to set
-    
-    public void setType(String type) {
-        this.type = type;
-    } */
 
     /**
      * @return the type
@@ -226,14 +208,14 @@ public class Resource {
     /**
      * @return the state
      */
-    public String getState() {
+    public StateType getState() {
         return state;
     }
 
     /**
      * @param state the state to set
      */
-    public void setState(String state) {
+    public void setState(StateType state) {
         this.state = state;
     }
 
