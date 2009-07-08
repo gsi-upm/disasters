@@ -25,7 +25,7 @@
      <!-- Catch all requests -->
     <servlet>
         <servlet-name>XpertServlet</servlet-name>
-        <servlet-class>gsi.disasters.XpertServlet</servlet-class>
+        <servlet-class>gsi.xpert.XpertServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RestletServlet</servlet-name>

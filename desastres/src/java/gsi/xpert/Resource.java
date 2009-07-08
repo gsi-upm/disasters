@@ -1,4 +1,6 @@
-package gsi.disasters;
+package gsi.xpert;
+
+import gsi.disasters.StateType;
 
 /**
  * Class that represents a Resource (ambulance, fire engine or police car)
@@ -22,7 +24,7 @@ public class Resource {
 
     private String type;
      */
-    
+
     /**
      * Type of resource (AMBULANCE, POLICE_CAR, FIRE_ENGINE)
      **/
@@ -72,7 +74,7 @@ public class Resource {
      * @param latitud
      * @param info
      * @param description
-     
+
     public Resource(int id, String type, String name, String info,
             String description, int idAssigned) {
 
@@ -88,7 +90,7 @@ public class Resource {
     // System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
     }
 */
-    
+
     /**
      * @param id
      * @param idAssigned
@@ -204,6 +206,7 @@ public class Resource {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     /**
      * @return the state

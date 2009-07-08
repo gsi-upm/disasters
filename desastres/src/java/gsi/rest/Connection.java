@@ -1,4 +1,4 @@
-package gsi.disasters;
+package gsi.rest;
 
 import gsi.rest.DisasterApplication;
 import java.net.*;
@@ -9,7 +9,7 @@ import java.io.*;
  * @author julio camarero
  * @version 1.0
  */
-class Connection {
+public class Connection {
 
     /**
      * @param source URL to connect
