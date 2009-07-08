@@ -48,6 +48,7 @@ public class Person {
      * @param healthPoints person's health points
      */
     public Person(int id, int healthPoints) {
+        this.id = id;
         this.healthPoints = healthPoints;
         this.setInjuryDegree();
     }

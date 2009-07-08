@@ -16,12 +16,12 @@ public class Event {
     /**
      * Identification of the event
      */
-    private long idEvent;
+    private int idEvent;
 
     /**
      * Moment when event happens
      */
-    private long instant;
+    private int instant;
 
     /**
      * Type of event
@@ -36,11 +36,10 @@ public class Event {
     /**
      * Constructor of event associated to a fire
      *
-     * @param idDisaster assigns the event with an existing disaster (if != 0) or with a new one (if == 0)
      * @param instant when event happens
      * @param type event type
      */
-    public Event(long instant, EventType type) {
+    public Event(int instant, EventType type) {
         this.idEvent = eventCount++;
         this.instant = instant;
         this.type = type;
@@ -53,7 +52,7 @@ public class Event {
      * @param instant when event happens
      * @return event
      */
-    public static Event generateEvent(long instant) {
+    public static Event generateEvent(int instant) {
         Event newEvent = new Event(instant, null);
         LOGGER.info("Generate any event: " + newEvent);
         return newEvent;
@@ -65,7 +64,7 @@ public class Event {
      * @param instant when fire will be generated
      * @return event
      */
-    public static Event generateNewFire(long instant) {
+    public static Event generateNewFire(int instant) {
         Event newEvent = new Event(instant, EventType.FIRE_GENERATION);
         LOGGER.info("Generate New Fire " + newEvent);
         return newEvent;
@@ -77,8 +76,8 @@ public class Event {
      * @param period amount of time between two refresh events
      * @return event
      */
-    public static Event generateRefresh(Event lastRefresh, long period) {
-        long instant = period;
+    public static Event generateRefresh(Event lastRefresh, int period) {
+        int instant = period;
         if (lastRefresh != null)
             instant += lastRefresh.getInstant();
         Event newEvent = new Event(instant, EventType.REFRESH);
@@ -90,13 +89,13 @@ public class Event {
      * Factory generating a new event to ask for agents
      *
      * @param lastAsking last ASKING FOR AGENTS event happened or null if it doesn't exist
-     * @param generator random generator
+     * @param period amount of time beween two asking for agents events
      * @return event
      */
-    public static Event generateAskingAgents(Event lastAsking, RandomGenerator generator) {
-        // long instant = generator.agentsTime(); This method or similar should be programmed
-        long instant = 0;
-        if (lastAsking != null) instant += lastAsking.getInstant();
+    public static Event generateAskingAgents(Event lastAsking, int period) {
+        int instant = period;
+        if (lastAsking != null)
+            instant += lastAsking.getInstant();
         Event newEvent = new Event(instant, EventType.ASKING_FOR_AGENTS);
         LOGGER.info("Generate Asking for Agents " + newEvent);
         return newEvent;
@@ -105,37 +104,35 @@ public class Event {
     /**
      * Factory generating a firemen arrival event
      *
-     * @param generator random generator
+     * @param time amount of time needed for firemen to arrive at the disaster
      * @return event
      */
-    public static Event generateFiremenArrival(RandomGenerator generator) {
-        // long instant = generator.firemenArrivalTime(); This method or similar should be programmed
-        long instant = 0;
-        Event newEvent = new Event(instant, EventType.FIREMEN_ARRIVAL);
+    public static Event generateFiremenArrival(int time) {
+        Event newEvent = new Event(time, EventType.FIREMEN_ARRIVAL);
         LOGGER.info("Generate Firemen Arrival " + newEvent);
         return newEvent;
     }
 
+
     /**
      * Factory generating an ambulance arrival event
      *
-     * @param generator random generator
+     * @param time amount of time needed for ambulances to arrive at the disaster
      * @return event
      */
-    public static Event generateAmbulanceArrival(RandomGenerator generator) {
-        // long instant = generator.ambulanceArrivalTime(); This method or similar should be programmed
-        long instant = 0;
-        Event newEvent = new Event(instant, EventType.AMBULANCE_ARRIVAL);
+    public static Event generateAmbulanceArrival(int time) {
+        Event newEvent = new Event(time, EventType.AMBULANCE_ARRIVAL);
         LOGGER.info("Generate Ambulance Arrival " + newEvent);
         return newEvent;
     }
+
 
     /**
      * Method returning the event identifier
      *
      * @return event identifier
      */
-    public long getIdEvent() {
+    public int getIdEvent() {
         return idEvent;
     }
 
@@ -144,7 +141,7 @@ public class Event {
      *
      * @param idEvent event identifier
      */
-    public void setIdEvent(long idEvent) {
+    public void setIdEvent(int idEvent) {
         this.idEvent = idEvent;
     }
 
@@ -153,7 +150,7 @@ public class Event {
      *
      * @return moment when the event happens
      */
-    public long getInstant() {
+    public int getInstant() {
         return instant;
     }
 
@@ -162,7 +159,7 @@ public class Event {
      *
      * @param instant when event happens
      */
-    public void setInstant(long instant) {
+    public void setInstant(int instant) {
         this.instant = instant;
     }
 

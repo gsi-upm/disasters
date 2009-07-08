@@ -72,7 +72,6 @@ public class Parameters {
     public final double DEFAULT_TRAPPED_TO_VICTIM = 0.05;
     public final int DEFAULT_MIN_FIRE_STRENGTH = 1;
     public final int DEFAULT_MAX_FIRE_STRENGTH = 100;
-    //TODO: determine limits
     public final int DEFAULT_MIN_TRAPPED_VICTIMS = 0;
     public final int DEFAULT_MAX_TRAPPED_VICTIMS = 10;
     public final int DEFAULT_MIN_SLIGHT_VICTIMS = 0;
@@ -168,9 +167,9 @@ public class Parameters {
 	public Parameters(String file)
 	throws IOException, NumberFormatException, IllegalArgumentException {
 		FileInputStream in = null;
-		// Creo unas nuevas variables intermedias para cada parametro, inicializadas
-		// al valor por defecto, que tomaran el valor leido del fichero en el caso
-		// en que este tenga un formato adecuado.
+		// All attributes are firstly initialized to 'default'. If the value
+        // read from file is right, they will get it. They will remain default
+        // otherwise.
         boolean newConstant = DEFAULT_IS_CONSTANT;
         long newSeed = DEFAULT_SEED;
         int newPeriod = DEFAULT_PERIOD;
