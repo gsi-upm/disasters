@@ -1,5 +1,8 @@
 package gsi.simulator;
 
+import gsi.disasters.DensityType;
+import gsi.disasters.Disaster;
+import gsi.disasters.SizeType;
 import java.util.Random;
 
 /**
@@ -8,10 +11,14 @@ import java.util.Random;
  * @author Miguel
  */
 public class RandomGenerator {
-
+    /**
+     * Random object
+     */
      Random random;
+     /**
+      * Parameters object
+      */
      Parameters params;
-
 
     /**
      * Constructor with parameters.
@@ -19,21 +26,16 @@ public class RandomGenerator {
      * @throws java.lang.IllegalArgumentException if parameters are null
      */
     public RandomGenerator(Parameters params) throws IllegalArgumentException {
-
         if (params == null) {
             throw new IllegalArgumentException("Parameters could not load correctly");
         }
-
         this.params= params;
-
-        long seed = params.getSeed();
-
+        long seed = params.SEED;
         if (seed == 0) {
             random = new Random();
         } else {
             random = new Random(seed);
         }
-
     }
 
     /*
@@ -43,9 +45,7 @@ public class RandomGenerator {
      * @return The result of the execution of a Gaussian variable.
      */
     public int randomGaussian(double mean, double standardDeviation){
-
         return (int) Math.round((random.nextGaussian()*standardDeviation) + mean);
-
     }
 
     /**
@@ -73,34 +73,43 @@ public class RandomGenerator {
         return min + Math.floor((max - min) * Math.random());
     }
 
+    /**
+     * Returns the time between two refreshes of the simulator
+     * @return
+     */
     public int refreshPeriod(){
-        if(params.isConstant()){
-            return params.getFrequency();
+        if(params.IS_CONSTANT){
+            return params.PERIOD;
         }
         else{
             return randomInteger(0,10);
         }
     }
 
+    /**
+     * Returns the time between two fire generations
+     * @return
+     */
     public int fireGeneratePeriod(){
-        double mean = params.getTimeBeetwenFires();
-        double standardDeviation = params.getDeviationForFires();
+        double mean = params.TIME_BETWEEN_FIRES;
+        double standardDeviation = params.DEVIATION_FOR_FIRES;
         return randomGaussian(mean, standardDeviation);
     }
+
     /**
      * Defines a size for a fire
      * @return random size for a new fire
      */
-    public String fireDefineSize() {
+    public SizeType fireDefineSize() {
         double size = Math.random();
         if (size < 0.25) {
-            return "small";
+            return SizeType.SMALL;
         } else if (size < 0.5) {
-            return "medium";
+            return SizeType.MEDIUM;
         } else if (size < 0.75) {
-            return "big";
+            return SizeType.BIG;
         } else {
-            return "huge";
+            return SizeType.HUGE;
         }
     }
 
@@ -109,21 +118,21 @@ public class RandomGenerator {
      * @return random number of strength for a new fire
      */
     public int fireDefineStrength() {
-        return randomInteger(params.getMinFireStrength(),params.getMaxFireStrength());
+        return randomInteger(params.MIN_FIRE_STRENGTH,params.MAX_FIRE_STRENGTH);
     }
 
     /**
      * Defines the density of traffic
      * @return random traffic density around the fire
      */
-    public String trafficDefineDensity() {
+    public DensityType trafficDefineDensity() {
         double density = (Math.random() * 3);
         if (density < 1.0) {
-            return "low";
+            return DensityType.LOW;
         } else if (density < 2.0) {
-            return "medium";
+            return DensityType.MEDIUM;
         } else {
-            return "high";
+            return DensityType.HIGH;
         }
     }
 
@@ -151,22 +160,33 @@ public class RandomGenerator {
         return randomInteger(2,6);
     }
 
-
     /**
-     * Generates a random value of health points for a victim to get initialized.
-     * @return the number of health points
+     * Generates the number of initial trapped victims
+     * @return the number of initial trapped victims
      */
     public int initialTrappedVictims() {
-        return randomInteger(params.getMinTrappedVictims(),params.getMaxTrappedVictims());
+        return randomInteger(params.MIN_TRAPPED_VICTIMS, params.MAX_TRAPPED_VICTIMS);
     }
+    /**
+     * Generates the number of initial slight victims
+     * @return the number of initial slight victims
+     */
     public int initialSlightVictims() {
-        return randomInteger(params.getMinSlightVictims(),params.getMaxSlightVictims());
+        return randomInteger(params.MIN_SLIGHT_VICTIMS, params.MAX_SLIGHT_VICTIMS);
     }
+    /**
+     * Generates the number of initial serious victims
+     * @return the number of initial serious victims
+     */
     public int initialSeriousVictims() {
-        return randomInteger(params.getMinSeriousVictims(),params.getMaxSeriousVictims());
+        return randomInteger(params.MIN_SERIOUS_VICTIMS, params.MAX_SERIOUS_VICTIMS);
     }
+    /**
+     * Generates the number of initial dead
+     * @return the number of initial dead
+     */
     public int initialDeadVictims() {
-        return randomInteger(params.getMinDeadVictims(),params.getMaxDeadVictims());
+        return randomInteger(params.MIN_DEAD_VICTIMS, params.MAX_DEAD_VICTIMS);
     }
 
     /**
@@ -203,4 +223,28 @@ public class RandomGenerator {
         return randomDouble(params.MIN_LONGITUDE, params.MAX_LONGITUDE);
     }
 
+    /**
+     * Reduces a random value of a disaster's strenght
+     * @param disaster
+     */
+    public void reduceRandomStrength(Disaster disaster) {
+        disaster.reduceStrength(RandomGenerator.randomInteger(0, 10));
+    }
+
+    /**
+     * Increases a random value of a disaster's strenght
+     * @param disaster
+     */
+    public void increaseRandomStrength(Disaster disaster) {
+        disaster.increaseStrength(RandomGenerator.randomInteger(0, 10));
+    }
+
+    /**
+     * Returns if a trapped gets into a victim
+     * @param strength strength of the disaster
+     * @return if a trapped gets into a victim
+     */
+    public boolean doesTrappedPassToVictim (int strength) {
+        return Math.random() < (strength / 10) * params.TRAPPED_TO_VICTIM;
+    }
 }

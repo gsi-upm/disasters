@@ -1,11 +1,14 @@
-package gsi.disasters;
+package gsi.xpert;
 
+import gsi.disasters.*;
 import gsi.simulator.VictimManager;
 import java.io.PrintWriter;
 import jess.*;
 import java.util.*;
 import org.json.me.*;
 import java.sql.Timestamp;
+import gsi.rest.Connection;
+import gsi.simulator.Parameters;
 
 /**
  * Launches jess and creates markers
@@ -181,10 +184,10 @@ public class ReteDisasterDB {
         Resource res = (Resource) resourcesHash.get(idResource);
         int marker = 0;
 
-        if (res.getType() == ResourceType.POLICE_CAR) {
+        if (res.getType() == ResourceType.POLICE) {
             marker = dis.getPoliceMarker();
         }
-        if (res.getType() == ResourceType.FIRE_ENGINE) {
+        if (res.getType() == ResourceType.FIREMEN) {
             marker = dis.getFiremenMarker();
         }
         if (res.getType() == ResourceType.AMBULANCE) {
@@ -192,10 +195,10 @@ public class ReteDisasterDB {
         }
         if (marker != 0) {
             Connection.connect(URL_BASE + "delete/" + marker);
-            if (res.getType() == ResourceType.POLICE_CAR) {
+            if (res.getType() == ResourceType.POLICE) {
                 dis.setPoliceMarker(0);
             }
-            if (res.getType() == ResourceType.FIRE_ENGINE) {
+            if (res.getType() == ResourceType.FIREMEN) {
                 dis.setFiremenMarker(0);
             }
             if (res.getType() == ResourceType.AMBULANCE) {
@@ -217,7 +220,7 @@ public class ReteDisasterDB {
         double longitude;
 
         //We must check if there is already markers of the same type
-        if (res.getType() == ResourceType.POLICE_CAR) {
+        if (res.getType() == ResourceType.POLICE) {
             if (dis.getPoliceMarker() == 0) {
                 //Add the marker to the map
                 latitude = dis.getLatitude() + POLICE_MARKER_LATITUDE_DIFFERENCE;
@@ -239,7 +242,7 @@ public class ReteDisasterDB {
                 Connection.connect(URL_BASE + "put/" + dis.getPoliceMarker() + "/add");
             }
         }
-        if (res.getType() == ResourceType.FIRE_ENGINE) {
+        if (res.getType() == ResourceType.FIREMEN) {
             if (dis.getFiremenMarker() == 0) {
                 //Add the marker to the map
                 latitude = dis.getLatitude() + FIREMEN_MARKER_LATITUDE_DIFFERENCE;
@@ -322,7 +325,7 @@ public class ReteDisasterDB {
                     StateType.getType(JSONObject.getString("state")),
                     SizeType.getType(JSONObject.getString("size")),
                     DensityType.getType(JSONObject.getString("traffic")),
-                    null, null, null, null, null, null, null, 0);
+                    null, null, null, null, 0, 0, 0, 0);
             
             System.out.println("### New Disaster: " + newDisaster.getType()
                     + " - " + newDisaster.getName() + " (id:"
@@ -362,12 +365,12 @@ public class ReteDisasterDB {
             if (newPeople.getType().equals(InjuryDegree.SLIGHT)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
                     //TODO: All the Person from the same People will have the same id
-                    dis.addSlight(VictimManager.generateDefaultSlight(newPeople.getId()));
+                    dis.addSlight(VictimManager.generateSlightVictim(newPeople.getId(), new Parameters()));
                 }               
             }
             if (newPeople.getType().equals(InjuryDegree.SERIOUS)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addSerious(VictimManager.generateDefaultSerious(newPeople.getId()));
+                    dis.addSerious(VictimManager.generateSeriousVictim(newPeople.getId(), new Parameters()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.DEAD)) {
@@ -413,7 +416,7 @@ public class ReteDisasterDB {
                     StateType.getType(JSONObject.getString("state")),
                     SizeType.getType(JSONObject.getString("size")),
                     DensityType.getType(JSONObject.getString("traffic")),
-                    null, null, null, null, null, null, null, 0);
+                    null, null, null, null, 0, 0, 0, 0);
             
             //It's not a new Disaster, it has just been modified
             if (disastersHash.containsKey(newDisaster.getId())) {
@@ -482,12 +485,12 @@ public class ReteDisasterDB {
             if (newPeople.getType().equals(InjuryDegree.SLIGHT)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
                     //TODO: All the Person from the same People will have the same id
-                    dis.addSlight(VictimManager.generateDefaultSlight(newPeople.getId()));
+                    dis.addSlight(VictimManager.generateSlightVictim(newPeople.getId(), new Parameters()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.SERIOUS)) {
                 for(int j = 0; j < newPeople.getQuantity(); j++) {
-                    dis.addSerious(VictimManager.generateDefaultSerious(newPeople.getId()));
+                    dis.addSerious(VictimManager.generateSeriousVictim(newPeople.getId(), new Parameters()));
                 }
             }
             if (newPeople.getType().equals(InjuryDegree.DEAD)) {

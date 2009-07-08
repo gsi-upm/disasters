@@ -1,4 +1,4 @@
-package gsi.disasters;
+package gsi.xpert;
 
 /**
  * Class that represents a an assignment (resource - disaster)

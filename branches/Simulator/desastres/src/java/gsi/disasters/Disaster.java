@@ -91,17 +91,17 @@ public class Disaster {
      */
     private List<Person> trapped;
     /**
-     * Associate police cars
+     * Associate police
      */
-    private List<PoliceCar> policeCars;
+    private int policeNum;
     /**
      * Associate ambulances
      */
-    private List<Ambulance> ambulances;
+    private int ambulancesNum;
     /**
-     * Associate fire engines
+     * Associate firemen
      */
-    private List<FireEngine> fireEngines;
+    private int firemenNum;
 
     /**
      * 
@@ -129,8 +129,8 @@ public class Disaster {
             String description, String address, double longitud, double latitud,
             StateType state, SizeType size, DensityType traffic,
             List<Person> slight, List<Person> serious, List<Person> dead,
-            List<Person> trapped, List<PoliceCar> policeCars,
-            List<Ambulance> ambulances, List<FireEngine> fireEngines,
+            List<Person> trapped, int police,
+            int ambulances, int firemen,
             int strength) {
         this.id = id;
         this.type = type;
@@ -152,9 +152,9 @@ public class Disaster {
         this.dead = dead;
         this.trapped = trapped;
 
-        this.policeCars = policeCars;
-        this.fireEngines = fireEngines;
-        this.ambulances = ambulances;
+        this.policeNum = police;
+        this.firemenNum = firemen;
+        this.ambulancesNum = ambulances;
 
         this.policeMarker = 0;
         this.ambulanceMarker = 0;
@@ -454,65 +454,19 @@ public class Disaster {
     }
 
      /**
-     * Returns the number of police cars
-     * @return the number of police cars
+     * Returns the number of police
+     * @return the number of police
      */
     public int getPoliceCarsNum() {
-        return policeCars.size();
+        return policeNum;
     }
 
     /**
-     * Returns the list of police cars
-     * @return the list of police cars
+     * Returns the number of firemen
+     * @return the number of firemen
      */
-    public List<PoliceCar> getPoliceCars() {
-        return policeCars;
-    }
-
-    /**
-     * Sets the list of police cars
-     * @param the list of police cars
-     */
-    public void setPoliceCars(List<PoliceCar> policeCars) {
-        this.policeCars = policeCars;
-    }
-
-    /**
-     * Adds a new police car to the list
-     */
-    public void addPoliceCar(PoliceCar policeCar) {
-        this.policeCars.add(policeCar);
-    }
-
-    /**
-     * Returns the number of fire engines
-     * @return the number of fire engines
-     */
-    public int getFireEnginesNum() {
-        return fireEngines.size();
-    }
-
-    /**
-     * Returns the list of fire engines
-     * @return the list of fire engines
-     */
-    public List<FireEngine> getFireEngines() {
-        return fireEngines;
-    }
-
-    /**
-     * Sets the list of fire engines
-     * @param the list of fire engines
-     */
-    public void setFireEngines(List<FireEngine> fireEngines) {
-        this.fireEngines = fireEngines;
-    }
-
-    /**
-     * Adds a new fire engine to the list
-     */
-    public void addFireEngine(FireEngine fireEngine) {
-        this.fireEngines.add(fireEngine);
+    public int getFiremenNum() {
+        return firemenNum;
     }
 
     /**
@@ -520,30 +474,7 @@ public class Disaster {
      * @return the number of ambulances
      */
     public int getAmbulancesNum() {
-        return ambulances.size();
-    }
-
-    /**
-     * Returns the list of ambulances
-     * @return the list of ambulances
-     */
-    public List<Ambulance> getAmbulancess() {
-        return ambulances;
-    }
-
-    /**
-     * Sets the list of ambulances
-     * @param the list of ambulances
-     */
-    public void setAmbulances(List<Ambulance> ambulances) {
-        this.ambulances = ambulances;
-    }
-
-    /**
-     * Adds a new ambulance to the list
-     */
-    public void addAmbulances(Ambulance ambulance) {
-        this.ambulances.add(ambulance);
+        return ambulancesNum;
     }
 
     /**
@@ -690,20 +621,39 @@ public class Disaster {
         } else if (this.isHuge()) {
             number = 4;
         }
-        number *= ((int) this.strength / 10) + RandomGenerator.randomInteger(0, 10);
+        number *= ((int) this.strength / 10);
         return number;
     }
 
 
     /**
      * Calculates the number of ambulances necessary to control people
+     * One ambulance for each two slight victims
+     * One ambulance for each serious victim
      * @return number of ambulances required
      */
-    public static int necessaryAmbulances(int quantity, InjuryDegree degree) {
-        int number = quantity;
-        if (degree.equals(InjuryDegree.SLIGHT)) number*=2;
-        else if (degree.equals(InjuryDegree.SERIOUS)) number *=3;
-        number += RandomGenerator.randomInteger(0,10);
+    public int necessaryAmbulances() {
+        int number = 0;
+        if (this.getSlightNum() > 0)
+            number += this.getSlightNum() / 2;
+        if (this.getSeriousNum() > 0)
+            number += this.getSeriousNum();
         return number;
+    }
+
+    /**
+     * Returns if there is enough firemen
+     * @return if there is enough firemen
+     */
+    public boolean isEnoughFiremen() {
+        return this.getFiremenNum() >= this.necessaryFiremen();
+    }
+
+    /**
+     * Returns if there is enough ambulances
+     * @return if there is enough ambulances
+     */
+    public boolean isEnoughAmbulances() {
+        return this.getAmbulancesNum() >= this.necessaryAmbulances();
     }
 }

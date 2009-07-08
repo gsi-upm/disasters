@@ -1,5 +1,6 @@
-package gsi.disasters;
+package gsi.xpert;
 
+import gsi.disasters.*;
 import gsi.simulator.RandomGenerator;
 
 /**

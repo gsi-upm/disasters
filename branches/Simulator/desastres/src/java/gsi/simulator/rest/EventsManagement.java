@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import gsi.disasters.SizeType;
 import gsi.disasters.DensityType;
 
-
 /**
  * This class provides an interface for using the REST API.
  * @author al.lopezf
@@ -104,34 +103,34 @@ public class EventsManagement {
         return response;
     }
 
-       /**
-        *
-        * @param type It can be police, firemen, ambulance, if it is referring
-        * to a resource, or slight, serious, dead or trapped, if referring to a victim.
-        * @param name Name of the resource or victim
-        * @param quantity Number of resources or victims to insert
-        * @param lat latitude
-        * @param lon longitude
-        * @param idAssigned id of the disaster which this resource or victim is assigned
-        *  If it is -1 , the resource or victim is nos associated to any disaster.
-        *
-        * @return the id of the resource or victim. This is important if you want to modify
-        * or erase it later.
-        */
-       public static int insertResourcesOrVictims(String type, String name,
-               int quantity, double lat, double lon, int idAssigned) {
+    /**
+     *
+     * @param type It can be police, firemen, ambulance, if it is referring
+     * to a resource, or slight, serious, dead or trapped, if referring to a victim.
+     * @param name Name of the resource or victim
+     * @param quantity Number of resources or victims to insert
+     * @param lat latitude
+     * @param lon longitude
+     * @param idAssigned id of the disaster which this resource or victim is assigned
+     *  If it is -1 , the resource or victim is nos associated to any disaster.
+     *
+     * @return the id of the resource or victim. This is important if you want to modify
+     * or erase it later.
+     */
+    public static int insertResourcesOrVictims(String type, String name,
+            int quantity, double lat, double lon, int idAssigned) {
         WebFile web;
         int response = -1;
         String content = "error";
         String URL = "";
         try {
-            URL += URL_BASE + POST + "&type="+type + "&quantity=" + quantity + "&latitud=" + lat +
+            URL += URL_BASE + POST + "&type=" + type + "&quantity=" + quantity + "&latitud=" + lat +
                     "&longitud=" + lon;
             if (name != null) {
                 URL += "&name=" + name;
             }
 
-            if (idAssigned !=  -1 ) {
+            if (idAssigned != -1) {
                 URL += "&idAssigned=" + idAssigned;
             }
 
@@ -146,6 +145,28 @@ public class EventsManagement {
             ex.printStackTrace();
         }
         return response;
+    }
+
+    /**
+     * Modifies a parameter in the database
+     * @param id identifier of the marker
+     * @param parameter parameter that must be changed
+     * @param value value of the parameter
+     */
+    public static void modify(int id, String parameter, String value) {
+        WebFile web;
+        String content = "error";
+        String URL = "";
+        try {
+            URL += URL_BASE + PUT + id + "/" + parameter + "/" + value;
+            web = new WebFile(URL);
+            content = (String) web.getContent();
+            System.out.println(content.trim());
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -169,26 +190,23 @@ public class EventsManagement {
             ex.printStackTrace();
         }
     }
-
-    
-
     /**
      * Tests
 
 
     public static void main(String[] args) {
 
-        try {
-        System.out.println(listAllEvents());
-            //Draw a fire and put it out
-            int id = insertFire(40, -4.2, "Info", "huge", null);
-           // System.out.println(id);
-            insertResourcesOrVictims("serious","nombre",3,40,-4.1,id);
-            Thread.sleep(5000); //Waits 5 seconds
-            System.out.println("Wake up...");
-            delete(id); //End
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    try {
+    System.out.println(listAllEvents());
+    //Draw a fire and put it out
+    int id = insertFire(40, -4.2, "Info", "huge", null);
+    // System.out.println(id);
+    insertResourcesOrVictims("serious","nombre",3,40,-4.1,id);
+    Thread.sleep(5000); //Waits 5 seconds
+    System.out.println("Wake up...");
+    delete(id); //End
+    } catch (Exception e) {
+    e.printStackTrace();
+    }
     }  */
 }

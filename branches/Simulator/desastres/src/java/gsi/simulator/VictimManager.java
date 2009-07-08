@@ -1,7 +1,9 @@
 package gsi.simulator;
 
-import gsi.disasters.*;
-import gsi.simulator.*;
+import gsi.disasters.InjuryDegree;
+import gsi.disasters.Person;
+
+
 
 /**
  * Generates new victims and manages the refreshment of the victims
@@ -22,14 +24,6 @@ public class VictimManager {
      * amount of health points are considered SLIGTH.
      */
     public static final int LIMIT_SERIOUS_SLIGHT = 50;
-    /**
-     * Default value for slight victims
-     */
-    public static final int DEFAULT_SLIGHT = 80;
-    /**
-     * Default value for serious victims
-     */
-    public static final int DEFAULT_SERIOUS = 30;
 
     /**
      * Calculates the InjuryDegree of a Person
@@ -74,24 +68,6 @@ public class VictimManager {
     public static void refreshVictim(Person victim, Parameters param) {
         RandomGenerator generator = new RandomGenerator(param);
         victim.reduceHealthPoints(generator.healthPointsDecrease());
-    }
-
-    /**
-     * Generates a default slight victim
-     * @param id identifier of the person
-     * @return the created slight victim
-     */
-    public static Person generateDefaultSlight(int id) {
-        return new Person(id, DEFAULT_SLIGHT);
-    }
-
-    /**
-     * Generates a default serious victim
-     * @param id identifier of the person
-     * @return the created slight victim
-     */
-    public static Person generateDefaultSerious(int id) {
-        return new Person(id, DEFAULT_SERIOUS);
     }
 
     /**

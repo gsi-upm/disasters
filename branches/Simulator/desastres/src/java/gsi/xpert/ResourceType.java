@@ -1,4 +1,4 @@
-package gsi.disasters;
+package gsi.xpert;
 
 /**
  *
@@ -6,17 +6,17 @@ package gsi.disasters;
  */
 public enum ResourceType {
 
-    AMBULANCE, POLICE_CAR, FIRE_ENGINE;
+    AMBULANCE, POLICE, FIREMEN;
 
     public static ResourceType getType(String str) {
         if (str.toLowerCase().equals("ambulance")) {
             return ResourceType.AMBULANCE;
         } else if (str.toLowerCase().equals("police_car") ||
                 str.toLowerCase().equals("police car")) {
-            return ResourceType.POLICE_CAR;
+            return ResourceType.POLICE;
         } else if (str.toLowerCase().equals("fire_engine") ||
                 str.toLowerCase().equals("fire_engine")) {
-            return ResourceType.FIRE_ENGINE;
+            return ResourceType.FIREMEN;
         } else {
             return null;
         }

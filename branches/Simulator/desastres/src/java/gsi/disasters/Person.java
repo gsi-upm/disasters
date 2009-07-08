@@ -1,7 +1,8 @@
 package gsi.disasters;
 
 import gsi.simulator.VictimManager;
-import gsi.simulator.*;
+
+
 
 /**
  *
