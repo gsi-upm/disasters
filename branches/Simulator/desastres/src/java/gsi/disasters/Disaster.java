@@ -595,6 +595,9 @@ public class Disaster {
      */
     public void reduceStrength(int loss) {
         this.strength -= loss;
+        if (this.strength < 0) {
+            this.strength = 0;
+        }
     }
 
     /**
