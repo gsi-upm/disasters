@@ -107,10 +107,10 @@ public class Parameters {
     /**
      * Limits for latitude and longitude in Madrid
      */
-    public final double MIN_LATITUDE = 40.40;
-    public final double MAX_LATITUDE = 40.45;
-    public final double MIN_LONGITUDE = -3.73;
-    public final double MAX_LONGITUDE = -3.68;
+    public final double MIN_LATITUDE = 40.36;
+    public final double MAX_LATITUDE = 40.48;
+    public final double MIN_LONGITUDE = -3.78;
+    public final double MAX_LONGITUDE = -3.57;
     /**
      * Differences for marker's latitudes and longitudes
      */

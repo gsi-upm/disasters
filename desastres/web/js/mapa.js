@@ -271,7 +271,7 @@ function generaMarcador(evento, caracter){
         if (evento.tipo=="fire"){
             icono = new GIcon(G_DEFAULT_ICON);
             icono.image = "markers/fuego.png";
-            map.addOverlay(new EInsert(new GLatLng(evento.latitud, evento.longitud), "images/anifire.gif", new GSize(800,800), 14));
+            // map.addOverlay(new EInsert(new GLatLng(evento.latitud, evento.longitud), "images/anifire.gif", new GSize(800,800), 14));
             if(evento.estado=="controlled"){icono.image ="markers/fuego_control.png"}
                             
         }
