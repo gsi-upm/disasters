@@ -57,7 +57,7 @@ public class RandomGenerator {
         if (min > max) {
             throw new IllegalArgumentException("Maximum value cannot be greater than the minimum one");
         }
-        return min + (int) Math.floor((max - min + 1) * Math.random());
+        return min + (int)((max - min)*Math.random());
     }
 
     /**
@@ -70,7 +70,7 @@ public class RandomGenerator {
         if (min > max) {
             throw new IllegalArgumentException("Maximum value cannot be greater than the minimum one");
         }
-        return min + Math.floor((max - min) * Math.random());
+        return min + (max - min) * Math.random();
     }
 
     /**
@@ -144,11 +144,11 @@ public class RandomGenerator {
      */
     public int healthPointsDecrease(int strength) {
         if (strength >= 80)
-            return randomInteger(7,10);
+            return randomInteger(4,6);
         else if (strength >=40)
-            return randomInteger(4,7);
+            return randomInteger(3,4);
         else
-            return randomInteger(0,4);
+            return randomInteger(0,2);
     }
 
     /**
@@ -228,7 +228,7 @@ public class RandomGenerator {
      * @param disaster
      */
     public void reduceRandomStrength(Disaster disaster) {
-        disaster.reduceStrength(RandomGenerator.randomInteger(0, 10));
+        disaster.reduceStrength(RandomGenerator.randomInteger(0, 3));
     }
 
     /**
@@ -236,7 +236,7 @@ public class RandomGenerator {
      * @param disaster
      */
     public void increaseRandomStrength(Disaster disaster) {
-        disaster.increaseStrength(RandomGenerator.randomInteger(0, 10));
+        disaster.increaseStrength(RandomGenerator.randomInteger(0, 5));
     }
 
     /**
