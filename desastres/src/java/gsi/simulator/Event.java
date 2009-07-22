@@ -54,7 +54,7 @@ public class Event {
      */
     public static Event generateEvent(int instant) {
         Event newEvent = new Event(instant, null);
-        LOGGER.info("Generate any event: " + newEvent);
+        LOGGER.info("Generated any event: " + newEvent);
         return newEvent;
     }
 
@@ -66,7 +66,7 @@ public class Event {
      */
     public static Event generateNewFire(int instant) {
         Event newEvent = new Event(instant, EventType.FIRE_GENERATION);
-        LOGGER.info("Generate New Fire " + newEvent);
+        LOGGER.info("Generated New Fire " + newEvent);
         return newEvent;
     }
     /**
@@ -81,7 +81,7 @@ public class Event {
         if (lastRefresh != null)
             instant += lastRefresh.getInstant();
         Event newEvent = new Event(instant, EventType.REFRESH);
-        LOGGER.info("Generate Refresh " + newEvent);
+        LOGGER.info("Generated Refresh " + newEvent);
         return newEvent;
     }
 
@@ -97,7 +97,7 @@ public class Event {
         if (lastAsking != null)
             instant += lastAsking.getInstant();
         Event newEvent = new Event(instant, EventType.ASKING_FOR_AGENTS);
-        LOGGER.info("Generate Asking for Agents " + newEvent);
+        LOGGER.info("Generated Asking for Agents " + newEvent);
         return newEvent;
     }
 
@@ -109,7 +109,7 @@ public class Event {
      */
     public static Event generateFiremenArrival(int time) {
         Event newEvent = new Event(time, EventType.FIREMEN_ARRIVAL);
-        LOGGER.info("Generate Firemen Arrival " + newEvent);
+        LOGGER.info("Generated Firemen Arrival " + newEvent);
         return newEvent;
     }
 
@@ -122,7 +122,7 @@ public class Event {
      */
     public static Event generateAmbulanceArrival(int time) {
         Event newEvent = new Event(time, EventType.AMBULANCE_ARRIVAL);
-        LOGGER.info("Generate Ambulance Arrival " + newEvent);
+        LOGGER.info("Generated Ambulance Arrival " + newEvent);
         return newEvent;
     }
 

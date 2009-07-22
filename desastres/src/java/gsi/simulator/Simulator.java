@@ -3,6 +3,7 @@ package gsi.simulator;
 import gsi.simulator.Logger.Logger;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.IOException;
 import gsi.disasters.Disaster;
 import gsi.disasters.DisasterType;
@@ -48,6 +49,8 @@ public class Simulator {
      * Constructor for empty simulator
      */
     public Simulator() {
+        this.parameters = new Parameters();
+        this.generator = new RandomGenerator(parameters);
         this.disasters = new ArrayList<Disaster>();
         this.queue = new EventQueue();
     }
@@ -73,6 +76,7 @@ public class Simulator {
         queue.insert(firstRefresh);
 
         while (currentEvent.getInstant() <= howLong && !pause) {
+            LOGGER.info("Processing: " + currentEvent);
             //Generation of a new fire
             if (currentEvent.isFireGeneration()) {
                 SizeType size = generator.fireDefineSize(); // Size of the fire
@@ -95,11 +99,11 @@ public class Simulator {
 
                 //Saves the disaster in the DB and gets its id
                 int idDisaster = EventsManagement.insertFire(latitude, longitude,
-                        "Simulated Fire", size, density);
+                        "Simulated_Fire", size, density);
 
                 //Saves the people in the DB
                 if (initialSlight > 0) {
-                    int id = EventsManagement.insertResourcesOrVictims("slight", "Simulated slight",
+                    int id = EventsManagement.insertResourcesOrVictims("slight", "Simulated_slight",
                             initialSlight,
                             latitude + parameters.SLIGHT_LATITUDE_DIFFERENCE,
                             longitude + parameters.SLIGHT_LONGITUDE_DIFFERENCE,
@@ -110,7 +114,7 @@ public class Simulator {
                     }
                 }
                 if (initialSerious > 0) {
-                    int id = EventsManagement.insertResourcesOrVictims("serious", "Simulated serious",
+                    int id = EventsManagement.insertResourcesOrVictims("serious", "Simulated_serious",
                             initialSerious,
                             latitude + parameters.SERIOUS_LATITUDE_DIFFERENCE,
                             longitude + parameters.SERIOUS_LONGITUDE_DIFFERENCE,
@@ -120,7 +124,7 @@ public class Simulator {
                     }
                 }
                 if (initialTrapped > 0) {
-                    int id = EventsManagement.insertResourcesOrVictims("trapped", "Simulated trapped",
+                    int id = EventsManagement.insertResourcesOrVictims("trapped", "Simulated_trapped",
                             initialTrapped,
                             latitude + parameters.TRAPPED_LATITUDE_DIFFERENCE,
                             longitude + parameters.TRAPPED_LONGITUDE_DIFFERENCE,
@@ -130,7 +134,7 @@ public class Simulator {
                     }
                 }
                 if (initialDead > 0) {
-                    int id = EventsManagement.insertResourcesOrVictims("dead", "Simulated dead",
+                    int id = EventsManagement.insertResourcesOrVictims("dead", "Simulated_dead",
                             initialDead,
                             latitude + parameters.DEAD_LATITUDE_DIFFERENCE,
                             longitude + parameters.DEAD_LONGITUDE_DIFFERENCE,
@@ -142,13 +146,17 @@ public class Simulator {
 
                 //Generates the Disaster object
                 Disaster newDisaster = new Disaster(idDisaster, DisasterType.FIRE, 
-                        "First fire", "INFO", "DESCRIPTION", "ADDRESS", 0, 0,
+                        "First_fire", "INFO", "DESCRIPTION", "ADDRESS", longitude, latitude,
                         StateType.ACTIVE, size, density, slight, serious, dead,
                         trapped, 0, 0, 0, strength);
 
                 //Saves it in the disasters list of the simulator
                 disasters.add(newDisaster);
 
+                LOGGER.info("New fire. Id: " + newDisaster.getId() +
+                        ". Strength: " + newDisaster.getStrength());
+                LOGGER.info("Victims: " + newDisaster.getSlightNum() + ", " + newDisaster.getSeriousNum() +
+                        ", " + newDisaster.getDeadNum() + ", " + newDisaster.getTrappedNum());
                 //Generates the next generation fire event
                 queue.insert(Event.generateNewFire(currentEvent.getInstant() + generator.fireGeneratePeriod()));
             } //Refresh fires and victims
@@ -165,7 +173,9 @@ public class Simulator {
                         } else {
                             generator.increaseRandomStrength(currentDisaster);
                         }
-                    } else if (currentDisaster.isControlled()) {
+                    }
+
+                    else if (currentDisaster.isControlled()) {
                         if (currentDisaster.getStrength() > 0) {
                             generator.reduceRandomStrength(currentDisaster);
                         }
@@ -206,51 +216,64 @@ public class Simulator {
                         }
 
                         //Tries trapped to victim
-                        for (Person trapped : currentDisaster.getTrapped()) {
+                        Iterator iterator = currentDisaster.getTrapped().iterator();
+                        while (iterator.hasNext()) {
+                            Person trapped = (Person) iterator.next();
                             if (generator.doesTrappedPassToVictim (currentDisaster.getStrength())) {
                                 trapped.setInjuryDegree(InjuryDegree.SLIGHT);
                                 trapped.setHealthPoints(generator.initialHealthPointsSlight());
-                                currentDisaster.getTrapped().remove(trapped);
+                                iterator.remove(); //The victim is removed from the trapped list
                                 currentDisaster.addSlight(trapped);
                                 if(slightBefore > 0) {
                                     trapped.setId(slightBeforeId);
                                 }
+                                LOGGER.info("Fire: " + currentDisaster.getId() + ". Trapped to victim.");
                             }
                         }
 
                         //Refreshes the serious and the slight
                         if (!currentDisaster.isEnoughAmbulances()) {
-                            for (Person serious : currentDisaster.getSerious()) {
+                            
+                            //Iterates the serious victims
+                            iterator = currentDisaster.getSerious().iterator();
+                            while (iterator.hasNext()) {
+                                Person serious = (Person) iterator.next();
                                 int decrease = generator.healthPointsDecrease(currentDisaster.getStrength());
                                 serious.reduceHealthPoints(decrease);
                                 //If he/she dies
                                 if (serious.getInjuryDegree() == InjuryDegree.DEAD) {
-                                    currentDisaster.getSlight().remove(serious);
+                                    iterator.remove();
                                     currentDisaster.addDead(serious);
                                     if(deadBefore > 0) {
                                         serious.setId(deadBeforeId);
                                     }
+                                    LOGGER.info("Fire: " + currentDisaster.getId() + ". Serious to dead.");
                                 }
                             }
 
-                            for (Person slight : currentDisaster.getSlight()) {
+                            //Iterates the slight victims
+                            iterator = currentDisaster.getSlight().iterator();
+                            while (iterator.hasNext()) {
+                                Person slight = (Person) iterator.next();
                                 int decrease = generator.healthPointsDecrease(currentDisaster.getStrength());
                                 slight.reduceHealthPoints(decrease);
                                 //If he/she gets serious
                                 if (slight.getInjuryDegree() == InjuryDegree.SERIOUS) {
-                                    currentDisaster.getSlight().remove(slight);
+                                    iterator.remove();
                                     currentDisaster.addSerious(slight);
                                     if(seriousBefore > 0) {
-                                        slight.setId(deadBeforeId);
+                                        slight.setId(seriousBeforeId);
                                     }
+                                    LOGGER.info("Fire: " + currentDisaster.getId() + ". Slight to serious.");
                                 }
                                 //If he/she dies
                                 if (slight.getInjuryDegree() == InjuryDegree.DEAD) {
-                                    currentDisaster.getSlight().remove(slight);
+                                    iterator.remove();
                                     currentDisaster.addDead(slight);
                                     if(deadBefore > 0) {
                                         slight.setId(deadBeforeId);
                                     }
+                                    LOGGER.info("Fire: " + currentDisaster.getId() + ". Slight to dead.");
                                 }
                             }
                         }
@@ -333,23 +356,27 @@ public class Simulator {
                                     "" + currentDisaster.getDeadNum());
                         }
                     }
+                    LOGGER.info("End of refresh. Fire: " + currentDisaster.getId() + "Strength: " + currentDisaster.getStrength());
+                    LOGGER.info("Victims: " + currentDisaster.getSlightNum() + ", " + currentDisaster.getSeriousNum() +
+                            ", " + currentDisaster.getDeadNum() + ", " + currentDisaster.getTrappedNum());
                 }
 
                 //Every refresh generates the next refresh event
                 queue.insert(Event.generateRefresh(currentEvent, generator.refreshPeriod()));
-            }       
-        }
-        LOGGER.info(currentEvent.toString());
-        double lastEventInstant = currentEvent.getInstant();
+            }
+
+        int lastEventInstant = currentEvent.getInstant();
         currentEvent = queue.extract();
+
         //Sleeps the thread if the simulation is in real time
-        if(parameters.REAL_TIME) {
+        if(parameters.IS_CONSTANT) {
             try {
                 Thread.sleep((long) (currentEvent.getInstant() - lastEventInstant) * 1000);
             }
             catch (InterruptedException e) {
                 System.err.println("Error interrupting the Thread: " + e.getMessage());
             }
+        }
         }
     }
 
@@ -376,7 +403,7 @@ public class Simulator {
     /**
      * Prepares and launches the simulation
      */
-    public static void main() throws IOException {
+    public static void main(String[] args) throws IOException {
         //Inicialization
         Simulator sim = new Simulator();
         LOGGER.info("Simulation beginning. Length = " + sim.generator.params.LENGTH);

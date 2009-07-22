@@ -15,7 +15,7 @@ import java.util.Properties;
 public class Parameters {
 
     /*
-     * Defines if the simulation is going to refresh constantly.
+     * Defines if the simulation is going to refresh constantly (is in real time).
      */
     public final boolean IS_CONSTANT;
     /*
@@ -67,9 +67,9 @@ public class Parameters {
     public final boolean DEFAULT_IS_CONSTANT = true;
 	public final long DEFAULT_SEED = 1;
 	public final int DEFAULT_PERIOD = 1;
-    public final double DEFAULT_TIME_BETWEEN_FIRES = 600;
-    public final double DEFAULT_DEVIATION_FOR_FIRES = 1;
-    public final double DEFAULT_TRAPPED_TO_VICTIM = 0.05;
+    public final double DEFAULT_TIME_BETWEEN_FIRES = 50;
+    public final double DEFAULT_DEVIATION_FOR_FIRES = 20;
+    public final double DEFAULT_TRAPPED_TO_VICTIM = 0.005;
     public final int DEFAULT_MIN_FIRE_STRENGTH = 1;
     public final int DEFAULT_MAX_FIRE_STRENGTH = 100;
     public final int DEFAULT_MIN_TRAPPED_VICTIMS = 0;
@@ -80,7 +80,7 @@ public class Parameters {
     public final int DEFAULT_MAX_SERIOUS_VICTIMS = 10;
     public final int DEFAULT_MIN_DEAD_VICTIMS = 0;
     public final int DEFAULT_MAX_DEAD_VICTIMS = 10;
-    public final int DEFAULT_LENGTH = 1000;
+    public final int DEFAULT_LENGTH = 200;
 
 
 	/*
@@ -124,10 +124,6 @@ public class Parameters {
      public final double DEAD_LONGITUDE_DIFFERENCE = + 0.00025;
 
 
-     /**
-      * Saves if the simulation is in real time (the thread sleeps)
-      */
-     public final boolean REAL_TIME = false;
 	/**
 	 * Default constructor, with default parameters.
 	 */
