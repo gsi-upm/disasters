@@ -21,6 +21,26 @@ public class EventsManagement {
     //private static final String URL_BASE = "http://localhost:8080/Disasters/";
 
 
+     /**
+     * Method used to remove the blanks in a String (useful for URLs)
+     * @param String with the original text
+     * @return the String without blanks
+     */
+    public static String removeBlanks(String string){
+        String newString = "";
+        String newChar;
+            for (int i=0;i<string.length();i++){
+                newChar = string.substring(i,i+1);
+
+                if(newChar.equals(" ")){newString=newString.concat("+");}
+                else{newString=newString.concat(newChar);}
+
+            }
+
+        return newString;
+    }
+
+
     /*
      * List all the events in the app
      * @return a String with all the events, in a JSON notation.
@@ -89,6 +109,7 @@ public class EventsManagement {
                     URL += "&traffic=high";
                 }
             }
+            URL = removeBlanks(URL);
             web = new WebFile(URL);
             System.out.println(URL);
             content = (String) web.getContent();
@@ -134,6 +155,7 @@ public class EventsManagement {
                 URL += "&idAssigned=" + idAssigned;
             }
 
+            URL = removeBlanks(URL);
             web = new WebFile(URL);
             content = (String) web.getContent();
             System.out.println(content.trim());
@@ -159,6 +181,7 @@ public class EventsManagement {
         String URL = "";
         try {
             URL += URL_BASE + PUT + id + "/" + parameter + "/" + value;
+            URL = removeBlanks(URL);
             web = new WebFile(URL);
             content = (String) web.getContent();
             System.out.println(content.trim());
@@ -181,6 +204,7 @@ public class EventsManagement {
         try {
             URL += URL_BASE + DELETE + "id/" + id;
 
+            URL = removeBlanks(URL);
             web = new WebFile(URL);
             content = (String) web.getContent();
             System.out.println(content.trim());
