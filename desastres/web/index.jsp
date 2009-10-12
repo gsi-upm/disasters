@@ -70,6 +70,10 @@
                             $('#showSimOptions').slideUp();
                             return false;
                         });
+                        $('#submit_simulador').mouseup(function() {
+                            $('#showSimOptions').slideUp();
+                            return false;
+                        })
                     }
                     ,function(){
                         $('#showSimOptions').slideUp();
@@ -96,6 +100,15 @@
                         return false;
                     },function(){
                         $('#console').slideUp();
+                    });
+
+                    $("#runSim").click(function() {
+                        $('#options2').show();
+                        $('#runSim').val("run");
+                    });
+
+                    $("#pauseSim, #restartSim").click(function() {
+                        $('#options2').hide();
                     });
                 });
             </script>
@@ -513,11 +526,17 @@
                 </form>
             </div>
             <div id="showSimOptions" class="slideMenu">
-                <form name="SimOptions" id="SimOptions">
-                    <p><fmt:message key="opcionesSimulador"/></p>
-                    <p><fmt:message key="victimas"/><input type="text" name="victims" size="3"/></p>
-                    <p><fmt:message key="incendios"/><input type="text" name="incendios" size="3"/></p>
-                    <input type="submit" name="arrancaSimulador" value="<fmt:message key="arrancaSimulador"/>" id="submit_simulador"></input><br>
+                <form name="SimOptions" id="SimOptions" type="post" action="/Disasters/RunSimulation">
+                    <p class="bigger"><fmt:message key="opcionesSimulador"/></p>
+                    <p><input id="runSim" type="radio" name="sim" value="run" checked="checked"/><fmt:message key="arrancaSimulador"/></p>
+                    <div id="options2">
+                         <p><fmt:message key="victimas"/><input type="text" name="victims0" size="3"/></p>
+                         <p><fmt:message key="incendios"/><input type="text" name="fires0" size="3"/></p>
+                    </div>
+                    <p><input id="restartSim"type="radio" name="sim" value="restart"/><fmt:message key="reiniciarSimulador"/></p>
+                    <p><input id="pauseSim" type="radio" name="sim" value="pause"/><fmt:message key="pause"/></p>
+
+                    <input id="submit_simulador" type="submit" name="aceptar" value="<fmt:message key="aceptar"/>"></input>
                     <br>
                     <br>
                     <a id="hideSimOptions" href="#"><fmt:message key="ocultar"/></a>
@@ -531,7 +550,7 @@
                 
                 
             </div>
-            
+           
             <jsp:useBean class="roads.DirectionsBean" id="resources" scope="session"/>
             <%
             int[] rscs = resources.getResourcesList();
@@ -542,7 +561,12 @@
                 out.println(ed);
             }
             %>
-            
+
+            <c:if test="${param.alert == true}">
+                <script>
+                    window.alert("Fin de la simulación.")
+                </script>
+            </c:if>
         </body>
         
     </fmt:bundle>

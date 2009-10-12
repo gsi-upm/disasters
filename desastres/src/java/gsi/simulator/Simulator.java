@@ -43,7 +43,7 @@ public class Simulator {
     /**
      * Saves if the simulation is paused
      */
-     private boolean pause;
+     private static boolean pause;
 
     /**
      * Constructor for empty simulator
@@ -69,24 +69,51 @@ public class Simulator {
      * Runs a simulation loop which lasts the specified time
      * @param howLong length of the simulation
      */
-    private void simulateLoop(int howLong) {
+    private void simulateLoop(int howLong, int victims0, int fires0) {
         pause = false;
         Event currentEvent = Event.generateNewFire(0);
         Event firstRefresh = Event.generateRefresh(null, generator.refreshPeriod());
         queue.insert(firstRefresh);
 
+        if (fires0 > 1) {
+            for (int i = fires0; i>1; i--) {
+                queue.insert(Event.generateNewFire(0));
+            }
+        }
+
         while (currentEvent.getInstant() <= howLong && !pause) {
             LOGGER.info("Processing: " + currentEvent);
             //Generation of a new fire
             if (currentEvent.isFireGeneration()) {
+
                 SizeType size = generator.fireDefineSize(); // Size of the fire
                 int strength = generator.fireDefineStrength(); // Strength of the fire
                 DensityType density = generator.trafficDefineDensity(); // Traffic density around the fire
-                int initialSlight = generator.initialSlightVictims(); //Number of slight victims
-                int initialSerious = generator.initialSeriousVictims(); //Number of serious victims
-                int initialTrapped = generator.initialTrappedVictims(); //Number of trapped victims
-                int initialDead = generator.initialDeadVictims(); //Number of deads
+                int initialSlight; //Number of slight victims
+                int initialSerious; //Number of serious victims
+                int initialTrapped; //Number of trapped victims
+                int initialDead; //Number of deads
 
+                // If it is one of the initial fires, we use the "initial victims" parameter
+                if ((victims0 > 0) && (currentEvent.getInstant() == 0)) {
+                    // We divide the number of victims among the vicitm types
+                    int mean = victims0/4;
+                    int rest = victims0 - 3*mean;
+                    
+                    initialSlight = rest; 
+                    initialSerious = mean; 
+                    initialTrapped = mean; 
+                    initialDead = mean;
+                }
+
+                //If it's not an initial fire or there aren't initial victims, we get a random number
+                else {
+                    initialSlight = generator.initialSlightVictims();
+                    initialSerious = generator.initialSeriousVictims();
+                    initialTrapped = generator.initialTrappedVictims();
+                    initialDead = generator.initialDeadVictims();
+                }
+                
                 //List to insert in the Disaster instance
                 List<Person> slight = new ArrayList<Person>();
                 List<Person> serious = new ArrayList<Person>();
@@ -155,7 +182,7 @@ public class Simulator {
 
                 LOGGER.info("New fire. Id: " + newDisaster.getId() +
                         ". Strength: " + newDisaster.getStrength());
-                LOGGER.info("Victims: " + newDisaster.getSlightNum() + ", " + newDisaster.getSeriousNum() +
+                LOGGER.info(" Victims: " + newDisaster.getSlightNum() + ", " + newDisaster.getSeriousNum() +
                         ", " + newDisaster.getDeadNum() + ", " + newDisaster.getTrappedNum());
                 //Generates the next generation fire event
                 queue.insert(Event.generateNewFire(currentEvent.getInstant() + generator.fireGeneratePeriod()));
@@ -222,11 +249,11 @@ public class Simulator {
                             if (generator.doesTrappedPassToVictim (currentDisaster.getStrength())) {
                                 trapped.setInjuryDegree(InjuryDegree.SLIGHT);
                                 trapped.setHealthPoints(generator.initialHealthPointsSlight());
-                                iterator.remove(); //The victim is removed from the trapped list
-                                currentDisaster.addSlight(trapped);
                                 if(slightBefore > 0) {
                                     trapped.setId(slightBeforeId);
                                 }
+                                iterator.remove(); //The victim is removed from the trapped list
+                                currentDisaster.addSlight(trapped);   
                                 LOGGER.info("Fire: " + currentDisaster.getId() + ". Trapped to victim.");
                             }
                         }
@@ -242,11 +269,11 @@ public class Simulator {
                                 serious.reduceHealthPoints(decrease);
                                 //If he/she dies
                                 if (serious.getInjuryDegree() == InjuryDegree.DEAD) {
-                                    iterator.remove();
-                                    currentDisaster.addDead(serious);
                                     if(deadBefore > 0) {
                                         serious.setId(deadBeforeId);
                                     }
+                                    iterator.remove();
+                                    currentDisaster.addDead(serious);
                                     LOGGER.info("Fire: " + currentDisaster.getId() + ". Serious to dead.");
                                 }
                             }
@@ -259,20 +286,20 @@ public class Simulator {
                                 slight.reduceHealthPoints(decrease);
                                 //If he/she gets serious
                                 if (slight.getInjuryDegree() == InjuryDegree.SERIOUS) {
-                                    iterator.remove();
-                                    currentDisaster.addSerious(slight);
                                     if(seriousBefore > 0) {
                                         slight.setId(seriousBeforeId);
                                     }
+                                    iterator.remove();
+                                    currentDisaster.addSerious(slight);                                    
                                     LOGGER.info("Fire: " + currentDisaster.getId() + ". Slight to serious.");
                                 }
                                 //If he/she dies
                                 if (slight.getInjuryDegree() == InjuryDegree.DEAD) {
-                                    iterator.remove();
-                                    currentDisaster.addDead(slight);
                                     if(deadBefore > 0) {
                                         slight.setId(deadBeforeId);
                                     }
+                                    iterator.remove();
+                                    currentDisaster.addDead(slight);
                                     LOGGER.info("Fire: " + currentDisaster.getId() + ". Slight to dead.");
                                 }
                             }
@@ -356,7 +383,7 @@ public class Simulator {
                                     "" + currentDisaster.getDeadNum());
                         }
                     }
-                    LOGGER.info("End of refresh. Fire: " + currentDisaster.getId() + "Strength: " + currentDisaster.getStrength());
+                    LOGGER.info("End of refresh. Fire: " + currentDisaster.getId() + ". Strength: " + currentDisaster.getStrength());
                     LOGGER.info("Victims: " + currentDisaster.getSlightNum() + ", " + currentDisaster.getSeriousNum() +
                             ", " + currentDisaster.getDeadNum() + ", " + currentDisaster.getTrappedNum());
                 }
@@ -380,24 +407,37 @@ public class Simulator {
         }
     }
 
-    /**
-     * Runs the simulation
+     /**
+     * Runs the simulation with a random value of initial victims and fires
      */
     public void runSimulation() {
         //Inicialization
-        Simulator sim = new Simulator();
-        LOGGER.info("Simulation beginning. Length = " + sim.generator.params.LENGTH);
+        LOGGER.info("Simulation beginning. Length = " + this.generator.params.LENGTH);
 
         //Simulation loop running
-        sim.simulateLoop(sim.generator.params.LENGTH);
+        this.simulateLoop(this.generator.params.LENGTH, 0, 0);
+        LOGGER.info("End of simulation");
+    }
+
+    /**
+     * Runs the simulation with the specified number of victims and fires
+     * @param victims0 number of initial victims
+     * @param fires0 number of initial fires
+     */
+    public void runSimulation(int victims0, int fires0) {
+        //Inicialization
+        LOGGER.info("Simulation beginning. Length = " + this.generator.params.LENGTH);
+
+        //Simulation loop running
+        this.simulateLoop(this.generator.params.LENGTH, victims0, fires0);
         LOGGER.info("End of simulation");
     }
 
     /**
      * Pauses the simulation
      */
-    public void pauseSimulation() {
-        this.pause = true;
+    public static void pauseSimulation() {
+        pause = true;
     }
 
     /**
@@ -409,7 +449,7 @@ public class Simulator {
         LOGGER.info("Simulation beginning. Length = " + sim.generator.params.LENGTH);
 
          //Simulation loop running
-        sim.simulateLoop(sim.generator.params.LENGTH);
+        sim.simulateLoop(sim.generator.params.LENGTH, 0, 0);
         LOGGER.info("End of simulation");
     }
 }

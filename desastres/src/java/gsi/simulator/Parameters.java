@@ -80,7 +80,7 @@ public class Parameters {
     public final int DEFAULT_MAX_SERIOUS_VICTIMS = 10;
     public final int DEFAULT_MIN_DEAD_VICTIMS = 0;
     public final int DEFAULT_MAX_DEAD_VICTIMS = 10;
-    public final int DEFAULT_LENGTH = 200;
+    public final int DEFAULT_LENGTH = 60;
 
 
 	/*
