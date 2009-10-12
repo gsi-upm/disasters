@@ -8,7 +8,7 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-        
+
          <!-- Application class name -->
     <context-param>
         <param-name>org.restlet.application</param-name>
@@ -94,5 +94,13 @@
     <servlet-mapping>
         <servlet-name>SimulatorServlet</servlet-name>
         <url-pattern>/SimulatorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RunSimulation</servlet-name>
+        <servlet-class>gsi.simulator.RunSimulation</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RunSimulation</servlet-name>
+        <url-pattern>/RunSimulation</url-pattern>
     </servlet-mapping>
 </web-app>
