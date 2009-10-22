@@ -1,10 +1,10 @@
-
 package gsi.simulator;
 
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Properties;
+
 /**
  * This class contains the diferent parameters which define a simulation
  *
@@ -38,7 +38,7 @@ public class Parameters {
      * Probability in a refresh for a trapped to turn into a victim.
      * 0 <= trappedToVictim <= 1
      */
-     public final double TRAPPED_TO_VICTIM;
+    public final double TRAPPED_TO_VICTIM;
     /**
      * Minimum and maximum values for fire strength
      */
@@ -55,18 +55,17 @@ public class Parameters {
     public final int MAX_SERIOUS_VICTIMS;
     public final int MIN_DEAD_VICTIMS;
     public final int MAX_DEAD_VICTIMS;
-
     /**
      * Length of the simulation, in seconds
      */
     public final int LENGTH;
 
-	/*
-	 * Default parameters value
-	 */
+    /*
+     * Default parameters value
+     */
     public final boolean DEFAULT_IS_CONSTANT = true;
-	public final long DEFAULT_SEED = 1;
-	public final int DEFAULT_PERIOD = 1;
+    public final long DEFAULT_SEED = 1;
+    public final int DEFAULT_PERIOD = 1;
     public final double DEFAULT_TIME_BETWEEN_FIRES = 50;
     public final double DEFAULT_DEVIATION_FOR_FIRES = 20;
     public final double DEFAULT_TRAPPED_TO_VICTIM = 0.005;
@@ -81,11 +80,9 @@ public class Parameters {
     public final int DEFAULT_MIN_DEAD_VICTIMS = 0;
     public final int DEFAULT_MAX_DEAD_VICTIMS = 10;
     public final int DEFAULT_LENGTH = 60;
-
-
-	/*
-	 * Tags to read parameteres from file
-	 */
+    /*
+     * Tags to read parameteres from file
+     */
     private final String IS_CONSTANT_TAG = "is constant";
     private final String SEED_TAG = "seed";
     private final String PERIOD_TAG = "period";
@@ -103,7 +100,6 @@ public class Parameters {
     private final String MIN_DEAD_VICTIMS_TAG = "minimum number of dead victims";
     private final String MAX_DEAD_VICTIMS_TAG = "maximum number of dead victims";
     private final String LENGTH_TAG = "length";
-    
     /**
      * Limits for latitude and longitude in Madrid
      */
@@ -114,23 +110,22 @@ public class Parameters {
     /**
      * Differences for marker's latitudes and longitudes
      */
-     public final double SLIGHT_LATITUDE_DIFFERENCE = - 0.00025;
-     public final double SERIOUS_LATITUDE_DIFFERENCE = - 0.00025;
-     public final double TRAPPED_LATITUDE_DIFFERENCE = + 0.00025;
-     public final double DEAD_LATITUDE_DIFFERENCE = + 0.00025;
-     public final double SLIGHT_LONGITUDE_DIFFERENCE = - 0.00025;
-     public final double SERIOUS_LONGITUDE_DIFFERENCE = + 0.00025;
-     public final double TRAPPED_LONGITUDE_DIFFERENCE = - 0.00025;
-     public final double DEAD_LONGITUDE_DIFFERENCE = + 0.00025;
+    public final double SLIGHT_LATITUDE_DIFFERENCE = -0.00025;
+    public final double SERIOUS_LATITUDE_DIFFERENCE = -0.00025;
+    public final double TRAPPED_LATITUDE_DIFFERENCE = +0.00025;
+    public final double DEAD_LATITUDE_DIFFERENCE = +0.00025;
+    public final double SLIGHT_LONGITUDE_DIFFERENCE = -0.00025;
+    public final double SERIOUS_LONGITUDE_DIFFERENCE = +0.00025;
+    public final double TRAPPED_LONGITUDE_DIFFERENCE = -0.00025;
+    public final double DEAD_LONGITUDE_DIFFERENCE = +0.00025;
 
-
-	/**
-	 * Default constructor, with default parameters.
-	 */
-	public Parameters() {
+    /**
+     * Default constructor, with default parameters.
+     */
+    public Parameters() {
         IS_CONSTANT = DEFAULT_IS_CONSTANT;
-		SEED = DEFAULT_SEED;
-		PERIOD = DEFAULT_PERIOD;
+        SEED = DEFAULT_SEED;
+        PERIOD = DEFAULT_PERIOD;
         TIME_BETWEEN_FIRES = DEFAULT_TIME_BETWEEN_FIRES;
         DEVIATION_FOR_FIRES = DEFAULT_DEVIATION_FOR_FIRES;
         TRAPPED_TO_VICTIM = DEFAULT_TRAPPED_TO_VICTIM;
@@ -145,25 +140,25 @@ public class Parameters {
         MIN_DEAD_VICTIMS = DEFAULT_MIN_DEAD_VICTIMS;
         MAX_DEAD_VICTIMS = DEFAULT_MAX_DEAD_VICTIMS;
         LENGTH = DEFAULT_LENGTH;
-	}
+    }
 
-	/**
-	 * Constructor from file. If it doesn't exist, default values will be used.
-	 * If value associated to any of the file parameters doesn't exist or has
+    /**
+     * Constructor from file. If it doesn't exist, default values will be used.
+     * If value associated to any of the file parameters doesn't exist or has
      * wrong format, some parameters will remain with file values and others
      * will have the default ones.
-	 *
-	 * @param file Configuration file where parameters are read
-	 * @throws IOException If problems when opening, reading or closing the file
-	 * @throws NumberFormatException If value associated to any file parameter
+     *
+     * @param file Configuration file where parameters are read
+     * @throws IOException If problems when opening, reading or closing the file
+     * @throws NumberFormatException If value associated to any file parameter
      * doesn't exist or has wrong format.
-	 * @throws IllegalArgumentException If object FileInputStream has a wrong
+     * @throws IllegalArgumentException If object FileInputStream has a wrong
      * format or some of the final parameters is out of range.
-	 */
-	public Parameters(String file)
-	throws IOException, NumberFormatException, IllegalArgumentException {
-		FileInputStream in = null;
-		// All attributes are firstly initialized to 'default'. If the value
+     */
+    public Parameters(String file)
+            throws IOException, NumberFormatException, IllegalArgumentException {
+        FileInputStream in = null;
+        // All attributes are firstly initialized to 'default'. If the value
         // read from file is right, they will get it. They will remain default
         // otherwise.
         boolean newConstant = DEFAULT_IS_CONSTANT;
@@ -184,7 +179,7 @@ public class Parameters {
         int newMaxDeadVictims = DEFAULT_MAX_DEAD_VICTIMS;
         int newLength = DEFAULT_LENGTH;
 
-		try {
+        try {
 
             Properties properties = new Properties();
             in = new FileInputStream(file);
@@ -215,17 +210,16 @@ public class Parameters {
 
             newLength = Integer.parseInt(properties.getProperty(LENGTH_TAG));
 
-			in.close();
+            in.close();
 
-		} catch (FileNotFoundException e) {
-			System.out.println("File does not exist or cannot be opened. Default values "
-                    + "will be used.");
-			throw new IOException("File not found.");
+        } catch (FileNotFoundException e) {
+            System.out.println("File does not exist or cannot be opened. Default values " + "will be used.");
+            throw new IOException("File not found.");
 
-		} finally {
+        } finally {
             IS_CONSTANT = newConstant;
-			SEED = newSeed;
-			PERIOD = newPeriod;
+            SEED = newSeed;
+            PERIOD = newPeriod;
             TIME_BETWEEN_FIRES = newTimeBeetwenFires;
             DEVIATION_FOR_FIRES = newDeviationForFires;
             TRAPPED_TO_VICTIM = newTrappedToVictim;
@@ -241,37 +235,36 @@ public class Parameters {
             MAX_DEAD_VICTIMS = newMaxDeadVictims;
             LENGTH = newLength;
 
-			checkParameters();
+            checkParameters();
 
-			try {
-				in.close();
-			} catch (NullPointerException e) {
-				System.err.println("Error closing the lecture object.");
-			}
-		}
-	}
+            try {
+                in.close();
+            } catch (NullPointerException e) {
+                System.err.println("Error closing the lecture object.");
+            }
+        }
+    }
 
-	/**
-	 * Constructor from explicit values
-	 *
+    /**
+     * Constructor from explicit values
+     *
      * @param constant           Defines if the simulation is going to refresh constantly.
-	 * @param seed               to get a repetitive behaviour at random number sequences
-	 * @param period          how often we refesh the simulator
+     * @param seed               to get a repetitive behaviour at random number sequences
+     * @param period          how often we refesh the simulator
      * @param timeBeetwenFires   Mean of the time beetween new and random fires.
      * @param deviationForFires  Standard deviation of the gaussian generating new fires.
-	 * @throws IllegalArgumentException if any value is out of range
-	 */
-	public Parameters(boolean constant,long seed, int period,
+     * @throws IllegalArgumentException if any value is out of range
+     */
+    public Parameters(boolean constant, long seed, int period,
             double timeBetweenFires, double deviationForFires,
             double trappedToVictim, int minFireStrength, int maxFireStrength,
             int minTrappedVictims, int maxTrappedVictims,
             int minSlightVictims, int maxSlightVictims,
             int minSeriousVictims, int maxSeriousVictims,
-            int minDeadVictims, int maxDeadVictims, int length
-            ) throws IllegalArgumentException {
+            int minDeadVictims, int maxDeadVictims, int length) throws IllegalArgumentException {
         this.IS_CONSTANT = constant;
-		this.SEED = seed;
-		this.PERIOD = period;
+        this.SEED = seed;
+        this.PERIOD = period;
         this.TIME_BETWEEN_FIRES = timeBetweenFires;
         this.DEVIATION_FOR_FIRES = deviationForFires;
         this.TRAPPED_TO_VICTIM = trappedToVictim;
@@ -287,22 +280,22 @@ public class Parameters {
         this.MAX_DEAD_VICTIMS = maxDeadVictims;
         this.LENGTH = length;
 
-		checkParameters();
-	}
+        checkParameters();
+    }
 
-	/**
-	 * Check that parameters values are correct
-	 *
-	 * @throws IllegalArgumentException if any value is out of range
-	 */
-	private void checkParameters() {
-		if (PERIOD < 0){
-			wrongParameter(Integer.toString(PERIOD), PERIOD_TAG);
+    /**
+     * Check that parameters values are correct
+     *
+     * @throws IllegalArgumentException if any value is out of range
+     */
+    private void checkParameters() {
+        if (PERIOD < 0) {
+            wrongParameter(Integer.toString(PERIOD), PERIOD_TAG);
         }
-        if (TIME_BETWEEN_FIRES < 0){
+        if (TIME_BETWEEN_FIRES < 0) {
             wrongParameter(Double.toString(TIME_BETWEEN_FIRES), TIME_BETWEEN_FIRES_TAG);
         }
-        if (DEVIATION_FOR_FIRES < 0){
+        if (DEVIATION_FOR_FIRES < 0) {
             wrongParameter(Double.toString(DEVIATION_FOR_FIRES), DEVIATION_FOR_FIRES_TAG);
         }
         if (TRAPPED_TO_VICTIM < 0 || TRAPPED_TO_VICTIM > 1) {
@@ -317,37 +310,37 @@ public class Parameters {
         if (MAX_TRAPPED_VICTIMS < 0) {
             wrongParameter(Integer.toString(MAX_TRAPPED_VICTIMS), MAX_TRAPPED_VICTIMS_TAG);
         }
-        if ( MIN_TRAPPED_VICTIMS < 0 ||  MIN_TRAPPED_VICTIMS >  MAX_TRAPPED_VICTIMS) {
+        if (MIN_TRAPPED_VICTIMS < 0 || MIN_TRAPPED_VICTIMS > MAX_TRAPPED_VICTIMS) {
             wrongParameter(Integer.toString(MIN_TRAPPED_VICTIMS), MIN_TRAPPED_VICTIMS_TAG);
         }
         if (LENGTH <= 0) {
             wrongParameter(Integer.toString(LENGTH), LENGTH_TAG);
         }
-        
-	}
 
-	/**
-	 * Throws IllegalArgumentException for a wrong parameter
-	 *
-	 * @param value parameter value
-	 * @param key param name
-	 * @throws IllegalArgumentException showing the wrong parameter
-	 */
-	private void wrongParameter(String value, String key) {
-		throw new IllegalArgumentException(key + "= " + value);
-	}
+    }
 
-	/**
-	 * Parameters list
-	 *
-	 * @return every parameter
-	 */
+    /**
+     * Throws IllegalArgumentException for a wrong parameter
+     *
+     * @param value parameter value
+     * @param key param name
+     * @throws IllegalArgumentException showing the wrong parameter
+     */
+    private void wrongParameter(String value, String key) {
+        throw new IllegalArgumentException(key + "= " + value);
+    }
+
+    /**
+     * Parameters list
+     *
+     * @return every parameter
+     */
     @Override
-	public String toString() {
-		String a = "\n";
+    public String toString() {
+        String a = "\n";
         a += "\t" + IS_CONSTANT_TAG + "=" + Boolean.toString(IS_CONSTANT) + "\n";
-		a += "\t" + SEED_TAG + "=" + SEED + "\n";
-		a += "\t" + PERIOD_TAG + "=" + PERIOD;
+        a += "\t" + SEED_TAG + "=" + SEED + "\n";
+        a += "\t" + PERIOD_TAG + "=" + PERIOD;
         a += "\t" + TIME_BETWEEN_FIRES_TAG + "=" + TIME_BETWEEN_FIRES;
         a += "\t" + DEVIATION_FOR_FIRES_TAG + "=" + DEVIATION_FOR_FIRES;
         a += "\t" + TRAPPED_TO_VICTIM_TAG + "=" + TRAPPED_TO_VICTIM;
@@ -364,5 +357,5 @@ public class Parameters {
         a += "\t" + LENGTH_TAG + "=" + LENGTH;
 
         return a;
-	}
+    }
 }

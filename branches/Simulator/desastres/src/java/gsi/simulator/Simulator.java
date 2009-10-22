@@ -225,10 +225,10 @@ public class Simulator {
                         int deadBefore = currentDisaster.getDeadNum();
 
                         //Save the previous marker id's
-                        int slightBeforeId = -1;
-                        int seriousBeforeId = -1;
-                        int trappedBeforeId = -1;
-                        int deadBeforeId = -1;
+                        int slightBeforeId = 0;
+                        int seriousBeforeId = 0;
+                        int trappedBeforeId = 0;
+                        int deadBeforeId = 0;
                         if(slightBefore > 0) {
                             slightBeforeId = currentDisaster.getSlight().get(0).getId();
                         }
