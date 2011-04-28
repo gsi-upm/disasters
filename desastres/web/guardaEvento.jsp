@@ -2,6 +2,9 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ page isELIgnored = "false" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="winterwell.jtwitter.*" %>
+<%@ page import="gsi.twitter.*" %>
+<%@ page import="java.util.Date" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
@@ -31,6 +34,27 @@
         <sql:param value="${param.usuario}"/>
         
     </sql:update>
+
+    <%-- Uncomment this code in order to enable Twitter service for new disasters.
+    DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR
+    <%
+    Twitter twitt = new Twitter("your_username_here","your_password_here");
+    StreetLocator st = new StreetLocator();
+    double lat = Double.parseDouble(request.getParameter("latitud"));
+    double lon = Double.parseDouble(request.getParameter("longitud"));
+    String msg = "New ";
+    msg += request.getParameter("tipo");
+    msg += " at ";
+    msg +=st.getAddress(lat, lon);
+    msg += " on ";
+    msg += new Date();
+    msg += " Size: " + request.getParameter("size");
+    if( msg.length() > 140){
+        msg = msg.substring(0, 134) +"(...)";
+    }
+    twitt.updateStatus(msg);
+    %>
+    --%>
 </c:catch>
 ok
 

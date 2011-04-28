@@ -84,11 +84,11 @@ public class TimerMove extends Thread
 	{
 		
 		System.out.println("LLamada a REST modificando latitud y longitud: "+ latitud + " - " +longitud);
-		String resultado1 = Connection.connect(Environment.DISASTERS+"put/"+id+"/latitud/"+latitud);
-		String resultado2 = Connection.connect(Environment.DISASTERS+"put/"+id+"/longitud/"+longitud);
+		String resultado1 = Connection.connect(Environment.URL+"put/"+id+"/latitud/"+latitud);
+		String resultado2 = Connection.connect(Environment.URL+"put/"+id+"/longitud/"+longitud);
 		//System.out.println("Resultado de la latitud: "+ resultado1);
 		//System.out.println("Resultado de la longitud: "+ resultado2);
-		//llama a la aplicación... le dice el id, latitud y longitud
+		//llama a la aplicacion... le dice el id, latitud y longitud
 		try{
 		this.sleep(500);
 	}

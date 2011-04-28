@@ -8,7 +8,7 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-        
+
          <!-- Application class name -->
     <context-param>
         <param-name>org.restlet.application</param-name>
@@ -25,7 +25,7 @@
      <!-- Catch all requests -->
     <servlet>
         <servlet-name>XpertServlet</servlet-name>
-        <servlet-class>gsi.disasters.XpertServlet</servlet-class>
+        <servlet-class>gsi.xpert.XpertServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RestletServlet</servlet-name>
@@ -84,5 +84,23 @@
     <servlet-mapping>
         <servlet-name>dwr-invoker</servlet-name>
         <url-pattern>/dwr/*</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Simulator -->
+    <servlet>
+        <servlet-name>SimulatorServlet</servlet-name>
+        <servlet-class>simulator.SimulatorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimulatorServlet</servlet-name>
+        <url-pattern>/SimulatorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RunSimulation</servlet-name>
+        <servlet-class>gsi.simulator.RunSimulation</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RunSimulation</servlet-name>
+        <url-pattern>/RunSimulation</url-pattern>
     </servlet-mapping>
 </web-app>

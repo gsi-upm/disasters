@@ -12,9 +12,8 @@ import java.lang.*;
  */
 public class Conecta {
 	
-	
 	/**
-	 * Creamos evento/agente teniendo du tipo, nombre, información y posición.
+	 * Creamos evento/agente teniendo du tipo, nombre, informacion y posicion.
 	 */
 	public Conecta(Position position,String type,String name,String info){
 		//Pasamos a String la latitud y la longitud
@@ -22,14 +21,13 @@ public class Conecta {
 		String latitud = String.valueOf(position.getX());
 		//Crea un fuego en las coordenadas dadas.
 		try{
-			URL url0 = new URL("http://localhost:8080/Disasters/rest/post/type="+type+"&name="+name+"&info=''&latitud="+latitud+"&longitud="+longitud);
+			URL url0 = new URL(Environment.URL + "post/type="+type+"&name="+name+"&info=''&latitud="+latitud+"&longitud="+longitud);
 			//Nos conectamos a la URL
 			conectaWeb(url0);
 		}catch(MalformedURLException me){
 			System.err.println("MalformedURLException: " + me);
 		}
 	}
-	
 	
 	/**
 	 * Conecta a la URL dada, y devuelve en un String el resultado dado
@@ -58,6 +56,4 @@ public class Conecta {
 		}
 		return "error";
 	}
-	
-	
 }

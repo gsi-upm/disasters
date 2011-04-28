@@ -8,7 +8,7 @@ public class WorldObject {
 	/** Tipo */
 	protected String type;
 	
-	/** Posición */
+	/** Posicion */
 	protected Position pos;
 	
 	/** Info */
@@ -26,6 +26,11 @@ public class WorldObject {
 		assert type.equals(Environment.AMBULANCIA)
 						||type.equals(Environment.BOMBERO)
 						||type.equals(Environment.POLICIA)
+						||type.equals(Environment.AMBULANCIA2)
+						||type.equals(Environment.GSO)
+						||type.equals(Environment.MEDICO_CACH)
+						||type.equals(Environment.COORDINADOR_HOSPITAL)
+						||type.equals(Environment.COORDINADOR_MEDICO)
 						||type.equals(Environment.INUNDACION)
 						||type.equals(Environment.TERREMOTO)
 						||type.equals(Environment.FUEGO)
@@ -55,7 +60,7 @@ public class WorldObject {
 	}
 	
 	/**
-	 * Devuelve la posición
+	 * Devuelve la posicion
 	 */
 	public Position getPosition(){
 		return pos;
@@ -69,7 +74,7 @@ public class WorldObject {
 	}
 	
 	/**
-	 * Establece la posición
+	 * Establece la posicion
 	 */
 	public void setPosition(Position pos){
 		this.pos = pos;

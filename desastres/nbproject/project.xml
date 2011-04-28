@@ -6,184 +6,228 @@
             <name>desastres</name>
             <minimum-ant-version>1.6</minimum-ant-version>
             <web-module-libraries>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.ant-contrib.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.catalina.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.com.noelios.restlet.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.commons-beanutils.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.commons-codec.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.commons-collections.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.commons-digester.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.commons-logging.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.hsqldb-2005-08-20.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.httpunit.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.jakarta-oro.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.js.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.json-taglib-0.4.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jsr94.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.jstl.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.junit.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.mysql-connector-java-5.1.5-bin.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.org.restlet.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.servlet.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.slamd_server.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.Tidy.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.standard.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jess.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.bsf-2.3.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.bsh-2.0b4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.commons-logging-1.0.4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.commons-validator-1.1.4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.dwr.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.jakarta-oro-2.0.8.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library dirs="200">
                     <file>${file.reference.log4j-1.2.12.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.bcel.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jtwitter.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.GraphLayout.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jess.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jadex_examples.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-applib-bdi-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jadex_rt.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-applications-bdi-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jadex_standalone.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-applications-bdibpmn-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jadex_tools.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-applications-bpmn-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.janino.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-applications-gpmn-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jhall.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-applications-micro-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jibx-bind.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-bridge-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jibx-extras.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-commons-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.jibx-run.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-javaparser-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.nuggets.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-kernel-application-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.xmlpull_1_1_4.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-kernel-application-opengl-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
-                    <file>${file.reference.xpp3.jar}</file>
+                <library dirs="200">
+                    <file>${file.reference.jadex-kernel-bdi-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-kernel-bdibpmn-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-kernel-bpmn-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-kernel-gpmn-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-kernel-micro-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-nuggets-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-platform-base-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-platform-standalone-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-platform-standalone-launch-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-rules-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-rules-applications-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-rules-tools-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-runtimetools-2.0-rc6.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jadex-xml-2.0-rc6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
