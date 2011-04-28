@@ -19,9 +19,11 @@ import java.io.*;
  */
 public class DisasterApplication extends Application {
 
+	private static final String URL_BASE = "/disasters/RESTFUL/";
+
    /**
     * Constructor (not used)
-  */ 
+	*/
     public DisasterApplication(Context parentContext) {
         super(parentContext);
     }
@@ -59,7 +61,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=id&id="
+                String redirector = URL_BASE + "get.jsp?action=id&id="
                         + request.getAttributes().get("id");
                 
                
@@ -72,7 +74,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 int year = Integer.parseInt((String)request.getAttributes().get("year"));
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=year&year1="
+                String redirector = URL_BASE + "get.jsp?action=year&year1="
                         + year+ "-01-01 00:00:01" + "&year2="+( year + 1 )+"-01-01 00:00:01";
                 
                 //response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
@@ -87,7 +89,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 int year = Integer.parseInt((String)request.getAttributes().get("year"));
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=eventsByYear&year1="
+                String redirector = URL_BASE + "get.jsp?action=eventsByYear&year1="
                         + year+ "-01-01 00:00:01" + "&year2="+( year + 1 )+"-01-01 00:00:01";
                 
                 
@@ -100,7 +102,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 int year = Integer.parseInt((String)request.getAttributes().get("year"));
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=resourcesByYear&year1="
+                String redirector = URL_BASE + "get.jsp?action=resourcesByYear&year1="
                         + year+ "-01-01 00:00:01" + "&year2="+( year + 1 )+"-01-01 00:00:01";
                 
                  response.redirectTemporary(removeBlanks(redirector));
@@ -113,7 +115,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 int year = Integer.parseInt((String)request.getAttributes().get("year"));
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=peopleByYear&year1="
+                String redirector = URL_BASE + "get.jsp?action=peopleByYear&year1="
                         + year+ "-01-01 00:00:01" + "&year2="+( year + 1 )+"-01-01 00:00:01";
                 
               
@@ -126,7 +128,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 
-                String redirector = "/Disasters/RESTFUL/delete.jsp?action=id&id="
+                String redirector = URL_BASE + "delete.jsp?action=id&id="
                         + request.getAttributes().get("id");
                 
                 //response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
@@ -140,7 +142,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 
-                String redirector = "/Disasters/RESTFUL/delete.jsp?action=events";
+                String redirector = URL_BASE + "delete.jsp?action=events";
                 
                 //response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
                 response.redirectTemporary(removeBlanks(redirector));
@@ -152,7 +154,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 
-                String redirector = "/Disasters/RESTFUL/delete.jsp?action=all";
+                String redirector = URL_BASE + "delete.jsp?action=all";
                 
                 //response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
                 response.redirectTemporary(removeBlanks(redirector));
@@ -167,7 +169,7 @@ public class DisasterApplication extends Application {
                 
                
                 
-                String redirector = "/Disasters/RESTFUL/postFul.jsp?"                        
+                String redirector = URL_BASE + "postFul.jsp?"
                         + request.getAttributes().get("params")+"&date="+
                          new Timestamp(new Date().getTime()).toString()+"&state=active&user=1";
                 
@@ -194,7 +196,7 @@ public class DisasterApplication extends Application {
                 int id = Integer.parseInt((String) request.getAttributes().get("id"));
                 String value = (String) request.getAttributes().get("value");
                 
-                String redirector = "/Disasters/RESTFUL/put.jsp?action="+parameter+"&id="+id+"&"+"value="+value;
+                String redirector = URL_BASE + "put.jsp?action="+parameter+"&id="+id+"&"+"value="+value;
                 
                 
                 
@@ -218,7 +220,7 @@ public class DisasterApplication extends Application {
                 int id = Integer.parseInt((String) request.getAttributes().get("id"));
                 String action = (String) request.getAttributes().get("action");
                              
-                String redirector = "/Disasters/RESTFUL/put.jsp?action="+action+"&id="+id;
+                String redirector = URL_BASE + "put.jsp?action="+action+"&id="+id;
                   
                     if(!(action.equals("add") || action.equals("remove") ))
                         {response.setEntity("Action is not correct (add or remove).", MediaType.TEXT_PLAIN);}
@@ -248,7 +250,7 @@ public class DisasterApplication extends Application {
                 valueParameter+=increment;
                
                 
-                String redirector = "/Disasters/RESTFUL/put.jsp?action="+parameter+"&id="+id+"&value="+valueParameter;
+                String redirector = URL_BASE + "/put.jsp?action="+parameter+"&id="+id+"&value="+valueParameter;
                   
                     
                 response.redirectTemporary(removeBlanks(redirector));
@@ -265,10 +267,8 @@ public class DisasterApplication extends Application {
             public void handle(Request request, Response response) {
                 String event = (String)request.getAttributes().get("event");
                 String redirector;
-                if (event!=null) {redirector =
-                "/Disasters/RESTFUL/get.jsp?action=type&type="+ event;}
-                else{redirector =
-                "/Disasters/RESTFUL/get.jsp?action=item&item=event";}
+                if (event!=null) {redirector = URL_BASE + "get.jsp?action=type&type="+ event;}
+                else{redirector = URL_BASE + "get.jsp?action=item&item=event";}
                 response.redirectTemporary(removeBlanks(redirector));
             }
         };
@@ -279,10 +279,8 @@ public class DisasterApplication extends Application {
             public void handle(Request request, Response response) {
                 String event = (String)request.getAttributes().get("resource");
                 String redirector;
-                if (event!=null) {redirector =
-                "/Disasters/RESTFUL/get.jsp?action=type&type="+ event;}
-                else{redirector =
-                "/Disasters/RESTFUL/get.jsp?action=item&item=resource";}
+                if (event!=null) {redirector = URL_BASE + "get.jsp?action=type&type="+ event;}
+                else{redirector = URL_BASE + "get.jsp?action=item&item=resource";}
                 response.redirectTemporary(removeBlanks(redirector));
             }
         };
@@ -294,10 +292,8 @@ public class DisasterApplication extends Application {
             public void handle(Request request, Response response) {
                 String event = (String)request.getAttributes().get("people");
                 String redirector;
-                if (event!=null) {redirector =
-                "/Disasters/RESTFUL/get.jsp?action=type&type="+event;}
-                else{redirector =
-                "/Disasters/RESTFUL/get.jsp?action=item&item=people";}
+                if (event!=null) {redirector = URL_BASE + "get.jsp?action=type&type="+event;}
+                else{redirector = URL_BASE + "get.jsp?action=item&item=people";}
                 response.redirectTemporary(removeBlanks(redirector));
             }
         };
@@ -321,7 +317,7 @@ public class DisasterApplication extends Application {
                 //En caso de fecha no correcta pasando los 3 parametors, imprime un mensaje de error
                 //si se mete entera mal hace lo que puede...
                if(!fecha_correcta)response.setEntity("Date format is not correct. (YYYY-MM-DD)", MediaType.TEXT_PLAIN);
-               else{String redirector = "/Disasters/RESTFUL/get.jsp?action=all&fecha="+redirector_date + " 00:00:01";
+               else{String redirector = URL_BASE + "get.jsp?action=all&fecha="+redirector_date + " 00:00:01";
                     response.redirectTemporary(removeBlanks(redirector));}
             };
         };
@@ -345,7 +341,7 @@ public class DisasterApplication extends Application {
                 //En caso de fecha no correcta pasando los 3 parametors, imprime un mensaje de error
                 //si se mete entera mal hace lo que puede...
                if(!fecha_correcta)response.setEntity("Date format is not correct. (YYYY-MM-DD)", MediaType.TEXT_PLAIN);
-               else{String redirector = "/Disasters/RESTFUL/get.jsp?action=events&fecha="+redirector_date + " 00:00:01";
+               else{String redirector = URL_BASE + "get.jsp?action=events&fecha="+redirector_date + " 00:00:01";
                     response.redirectTemporary(removeBlanks(redirector));}
             };
         };
@@ -370,7 +366,7 @@ public class DisasterApplication extends Application {
                 //si se mete entera mal hace lo que puede...
                if(!fecha_correcta)response.setEntity("Date format is not correct. (YYYY-MM-DD)", MediaType.TEXT_PLAIN);
                
-               else{String redirector = "/Disasters/RESTFUL/get.jsp?action=resources&fecha="+redirector_date + " 00:00:01";
+               else{String redirector = URL_BASE + "get.jsp?action=resources&fecha="+redirector_date + " 00:00:01";
                     response.redirectTemporary(removeBlanks(redirector));}
             };
         };
@@ -394,7 +390,7 @@ public class DisasterApplication extends Application {
                 //En caso de fecha no correcta pasando los 3 parametors, imprime un mensaje de error
                 //si se mete entera mal hace lo que puede...
                if(!fecha_correcta)response.setEntity("Date format is not correct. (YYYY-MM-DD)", MediaType.TEXT_PLAIN);
-               else{String redirector = "/Disasters/RESTFUL/get.jsp?action=people&fecha="+redirector_date + " 00:00:01";
+               else{String redirector = URL_BASE + "get.jsp?action=people&fecha="+redirector_date + " 00:00:01";
                     response.redirectTemporary(removeBlanks(redirector));}
             };
         };
@@ -404,8 +400,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                int id = Integer.parseInt((String) request.getAttributes().get("id"));
-                String redirector=
-                "/Disasters/RESTFUL/get.jsp?action=associated&type=resource&id="+id;
+                String redirector= URL_BASE + "get.jsp?action=associated&type=resource&id="+id;
                 response.redirectTemporary(removeBlanks(redirector));
             }
         };
@@ -415,8 +410,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                int id = Integer.parseInt((String) request.getAttributes().get("id"));
-                String redirector=
-                "/Disasters/RESTFUL/get.jsp?action=associated&type=people&id="+id;
+                String redirector= URL_BASE + "get.jsp?action=associated&type=people&id="+id;
                 response.redirectTemporary(removeBlanks(redirector));
             }
         };
@@ -427,8 +421,7 @@ public class DisasterApplication extends Application {
             @Override
             public void handle(Request request, Response response) {
                 String event = (String)request.getAttributes().get("resource");
-                String redirector=
-                "/Disasters/RESTFUL/get.jsp?action=free";
+                String redirector= URL_BASE + "get.jsp?action=free";
                 response.redirectTemporary(removeBlanks(redirector));
             }
         };
@@ -442,7 +435,7 @@ public class DisasterApplication extends Application {
                
                 String redirector_date = (String)request.getAttributes().get("dateTime");
                     
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=eventsModified&fecha="+redirector_date;
+                String redirector = URL_BASE + "get.jsp?action=eventsModified&fecha="+redirector_date;
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -454,7 +447,7 @@ public class DisasterApplication extends Application {
                
                 String redirector_date = (String)request.getAttributes().get("dateTime");
                     
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=peopleModified&fecha="+redirector_date;
+                String redirector = URL_BASE + "get.jsp?action=peopleModified&fecha="+redirector_date;
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -466,7 +459,7 @@ public class DisasterApplication extends Application {
                
                 String redirector_date = (String)request.getAttributes().get("dateTime");
                     
-                String redirector = "/Disasters/RESTFUL/get.jsp?action=resourcesModified&fecha="+redirector_date;
+                String redirector = URL_BASE + "get.jsp?action=resourcesModified&fecha="+redirector_date;
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -479,7 +472,7 @@ public class DisasterApplication extends Application {
                
                 String redirector_date = (String)request.getAttributes().get("dateTime");
                     
-                String redirector = "/Disasters/RESTFUL/get.jsp?mode=xml&action=eventsModified&fecha="+redirector_date;
+                String redirector = URL_BASE + "get.jsp?mode=xml&action=eventsModified&fecha="+redirector_date;
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -491,7 +484,7 @@ public class DisasterApplication extends Application {
                
                 String redirector_date = (String)request.getAttributes().get("dateTime");
                     
-                String redirector = "/Disasters/RESTFUL/get.jsp?mode=xml&action=peopleModified&fecha="+redirector_date;
+                String redirector = URL_BASE + "get.jsp?mode=xml&action=peopleModified&fecha="+redirector_date;
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -503,7 +496,7 @@ public class DisasterApplication extends Application {
                
                 String redirector_date = (String)request.getAttributes().get("dateTime");
                     
-                String redirector = "/Disasters/RESTFUL/get.jsp?mode=xml&action=resourcesModified&fecha="+redirector_date;
+                String redirector = URL_BASE + "get.jsp?mode=xml&action=resourcesModified&fecha="+redirector_date;
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -512,7 +505,7 @@ public class DisasterApplication extends Application {
         Restlet eventsXML = new Restlet(getContext()) {
             @Override
             public void handle(Request request, Response response) {
-               String redirector = "/Disasters/RESTFUL/get.jsp?mode=xml&action=item&item=event";
+               String redirector = URL_BASE + "get.jsp?mode=xml&action=item&item=event";
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -521,7 +514,7 @@ public class DisasterApplication extends Application {
         Restlet peopleXML = new Restlet(getContext()) {
             @Override
             public void handle(Request request, Response response) {
-               String redirector = "/Disasters/RESTFUL/get.jsp?mode=xml&action=item&item=people";
+               String redirector = URL_BASE + "get.jsp?mode=xml&action=item&item=people";
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };
@@ -530,7 +523,7 @@ public class DisasterApplication extends Application {
         Restlet resourcesXML = new Restlet(getContext()) {
             @Override
             public void handle(Request request, Response response) {
-                String redirector = "/Disasters/RESTFUL/get.jsp?mode=xml&action=item&item=resource";
+                String redirector = URL_BASE + "get.jsp?mode=xml&action=item&item=resource";
                     response.redirectTemporary(removeBlanks(redirector));
             };
         };

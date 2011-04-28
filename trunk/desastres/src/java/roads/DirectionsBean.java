@@ -37,10 +37,6 @@ public class DirectionsBean {
     }
     
     public int[] getResourcesList() {
-        System.out.print("resources: ");
-        for (int i=0; i<resourcesList.length; i++)
-            System.out.print(resourcesList[i]);
-        System.out.println();
         return resourcesList;
     }
 
@@ -49,7 +45,6 @@ public class DirectionsBean {
     }
 
     public void sendDirections() throws InterruptedException {
-        System.out.println("sendDirections: ");
         int ids[] = getResourcesList();
         HashMap<String, String> hm = new HashMap();
         for (int i = 0; i < ids.length; i++) {

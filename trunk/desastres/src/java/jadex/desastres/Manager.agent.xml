@@ -5,72 +5,51 @@
 	ambulancias que consideremos.
 -->
 
-<agent xmlns="http://jadex.sourceforge.net/jadex"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://jadex.sourceforge.net/jadex 
-	                    http://jadex.sourceforge.net/jadex-0.96.xsd"
-	name="Manager"
-	package="jadex.desastres">
+<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
+	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+       name="Manager"
+	   package="jadex.desastres">
 
 	<imports>
 		<import>jadex.*</import>
-		<import>jadex.planlib.*</import>
+		<import>jadex.bdi.planlib.*</import>
 		<import>java.util.logging.*</import>
+		<import>jadex.bdi.planlib.cms.*</import>
 	</imports>
 
 	<capabilities>
-		<capability name="startcap" file="StartAgents"/>
-		<capability name="amscap" file="jadex.planlib.AMS"/>
+		<capability name="cmscap" file="CMS"/>
 	</capabilities>
 
 	<goals>
-		<achievegoalref name="start_agents">
-			<concrete ref="startcap.start_agents"/>
-			<deliberation>
-				<!-- Espera a crear todos los agentes antes de destruir el manager. -->
-				<inhibits ref="ams_destroy_agent"/>
-			</deliberation>
+		<!-- Objetivo usado para crear el manager -->
+		<achievegoalref name="cms_create_component">
+			<concrete ref="cmscap.cms_create_component"/>
 		</achievegoalref>
-		<!-- Objetivo usado para destruir el manager. -->
-		<achievegoalref name="ams_destroy_agent">
-			<concrete ref="amscap.ams_destroy_agent"/>
+
+		<!-- Objetivo usado para destruir el manager -->
+		<achievegoalref name="cms_destroy_component">
+			<concrete ref="cmscap.cms_destroy_component"/>
 		</achievegoalref>
+
+		<performgoal name="managerGoal"/>
 	</goals>
+
+	<plans>
+		<plan name="managerPlan">
+			<body class="ManagerPlan"/>
+			<trigger>
+				<goal ref="managerGoal"/>
+			</trigger>
+		</plan>
+	</plans>
 
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="start_agents">
-					<parameterset ref="agentinfos">
-					<!-- El %n asigna un entero, es decir: Environment0,Ambulancia0...-->
-						<value>new StartAgentInfo("jadex.desastres.Environment", "Environment_%n", 2000, null)</value>
-						<value>new StartAgentInfo("jadex.desastres.police", "Policia_%n", 0, null)</value>
-						<value>new StartAgentInfo("jadex.desastres.firemen", "Bombero_%n", 0, null)</value>
-						<value>new StartAgentInfo("jadex.desastres.ambulance", "Ambulancia_%n", 0, null)</value>
-						<value>new StartAgentInfo("jadex.desastres.central", "Central_%n", 0, null)</value>
-					</parameterset>
-				</initialgoal>
-				<initialgoal ref="ams_destroy_agent">
-					<parameter ref="agentidentifier">
-						<value>$agent.getAgentIdentifier()</value>
-					</parameter>
-				</initialgoal>
-			</goals>
-		</configuration>
-		<configuration name="Dos ambulancias">
-			<goals>
-				<initialgoal ref="start_agents">
-					<parameterset ref="agentinfos">
-						<value>new StartAgentInfo("jadex.desastres.Environment", "Environment_%n", 2000, null)</value>
-						<value>new StartAgentInfo("jadex.desastres.Ambulancia", "Ambulancia_%n", 0, null)</value>
-						<value>new StartAgentInfo("jadex.desastres.Ambulancia", "Ambulancia_%n", 0, null)</value>
-					</parameterset>
-				</initialgoal>
-				<initialgoal ref="ams_destroy_agent">
-					<parameter ref="agentidentifier">
-						<value>$agent.getAgentIdentifier()</value>
-					</parameter>
-				</initialgoal>
+				<initialgoal ref="managerGoal"/>
 			</goals>
 		</configuration>
 	</configurations>

@@ -59,7 +59,7 @@ public class People {
 	private int user;
 
 	/**
-	 * true si hay alguna ambulancia llendo a por él
+	 * true si hay alguna ambulancia yendo a por el
 	 */
 	private boolean atendido;
 	/**

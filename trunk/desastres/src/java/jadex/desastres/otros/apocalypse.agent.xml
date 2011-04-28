@@ -1,0 +1,83 @@
+<!--
+  <H3>Apocalypse.</H3>
+
+  This agent search for unattended disasters and make them bigger
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
+	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+       name="apocalypse"
+	   package="jadex.desastres.otros">
+
+	<imports>
+		<import>jadex.desastres.*</import>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>jadex.base.fipa.SFipa</import>
+		<import>jadex.bridge.fipa.AgentIdentifier</import>
+		<import>java.util.logging.*</import>
+		 
+	</imports>
+	
+
+	<beliefs>
+		<!-- Creamos el agente como instancia del Entorno. -->
+		<belief name="env" class="Environment">
+			<fact>Environment.getInstance(Environment.APOCALIPSIS,$scope.getAgentName(),$beliefbase.centralMadrid)</fact>
+ 		</belief>
+		
+		<!-- Definimos la posicion de la central en Madrid -->
+		<belief name="centralMadrid" class="Position">
+			<fact>new Position(40.45, -3.70)</fact> <!-- Posición aleatoria de la central -->
+		</belief>
+
+		<!--  -->
+		<belief name="unattendedDisaster" class="Disaster" evaluationmode="dynamic">
+			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
+		</belief>
+
+	</beliefs>
+
+	<goals>
+		<!-- Look for all the disasters in the map  -->
+		<performgoal name="searchDisaster" retry="true" exclude="never"/>
+		
+		<!-- When a disaster has been unattended for a while, make it bigger and hurt people around -->
+		<achievegoal name="harm"/>
+	</goals>
+
+	<plans>
+		<!-- Plan to search disasters -->
+		<plan name="searchDisaster-plan">
+			<body class="SearchDisasterPlan"/>
+			<trigger>
+				<goal ref="searchDisaster"/>
+			</trigger>
+			
+		</plan>
+		<!-- Plan to cause trouble -->
+		<plan name="harm-plan">
+			<body class="HarmPlan"/>
+			<trigger>
+				<goal ref="harm"/>
+			</trigger>
+		</plan>
+	</plans>
+ 	<!-- Initially we activate the search plan -->
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="searchDisaster"/>
+			</goals>
+		</configuration>
+	</configurations>
+
+	<properties>
+		<property name="logging.level">Level.INFO</property>
+		<property name="logging.useParentHandlers">true</property>
+	</properties>
+
+</agent>

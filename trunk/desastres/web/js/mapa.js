@@ -29,6 +29,7 @@ var estado_Experto = "off";
 var tiempoActualizacion = 1500;
 var tiempoInicial = 5000;
 
+var url_base = "/disasters/Xpert";
 
 function initialize() {
     if (GBrowserIsCompatible()) {
@@ -233,33 +234,58 @@ function generateBuilding(type, mensaje, latitud, longitud){
          
 function hideBuilding(type){
     var matrix;
-    if (type=='hospital'){   matrix=hospitals; }
-    if (type=='policeStation'){   matrix=policeStations; }
-    if (type=='firemenStation'){   matrix=firemenStations; }
-    for(i=0;i<matrix.length;i++){
+    if(type=='hospital'){
+		matrix=hospitals;
+		hospitals = new Array;
+		hospIndex = 0;
+	}else if(type=='policeStation'){
+		matrix=policeStations;
+		policeStations = new Array;
+		policeIndex = 0;
+	}else if(type=='firemenStation'){
+		matrix=firemenStations;
+		firemenStations = new Array;
+		fireIndex = 0;
+	}
+    for(i=0; i<matrix.length; i++){
         map.removeOverlay(matrix[i]);
     }
-}
-         
-function visualize(selected, type){
-    if (type=='hospital'){
-        if(selected){showHospitals();}
-        else {hideBuilding (type);}
-    }
-    if (type=='policeStation'){
-        if(selected){showPoliceStations();}
-        else {hideBuilding (type);}
-    }
-    if (type=='firemenStation'){
-        if(selected){showFiremenStations();}
-        else {hideBuilding (type);}
-    }
-    
+	if(type=='hospital'){
+		hospitals = matrix;
+		hospIndex = matrixIndex;
+	}else if(type=='policeStation'){
+		policeStations = matrix;
+		policeIndex = matrixIndex;
+	}else if(type=='firemenStation'){
+		firemenStations = matrix;
+		fireIndex = matrixIndex;
+	}
 }
 
- 	
-	
-	
+function visualize(selected, type){
+    if(type=='hospital'){
+        if(selected){
+			showHospitals();
+		}else{
+			hideBuilding (type);
+		}
+    }
+    if(type=='policeStation'){
+        if(selected){
+			showPoliceStations();
+		}else{
+			hideBuilding (type);
+		}
+    }
+    if(type=='firemenStation'){
+        if(selected){
+			showFiremenStations();
+		}else{
+			hideBuilding (type);
+		}
+    }
+}
+
 function generaMarcador(evento, caracter){
 		
     var opciones;
@@ -271,8 +297,8 @@ function generaMarcador(evento, caracter){
         if (evento.tipo=="fire"){
             icono = new GIcon(G_DEFAULT_ICON);
             icono.image = "markers/fuego.png";
-            if(evento.estado=="controlled"){icono.image ="markers/fuego_control.png"}
-                            
+            // map.addOverlay(new EInsert(new GLatLng(evento.latitud, evento.longitud), "images/anifire.gif", new GSize(800,800), 14));
+            if(evento.estado=="controlled"){icono.image ="markers/fuego_control.png"}              
         }
         //Inundación
         if (evento.tipo=="flood"){
@@ -285,11 +311,8 @@ function generaMarcador(evento, caracter){
             icono = new GIcon(G_DEFAULT_ICON);
             icono.image = "markers/casa.png";
             if(evento.estado=="controlled")icono.image ="markers/casa_control.png";
-        }
-                        
-                       
+        }            
         opciones = { icon:icono }; //No se pueden arrastrar
-			
     }
     //es un recurso
     if (evento.marcador=="resource"){
@@ -305,14 +328,10 @@ function generaMarcador(evento, caracter){
             icono.image = "markers/bombero"+evento.cantidad+".png";
         }
         //es una ambulancia
-        if (evento.tipo=="ambulance"){
+        if (evento.tipo=="ambulance" || evento.tipo=="ambulancia"){
             icono.image = "markers/ambulancia"+evento.cantidad+".png";
-        }
-				
+        }	
         opciones = { icon:icono, draggable: true }; //Para que se pueda arrastrar
-		
-			
-				
     }
     //es una víctima
     if (evento.marcador=="people"){
@@ -412,9 +431,9 @@ function generaMarcador(evento, caracter){
 		
     }
     
-    if (!(evento.marcador=="resource" && caracter==1)){
+    //if (!(evento.marcador=="resource" && caracter==1)){
         map.addOverlay(marker);
-    }
+    //}
     return marker;
 }
 
@@ -688,7 +707,7 @@ function obtiene_fecha() {
  
  
 function lanzaExperto(){
-    $.get('/Disasters/Xpert',{'action':"start"}, function(data) {
+    $.get(url_base,{'action':"start"}, function(data) {
         // alert(data);
         $('#screen').html(data);});
          
@@ -713,7 +732,7 @@ function lanzaExperto(){
 function avisaExperto(){
     if(estado_Experto == "on"){
           
-        $.get('/Disasters/Xpert',{'action':"call"}, function(data) {
+        $.get(url_base,{'action':"call"}, function(data) {
             alert(data);
             $('#screen').append(data);});
           
@@ -725,7 +744,7 @@ function avisaExperto(){
 }
 
 function stopExperto(){
-    $.get('/Disasters/Xpert',{'action':"stop"},function(data){
+    $.get(url_base,{'action':"stop"},function(data){
         
         estado_Experto = "off";
         

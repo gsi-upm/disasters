@@ -61,7 +61,8 @@
                      <c:set var="item">
                         <c:choose>
                             <c:when test="${param.type=='fire'||param.type=='flood'||param.type=='collapse'}">event</c:when>
-                            <c:when test="${param.type=='police'||param.type=='firemen'||param.type=='ambulance'}">resource</c:when>
+                            <c:when test="${param.type=='police'||param.type=='firemen'||param.type=='ambulance'||
+								param.type=='ambulancia'||param.type=='grupoSanitarioOperativo'||param.type=='medicoCACH'||param.type=='coordinadorHospital'||param.type=='coordinadorMedico'}">resource</c:when>
                             <c:when test="${param.type=='slight'||param.type=='serious'||param.type=='dead'||param.type=='trapped'}">people</c:when>
                             <c:otherwise>
                                 <jsp:forward page="error.jsp">

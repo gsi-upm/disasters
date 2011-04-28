@@ -9,7 +9,7 @@ public class DBManager {
     /**
      * URL for Disasters2.0 application REST interface
      **/
-    private final static String URL_BASE = "http://localhost:8080/Disasters/rest/";
+    private static final String URL_BASE = "http://localhost:8080/disasters/rest/";
 
     public DBManager() {
     }
@@ -50,7 +50,10 @@ public class DBManager {
         StringTokenizer stnizer = new StringTokenizer(response);
         int aux[] = new int[100];
         int number = 0;
-        String tk = stnizer.nextToken("{");
+        String tk;
+        if(stnizer.hasMoreTokens()){
+        	tk = stnizer.nextToken("{");
+        }
         while (stnizer.hasMoreElements()) {
             tk = stnizer.nextToken("{");
             tk = tk.substring(5, tk.indexOf(','));
@@ -62,7 +65,7 @@ public class DBManager {
         for (int i = 0; i < number; i++) {
             ids[i] = aux[i];
         }
-        return ids;
+      return ids;
     }
     
 
