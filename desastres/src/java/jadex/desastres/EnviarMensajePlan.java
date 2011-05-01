@@ -36,7 +36,7 @@ public abstract class EnviarMensajePlan extends Plan {
 
 	protected void enviarRespuesta(String evento, String respuesta){
 		IMessageEvent solReq = (IMessageEvent) getReason();
-		IMessageEvent msgResp = getEventbase().createReply(solReq,evento);
+		IMessageEvent msgResp = getEventbase().createReply(solReq, evento);
 		msgResp.getParameter(SFipa.CONTENT).setValue(respuesta);
 		sendMessage(msgResp);
 	}

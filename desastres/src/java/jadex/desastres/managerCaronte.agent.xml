@@ -1,0 +1,56 @@
+<!--
+	<h3>Agente manager</h3>
+
+	Usado para lanzar el entorno y los agentes necesarios
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
+	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+       name="managerCaronte"
+	   package="jadex.desastres">
+
+	<imports>
+		<import>jadex.*</import>
+		<import>jadex.bdi.planlib.*</import>
+		<import>java.util.logging.*</import>
+		<import>jadex.bdi.planlib.cms.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="cmscap" file="CMS"/>
+	</capabilities>
+
+	<goals>
+		<!-- Objetivo usado para crear el manager -->
+		<achievegoalref name="cms_create_component">
+			<concrete ref="cmscap.cms_create_component"/>
+		</achievegoalref>
+
+		<!-- Objetivo usado para destruir el manager -->
+		<achievegoalref name="cms_destroy_component">
+			<concrete ref="cmscap.cms_destroy_component"/>
+		</achievegoalref>
+
+		<performgoal name="managerCaronteGoal"/>
+	</goals>
+
+	<plans>
+		<plan name="managerCaronte-plan">
+			<body class="ManagerCarontePlan"/>
+			<trigger>
+				<goal ref="managerCaronteGoal"/>
+			</trigger>
+		</plan>
+	</plans>
+	
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="managerCaronteGoal"/>
+			</goals>
+		</configuration>
+	</configurations>
+
+</agent>

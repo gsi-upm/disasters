@@ -1,0 +1,30 @@
+<!--
+  <h3>Gerocultor</h3>
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
+	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+       name="gerocultor"
+	   package="jadex.desastres.caronte.gerocultor">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+	</imports>
+
+	<beliefs>
+	</beliefs>
+
+	<goals>
+	</goals>
+
+	<plans>
+	</plans>
+
+	<events>
+	</events>
+
+	<configurations>
+	</configurations>
+</agent>

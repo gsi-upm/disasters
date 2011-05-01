@@ -1,17 +1,9 @@
 package gsi.simulator;
 
 import gsi.simulator.Logger.Logger;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.io.IOException;
-import gsi.disasters.Disaster;
-import gsi.disasters.DisasterType;
-import gsi.disasters.StateType;
-import gsi.disasters.SizeType;
-import gsi.disasters.DensityType;
-import gsi.disasters.Person;
-import gsi.disasters.InjuryDegree;
+import gsi.disasters.*;
 import gsi.simulator.rest.EventsManagement;
 
 /**
@@ -69,7 +61,7 @@ public class Simulator {
      * Runs a simulation loop which lasts the specified time
      * @param howLong length of the simulation
      */
-    private void simulateLoop(int howLong, int victims0, int fires0) {
+    private void simulateLoop(int howLong, int victims0, int fires0, String proyect) {
         pause = false;
         Event currentEvent = Event.generateNewFire(0);
         Event firstRefresh = Event.generateRefresh(null, generator.refreshPeriod());
@@ -108,10 +100,18 @@ public class Simulator {
 
                 //If it's not an initial fire or there aren't initial victims, we get a random number
                 else {
-                    initialSlight = generator.initialSlightVictims();
-                    initialSerious = generator.initialSeriousVictims();
-                    initialTrapped = generator.initialTrappedVictims();
-                    initialDead = generator.initialDeadVictims();
+					int victimas = generator.initialSlightVictims();
+					int mean = victimas/4;
+                    int rest = victimas - 3*mean;
+
+                    initialSlight = rest;
+                    initialSerious = mean;
+                    initialTrapped = mean;
+                    initialDead = mean;
+                    //initialSlight = generator.initialSlightVictims();
+                    //initialSerious = generator.initialSeriousVictims();
+                    //initialTrapped = generator.initialTrappedVictims();
+                    //initialDead = generator.initialDeadVictims();
                 }
                 
                 //List to insert in the Disaster instance
@@ -121,8 +121,8 @@ public class Simulator {
                 List<Person> dead = new ArrayList<Person>();
 
                 //Random latitude and longitude (in Madrid!)
-                double latitude = generator.randomLatitude();
-                double longitude = generator.randomLongitude();
+                double latitude = generator.randomLatitude(proyect);
+                double longitude = generator.randomLongitude(proyect);
 
                 //Saves the disaster in the DB and gets its id
                 int idDisaster = EventsManagement.insertFire(latitude, longitude,
@@ -170,9 +170,8 @@ public class Simulator {
                         dead.add(VictimManager.generateDefaultDead(id));
                     }
                 }
-
                 //Generates the Disaster object
-                Disaster newDisaster = new Disaster(idDisaster, DisasterType.FIRE, 
+                Disaster newDisaster = new Disaster(idDisaster, DisasterType.FIRE,
                         "First_fire", "INFO", "DESCRIPTION", "ADDRESS", longitude, latitude,
                         StateType.ACTIVE, size, density, slight, serious, dead,
                         trapped, 0, 0, 0, strength);
@@ -410,12 +409,12 @@ public class Simulator {
      /**
      * Runs the simulation with a random value of initial victims and fires
      */
-    public void runSimulation() {
+    public void runSimulation(String proyect) {
         //Inicialization
         LOGGER.info("Simulation beginning. Length = " + this.generator.params.LENGTH);
 
         //Simulation loop running
-        this.simulateLoop(this.generator.params.LENGTH, 0, 0);
+        this.simulateLoop(this.generator.params.LENGTH, 0, 0, proyect);
         LOGGER.info("End of simulation");
     }
 
@@ -424,12 +423,12 @@ public class Simulator {
      * @param victims0 number of initial victims
      * @param fires0 number of initial fires
      */
-    public void runSimulation(int victims0, int fires0) {
+    public void runSimulation(int victims0, int fires0, String proyect) {
         //Inicialization
         LOGGER.info("Simulation beginning. Length = " + this.generator.params.LENGTH);
 
         //Simulation loop running
-        this.simulateLoop(this.generator.params.LENGTH, victims0, fires0);
+        this.simulateLoop(this.generator.params.LENGTH, victims0, fires0, proyect);
         LOGGER.info("End of simulation");
     }
 
@@ -449,7 +448,7 @@ public class Simulator {
         LOGGER.info("Simulation beginning. Length = " + sim.generator.params.LENGTH);
 
          //Simulation loop running
-        sim.simulateLoop(sim.generator.params.LENGTH, 0, 0);
+        sim.simulateLoop(sim.generator.params.LENGTH, 0, 0, "disasters");
         LOGGER.info("End of simulation");
     }
 }

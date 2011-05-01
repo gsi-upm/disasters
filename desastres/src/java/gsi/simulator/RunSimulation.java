@@ -6,7 +6,6 @@
 package gsi.simulator;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,15 +36,16 @@ public class RunSimulation extends HttpServlet {
             try {
                 int victims0 = Integer.parseInt(request.getParameter("victims0"));
                 int fires0 = Integer.parseInt(request.getParameter("fires0"));
+				String proyect = request.getParameter("proyectName");
 
                 if ((victims0 == 0) || (fires0 == 0)) {
-                    sim.runSimulation();
+                    sim.runSimulation(proyect);
                 }
                 else {
-                    sim.runSimulation(victims0, fires0);
+                    sim.runSimulation(victims0, fires0, proyect);
                 }
             } catch (Exception e) {
-                sim.runSimulation();
+                sim.runSimulation("");
             } finally {
                 response.sendRedirect(URL_BASE + "index.jsp?alert=true");
             }

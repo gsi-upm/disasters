@@ -52,7 +52,6 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-
 package org.securityfilter.example;
 
 /**
@@ -63,33 +62,35 @@ package org.securityfilter.example;
  */
 public interface Constants {
 
-   // shared constants
-   public static final String COMMON_TITLE_BASE = "SecurityFilter Example Application: ";
-   public static final String VALID_USERNAME = "username";
-   public static final String VALID_PASSWORD = "password";
-   public static final String VALID_USERNAME2 = "username2";
-   public static final String VALID_PASSWORD2 = "password2";
-   public static final String VALID_ROLE = "inthisrole";
+	// shared constants
+	public static final String COMMON_TITLE_BASE = "SecurityFilter Example Application: ";
+	public static final String VALID_USERNAME = "admin";
+	public static final String VALID_USERNAME2 = "user";
+	public static final String VALID_USERNAME3 = "agent";
+	public static final String VALID_USERNAME4 = "citizen";
+	public static final String VALID_PASSWORD = "pass";
+	public static final String VALID_ROLE = "administrator";
+	public static final String VALID_ROLE2 = "agent";
+	public static final String VALID_ROLE3 = "citizen";
 
-   // home page constants
-   public static final String HOME_TITLE = COMMON_TITLE_BASE + "Home";
-   public static final String HOME_FORM_ID = "homeForm";
-   public static final String HOME_POST_FIELD = "postMe";
+	// home page constants
+	public static final String HOME_TITLE = COMMON_TITLE_BASE + "Home";
+	public static final String HOME_FORM_ID = "homeForm";
+	public static final String HOME_POST_FIELD = "postMe";
 
-   // login form constants
-   public static final String LOGIN_TITLE = COMMON_TITLE_BASE + "Login Page";
-   public static final String LOGIN_FORM_ID = "loginForm";
-   public static final String LOGIN_FORM_ACTION = "j_security_check";
-   public static final String LOGIN_USERNAME_FIELD = "j_username";
-   public static final String LOGIN_PASSWORD_FIELD = "j_password";
-   public static final String LOGIN_REMEMBERME_FIELD = "j_rememberme";
+	// login form constants
+	public static final String LOGIN_TITLE = COMMON_TITLE_BASE + "Login Page";
+	public static final String LOGIN_FORM_ID = "loginForm";
+	public static final String LOGIN_FORM_ACTION = "j_security_check";
+	public static final String LOGIN_USERNAME_FIELD = "j_username";
+	public static final String LOGIN_PASSWORD_FIELD = "j_password";
+	public static final String LOGIN_REMEMBERME_FIELD = "j_rememberme";
 
-   // secure page constants
-   public static final String SECURE_TITLE = COMMON_TITLE_BASE + "Secure Page";
-   public static final String SECURE_POSTED_VALUE_FORM = "postedValueForm";
-   public static final String SECURE_POSTED_VALUE_FIELD = "postedValue";
-   public static final String SECURE_LAST_POSTED_VALUE_FIELD = "lastPostedValue";
-
-   // logout page constants
-   public static final String LOGOUT_TITLE = COMMON_TITLE_BASE + "Logout";
+	// secure page constants
+	public static final String SECURE_TITLE = COMMON_TITLE_BASE + "Secure Page";
+	public static final String SECURE_POSTED_VALUE_FORM = "postedValueForm";
+	public static final String SECURE_POSTED_VALUE_FIELD = "postedValue";
+	public static final String SECURE_LAST_POSTED_VALUE_FIELD = "lastPostedValue";
+	// logout page constants
+	public static final String LOGOUT_TITLE = COMMON_TITLE_BASE + "Logout";
 }

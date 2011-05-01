@@ -15,7 +15,9 @@
             <form-default-page>/index.jsp</form-default-page>
         </form-login-config>
     </login-config>
-    <realm className="security.MySecurityRealm">
+
+    <!--<realm className="security.MySecurityRealm">-->
+	<realm className="org.securityfilter.example.realm.TrivialSecurityRealm">
       <!-- <realm-param name="" value="" /> -->
     </realm>
 </securityfilter-config>

@@ -11,57 +11,46 @@ public class People {
 	 * Resource id
 	 **/
 	private int id;
-
 	/**
 	 * assigned Resource id
 	 **/
 	private int idAssigned;
-	
 	/**
 	 * type of injured (slight, serious, dead, trapped)
 	 **/
 	private String type;
-	
 	/**
 	 * Name of the resource
 	 **/
 	private String name;
-	
-		
-	
-	
-     
-    /**
+	/**
 	 * Info about the resource
 	 */
-     private String info;
-    /**
+	private String info;
+	/**
 	 * Description for the resource
 	 */
-     private String description;
+	private String description;
 	/**
 	 * state of the resource (usually active)
 	 */
-	
-     private String state;
-	
+	private String state;
 	/**
 	 * Size of the Disaster
 	 */
-     /**
- 	 * id of the user who added the injured
- 	 */
- 	private int quantity;
-	
+	/**
+	 * id of the user who added the injured
+	 */
+	private int quantity;
 	/**
 	 * id of the user who added the injured
 	 */
 	private int user;
-
 	/**
 	 * true si hay alguna ambulancia yendo a por el
 	 */
 	private boolean atendido;
+
 	/**
 	 * @param id
 	 * @param idAssigned
@@ -74,18 +63,18 @@ public class People {
 	 * @param description
 	 * @param quantity
 	 */
-	public People(int id, String type, String name,String info,String description,int idAssigned, int quantity, String state ) {
+	public People(int id, String type, String name, String info, String description, int idAssigned, int quantity, String state) {
 		super();
 		this.id = id;
 		this.idAssigned = idAssigned;
 		this.type = type;
 		this.name = name;
-		this.quantity= quantity;
+		this.quantity = quantity;
 		this.info = info;
 		this.description = description;
-		this.state=state;
+		this.state = state;
 		this.user = 1;
-		this.atendido=false;
+		this.atendido = false;
 	}
 
 	/**
@@ -143,8 +132,6 @@ public class People {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
 
 	/**
 	 * @return the info
@@ -229,10 +216,4 @@ public class People {
 	public void setAtendido(boolean atendido) {
 		this.atendido = atendido;
 	}
-	
-	
-	
-	
-	
-	
-	}
+}

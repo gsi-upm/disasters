@@ -100,13 +100,24 @@ public class Parameters {
     private final String MIN_DEAD_VICTIMS_TAG = "minimum number of dead victims";
     private final String MAX_DEAD_VICTIMS_TAG = "maximum number of dead victims";
     private final String LENGTH_TAG = "length";
-    /**
+	/**
      * Limits for latitude and longitude in Madrid
      */
-    public final double MIN_LATITUDE = 40.36;
-    public final double MAX_LATITUDE = 40.48;
-    public final double MIN_LONGITUDE = -3.78;
-    public final double MAX_LONGITUDE = -3.57;
+    public final double MIN_LATITUDE_DISASTERS = 40.36;
+    public final double MAX_LATITUDE_DISASTERS = 40.48;
+    public final double MIN_LONGITUDE_DISASTERS = -3.78;
+    public final double MAX_LONGITUDE_DISASTERS = -3.57;
+    /**
+     * Limits for latitude and longitude in Calasparra
+     */
+	 public final double MIN_LATITUDE_CARONTE = 38.232276;
+	 public final double MAX_LATITUDE_CARONTE = MIN_LATITUDE_CARONTE;
+	 public final double MIN_LONGITUDE_CARONTE = -1.699829;
+	 public final double MAX_LONGITUDE_CARONTE = MIN_LONGITUDE_CARONTE;
+    //public final double MIN_LATITUDE_CARONTE = 38.225;
+    //public final double MAX_LATITUDE_CARONTE = 38.233;
+    //public final double MIN_LONGITUDE_CARONTE = -1.71;
+    //public final double MAX_LONGITUDE_CARONTE = -1.694;
     /**
      * Differences for marker's latitudes and longitudes
      */

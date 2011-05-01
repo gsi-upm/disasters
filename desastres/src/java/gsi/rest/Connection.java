@@ -1,6 +1,7 @@
 package gsi.rest;
 
 import gsi.rest.DisasterApplication;
+import jadex.desastres.Environment;
 import java.net.*;
 import java.io.*;
 
@@ -62,6 +63,7 @@ public class Connection {
             URL yahoo6 = new URL(URL_BASE + "people");//funciona
             URL yahoo4 = new URL(URL_BASE + "delete/id/4");//funciona
             URL yahoo7 = new URL(URL_BASE + "put/5/quantity/1");//funciona
+
             URL yahoo8 = new URL(URL_BASE + "post/type=ambulance&name=SAMUR&info=Coche+115-F&description=Servicio+de+Urgencia&address=Plaza+del+Encuentro,1,madrid&latitud=40.416878&longitud=-3.703748");
             URL yahoo9 = new URL(URL_BASE_2 + "prePost.jsp?type=ambulance&address=burgos&date='2008-04-14+13:06:09.109'&state=active&user=1");
             URLConnection yahooConnection = yahoo8.openConnection();

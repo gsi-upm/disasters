@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 
 import gsi.disasters.SizeType;
 import gsi.disasters.DensityType;
+import jadex.desastres.Environment;
 
 /**
  * This class provides an interface for using the REST API.
@@ -17,7 +18,6 @@ public class EventsManagement {
     private static final String PUT = "put/";
     private static final String DELETE = "delete/";
     private static final String LIST = "events/";
-
 
      /**
      * Method used to remove the blanks in a String (useful for URLs)
@@ -124,7 +124,7 @@ public class EventsManagement {
 
     /**
      *
-     * @param type It can be police, firemen, ambulance, if it is referring
+     * @param type It can be police, firemen, ambulance, nurse if it is referring
      * to a resource, or slight, serious, dead or trapped, if referring to a victim.
      * @param name Name of the resource or victim
      * @param quantity Number of resources or victims to insert

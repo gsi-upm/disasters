@@ -123,6 +123,14 @@ public class Person {
         this.setInjuryDegree();
     }
 
+	/**
+     * Check if the person is a healthy person
+     * @return if the person is a healthy person
+     */
+    public boolean isHealthy() {
+        return this.injuryDegree == InjuryDegree.HEALTHY;
+    }
+
     /**
      * Check if the person is a slight victim
      * @return if the person is a slight victim

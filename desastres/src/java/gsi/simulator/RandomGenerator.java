@@ -211,16 +211,34 @@ public class RandomGenerator {
      * Returns a random value for the latitude with the specified limits
      * @return
      */
-    public double randomLatitude() {
-        return randomDouble(params.MIN_LATITUDE, params.MAX_LATITUDE);
+    public double randomLatitude(String proyect) {
+		double latMax;
+		double latMin;
+		if(proyect.equals("caronte")){
+			latMin = params.MIN_LATITUDE_CARONTE;
+			latMax= params.MAX_LATITUDE_CARONTE;
+		}else{
+			latMin = params.MIN_LATITUDE_DISASTERS;
+			latMax= params.MAX_LATITUDE_DISASTERS;
+		}
+        return randomDouble(latMin, latMax);
     }
 
     /**
      * Returns a random value for the longlitude with the specified limits
      * @return
      */
-    public double randomLongitude() {
-        return randomDouble(params.MIN_LONGITUDE, params.MAX_LONGITUDE);
+    public double randomLongitude(String proyect) {
+        double longMax;
+		double longMin;
+		if(proyect.equals("caronte")){
+			longMin = params.MIN_LONGITUDE_CARONTE;
+			longMax= params.MAX_LONGITUDE_CARONTE;
+		}else{
+			longMin = params.MIN_LONGITUDE_DISASTERS;
+			longMax= params.MAX_LONGITUDE_DISASTERS;
+		}
+        return randomDouble(longMin, longMax);
     }
 
     /**

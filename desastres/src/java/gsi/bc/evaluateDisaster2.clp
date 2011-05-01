@@ -19,13 +19,13 @@
 ;	=>
 ;	(retract ?s)
 ;	(assert (state ?new))
-;)
+;)   
 
 (defrule assignPolicemen
 	;(state assign)
 	?dis <- (Disaster (type ?typeDisaster)(name ?nameDisaster)(policeNum ?p)(id ?idDisaster)(traffic ?traffic))
 	?poli <- (Resource (type "police")(id ?idPolicemen)(name ?namePolicemen)(idAssigned 0))
-
+	
 	(test (or
 			(and(eq ?traffic "low")(< ?p 1))
 			(and(eq ?traffic "medium")(< ?p 2))

@@ -1,8 +1,14 @@
 function seleccionRadio (form, valor){
-	var types = ["fire","flood","collapse","police","firemen","ambulance","slight","serious","dead","trapped"];
-	for (Count = 0; Count < 4; Count++) {
+	var types = ["fire","flood","collapse","lostPerson","injuredPerson","police","firemen","ambulance","nurse","slight","serious","dead","trapped","healthy"];
+	var despTypes = 0; // desplaza el valor del tipo
+	for (Count = 0; Count < 5; Count++) {
 		if (form.tipo[Count].checked)
 			break;
 	}
-	return types[Count+3*valor];
+	if(valor == 1){
+		despTypes = 5;
+	}else if(valor == 2){
+		despTypes = 9;
+	}
+	return types[Count+despTypes];
 }

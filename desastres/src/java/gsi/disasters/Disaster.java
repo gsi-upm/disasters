@@ -74,6 +74,10 @@ public class Disaster {
 	 */
 	private int firemenMarker;
 	/**
+	 * Associate healthy people
+	 */
+	private List<Person> healthy;
+	/**
 	 * Associate slight victims
 	 */
 	private List<Person> slight;
