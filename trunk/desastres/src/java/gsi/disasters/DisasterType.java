@@ -6,7 +6,7 @@ package gsi.disasters;
  */
 public enum DisasterType {
 
-    FIRE, FLOOD, COLLAPSE;
+    FIRE, FLOOD, COLLAPSE, LOST_PERSON, INJURED_PERSON;
 
     public static DisasterType getType(String str) {
         if (str.toLowerCase().equals("fire")) {
@@ -15,6 +15,10 @@ public enum DisasterType {
             return DisasterType.FLOOD;
         } else if (str.toLowerCase().equals("collapse")) {
             return DisasterType.COLLAPSE;
+        } else if (str.toLowerCase().equals("lostPerson")) {
+            return DisasterType.LOST_PERSON;
+        } else if (str.toLowerCase().equals("injuredPerson")) {
+            return DisasterType.INJURED_PERSON;
         } else {
             return null;
         }

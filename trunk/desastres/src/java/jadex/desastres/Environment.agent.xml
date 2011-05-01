@@ -1,15 +1,14 @@
 <!--
-  <H3>Entorno.</H3>
+  <h3>Entorno</h3>
 
-  Agente que administra todos los agentes y/o eventos
-  que hay en el mapa. 
+  Agente que administra todos los agentes y/o eventos que hay en el mapa
 -->
 
 <agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
 	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-       name="Environment"
+       name="environment"
 	   package="jadex.desastres">
 
 	<imports>
@@ -20,21 +19,22 @@
 	</imports>
 	
 	<beliefs>
-	
-		<!-- Lista con ciudades accesibles -->
-		<!-- De momento no se usa, todos por defecto en Madrid.-->
-		<!--
-		<beliefset name="Ciudades" class="Location">
-			<facts>new Location("Madrid",new Position(40.56,-3.55),new Position(40.35,-3.8))</facts>
-		</beliefset>
-		-->
-		<!-- 
-		  De esta forma, pueden los agentes registrarse en este entorno.
-		-->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(null, null,null)</fact>
- 		</belief>
- 		
+			<fact>Environment.getInstance(null,null,null)</fact>
+		</belief>
 	</beliefs>
 
+	<plans>
+		<plan name="terminar-plan">
+			<body class="DetenerEntorno"/>
+		</plan>
+	</plans>
+
+	<configurations>
+		<configuration name="default">
+			<plans>
+				<endplan ref="terminar-plan"/>
+			</plans>
+		</configuration>
+	</configurations>
 </agent>

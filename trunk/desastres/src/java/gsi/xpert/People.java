@@ -298,6 +298,14 @@ public class People {
         //this.type = getVictimDegree(this.healthPoints); This line isn't needed in the new Simulator logic
     }
 
+	/**
+     * Checks if people are healthy people
+     * @return if people are healthy people
+     */
+    public boolean areHealthy() {
+        return this.type == InjuryDegree.HEALTHY;
+    }
+
     /**
      * Checks if people are slight victims
      * @return if people are slight victims

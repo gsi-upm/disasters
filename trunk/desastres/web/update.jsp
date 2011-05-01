@@ -34,14 +34,5 @@
     <sql:param value="${param.fecha}"/>
     <sql:param value="${param.usuario}"/>
     <sql:param value="${param.id}"/>
-    
-    
-    
 </sql:update>  
 ok
-
-
-
-
-
-

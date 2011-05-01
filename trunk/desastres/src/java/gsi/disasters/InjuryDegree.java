@@ -5,9 +5,12 @@ package gsi.disasters;
  * @author Luis Delgado
  */
 public enum InjuryDegree {
-    SLIGHT, SERIOUS, DEAD, TRAPPED;
+    HEALTHY, SLIGHT, SERIOUS, DEAD, TRAPPED;
 
     public static InjuryDegree getType(String str){
+		if (str.toLowerCase().equals("healthy")) {
+            return InjuryDegree.HEALTHY;
+        }
         if (str.toLowerCase().equals("slight")) {
             return InjuryDegree.SLIGHT;
         }

@@ -12,87 +12,70 @@ package jadex.desastres;
  *
  * @author	David Reilly
  */
-public class TimerMove extends Thread
-{
-	
+public class TimerMove extends Thread {
+
 	/** Rate at which timer is checked */
 	protected int m_rate = 100;
-	
 	/** Length of timeout */
 	private int m_length;
-
 	/** Time elapsed */
 	private int m_elapsed;
 
 	/**
-	  * Creates a timer of a specified length
-	  * @param	length	Length of time before timeout occurs
-	  */
-	public TimerMove ( int length )
-	{
+	 * Creates a timer of a specified length
+	 * @param	length	Length of time before timeout occurs
+	 */
+	public TimerMove(int length) {
 		// Assign to member variable
 		m_length = length;
 
 		// Set time elapsed
 		m_elapsed = 0;
-		
-		
 	}
 
-	
 	/** Resets the timer back to zero */
-	public synchronized void reset()
-	{
+	public synchronized void reset() {
 		m_elapsed = 0;
 	}
 
 	/** Performs timer specific code */
-	public void run(int id, Double latitud, Double longitud)
-	{
+	public void run(int id, Double latitud, Double longitud) {
 		// Keep looping
-		for (;;)
-		{
+		for (;;) {
 			// Put the timer to sleep
-			try
-			{ 
+			try {
 				Thread.sleep(m_rate);
-			}
-			catch (InterruptedException ioe) 
-			{
+			} catch (InterruptedException ioe) {
 				continue;
 			}
 
 			// Use 'synchronized' to prevent conflicts
-			synchronized ( this )
-			{
+			synchronized (this) {
 				// Increment time remaining
 				m_elapsed += m_rate;
 
 				// Check to see if the time has been exceeded
-				if (m_elapsed > m_length)
-				{
+				if (m_elapsed > m_length) {
 					// Trigger a timeout
 					timeout(id, latitud, longitud);
 				}
 			}
-
 		}
 	}
 
 	// Override this to provide custom functionality
-	public void timeout(int id, Double latitud, Double longitud)
-	{
-		
-		System.out.println("LLamada a REST modificando latitud y longitud: "+ latitud + " - " +longitud);
-		String resultado1 = Connection.connect(Environment.URL+"put/"+id+"/latitud/"+latitud);
-		String resultado2 = Connection.connect(Environment.URL+"put/"+id+"/longitud/"+longitud);
+	public void timeout(int id, Double latitud, Double longitud) {
+
+		System.out.println("LLamada a REST modificando latitud y longitud: " + latitud + " - " + longitud);
+		String resultado1 = Connection.connect(Environment.URL + "put/" + id + "/latitud/" + latitud);
+		String resultado2 = Connection.connect(Environment.URL + "put/" + id + "/longitud/" + longitud);
 		//System.out.println("Resultado de la latitud: "+ resultado1);
 		//System.out.println("Resultado de la longitud: "+ resultado2);
 		//llama a la aplicacion... le dice el id, latitud y longitud
-		try{
-		this.sleep(500);
+		try {
+			this.sleep(500);
+		} catch (Exception e) {
+			System.out.println("Error con hebra: " + e);
+		}
 	}
-		catch(Exception e){System.out.println ("Error con hebra: "+e);}
-	}
-	
 }

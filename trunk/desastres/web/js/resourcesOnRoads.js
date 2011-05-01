@@ -14,6 +14,8 @@ function moveAgents () {
             roadsInfo[resourcesList[i]].icon.image="markers/bombero"+marcadores_definitivos[indices[i]].cantidad+".png";
         } else if (marcadores_definitivos[indices[i]].tipo=="ambulance"){
             roadsInfo[resourcesList[i]].icon.image="markers/ambulancia"+marcadores_definitivos[indices[i]].cantidad+".png";
+        } else if (marcadores_definitivos[indices[i]].tipo=="nurse"){
+            roadsInfo[resourcesList[i]].icon.image="markers/enfermero"+marcadores_definitivos[indices[i]].cantidad+".png";
         }
     }
     DirectionsBean.sendDirections();
@@ -79,8 +81,8 @@ function getResources() {
 
 function myAddListener (id) {
     GEvent.addListener(roadsInfo[id].dirn,"load", function() {
-        roadsInfo[id].poly=roadsInfo[id].dirn.getPolyline();
-        roadsInfo[id].eol=roadsInfo[id].poly.Distance();
+        roadsInfo[id].poly = roadsInfo[id].dirn.getPolyline();
+        roadsInfo[id].eol = roadsInfo[id].poly.Distance();
         //map.addOverlay(new GMarker(roadsInfo[id].poly.getVertex(0),G_START_ICON));
         //map.addOverlay(new GMarker(roadsInfo[id].poly.getVertex(roadsInfo[id].poly.getVertexCount()-1),G_END_ICON));
         roadsInfo[id].marker = new GMarker(roadsInfo[id].poly.getVertex(0),{icon:roadsInfo[id].icon});
@@ -89,7 +91,7 @@ function myAddListener (id) {
 
     GEvent.addListener(roadsInfo[id].dirn,"error", function() {
         alert("Location(s) not recognised for id "+id+" "+starts[resourcesList[id]]+" "+ends[resourcesList[id]]+"\nCode: "+roadsInfo[id].dirn.getStatus().code);
-    });    
+    });
 }
 
 /**

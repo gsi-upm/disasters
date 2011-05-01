@@ -9,15 +9,15 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Trazas de ejecución.
+ * Trazas de ejecucion.
  *
- * @author Laboratorio de Programación
+ * @author Laboratorio de Programacion
  * @version 26.2.2006
  */
 public class Logger {
 
     /**
-     * Nivel máximo de traza: no se traza nada.
+     * Nivel maximo de traza: no se traza nada.
      */
     public static final int OFF = Integer.MAX_VALUE;
 
@@ -167,7 +167,7 @@ public class Logger {
 
     /**
      * Crea un logger.
-     * Se trata de que para cada nombre el logger sea único.
+     * Se trata de que para cada nombre el logger sea unico.
      *
      * @param name Nombre del logger.
      * @return un objeto Logger
@@ -195,7 +195,7 @@ public class Logger {
     }
 
     /**
-     * Marca un nivel de aceptación de trazas.
+     * Marca un nivel de aceptacion de trazas.
      * Se imprimen por consola y en fichero las trazas de nivel
      * mayor o igual que el marcado.
      *
@@ -207,7 +207,7 @@ public class Logger {
     }
 
     /**
-     * Marca un nivel de aceptación de trazas.
+     * Marca un nivel de aceptacion de trazas.
      * Se imprimen por consola las trazas de nivel
      * mayor o igual que el marcado.
      *

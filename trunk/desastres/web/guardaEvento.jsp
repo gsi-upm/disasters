@@ -13,6 +13,14 @@
 <%@ include file="database.jspf" %>
 
 <c:catch var="errorUpdate">
+	<%--<c:when test="${(param.latitud lt 123) and (param.latitud gt 123) and
+				  (param.longitud lt 123) and (param.longitud gt 123)}">
+
+	</c:when>
+	<c:otherwise>
+
+	</c:otherwise>--%>
+
     <sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO CATASTROFES (
                 marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario)
                 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">

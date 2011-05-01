@@ -1,0 +1,136 @@
+<!--
+  <h3>Central de emergencias</h3>
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
+	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+       name="centralEmergencias"
+	   package="jadex.desastres.caronte.centralEmergencias">
+
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.util.*</import>
+		<import>jadex.*</import>
+		<import>jadex.base.fipa.*</import>
+		<import>jadex.bridge.fipa.ComponentIdentifier</import>
+		<import>java.util.logging.*</import>
+		<import>jadex.bdi.planlib.protocols.request.Request</import>
+		<import>jadex.bdi.planlib.df.DF</import>
+		<import>jadex.commons.*</import>
+		<import>jadex.commons.service.*</import>
+		<import>jadex.desastres.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="procap" file="Request"/>
+		<capability name="dfcap" file="DF"/>
+	</capabilities>
+
+	<beliefs>
+		<!-- Creamos el agente como instancia del Entorno. Por defecto, una posicion en el centro de Calasparra -->
+		<belief name="env" class="Environment">
+			<fact>Environment.getInstance(Environment.CENTRAL_EMERGENCIAS,$scope.getAgentName(),$beliefbase.centralCalasparra)</fact>
+		</belief>
+
+		<!-- Definimos la posicion de la central en Calasparra -->
+		<belief name="centralCalasparra" class="Position">
+			<fact>new Position(38.229225, -1.701830)</fact> <!-- Posicion aleatoria de la central -->
+		</belief>
+
+		<!-- Poscion del agente evaluada dinamicamente-->
+		<belief name="pos" class="Position" evaluationmode="dynamic">
+			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
+		</belief>
+
+ 		<!-- id del desastre que tienen que atender-->
+		<belief name="desastreActual" class="Integer"> <!-- evaluationmode="dynamic" -->
+			<fact>0</fact>
+		</belief>
+	</beliefs>
+
+	<goals>
+		<achievegoalref name="rp_initiate">
+			<concrete ref="procap.rp_initiate"/>
+		</achievegoalref>
+		<achievegoalref name="df_search">
+			<concrete ref="dfcap.df_search"/>
+		</achievegoalref>
+		<maintaingoalref name="df_keep_registered">
+			<concrete ref="dfcap.df_register"/>
+		</maintaingoalref>
+		
+		<performgoal name="esperaAviso"/> <!-- retry="true" exclude="never"/> -->
+		<achievegoal name="mandaAviso"/>
+	</goals>
+
+	<plans>
+		<!-- Plan para buscar desastres. -->
+		<plan name="esperaAviso-plan">
+			<body class="EsperaAvisoPlan"/>
+			<trigger>
+				<goal ref="esperaAviso"/>
+			</trigger>
+		</plan>
+
+		<!-- Plan para esperar la solucion del Desastre. -->
+		<plan name="mandaAviso-plan">
+			<body class="MandaAvisoPlan"/>
+			<trigger>
+				<messageevent ref="aviso_geriatrico"/>
+			</trigger>
+		</plan>
+	</plans>
+
+	<events>
+		<messageevent name="aviso_geriatrico" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="ack_aviso_geriatrico" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+
+		<messageevent name="aviso" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="ack_aviso" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+	</events>
+
+ 	<!-- Inicialmente activamos el objetivo con nombre hospital -->
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="df_keep_registered">
+					<parameter ref="description">
+						<value>
+							$propertybase.getProperty("dfservice")
+								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
+								.createDFServiceDescription("centralEmergencias_service", "centralEmergencias", "GSI DIT UPM"))
+ 						</value>
+					</parameter>
+					<!--<parameter ref="leasetime">
+						<value>20000</value>
+					</parameter>-->
+				</initialgoal>
+				<initialgoal ref="esperaAviso"/>
+			</goals>
+		</configuration>
+	</configurations>
+
+	<properties>
+		<!--<property name="logging.level">Level.INFO</property>
+		<property name="logging.useParentHandlers">true</property>-->
+		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(),IDF.class)</property>
+	</properties>
+</agent>

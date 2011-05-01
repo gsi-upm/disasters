@@ -57,6 +57,8 @@ package org.securityfilter.example.realm;
 
 import org.securityfilter.example.Constants;
 import org.securityfilter.realm.SimpleSecurityRealmBase;
+import jadex.desastres.*;
+import org.json.me.*;
 
 /**
  * Trivial implementation of the SecurityRealmInterface.
@@ -82,10 +84,25 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
     * @return null if the user cannot be authenticated, otherwise a Pricipal object is returned
     */
    public boolean booleanAuthenticate(String username, String password) {
-      return (
-         (Constants.VALID_USERNAME.equals(username) && Constants.VALID_PASSWORD.equals(password))
-         || (Constants.VALID_USERNAME2.equals(username) && Constants.VALID_PASSWORD2.equals(password))
-      );
+	   boolean autenticado = false;
+	   try {
+			String usuarioAux = Connection.connect(Environment.URL + "user/" + username + "/" + password);
+			JSONArray usuario = new JSONArray(usuarioAux);
+			
+			if(usuario.length() == 1) {
+				autenticado = true;
+			}
+		} catch (JSONException ex) {
+			System.out.println("Excepcion: " + ex);
+		}
+
+	   /*return (
+         (Constants.VALID_USERNAME.equals(username) && Constants.VALID_PASSWORD.equals(password)) ||
+         (Constants.VALID_USERNAME2.equals(username) && Constants.VALID_PASSWORD.equals(password)) ||
+         (Constants.VALID_USERNAME3.equals(username) && Constants.VALID_PASSWORD.equals(password)) ||
+         (Constants.VALID_USERNAME4.equals(username) && Constants.VALID_PASSWORD.equals(password))
+      );*/
+	   return autenticado;
    }
 
    /**
@@ -98,10 +115,25 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
     * @return true if the user is in the role, false otherwise
     */
    public boolean isUserInRole(String username, String role) {
-      return (
-         (Constants.VALID_USERNAME.equals(username) || Constants.VALID_USERNAME2.equals(username))
-         && Constants.VALID_ROLE.equals(role)
-      );
+	   boolean rol = false;
+	   try {
+			String rolUsuarioAux = Connection.connect(Environment.URL + "userRole/" + username);
+			JSONArray rolUsuario = new JSONArray(rolUsuarioAux);
+			
+			if(rolUsuario.getJSONObject(0).getString("user_type").equals(role)) {
+				rol = true;
+			}
+		} catch (JSONException ex) {
+			System.out.println("Excepcion: " + ex);
+		}
+
+	   /*return (
+         (Constants.VALID_USERNAME.equals(username) && Constants.VALID_ROLE.equals(role)) ||
+		 (Constants.VALID_USERNAME2.equals(username) && Constants.VALID_ROLE.equals(role)) ||
+		 (Constants.VALID_USERNAME3.equals(username) && Constants.VALID_ROLE2.equals(role)) ||
+		 (Constants.VALID_USERNAME4.equals(username) && Constants.VALID_ROLE3.equals(role))
+      );*/
+	   return rol;
    }
 
    /**
