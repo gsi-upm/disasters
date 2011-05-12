@@ -20,6 +20,7 @@
                    direccion, estado, size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario FROM CATASTROFES, usuarios 
                    WHERE modificado > ?
                    AND estado != 'erased'
+				   AND tipo != 'user'
                    AND catastrofes.usuario=usuarios.id_usuarios;">
             <sql:param value="${param.fecha}"/>
         </sql:query>  
@@ -29,6 +30,7 @@
                    SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, 
                    direccion, estado, size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario FROM catastrofes, usuarios 
                    WHERE modificado > ?
+				   AND tipo != 'user'
                    AND catastrofes.usuario=usuarios.id_usuarios;">
             <sql:param value="${param.fecha}"/>
         </sql:query>                

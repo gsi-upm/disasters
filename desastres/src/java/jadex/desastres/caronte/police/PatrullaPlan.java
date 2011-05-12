@@ -25,13 +25,13 @@ public class PatrullaPlan extends Plan {
 		//Creamos una nueva posicion aleatoria
 		Position newPos = (Position)env.getRandomPosition("caronte");
 		
-		System.out.println("++ police: Estoy patrullando porque no hay desastres activos... ");
+		Environment.printout("PP police: Estoy patrullando porque no hay desastres activos... ",0);
 		try {
 			env.go(getComponentName(), newPos);
 			env.pinta(env.getAgent(getComponentName()).getId(), 0, newPos.getX(), newPos.getY());
 
 		} catch (Exception e) {
-			System.out.println("++ police: Error metodo andar: " + e);
+			System.out.println("PP police: Error metodo andar: " + e);
 		}
 		waitFor(1000);
 	}

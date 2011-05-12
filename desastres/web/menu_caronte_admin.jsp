@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:useBean class="jadex.desastres.ProyectBean" id="proyecto" scope="session"/>
+<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <%@ include file="info_caronte.jsp" %>
 <fmt:bundle basename="fmt.eji8n">
@@ -121,7 +121,7 @@
 							<input type="radio" name="tipo" value="police" checked="checked" onclick="cambiaIcono(marcador.value,'police', cantidad.value);">
 							<fmt:message key="policia"/> (${policemen.rowCount})
 						</td>
-						<td rowspan="4"><img alt="" id="icono_recursos" src="markers/policia1.png" class="rayas"></td>
+						<td rowspan="6"><img alt="" id="icono_recursos" src="markers/policia1.png" class="rayas"></td>
 					</tr>
 					<tr>
 						<td>
@@ -135,10 +135,24 @@
 							<fmt:message key="ambulancia"/> (${ambulance.rowCount})
 						</td>
 					</tr>
-					<tr><td>
+					<tr>
+						<td>
 							<input type="radio" name="tipo" value="nurse" onclick="cambiaIcono(marcador.value,'nurse',cantidad.value);">
 							<fmt:message key="enfermero"/> (${nurse.rowCount})
-						</td></tr>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="radio" name="tipo" value="gerocultor" onclick="cambiaIcono(marcador.value,'gerocultor',cantidad.value);">
+							<fmt:message key="gerocultor"/> (${gerocultor.rowCount})
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="radio" name="tipo" value="assistant" onclick="cambiaIcono(marcador.value,'assistant',cantidad.value);">
+							<fmt:message key="auxiliar"/> (${assistant.rowCount})
+						</td>
+					</tr>
 				</table>
 				<table class="tabla_menu">
 					<tr>
@@ -309,7 +323,7 @@
 				</p>
 			</form>
 			<hr>
-			<form id="SimOptions" method="post" action="/disasters/RunSimulation">
+			<form id="SimOptions" method="post" action="/desastres/RunSimulation">
 				<p class="bigger"><fmt:message key="opcionessimulador"/></p>
 				<p><input id="runSim" type="radio" name="sim" value="run" checked="checked"><fmt:message key="arrancasimulador"/></p>
 				<div id="options2">

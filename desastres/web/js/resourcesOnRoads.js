@@ -16,6 +16,10 @@ function moveAgents () {
             roadsInfo[resourcesList[i]].icon.image="markers/ambulancia"+marcadores_definitivos[indices[i]].cantidad+".png";
         } else if (marcadores_definitivos[indices[i]].tipo=="nurse"){
             roadsInfo[resourcesList[i]].icon.image="markers/enfermero"+marcadores_definitivos[indices[i]].cantidad+".png";
+        } else if (marcadores_definitivos[indices[i]].tipo=="gerocultor"){
+            roadsInfo[resourcesList[i]].icon.image="markers/gerocultor"+marcadores_definitivos[indices[i]].cantidad+".png";
+        } else if (marcadores_definitivos[indices[i]].tipo=="assistant"){
+            roadsInfo[resourcesList[i]].icon.image="markers/auxiliar"+marcadores_definitivos[indices[i]].cantidad+".png";
         }
     }
     DirectionsBean.sendDirections();
@@ -73,7 +77,10 @@ function getResources() {
     for (n in indices){
         if (marcadores_definitivos[indices[n]].tipo=="police" ||
             marcadores_definitivos[indices[n]].tipo=="firemen" ||
-            marcadores_definitivos[indices[n]].tipo=="ambulance"){
+            marcadores_definitivos[indices[n]].tipo=="ambulance"||
+            marcadores_definitivos[indices[n]].tipo=="nurse"||
+            marcadores_definitivos[indices[n]].tipo=="gerocultor"||
+            marcadores_definitivos[indices[n]].tipo=="assistant"){
             resourcesList[n]=indices[n];
         }
     }

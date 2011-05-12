@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 
 import jadex.commons.collection.MultiCollection;
 import jadex.commons.SimplePropertyChangeSupport;
+import java.io.*;
 
 /**
  * 
@@ -24,7 +25,7 @@ public class Environment {
 	public static final String POLICIA = "police";
 	public static final String ENFERMERO = "nurse";
 	public static final String GEROCULTOR = "gerocultor";
-	public static final String AUXILIAR = "auxiliar";
+	public static final String AUXILIAR = "assistant";
 	public static final String AMBULANCIA2 = "ambulancia";
 	public static final String GSO = "grupoSanitarioOperativo";
 	public static final String MEDICO_CACH = "medicoCACH";
@@ -45,10 +46,8 @@ public class Environment {
 	public static final String INUNDACION = "flood";
 	public static final String PERSONA_PERDIDA = "lostPerson";
 	public static final String PERSONA_HERIDA = "injuredPerson";
-	public static final String PROYECTO = "disasters";
+	public static final String PROYECTO = "desastres";
 	public static final String URL = "http://localhost:8080/" + PROYECTO + "/rest/";
-	public static final String URL2 = "http://localhost:8080/" + PROYECTO + "/RESTFUL/";
-	public static final String URL3 = "/" + PROYECTO + "/RESTFUL/";
 	//------- atributos ---
 	private final int tiempoJSON = 5000;
 	private final int tiempoMove = 500;
@@ -72,10 +71,10 @@ public class Environment {
 	protected MultiCollection objetos;
 	/** Posicion del centro de Calasparra*/
 	Position centroCalasparra = new Position(38.229225, -1.701830);
-	private final double residenciaLatMin = -1.699622;
-	private final double residenciaLatMax = -1.698201;
-	private final double residenciaLongMin = 38.231943;
-	private final double residenciaLongMax = 38.232634;
+	private final double residenciaLatMin = 38.231943;
+	private final double residenciaLatMax = 38.232634;
+	private final double residenciaLongMin = -1.699622;
+	private final double residenciaLongMax = -1.698201;
 	/** Generador aleatorio*/
 	Random rnd = new Random();
 	/** Objeto para notificar de cambios*/
@@ -95,10 +94,6 @@ public class Environment {
 		numAgentes = numEventos = 0;
 		this.temporizador = new TimerJSON(tiempoJSON, this);
 		this.tempoMover = new TimerMove(tiempoMove);
-		//metemos los eventos y los heridos.
-		// las ambulancias solo responden a desastres con heridos
-		// bomberos responde a desastres y heridos ATRAPADOS
-		// policia responde a desastres
 
 		//Esto LA PRIMERA VEZ - recibo el json
 		try {
@@ -107,6 +102,9 @@ public class Environment {
 
 			String victimas = Connection.connect(URL + "people");
 			JSONArray personas = new JSONArray(victimas);
+
+			String logueados = Connection.connect(URL + "users");
+			JSONArray usuarios = new JSONArray(logueados);
 
 			ahora = new Timestamp(new Date().getTime()).toString();
 
@@ -125,7 +123,7 @@ public class Environment {
 						instancia.getString("state"),
 						instancia.getString("size"),
 						instancia.getString("traffic"));
-				System.out.println("## ENV: New Disaster: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ") ##");
+				printout("## ENV: New Disaster: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ") ##",0);
 				disasters.put(nuevo.getId(), nuevo);
 			}
 
@@ -148,7 +146,7 @@ public class Environment {
 
 				people.put(nuevo.getId(), nuevo);
 				Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
-				System.out.println("## ENV: Updating Disaster Victims for " + dis.getName());
+				printout("## ENV: Updating Disaster Victims for " + dis.getName(),0);
 
 				if (nuevo.getType().equals("slight")) {
 					dis.setSlight(nuevo);
@@ -162,6 +160,13 @@ public class Environment {
 				if (nuevo.getType().equals("trapped")) {
 					dis.setTrapped(nuevo);
 				}
+			}
+
+			// Por cada usuario logueado
+			for (int i = 0; i < usuarios.length(); i++) {
+				JSONObject instancia = usuarios.getJSONObject(i);
+				printout("## ENV: New user: " +instancia.getString("name") + " (id:" + instancia.getInt("id") + ") en ["
+						+ new Double(instancia.getString("latitud")) + "," + new Double(instancia.getString("longitud")) + "]",0);
 			}
 		} catch (JSONException e) {
 			System.out.println("Error with JSON **** : " + e);
@@ -180,6 +185,9 @@ public class Environment {
 
 			String victimas = Connection.connect(URL + "people/modified/" + ahora);
 			JSONArray personas = new JSONArray(victimas);
+
+			String logueados = Connection.connect(URL + "users/modified/" + ahora);
+			JSONArray usuarios = new JSONArray(logueados);
 
 			ahora = new Timestamp(new Date().getTime()).toString();
 
@@ -201,8 +209,8 @@ public class Environment {
 
 				if (disasters.containsKey(nuevo.getId())) {
 					//si ya existia actualizo el desastre existente
-					System.out.println("## ENV: Updating Disaster... "
-							+ nuevo.getName() + " - " + nuevo.getState());
+					printout("## ENV: Updating Disaster... "
+							+ nuevo.getName() + " - " + nuevo.getState(),0);
 					Disaster viejo = (Disaster) disasters.get(nuevo.getId());
 					viejo.setType(nuevo.getType());
 					viejo.setName(nuevo.getName());
@@ -220,7 +228,7 @@ public class Environment {
 						disasters.remove(viejo.getId());
 					}
 				} else {
-					//System.out.println("### New Disaster: "+nuevo.getType()+" - "+nuevo.getName()+" (id:"+nuevo.getId()+") ##");
+					printout("### New Disaster: "+nuevo.getType()+" - "+nuevo.getName()+" (id:"+nuevo.getId()+") ##",0);
 					disasters.put(nuevo.getId(), nuevo);
 				}
 			}
@@ -245,12 +253,12 @@ public class Environment {
 						continue;
 					} //cuando ya existia y tengo que actualizar el desastres borrando sus heridos
 					else {
-						System.out.print("## ENV: Voy a desasociar herido cuya id es: " + nuevo.getId());
+						printout("## ENV: Voy a desasociar herido cuya id es: " + nuevo.getId(),0);
 
 						People antiguo = (People) people.get(nuevo.getId());
 						int idDesastre = antiguo.getIdAssigned();
 						people.remove(antiguo.getId());
-						System.out.println(" del desastre: " + idDesastre);
+						printout(" del desastre: " + idDesastre,0);
 						Disaster extraido = (Disaster) disasters.get(idDesastre);
 						disasters.remove(idDesastre);
 
@@ -270,7 +278,7 @@ public class Environment {
 					}
 				} else {
 					Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
-					System.out.println("## ENV: Updating Disaster Victims for " + dis.getName() + " -- " + nuevo.getQuantity() + nuevo.getType());
+					printout("## ENV: Updating Disaster Victims for " + dis.getName() + " -- " + nuevo.getQuantity() + nuevo.getType(),0);
 					people.put(nuevo.getId(), nuevo);
 					if (nuevo.getType().equals("slight")) {
 						dis.setSlight(nuevo);
@@ -285,6 +293,11 @@ public class Environment {
 						dis.setTrapped(nuevo);
 					}
 				}
+			}
+
+			for (int i = 0; i < usuarios.length(); i++) {
+				JSONObject instancia = usuarios.getJSONObject(i);
+				printout("## ENV: Updating user " + instancia.getString("name"),0);
 			}
 
 		} catch (JSONException e) {
@@ -330,7 +343,7 @@ public class Environment {
 		WorldObject wo = new WorldObject(name, type, position, null);
 
 		if (type.equals(AMBULANCIA) || type.equals(BOMBERO) || type.equals(POLICIA) ||
-				type.equals(ENFERMERO) || type.equals(AMBULANCIA2)) {
+				type.equals(ENFERMERO) || type.equals(AMBULANCIA2) || type.equals(GEROCULTOR) || type.equals(AUXILIAR)) {
 			//REST -> cree el recurso
 			String longitud = String.valueOf(position.getY());
 			String latitud = String.valueOf(position.getX());
@@ -398,11 +411,11 @@ public class Environment {
 
 		Double x = x2 - x1;
 		Double y = y2 - y1;
-		Double pendiente = y / x;
+		Double pendiente = Math.atan(y / x);
 		int velocidad = 50; //velocidad inversa, cuanto mas grande mas despacio
 
-		Double pasoX = 0.21 / velocidad;
-		Double pasoY = (-1) * (0.25 / velocidad) * pendiente;
+		Double pasoX = 0.25 / velocidad * Math.cos(pendiente);
+		Double pasoY = (0.25 / velocidad) * Math.abs(Math.sin(pendiente));
 
 		Boolean derecha;
 		Boolean arriba;
@@ -412,57 +425,60 @@ public class Environment {
 		Position PosMedia;
 
 		if (x > 0) {
-			derecha = true;
-		} else {
-			derecha = false;
-		}
-		if (y > 0) {
 			arriba = true;
 		} else {
 			arriba = false;
 		}
-		//System.out.println("Derecha "+derecha);
-		//System.out.println("Arriba "+arriba);
+		if (y > 0) {
+			derecha = true;
+		} else {
+			derecha = false;
+		}
+		
 		//El punto destino esta a la derecha del origen
 		if (derecha) {
 			if (arriba) {
-				while ((x1 < x2) | (y1 < y2)) {
-					if ((x1 < x2)) {
-						x1 = x1 + pasoX;
-						//System.out.println("va a la derecha ");
+				while ((x1 < x2) || (y1 < y2)) {
+					if(x2-x1 < pasoX){
+						x1 = x2;
+					}else if (x1 < x2) {
+						x1 += pasoX;
 					}
 
-					if ((y1 < y2)) {
-						y1 = y1 - pasoY;
-						//System.out.println("sube ");
+					if(y2-y1 < pasoY){
+						y1 = y2;
+					}else if (y1 < y2) {
+						y1 += pasoY;
 					}
+					
 					PosMedia = new Position(x1, y1);
 					go(getAgent(name).getName(), PosMedia);
 					//pinta agente
-					//System.out.println("( "+x1+" , "+y1+" )/n");
 					pinta(desastre, herido, x1, y1);
 				}
-				x1 = x2;
+				/*x1 = x2;
 				y1 = y2;
 				PosMedia = new Position(x1, y1);
 				go(getAgent(name).getName(), PosMedia);
 				//pinta agente
-				//System.out.println("( "+x1+" , "+y1+" )/n");
-				pinta(desastre, herido, x1, y1);
+				pinta(desastre, herido, x1, y1);*/
 			} else {
-				while ((x1 < x2) | (y1 > y2)) {
-					if ((x1 < x2)) {
-						x1 = x1 + pasoX;
-						//System.out.println("va a la derecha ");
+				while ((x1 > x2) || (y1 < y2)) {
+					if(x1-x2 < pasoX){
+						x1 = x2;
+					}else if (x1 > x2) {
+						x1 -= pasoX;
 					}
-					if ((y1 > y2)) {
-						y1 = y1 - pasoY;
-						//System.out.println("baja ");
+
+					if(y2-y1 < pasoY){
+						y1 = y2;
+					}else if (y1 < y2) {
+						y1 += pasoY;
 					}
+
 					PosMedia = new Position(x1, y1);
 					go(getAgent(name).getName(), PosMedia);
 					//pinta agente
-					//System.out.println("( "+x1+" , "+y1+" )/n");
 					pinta(desastre, herido, x1, y1);
 				}
 				x1 = x2;
@@ -470,44 +486,51 @@ public class Environment {
 				PosMedia = new Position(x1, y1);
 				go(getAgent(name).getName(), PosMedia);
 				//pinta agente
-				//System.out.println("( "+x1+" , "+y1+" )/n");
 				pinta(desastre, herido, x1, y1);
 			}
 		} else { //El punto esta a la izquierda
 			if (arriba) {
-				while ((x1 > x2) | (y1 < y2)) {
-					if ((x1 > x2)) {
-						x1 = x1 - pasoX; //System.out.println("va a la izquierda");
+				while ((x1 < x2) || (y1 > y2)) {
+					if(x2-x1 < pasoX){
+						x1 = x2;
+					}else if (x1 < x2) {
+						x1 += pasoX;
 					}
-					if ((y1 < y2)) {
-						y1 = y1 + pasoY; //System.out.println("sube ");
+
+					if(y1-y2 < pasoY){
+						y1 = y2;
+					}else if (y1 > y2) {
+						y1 -= pasoY;
 					}
+
 					PosMedia = new Position(x1, y1);
 					go(getAgent(name).getName(), PosMedia);
 					//pinta agente
-					//System.out.println("( "+x1+" , "+y1+" )/n");
 					pinta(desastre, herido, x1, y1);
-
 				}
 				x1 = x2;
 				y1 = y2;
 				PosMedia = new Position(x1, y1);
 				go(getAgent(name).getName(), PosMedia);
 				//pinta agente
-				//System.out.println("( "+x1+" , "+y1+" )/n");
 				pinta(desastre, herido, x1, y1);
 			} else {
-				while ((x1 > x2) | (y1 > y2)) {
-					if ((x1 > x2)) {
-						x1 = x1 - pasoX;//System.out.println("va a la izquierda");
+				while ((x1 > x2) || (y1 > y2)) {
+					if(x1-x2 < pasoX){
+						x1 = x2;
+					}else if (x1 > x2) {
+						x1 -= pasoX;
 					}
-					if ((y1 > y2)) {
-						y1 = y1 + pasoY;//System.out.println("baja ");
+
+					if(y1-y2 < pasoY){
+						y1 = y2;
+					}else if (y1 > y2) {
+						y1 -= pasoY;
 					}
+
 					PosMedia = new Position(x1, y1);
 					go(getAgent(name).getName(), PosMedia);
 					//pinta agente
-					//System.out.println("( "+x1+" , "+y1+" )/n");
 					pinta(desastre, herido, x1, y1);
 				}
 				x1 = x2;
@@ -515,7 +538,6 @@ public class Environment {
 				PosMedia = new Position(x1, y1);
 				go(getAgent(name).getName(), PosMedia);
 				//pinta agente
-				//System.out.println("( "+x1+" , "+y1+" )/n");
 				pinta(desastre, herido, x1, y1);
 			}
 		}
@@ -525,19 +547,20 @@ public class Environment {
 	 * Pinta el movimiento de un agente en el mapa mediante REST
 	 */
 	public void pinta(int id, int idHerido, Double latitud, Double longitud) throws InterruptedException {
+		String resultado = Connection.connect(URL + "put/" + id + "/latlong/" + latitud + "/" + longitud);
+		if (idHerido != 0) {
+			String resultado2 = Connection.connect(URL + "put/" + idHerido + "/latlong/" + latitud + "/" + longitud);
+		}
 
-		//System.out.println("LLamada a REST modificando latitud y longitud...");
-		String resultado1 = Connection.connect(URL + "put/" + id + "/latitud/" + latitud);
+		/*String resultado1 = Connection.connect(URL + "put/" + id + "/latitud/" + latitud);
 		if (idHerido != 0) {
 			String resultado3 = Connection.connect(URL + "put/" + idHerido + "/latitud/" + latitud);
 		}
 		String resultado2 = Connection.connect(URL + "put/" + id + "/longitud/" + longitud);
 		if (idHerido != 0) {
 			String resultado4 = Connection.connect(URL + "put/" + idHerido + "/longitud/" + longitud);
-		}
-		//System.out.println("Resultado de la latitud: "+ resultado1);
-		//System.out.println("Resultado de la longitud: "+ resultado2);
-		Thread.sleep(2000);
+		}*/
+		Thread.sleep(1000);
 	}
 
 	/**
@@ -696,9 +719,20 @@ public class Environment {
 	/**
 	 * Termina la hebra del temporzador
 	 */
-	public synchronized void terminar() {
+	public synchronized void terminar() throws IOException {
 		System.out.println("Deteniendo entorno...");
 		temporizador = null;
 		System.out.println("Entorno detenido");
+	}
+
+	/**
+	 * Imprime un String por pantalla y lo envia para mostrar en la web
+	 *
+	 * @param valor String a imprimir
+	 * @param cat   nivel del mensaje (0 todos los usuarios, 1 todos los conectados,...)
+	 */
+	public static void printout(String valor, int nivel){
+		Connection.connect(Environment.URL + "message/" + valor + "/" + nivel);
+		System.out.println(valor);
 	}
 }

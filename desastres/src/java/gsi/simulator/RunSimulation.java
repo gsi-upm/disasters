@@ -18,7 +18,7 @@ import gsi.simulator.rest.*;
  */
 public class RunSimulation extends HttpServlet {
 
-	private static final String URL_BASE = "/disasters/";
+	private static final String URL_BASE = "/desastres/";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.

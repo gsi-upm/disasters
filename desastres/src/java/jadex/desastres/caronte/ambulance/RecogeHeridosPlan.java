@@ -1,13 +1,7 @@
-package jadex.desastres.ambulance;
+package jadex.desastres.caronte.ambulance;
 
 import jadex.bdi.runtime.*;
-import jadex.desastres.Connection;
-import jadex.desastres.Disaster;
-import jadex.desastres.EnviarMensajePlan;
-import jadex.desastres.Environment;
-import jadex.desastres.People;
-import jadex.desastres.Position;
-import jadex.desastres.WorldObject;
+import jadex.desastres.*;
 
 /**
  * Plan de la AMBULANCIA para recoger heridos.
@@ -36,10 +30,10 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 		Disaster des = env.getEvent(idDes);
 		Position positionDesastre = new Position(des.getLatitud(), des.getLongitud());
 
-		System.out.println("** ambulance: Estoy destinado al desastre: " + idDes);
+		Environment.printout("AA ambulance: Estoy destinado al desastre: " + idDes,0);
 
 		enviarRespuesta("ack_aviso", "Aviso recibido");
-		System.out.println("** ambulance: Ack mandado");
+		Environment.printout("AA ambulance: Ack mandado",0);
 
 		//sacamos el herido
 		People herido = null;
@@ -61,13 +55,13 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 		}
 
 		int id = 0;
-		if (herido != null) {
+		if ((herido != null) && !herido.getType().equals("slight")) { // Leves atendidos por el enfermero de la residencia
 			id = herido.getId();
-			System.out.println("** ambulance: Tengo herido " + id);
+			Environment.printout("AA ambulance: Tengo herido " + id,0);
 			
 			//deasociar los heridos del desastre
-			System.out.println("** ambulance: quitando la asociacion del herido " + id);
-			String resultado1 = Connection.connect(Environment.URL + "put/" + id + "/idAssigned/" + "0");
+			Environment.printout("AA ambulance: quitando la asociacion del herido " + id,0);
+			String resultado1 = Connection.connect(Environment.URL + "put/" + id + "/idAssigned/0");
 			
 			if (herido.getType().equals("slight")) {
 				des.setSlight();
@@ -77,23 +71,22 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 				des.setDead();
 			}
 		} else {
-			System.out.println("** ambulance: Desastre sin heridos");
+			Environment.printout("AA ambulance: Desastre sin heridos",0);
 		}
 
 		// La ambulancia regresa a su hospital correspondiente.
 		try {
 			env.andar(getComponentName(), posicionActual, posicionHospital, env.getAgent(getComponentName()).getId(), id);
-			if (herido != null) {
+			if ((herido != null) && !herido.getType().equals("slight")) {
 				//y deposita al herido
-				System.out.println("** ambulance: depositando herido " + id);
-				String resultado1 = Connection.connect(Environment.URL + "put/" + "0.0" + "/idAssigned/" + "0");
+				Environment.printout("AA ambulance: depositando herido " + id,0);
 				String resultado = Connection.connect(Environment.URL + "delete/id/" + id);
 			} else {
-				System.out.println("** ambulance: de vuelta en el hospital");
+				Environment.printout("AA ambulance: de vuelta en el hospital",0);
 			}
 
 		} catch (Exception e) {
-			System.out.println("** ambulance: Error metodo andar: " + e);
+			System.out.println("AA ambulance: Error metodo andar: " + e);
 		}
 	}
 }

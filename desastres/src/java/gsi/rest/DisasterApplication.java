@@ -19,7 +19,7 @@ import java.io.*;
  */
 public class DisasterApplication extends Application {
 
-	private static final String URL_BASE = "/disasters/RESTFUL/";
+	private static final String URL_BASE = "/desastres/RESTFUL/";
 
 	/**
 	 * Constructor (not used)
@@ -189,6 +189,21 @@ public class DisasterApplication extends Application {
 						response.setEntity("State format is not correct. (active, controlled or erased)", MediaType.TEXT_PLAIN);
 					}
 				}
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		//Updating Events in the database
+		Restlet putLatLong = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				int id = Integer.parseInt((String) request.getAttributes().get("id"));
+				String valueLat = (String) request.getAttributes().get("latitud");
+				String valueLong = (String) request.getAttributes().get("longitud");
+
+				String redirector = URL_BASE + "put.jsp?action=latlong&id=" + id + "&" + "latitud=" + valueLat + "&" + "longitud=" + valueLong;
+
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -538,11 +553,42 @@ public class DisasterApplication extends Application {
 			}
 		};
 
+		// Get all the users
+		Restlet users = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector = URL_BASE + "get.jsp?action=users";
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Get all the modified users
+		Restlet usersModified = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector_date = (String) request.getAttributes().get("dateTime");
+
+				String redirector = URL_BASE + "get.jsp?action=usersModified&fecha=" + redirector_date;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
 		// Get all the healthy people in the center
 		Restlet healthy = new Restlet(getContext()) {
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector = URL_BASE + "get.jsp?action=healthy";
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Get all the healthy people in the center
+		Restlet updateHealthy = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String id = (String) request.getAttributes().get("id");
+				String redirector = URL_BASE + "delete.jsp?action=healthy&id=" + id;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -583,6 +629,61 @@ public class DisasterApplication extends Application {
 			public void handle(Request request, Response response) {
 				String user_name = (String) request.getAttributes().get("nombre_usuario");
 				String redirector = URL_BASE + "get.jsp?action=userProyect&nombre_usuario=" + user_name;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// DELETE user
+		Restlet delUser = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				String nombre = (String) request.getAttributes().get("nombre");
+				String redirector = URL_BASE + "delete.jsp?action=user&nombre=" + nombre;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Introducir mensaje
+		Restlet message = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				String valor = (String) request.getAttributes().get("valor");
+				String nivel = (String) request.getAttributes().get("nivel");
+				String redirector = URL_BASE + "put.jsp?action=message&mensaje=" + valor + "&nivel=" + nivel;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Leer mensajes
+		Restlet messages = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector = URL_BASE + "get.jsp?action=messages"; //&fecha=" + fecha;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Leer mensajes desde una fecha
+		Restlet messagesDate = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				String fecha = (String) request.getAttributes().get("fecha");
+				String redirector = URL_BASE + "get.jsp?action=messagesDate&fecha=" + fecha;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Leer mensajes desde un id
+		Restlet messagesId = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				String index = (String) request.getAttributes().get("index");
+				String redirector = URL_BASE + "get.jsp?action=messagesId&index=" + index;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -644,13 +745,24 @@ public class DisasterApplication extends Application {
 		router.attach("/put/{id}/{parameter}/{valueParameter}/inc/{valueIncrement}", putInc);
 		router.attach("/put/{id}/{parameter}/{value}", put);
 		router.attach("/put/{id}/{action}", putAdd);
+		router.attach("/put/{id}/latlong/{latitud}/{longitud}", putLatLong);
 
+		router.attach("/users", users);
+		router.attach("/users/modified/{dateTime}", usersModified);
 		router.attach("/healthy", healthy);
+		router.attach("/healthy/id/{id}", updateHealthy);
 
 		router.attach("/proyects", proyects);
 		router.attach("/user/{nombre_usuario}/{password}", user);
 		router.attach("/userRole/{nombre_usuario}", userRole);
 		router.attach("/userProyect/{nombre_usuario}", userProyect);
+
+		router.attach("/delete/user/{nombre}", delUser);
+
+		router.attach("/message/{valor}/{nivel}", message);
+		router.attach("/messages", messages);
+		router.attach("/messages/{fecha}", messagesDate);
+		router.attach("/messages/id/{index}", messagesId);
 
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);
 		//router.attachDefault(inicial);

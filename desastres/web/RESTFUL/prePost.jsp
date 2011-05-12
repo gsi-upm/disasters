@@ -43,7 +43,7 @@
 
 				var valid = false;
 				if (type=="fire"||type=="flood"||type=="collapse"||type=="lostPerson"||type=="injuredPerson") {item = "event"; valid=true;}
-				if (type=="police"||type=="firemen"||type=="ambulance"||type=="ambulancia"||type=="nurse"){item="resource";valid =true;}
+				if (type=="police"||type=="firemen"||type=="ambulance"||type=="ambulancia"||type=="nurse"||type=="gerocultor"||type=="assistant"){item="resource";valid =true;}
 				if(type=="slight"||type=="serious"||type=="dead"||type=="healthy"){item="people";valid = true;}
 
 			<c:choose>

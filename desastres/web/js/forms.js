@@ -35,6 +35,12 @@ function cambiaIcono(marcador,tipo,cantidad){
 		if (tipo=="nurse"){
 			imagen="markers/enfermero"+cantidad+".png";
 		}
+		if (tipo=="gerocultor"){
+			imagen="markers/gerocultor"+cantidad+".png";
+		}
+		if (tipo=="assistant"){
+			imagen="markers/auxiliar"+cantidad+".png";
+		}
 		document.getElementById("icono_recursos").src=imagen;
 	}
 	if (marcador=="people"){
@@ -144,6 +150,12 @@ function iconoAdecuado(marcador,tipo,cantidad){
 		}
 		if (tipo=="nurse"){
 			imagen="markers/enfermero"+cantidad+".png";
+		}
+		if (tipo=="gerocultor"){
+			imagen="markers/gerocultor"+cantidad+".png";
+		}
+		if (tipo=="assistant"){
+			imagen="markers/auxiliar"+cantidad+".png";
 		}
 	}
 	if (marcador=="people"){

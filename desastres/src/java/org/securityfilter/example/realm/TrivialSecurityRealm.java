@@ -55,9 +55,16 @@
 
 package org.securityfilter.example.realm;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.securityfilter.example.Constants;
 import org.securityfilter.realm.SimpleSecurityRealmBase;
 import jadex.desastres.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.util.Calendar;
 import org.json.me.*;
 
 /**
@@ -83,17 +90,22 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
     *
     * @return null if the user cannot be authenticated, otherwise a Pricipal object is returned
     */
-   public boolean booleanAuthenticate(String username, String password) {
-	   boolean autenticado = false;
-	   try {
-			String usuarioAux = Connection.connect(Environment.URL + "user/" + username + "/" + password);
+	public boolean booleanAuthenticate(String username, String password) {
+		boolean autenticado = false;
+		try {
+			String pass = MD5(password);
+			String usuarioAux = Connection.connect("http://localhost:8080/desastres/rest/user/" + username + "/" + pass);
 			JSONArray usuario = new JSONArray(usuarioAux);
 			
 			if(usuario.length() == 1) {
 				autenticado = true;
+				Calendar cal = Calendar.getInstance();
+				String date = cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.DAY_OF_MONTH)
+						+ " " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND);
+				Connection.connect("http://localhost:8080/desastres/rest/post/type=user&name=" + username + "&quantity=1&latitud=0&longitud=0" + "&fecha=" + date + "&idAssigned=0");
 			}
-		} catch (JSONException ex) {
-			System.out.println("Excepcion: " + ex);
+		} catch (Exception ex) {
+			System.out.println("Excepcion en TrivialSecurityRealm.booleanAuthenticate(): " + ex);
 		}
 
 	   /*return (
@@ -104,6 +116,25 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
       );*/
 	   return autenticado;
    }
+
+	private String MD5(String valor){
+		String hash = "";
+		try {
+			MessageDigest md5 = MessageDigest.getInstance("MD5");
+			md5.update(valor.getBytes("UTF-8"));
+			byte[] valorHash = md5.digest();
+			int[] valorHash2 = new int[16];
+			for (int i = 0; i < valorHash.length; i++) {
+				valorHash2[i] = new Integer(valorHash[i]);
+				if (valorHash2[i] < 0) {
+					valorHash2[i] += 256;
+				}
+				hash += (Integer.toHexString(valorHash2[i]));
+			}
+		} catch (Exception ex) {}
+
+		return hash;
+	}
 
    /**
     * Test for role membership.
@@ -117,7 +148,7 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
    public boolean isUserInRole(String username, String role) {
 	   boolean rol = false;
 	   try {
-			String rolUsuarioAux = Connection.connect(Environment.URL + "userRole/" + username);
+			String rolUsuarioAux = Connection.connect("http://localhost:8080/desastres/rest/userRole/" + username);
 			JSONArray rolUsuario = new JSONArray(rolUsuarioAux);
 			
 			if(rolUsuario.getJSONObject(0).getString("user_type").equals(role)) {

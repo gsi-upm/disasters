@@ -1,9 +1,7 @@
 package jadex.desastres.caronte.police;
 
 import jadex.bdi.runtime.*;
-import jadex.desastres.Environment;
-import jadex.desastres.Position;
-import jadex.desastres.WorldObject;
+import jadex.desastres.*;
 
 /**
  * Plan de la POLICIA para esperar un aviso en la comisaria.

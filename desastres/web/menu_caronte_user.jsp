@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:useBean class="jadex.desastres.ProyectBean" id="proyecto" scope="session"/>
+<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <%@ include file="info_caronte.jsp" %>
 <fmt:bundle basename="fmt.eji8n">
@@ -54,6 +54,14 @@
 				<tr>
 					<td><fmt:message key="enfermero"/> (${nurse.rowCount})</td>
 					<td><img alt="" src="markers/enfermero1.png" class="rayas"></td>
+				</tr>
+				<tr>
+					<td><fmt:message key="gerocultor"/> (${gerocultor.rowCount})</td>
+					<td><img alt="" src="markers/gerocultor1.png" class="rayas"></td>
+				</tr>
+				<tr>
+					<td><fmt:message key="auxiliar"/> (${assistant.rowCount})</td>
+					<td><img alt="" src="markers/auxiliar1.png" class="rayas"></td>
 				</tr>
 			</table>
 		</div>

@@ -1,6 +1,7 @@
 package jadex.desastres;
 
 import jadex.bdi.runtime.*;
+import java.io.IOException;
 
 /**
  *
@@ -13,6 +14,10 @@ public class DetenerEntorno extends Plan {
 	 */
 	public synchronized void body() {
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		env.terminar();
+		try {
+			env.terminar();
+		} catch (IOException ex) {
+			System.out.println("Excepcion en DetenerEntorno: " + ex);
+		}
 	}
 }

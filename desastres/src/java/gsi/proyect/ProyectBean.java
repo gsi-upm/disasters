@@ -1,4 +1,4 @@
-package jadex.desastres;
+package gsi.proyect;
 
 import java.beans.*;
 import java.io.Serializable;

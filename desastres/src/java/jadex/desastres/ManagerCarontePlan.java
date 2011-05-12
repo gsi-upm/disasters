@@ -35,15 +35,20 @@ public class ManagerCarontePlan extends Plan{
 		sp5.getParameter("type").setValue("jadex/desastres/caronte/nurse/nurse.agent.xml");
 		dispatchSubgoalAndWait(sp5);
 		System.out.println("Enfermero creado");
-		
+
 		IGoal sp6 = createGoal("cms_create_component");
-		sp6.getParameter("type").setValue("jadex/desastres/caronte/centralEmergencias/centralEmergencias.agent.xml");
+		sp6.getParameter("type").setValue("jadex/desastres/caronte/gerocultor/gerocultor.agent.xml");
 		dispatchSubgoalAndWait(sp6);
-		System.out.println("Central creada");
+		System.out.println("Gerocultor creado");
 		
 		IGoal sp7 = createGoal("cms_create_component");
-		sp7.getParameter("type").setValue("jadex/desastres/caronte/coordinadorEmergencias/coordinadorEmergencias.agent.xml");
+		sp7.getParameter("type").setValue("jadex/desastres/caronte/centralEmergencias/centralEmergencias.agent.xml");
 		dispatchSubgoalAndWait(sp7);
+		System.out.println("Central creada");
+		
+		IGoal sp8 = createGoal("cms_create_component");
+		sp8.getParameter("type").setValue("jadex/desastres/caronte/coordinadorEmergencias/coordinadorEmergencias.agent.xml");
+		dispatchSubgoalAndWait(sp8);
 		System.out.println("Coordinador creado");
 		
 

@@ -192,6 +192,28 @@
 		</sql:query>
 	</c:when>
 
+	<c:when test="${param.action eq 'users'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
+				   WHERE marcador = 'user'
+				   AND estado != 'erased';">
+		</sql:query>
+	</c:when>
+
+	<c:when test="${param.action eq 'usersModified'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
+				   WHERE marcador = 'user'
+				   AND modificado > ?
+				   AND estado != 'erased';">
+			<sql:param value="${param.fecha}"/>
+		</sql:query>
+	</c:when>
+
 	<c:when test="${param.action eq 'healthy'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
 				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
@@ -241,7 +263,31 @@
 			<sql:param value="${param.nombre_usuario}"/>
 		</sql:query>
 	</c:when>
-	
+
+	<c:when test="${param.action eq 'messages'}">
+		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, mensaje, nivel, fecha
+				   FROM mensajes;">
+		</sql:query>
+	</c:when>
+
+	<c:when test="${param.action eq 'messagesDate'}">
+		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, mensaje, nivel, fecha
+				   FROM mensajes
+				   WHERE fecha > ?;">
+			<sql:param value="${param.fecha}"/>
+		</sql:query>
+	</c:when>
+
+	<c:when test="${param.action eq 'messagesId'}">
+		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, mensaje, nivel, fecha
+				   FROM mensajes
+				   WHERE id > ?;">
+			<sql:param value="${param.index}"/>
+		</sql:query>
+	</c:when>
 </c:choose>
 
 <c:choose>     
@@ -298,6 +344,14 @@
 		<c:forEach var="proyecto" items="${proyectos.rows}">
 			<json:object name="temporal">
 				<json:property name="proyect" value="${proyecto.proyecto}"/>
+			</json:object> ,
+		</c:forEach>
+		<c:forEach var="mensaje" items="${mensajes.rows}">
+			<json:object name="temporal">
+				<json:property name="id" value="${mensaje.id}"/>
+				<json:property name="mensaje" value="${mensaje.mensaje}"/>
+				<json:property name="nivel" value="${mensaje.nivel}"/>
+				<json:property name="fecha" value="${mensaje.fecha}"/>
 			</json:object> ,
 		</c:forEach>
 		]

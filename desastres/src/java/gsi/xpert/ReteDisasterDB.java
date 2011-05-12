@@ -9,7 +9,6 @@ import org.json.me.*;
 import java.sql.Timestamp;
 import gsi.rest.Connection;
 import gsi.simulator.Parameters;
-import jadex.desastres.Environment;
 
 /**
  * Launches jess and creates markers
@@ -37,7 +36,7 @@ public class ReteDisasterDB {
 	/**
 	 * URL for Disasters2.0 application REST interface
 	 **/
-	private static final String URL_BASE = "http://localhost:8080/disasters/rest/";
+	private static final String URL_BASE = "http://localhost:8080/desastres/rest/";
 	/**
 	 * TimeStamp for the last JSON Request
 	 **/

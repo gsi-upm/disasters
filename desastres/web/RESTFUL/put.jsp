@@ -67,6 +67,20 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
+	<c:when test="${param.action eq 'latlong'}">
+		<c:catch var="errorInsert">
+			<sql:update dataSource="${CatastrofesServer}">
+				UPDATE CATASTROFES SET
+				latitud = ? ,
+				longitud = ? ,
+				modificado = <%=modif%>
+				WHERE id = ?
+				<sql:param value="${param.latitud}"/>
+				<sql:param value="${param.longitud}"/>
+				<sql:param value="${param.id}"/>
+			</sql:update>
+		</c:catch>
+	</c:when>
 	<c:when test="${param.action eq 'quantity'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
@@ -154,6 +168,16 @@
 					<sql:param value="${param.id}"/>
 				</sql:update>
 			</c:forEach>
+		</c:catch>
+	</c:when>
+	<c:when test="${param.action eq 'message'}">
+		<c:catch var="errorInsert">
+			<sql:update dataSource="${CatastrofesServer}">
+				INSERT INTO MENSAJES (mensaje, nivel, fecha)
+				VALUES (?,?,<%=modif%>)
+				<sql:param value="${param.mensaje}"/>
+				<sql:param value="${param.nivel}"/>
+			</sql:update>
 		</c:catch>
 	</c:when>
 </c:choose>

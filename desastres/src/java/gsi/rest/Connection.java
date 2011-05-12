@@ -1,7 +1,6 @@
 package gsi.rest;
 
 import gsi.rest.DisasterApplication;
-import jadex.desastres.Environment;
 import java.net.*;
 import java.io.*;
 
@@ -12,8 +11,8 @@ import java.io.*;
  */
 public class Connection {
 
-	private static final String URL_BASE = "http://localhost:8080/disasters/rest/";
-	private static final String URL_BASE_2 = "http://localhost:8080/disasters/RESTFUL/";
+	private static final String URL_BASE = "http://localhost:8080/desastres/rest/";
+	private static final String URL_BASE_2 = "http://localhost:8080/desastres/RESTFUL/";
 
     /**
      * @param source URL to connect

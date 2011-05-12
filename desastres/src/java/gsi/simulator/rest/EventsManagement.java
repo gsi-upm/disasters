@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 
 import gsi.disasters.SizeType;
 import gsi.disasters.DensityType;
-import jadex.desastres.Environment;
 
 /**
  * This class provides an interface for using the REST API.
@@ -13,7 +12,7 @@ import jadex.desastres.Environment;
  */
 public class EventsManagement {
 
-    private static final String URL_BASE = "http://localhost:8080/disasters/rest/";
+    private static final String URL_BASE = "http://localhost:8080/desastres/rest/";
     private static final String POST = "post/";
     private static final String PUT = "put/";
     private static final String DELETE = "delete/";
@@ -124,7 +123,7 @@ public class EventsManagement {
 
     /**
      *
-     * @param type It can be police, firemen, ambulance, nurse if it is referring
+     * @param type It can be police, firemen, ambulance, nurse, gerocultor, assistant if it is referring
      * to a resource, or slight, serious, dead or trapped, if referring to a victim.
      * @param name Name of the resource or victim
      * @param quantity Number of resources or victims to insert
