@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:useBean class="jadex.desastres.ProyectBean" id="proyecto" scope="session"/>
+<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <fmt:bundle basename="fmt.eji8n">
 	<div id="dhtmlgoodies_tabView1">
@@ -284,6 +284,6 @@
 	</div>
 	<!--aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="eventos"/>','<fmt:message key="recursos"/>','<fmt:message key="victimas"/>','<fmt:message key="experto"/>'),0,228,458);
+		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="eventos"/>','<fmt:message key="recursos"/>','<fmt:message key="victimas"/>','<fmt:message key="experto"/>'),0,228,488);
 	</script>
 </fmt:bundle>

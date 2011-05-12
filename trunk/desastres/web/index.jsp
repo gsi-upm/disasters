@@ -6,7 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>
-<jsp:useBean class="jadex.desastres.ProyectBean" id="proyecto" scope="session"/>
+<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 <c:set var="nombreUsuario" value="<%= request.getRemoteUser()%>"/>
 
 <c:if test="${nombreUsuario != null}">
@@ -30,6 +30,7 @@
 			<title><fmt:message key="title_${proyecto.proyect}"/></title>
 			<link type="image/x-icon" rel="shotcut icon" href="images/favicon_${proyecto.proyect}.ico">
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css">
+			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css">
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen">
 			<!--[if lt IE 9]>
 				<script type="text/javascript">
@@ -69,9 +70,9 @@
 			<script type="text/javascript" src="js/jquery-fieldselection.js"></script>
 			<script type="text/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>
 			<!-- DWR. These files are created in the runtime -->
-			<script type="text/javascript" src="/disasters/dwr/util.js"></script>
-			<script type="text/javascript" src="/disasters/dwr/interface/DirectionsBean.js"></script>
-			<script type="text/javascript" src="/disasters/dwr/engine.js"></script>
+			<script type="text/javascript" src="/desastres/dwr/util.js"></script>
+			<script type="text/javascript" src="/desastres/dwr/interface/DirectionsBean.js"></script>
+			<script type="text/javascript" src="/desastres/dwr/engine.js"></script>
 			<!-- Adds various Methods to GPolygon and GPolyline -->
 			<script type="text/javascript" src="js/epoly.js"></script>
 			<!-- Agents movement through roads -->
@@ -79,7 +80,7 @@
 			<!-- Areas around fires -->
 			<script type="text/javascript" src="js/einsert.js"></script>
 		</head>
-		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true); mostrarMensajes();" onunload="GUnload()">
 			<c:if test="${nombreUsuario != null}">
 				<c:import url="ventana_modificacion.jsp"/>
 			</c:if>
@@ -97,22 +98,6 @@
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
-						<c:if test="${proyecto.proyect == 'disasters'}">
-							<!-- minitabs top-right -->
-							<div id="minitabs">
-								<c:if test="${nombreUsuario != null}">
-									<div id="minitab3" class="minitab">
-										<img alt="ver" src="images/tab_simulator.png">
-									</div>
-								</c:if>
-								<div id="minitab2" class="minitab">
-									<img alt="ver" src="images/tab_building.png">
-								</div>
-								<div id="minitab1" class="minitab">
-									<img alt="más info" src="images/tab_eye.png">
-								</div>
-							</div>
-						</c:if>
 					</td>
 				</tr>
 			</table>
@@ -123,18 +108,18 @@
 						<div id="left">
 							<!-- If the user isn't autenticated, we show the login form -->
 							<c:if test="${nombreUsuario == null}">
-								<h2>Login</h2>
+								<h2><fmt:message key="iniciarsesion"/></h2>
 								<div id="login">
 									<form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="post" id="loginform">
 										<table>
 											<tr>
 												<td><fmt:message key="usuario"/>:</td>
-<!-- ELIMINAR value="agent"!!! -->
-												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" value="agent"></td>
+												<!-- ELIMINAR value="agent"!!! -->
+												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" size="26" value="agent"></td>
 											</tr>
 											<tr>
 												<td><fmt:message key="contrasenna"/>:</td>
-												<td><input type="password" name="<%=Constants.LOGIN_PASSWORD_FIELD%>" id="pwd"></td>
+												<td><input type="password" name="<%=Constants.LOGIN_PASSWORD_FIELD%>" id="pwd" size="26"></td>
 											</tr>
 											<tr>
 												<td colspan="2"><input type="submit" name="Submit" id="submit_butt" value="<fmt:message key="aceptar"/>"></td>
@@ -148,7 +133,7 @@
 								<c:if test="${proyecto.number == 1}">
 									<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
 									<br>
-									<a href="logout.jsp">Logout</a>
+									<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
 								</c:if>
 								<c:if test="${proyecto.number > 1}">
 									<table style="width:100%">
@@ -156,7 +141,7 @@
 											<td>
 												<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
 												<br>
-												<a href="logout.jsp">Logout</a>
+												<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
 											</td>
 											<td style="width:100px">
 												<form action="index.jsp" style="text-align:right; margin-right:8px">
@@ -197,10 +182,40 @@
 					<td id="fila_mapa">
 						<div id="right">
 							<c:if test="${nombreUsuario == null}">
+								<c:if test="${proyecto.proyect == 'disasters'}">
+									<!-- minitabs top-right -->
+									<div id="minitabs">
+										<c:if test="${nombreUsuario != null}">
+											<div id="minitab3" class="minitab">
+												<img alt="ver" src="images/tab_simulator.png">
+											</div>
+										</c:if>
+										<div id="minitab2" class="minitab">
+											<img alt="ver" src="images/tab_building.png">
+										</div>
+										<div id="minitab1" class="minitab">
+											<img alt="más info" src="images/tab_eye.png">
+										</div>
+									</div>
+								</c:if>
 								<div id="map_canvas"></div>
 							</c:if>
 							<c:if test="${nombreUsuario != null}">
 								<c:if test="${proyecto.proyect == 'disasters'}">
+									<!-- minitabs top-right -->
+									<div id="minitabs">
+										<c:if test="${nombreUsuario != null}">
+											<div id="minitab3" class="minitab">
+												<img alt="ver" src="images/tab_simulator.png">
+											</div>
+										</c:if>
+										<div id="minitab2" class="minitab">
+											<img alt="ver" src="images/tab_building.png">
+										</div>
+										<div id="minitab1" class="minitab">
+											<img alt="más info" src="images/tab_eye.png">
+										</div>
+									</div>
 									<div id="map_canvas"></div>
 								</c:if>
 								<c:if test="${proyecto.proyect == 'caronte'}">
@@ -208,6 +223,11 @@
 								</c:if>
 							</c:if>
 						</div>
+					</td>
+					<td>
+						<div id="open_messages"><a href="#"><fmt:message key="mostrar"/></a></div>
+						<div id="close_messages"><a href="#"><fmt:message key="ocultar"/></a></div>
+						<div id="messages"><div id="messages0"></div></div>
 					</td>
 				</tr>
 			</table>

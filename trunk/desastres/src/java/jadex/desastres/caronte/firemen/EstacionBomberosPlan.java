@@ -1,9 +1,7 @@
 package jadex.desastres.caronte.firemen;
 
 import jadex.bdi.runtime.*;
-import jadex.desastres.Environment;
-import jadex.desastres.Position;
-import jadex.desastres.WorldObject;
+import jadex.desastres.*;
 
 /**
  * Plan de BOMBEROS para llevar al bombero a la estacion de bomberos.

@@ -1,5 +1,7 @@
-package jadex.desastres;
+package gsi.proyect;
 
+import jadex.desastres.Connection;
+import jadex.desastres.Environment;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -31,17 +33,17 @@ public class ProyectServlet extends HttpServlet {
 			String proyectoAux = Connection.connect(Environment.URL + "userProyect/" + usuario);
 			JSONArray proyecto = new JSONArray(proyectoAux);
 			if (proyecto.length() == 1) {
-				response.sendRedirect("/disasters/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect") + "&number=1");
+				response.sendRedirect("/desastres/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect") + "&number=1");
 			}else{
-				/*String respuesta = "/disasters/index.jsp?num=" + proyecto.length();
+				/*String respuesta = "/desastres/index.jsp?num=" + proyecto.length();
 				for (int i = 0; i < proyecto.length(); i++) {
 					respuesta = respuesta + "&proyect" + i + "=" + proyecto.getJSONObject(i).getString("proyect");
 				}
 				response.sendRedirect(respuesta);*/
-				response.sendRedirect("/disasters/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect") + "&number=2");
+				response.sendRedirect("/desastres/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect") + "&number=2");
 			}
 		} catch (JSONException ex) {
-			System.out.println("Excepcion: " + ex);
+			System.out.println("Excepcion en ProyectServlet.processRequest(): " + ex);
 		}finally{
 			out.close();
 		}

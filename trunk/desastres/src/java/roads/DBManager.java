@@ -1,6 +1,5 @@
 package roads;
 
-import jadex.desastres.Environment;
 import java.util.*;
 import java.net.*;
 import java.io.*;
@@ -10,7 +9,7 @@ public class DBManager {
     /**
      * URL for Caronte application REST interface
      **/
-    private static final String URL_BASE = "http://localhost:8080/disasters/rest/";
+    private static final String URL_BASE = "http://localhost:8080/desastres/rest/";
 
     public DBManager() {
     }

@@ -15,6 +15,7 @@ var policeStations;
 var policeIndex = 0;
 var geriatricCenters;
 var geriatricIndex = 0;
+var geriatricLines;
          
 var pos_def;
 var pos_temp;
@@ -34,7 +35,11 @@ var estado_Experto = "off";
 var tiempoActualizacion = 1500;
 var tiempoInicial = 5000;
 
-var url_base = "/disasters/Xpert" ;
+var userName = null;
+var latitudUser = 0;
+var longitudUser = 0;
+
+var url_base = "/desastres/Xpert" ;
 
 function initialize() {
 	if (GBrowserIsCompatible()) {
@@ -68,6 +73,7 @@ function initialize() {
 		policeStations = new Array;
 		firemenStations = new Array;
 		geriatricCenters = new Array;
+		geriatricLines = new Array;
          
 		indices = new Array;
 		pos_indices = 0;
@@ -76,7 +82,10 @@ function initialize() {
         
 		ultimamodif = '1992-01-01 00:00:01'; //(una fecha antigua para empezar)
 		//hacemos la peticion inicial del json (baja todo menos los borrados)
-		$.getJSON('leeEventos.jsp', {'fecha': ultimamodif, 'action':"firstTime"}, function(data) {
+		$.getJSON('leeEventos.jsp', {
+			'fecha': ultimamodif,
+			'action':"firstTime"
+		}, function(data) {
 			$.each(data, function(entryIndex, entry) {
 				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
 					entry['quantity'],entry['name'],entry['description'],entry['info'],
@@ -105,6 +114,10 @@ function initialize() {
 		setTimeout("moveAgents()",2000);
 		setTimeout("actualizar()",tiempoInicial);
 
+		if(document.getElementById("signeduser") != null){
+			userName = document.getElementById("signeduser").innerHTML;
+		}
+		
 		if(navigator.geolocation){
 			navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 		}
@@ -112,21 +125,34 @@ function initialize() {
 }
 
 function coordenadasUsuario(pos){
-	var lati = pos.coords.latitude;
-	var longi = pos.coords.longitude;
+	latitudUser = pos.coords.latitude;
+	longitudUser = pos.coords.longitude;
 
 	var icono = new GIcon();
 	icono.image = "markers/user.png";
 	icono.iconSize = new GSize(28, 43);
 	icono.iconAnchor = new GPoint(28, 43);
-	opciones = { icon:icono };
-	var marker = new GMarker (new GLatLng(lati,longi), opciones);
+	opciones = {
+		icon:icono
+	};
+	var marker = new GMarker (new GLatLng(latitudUser,longitudUser), opciones);
 	map.addOverlay(marker);
+
+	if(userName != null){
+		$.post('updateLatLong.jsp',{
+			'nombre':userName,
+			'latitud':latitudUser,
+			'longitud':longitudUser
+		});
+	}
 }
 
 function actualizar(){
 	//cada 10 segundos hacemos la peticion actualizadora de json
-	$.getJSON('leeEventos.jsp', {'fecha': ultimamodif,'action':"notFirst"}, function(data) {
+	$.getJSON('leeEventos.jsp', {
+		'fecha': ultimamodif,
+		'action':"notFirst"
+	}, function(data) {
 		$.each(data, function(entryIndex, entry) {
 			//el id lo asigna la base de datos
 			var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
@@ -249,13 +275,29 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	}; //se pueden arrastrar para asociarlo
             
 	var marker = new GMarker (new GLatLng(latitud,longitud), opciones);
-	GEvent.addListener(marker, "click", function() {
-		marker.openInfoWindowHtml("<div id='bocadillo'>"+mensaje+"</div>");
-	});
+	if(type=='geriatricCenter'){
+		var linea1 = new GPolyline([new GLatLng(38.232634, -1.699622), new GLatLng(38.232634, -1.698201)], "#00ff00", 1, 0.5);
+		var linea2 = new GPolyline([new GLatLng(38.232634, -1.698201), new GLatLng(38.231943, -1.698201)], "#00ff00", 1, 0.5);
+		var linea3 = new GPolyline([new GLatLng(38.231943, -1.698201), new GLatLng(38.231943, -1.699622)], "#00ff00", 1, 0.5);
+		var linea4 = new GPolyline([new GLatLng(38.231943, -1.699622), new GLatLng(38.232634, -1.699622)], "#00ff00", 1, 0.5);
+		geriatricLines = [linea1, linea2, linea3, linea4];
+		GEvent.addListener(marker, "click", function() {
+			marker.openInfoWindowHtml("<div id='bocadillo'>"+mensaje+"</div>");
+			map.addOverlay(linea1);
+			map.addOverlay(linea2);
+			map.addOverlay(linea3);
+			map.addOverlay(linea4);
+		});
+	}else{
+		GEvent.addListener(marker, "click", function() {
+			marker.openInfoWindowHtml("<div id='bocadillo'>"+mensaje+"</div>");
+		});
+	}
+	
 	map.addOverlay(marker);
 	matrix[matrixIndex]=marker;
 	matrixIndex++;
-	
+
 	if(type=='hospital'){
 		hospitals = matrix;
 		hospIndex = matrixIndex;
@@ -275,8 +317,8 @@ function generateBuilding(type, mensaje, latitud, longitud){
 }
 
 function hideBuilding(type){
-    var matrix;
-    if(type=='hospital'){
+	var matrix;
+	if(type=='hospital'){
 		matrix=hospitals;
 		hospitals = new Array;
 		hospIndex = 0;
@@ -293,40 +335,47 @@ function hideBuilding(type){
 		geriatricCenters = new Array;
 		geriatricIndex = 0;
 	}
-    for(i=0; i<matrix.length; i++){
-        map.removeOverlay(matrix[i]);
-    }
+	for(i=0; i<matrix.length; i++){
+		map.removeOverlay(matrix[i]);
+	}
+
+	if(type=='geriatricCenter'){
+		map.removeOverlay(geriatricLines[0]);
+		map.removeOverlay(geriatricLines[1]);
+		map.removeOverlay(geriatricLines[2]);
+		map.removeOverlay(geriatricLines[3]);
+	}
 }
 
 function visualize(selected, type){
-    if(type=='hospital'){
-        if(selected){
+	if(type=='hospital'){
+		if(selected){
 			showHospitals();
 		}else{
 			hideBuilding (type);
 		}
-    }
-    if(type=='policeStation'){
-        if(selected){
+	}
+	if(type=='policeStation'){
+		if(selected){
 			showPoliceStations();
 		}else{
 			hideBuilding (type);
 		}
-    }
-    if(type=='firemenStation'){
-        if(selected){
+	}
+	if(type=='firemenStation'){
+		if(selected){
 			showFiremenStations();
 		}else{
 			hideBuilding (type);
 		}
-    }
+	}
 	if(type=='geriatricCenter'){
-        if(selected){
+		if(selected){
 			showGeriatricCenters();
 		}else{
 			hideBuilding (type);
 		}
-    }
+	}
 }
 
 function generaMarcador(evento, caracter){
@@ -401,6 +450,14 @@ function generaMarcador(evento, caracter){
 		//es un enfermero
 		if (evento.tipo=="nurse"){
 			icono.image = "markers/enfermero"+evento.cantidad+".png";
+		}
+		//es un gerocultor
+		if (evento.tipo=="gerocultor"){
+			icono.image = "markers/gerocultor"+evento.cantidad+".png";
+		}
+		//es un auxiliar
+		if (evento.tipo=="assistant"){
+			icono.image = "markers/auxiliar"+evento.cantidad+".png";
 		}
 				
 		opciones = {
@@ -496,8 +553,8 @@ function generaMarcador(evento, caracter){
 			var small = evento.nombre +"<br>" + evento.descripcion;
 			//AQUI SE PUEDEN AUMENTAR LAS OPCIONES A MOSTRAR!!!
 			var links1 = "<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
-				+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
-				+" - "+ "<a id='ver_mas1' href='#'onclick=\"verMas("+evento.id+");return false;\"  > Ver m&aacute;s </a>";
+			+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
+			+" - "+ "<a id='ver_mas1' href='#'onclick=\"verMas("+evento.id+");return false;\"  > Ver m&aacute;s </a>";
 			marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+
 				"<div id='bocadillo_links2'>"+"</div>"+"</div>");            
 		});
@@ -514,7 +571,7 @@ function generaMarcador(evento, caracter){
 	}
     
 	//if (!(evento.marcador=="resource" && caracter==1)){
-		map.addOverlay(marker);
+	map.addOverlay(marker);
 	//}
 	return marker;
 }
@@ -523,8 +580,8 @@ function verMas(id){
 	var evento = marcadores_definitivos[id];
 	var complete = evento.nombre +"<br>" + evento.info + "<br>" +evento.descripcion + "<br>" + "Direccion: " + evento.direccion +"<br>";
 	var links2 ="<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
-		+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
-		+" - "+ "<a id='ver_mas2' href='#' onclick=\"verMenos("+evento.id+");return false;\" > Ver menos </a>";
+	+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
+	+" - "+ "<a id='ver_mas2' href='#' onclick=\"verMenos("+evento.id+");return false;\" > Ver menos </a>";
 	marcadores_definitivos[id].marker.openInfoWindowHtml("<div id='bocadillo'>"+complete+"<div id='bocadillo_links'>"+links2+"</div>"+"</div>");
 }
 
@@ -532,8 +589,8 @@ function verMenos(id){
 	var evento = marcadores_definitivos[id];
 	var small = evento.nombre +"<br>" + evento.descripcion ;
 	var links1 ="<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
-		+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
-		+" - "+ "<a id='ver_mas1' href='#' onclick=\"verMas("+evento.id+");return false;\" > Ver m&aacute;s </a>";
+	+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
+	+" - "+ "<a id='ver_mas1' href='#' onclick=\"verMas("+evento.id+");return false;\" > Ver m&aacute;s </a>";
 	marcadores_definitivos[id].marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+"</div>");
 }
 
@@ -671,8 +728,8 @@ function guardar(puntero){
 	eliminar(puntero,TEMPORAL);
 	marcadores_temporales[puntero.id]=null;
 	
-	//3. Recargar el mapa para que aparezca el elemento nuevo
-	//actualizar();//esto adelanta el timeOut a ahora mismo
+//3. Recargar el mapa para que aparezca el elemento nuevo
+//actualizar();//esto adelanta el timeOut a ahora mismo
 }
 	
 function asociar (id, marker){
@@ -731,6 +788,14 @@ function guardar_asociacion (idEvento, idRecurso){
 		nueva_longitud=longitud+0.00025;
 	}
 	if(recurso.tipo=="nurse"){
+		nueva_latitud=latitud+0.0005;
+		nueva_longitud=longitud-0.00025;
+	}
+	if(recurso.tipo=="gerocultor"){
+		nueva_latitud=latitud+0.0005;
+		nueva_longitud=longitud-0.00025;
+	}
+	if(recurso.tipo=="assistant"){
 		nueva_latitud=latitud+0.0005;
 		nueva_longitud=longitud-0.00025;
 	}
@@ -861,4 +926,35 @@ function stopExperto(){
 		estado_Experto = "off";
 		$('#screen').append(data);
 	});
+}
+
+function mostrarMensajes(){
+	$('#close_messages').click(function(){
+		$('#messages').slideUp();
+		$('#close_messages').slideUp();
+		$('#open_messages').slideDown();
+		return false;
+	});
+
+	$('#open_messages').click(function(){
+		$('#messages').slideDown();
+		$('#close_messages').slideDown();
+		$('#open_messages').slideUp();
+		return false;
+	});
+	
+	mostrarMensajes2(0);
+}
+
+function mostrarMensajes2(i){
+	$.get("/desastres/messages",{
+		'action':i
+	}, function(data) {
+		$('#messages'+i).html(data);
+	});
+
+	var scc = document.getElementById('messages');
+	scc.scrollTop = scc.scrollHeight + scc.offsetHeight;
+
+	setTimeout("mostrarMensajes2("+(i+1)+")",2000);
 }

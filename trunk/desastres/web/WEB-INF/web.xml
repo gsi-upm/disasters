@@ -67,11 +67,19 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>ProyectServlet</servlet-name>
-        <servlet-class>jadex.desastres.ProyectServlet</servlet-class>
+        <servlet-class>gsi.proyect.ProyectServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProyectServlet</servlet-name>
         <url-pattern>/proyect</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>MessagesServlet</servlet-name>
+        <servlet-class>gsi.proyect.MessagesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MessagesServlet</servlet-name>
+        <url-pattern>/messages</url-pattern>
     </servlet-mapping>
     <!-- Filtering-->
     <filter>

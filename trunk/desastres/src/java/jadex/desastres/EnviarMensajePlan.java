@@ -11,7 +11,7 @@ import jadex.bridge.IComponentIdentifier;
  */
 public abstract class EnviarMensajePlan extends Plan {
 
-	protected String enviarMensaje(String agente, String mensajeID, String contenido){
+	protected String enviarMensaje(String agente, String evento, String contenido){
 		IComponentIdentifier a = null;
 		while(a == null){
 			IDF	dfservice = (IDF)SServiceProvider.getService(getScope().getServiceProvider(), IDF.class).get(this);
@@ -26,18 +26,34 @@ public abstract class EnviarMensajePlan extends Plan {
 			}
 		}
 
-		IGoal query = createGoal("procap.rp_initiate");
+		/*IGoal query = createGoal("procap.rp_initiate");
 		query.getParameter("receiver").setValue(a);
-		query.getParameter("conversation_id").setValue(mensajeID);
+		query.getParameter("conversation_id").setValue(evento);
 		query.getParameter("action").setValue(contenido);
 		dispatchSubgoalAndWait(query);
-		return (String)query.getParameter("result").getValue();
+		return (String)query.getParameter("result").getValue();*/
+
+		IMessageEvent msg = createMessageEvent(evento);
+		msg.getParameter(SFipa.CONTENT).setValue(evento + ":" + contenido);
+		msg.getParameterSet(SFipa.RECEIVERS).addValue(a);
+		//IMessageEvent answer = sendMessageAndWait(msg);
+		sendMessage(msg);
+		IMessageEvent answer = waitForMessageEvent("ack_" + evento);
+		return ((String)answer.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
+
 	}
 
 	protected void enviarRespuesta(String evento, String respuesta){
 		IMessageEvent solReq = (IMessageEvent) getReason();
 		IMessageEvent msgResp = getEventbase().createReply(solReq, evento);
-		msgResp.getParameter(SFipa.CONTENT).setValue(respuesta);
+		msgResp.getParameter(SFipa.CONTENT).setValue(evento + ":" + respuesta);
+		sendMessage(msgResp);
+	}
+
+	protected void esperarYEnviarRespuesta(String evento, String respuesta){
+		IMessageEvent solReq = waitForMessageEvent(evento);
+		IMessageEvent msgResp = getEventbase().createReply(solReq, "ack_" + evento);
+		msgResp.getParameter(SFipa.CONTENT).setValue("ack_" + evento + ":" + respuesta);
 		sendMessage(msgResp);
 	}
 }

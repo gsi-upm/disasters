@@ -57,35 +57,35 @@
 		</maintaingoalref>
 		
 		<!-- Objetivo para encontrar emergencias  -->
-		<performgoal name="encuentraEmergencia"/> <!-- retry="true" exclude="never"/>-->
+		<performgoal name="encontrarEmergencia" retry="true" exclude="never"/>
+
+		<achievegoal name="avisarAgentes"/>
 		
 		<!-- Objetivo para esperar a la finalizacion de un desastre -->
-		<achievegoal name="esperaSolucion"/>
-
-		<achievegoal name="volverABuscar"/>
+		<achievegoal name="esperarSolucion"/>
 	</goals>
 
 	<plans>
 		<!-- Plan para encontrar emergencias -->
-		<plan name="encuentraEmergencia-plan">
+		<plan name="encontrarEmergencia-plan">
 			<body class="EncontrarEmergenciaPlan"/>
 			<trigger>
-				<goal ref="encuentraEmergencia"/>
+				<goal ref="encontrarEmergencia"/>
 			</trigger>
 		</plan>
 
 		<!-- Plan para esperar la solucion del Desastre -->
-		<plan name="esperaSolucion-plan">
-			<body class="EsperaSolucionPlan"/>
+		<plan name="esperarSolucion-plan">
+			<body class="EsperarSolucionPlan"/>
 			<trigger>
-				<goal ref="esperaSolucion"/>
+				<goal ref="esperarSolucion"/>
 			</trigger>
 		</plan>
 
-		<plan name="volverABuscar-plan">
-			<body class="VolverABuscarPlan"/>
+		<plan name="avisarAgentes-plan">
+			<body class="AvisarAgentesPlan"/>
 			<trigger>
-				<messageevent ref="terminado"/>
+				<goal ref="avisarAgentes"/>
 			</trigger>
 		</plan>
 	</plans>
@@ -102,12 +102,12 @@
 			</parameter>
 		</messageevent>
 
-		<messageevent name="terminado" direction="receive" type="fipa">
+		<messageevent name="terminado_geriatrico" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
 		</messageevent>
-		<messageevent name="ack_terminado" direction="send" type="fipa">
+		<messageevent name="ack_terminado_geriatrico" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
@@ -125,18 +125,13 @@
 								.createDFServiceDescription("coordinadorEmergencias_service", "coordinadorEmergencias", "GSI DIT UPM"))
  						</value>
 					</parameter>
-					<!--<parameter ref="leasetime">
-						<value>20000</value>
-					</parameter>-->
 				</initialgoal>
-				<initialgoal ref="encuentraEmergencia"/>
+				<initialgoal ref="encontrarEmergencia"/>
 			</goals>
 		</configuration>
 	</configurations>
 
 	<properties>
-		<!--<property name="logging.level">Level.INFO</property>
-		<property name="logging.useParentHandlers">true</property>-->
 		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class)</property>
 	</properties>
 </agent>

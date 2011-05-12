@@ -1,11 +1,7 @@
 package jadex.desastres.caronte.police;
 
-import jadex.bdi.runtime.Plan;
-import jadex.desastres.Disaster;
-import jadex.desastres.EnviarMensajePlan;
-import jadex.desastres.Environment;
-import jadex.desastres.Position;
-import jadex.desastres.WorldObject;
+import jadex.bdi.runtime.*;
+import jadex.desastres.*;
 
 /**
  * Plan de la POLICIA
@@ -37,32 +33,32 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		int idDes = env.getTablon();
 
 		enviarRespuesta("ack_aviso", "Aviso recibido");
-		System.out.println("++ police: Ack mandado");
+		Environment.printout("PP police: Ack mandado",0);
 
 		//Espero a que se borre el desastre (lo borra el bombero) para irme a otra cosa...
 		Disaster des = env.getEvent(idDes);
 		Position positionDesastre = new Position(des.getLatitud(), des.getLongitud());
-		System.out.println("++ police: Estoy destinado al desastre " + idDes);
+		Environment.printout("PP police: Estoy destinado al desastre " + idDes,0);
 
 		try {
 			env.andar(getComponentName(), oldPos, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
 		} catch (Exception e) {
-			System.out.println("++ police: Error metodo andar: " + e);
+			System.out.println("PP police: Error metodo andar: " + e);
 		}
 		while (des != null) {
-			//System.out.println("++ police: No puedo marcharme hasta que se solucione este jaleo, espero un poco mas...");
+			//System.out.println("PP police: No puedo marcharme hasta que se solucione este jaleo, espero un poco mas...");
 			//waitFor(2000);
 			des = env.getEvent(idDes);
 		}
 
-		System.out.println("++ police: Desastre solucionado: " + idDes);
-		System.out.println("++ police: Vuelvo a la comisaria");
+		Environment.printout("PP police: Desastre solucionado: " + idDes,0);
+		Environment.printout("PP police: Vuelvo a la comisaria",0);
 		
 		try {
 			env.andar(getComponentName(), oldPos, posicionComisaria, env.getAgent(getComponentName()).getId(), 0);
 		} catch (Exception e) {
-			System.out.println("++ police: Error metodo andar: " + e);
+			System.out.println("PP police: Error metodo andar: " + e);
 		}
-		System.out.println("++ police: En la comisaria");
+		Environment.printout("PP police: En la comisaria",0);
 	}
 }

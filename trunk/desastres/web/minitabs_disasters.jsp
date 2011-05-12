@@ -36,7 +36,7 @@
 	</div>
 	<c:if test="${nombreUsuario != null}">
 		<div id="showSimOptions" class="slideMenu">
-			<form id="SimOptions" method="post" action="/disasters/RunSimulation">
+			<form id="SimOptions" method="post" action="/desastres/RunSimulation">
 				<table>
 					<tr>
 						<td><p class="bigger"><fmt:message key="opcionessimulador"/></td>

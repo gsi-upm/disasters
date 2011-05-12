@@ -65,10 +65,9 @@
 			<concrete ref="dfcap.df_keep_registered"/>
 		</maintaingoalref>
 		
-		<performgoal name="vigilarHabitaciones"/> <!-- retry="true" exclude="never"/> -->
-		<achievegoal name="atenderEmergencia"/>
+		<performgoal name="vigilarHabitaciones" retry="true" exclude="never"/>
+		<achievegoal name="atenderHeridos"/>
 		<achievegoal name="reponerMaterial"/>
-		<achievegoal name="evacuarResidencia"/>
 	</goals>
 
 	<plans>
@@ -78,8 +77,8 @@
 				<goal ref="vigilarHabitaciones"/>
 			</trigger>
 		</plan>
-		<plan name="atenderEmergencia-plan">
-			<body class="AtenderEmergenciaPlan"/>
+		<plan name="atenderHeridos-plan">
+			<body class="AtenderHeridosPlan"/>
 			<trigger>
 				<messageevent ref="aviso_geriatrico"/>
 			</trigger>
@@ -90,18 +89,6 @@
 				<goal ref="reponerMaterial"/>
 			</trigger>
 		</plan>
-		<plan name="evacuarResidencia-plan">
-			<body class="EvacuarResidenciaPlan"/>
-			<trigger>
-				<goal ref="evacuarResidencia"/>
-			</trigger>
-		</plan>
-<!--|\
-    | \
-=====  \
-=====  /  AQUI!!!
-    | /
-    |/-->
 	</plans>
 
 	<events>
@@ -140,9 +127,6 @@
 								.createDFServiceDescription("nurse_service", "nurse", "GSI DIT UPM"))
  						</value>
 					</parameter>
-					<!--<parameter ref="leasetime">
-						<value>20000</value>
-					</parameter>-->
 				</initialgoal>
 				<initialgoal ref="vigilarHabitaciones"/>
 			</goals>

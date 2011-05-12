@@ -1,7 +1,7 @@
 //forms
 
-//var URL_base="http://localhost:8080/disasters/rest/"; //developers url
-var URL_base="http://138.4.3.208:8080/disasters/rest/";
+//var URL_base="http://localhost:8080/desastres/rest/"; //developers url
+var URL_base="http://138.4.3.208:8080/desastres/rest/";
 
 var itemType="event";
 var type="fire";

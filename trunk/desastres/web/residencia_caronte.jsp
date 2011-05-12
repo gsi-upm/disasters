@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:useBean class="jadex.desastres.ProyectBean" id="proyecto" scope="session"/>
+<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <%@ include file="info_caronte.jsp" %>
 <fmt:bundle basename="fmt.eji8n">
@@ -24,34 +24,34 @@
 						<span onclick="cambiarPlanta(1)" style="cursor:pointer"><fmt:message key="planta"/> 1</span> -
 						<span onclick="cambiarPlanta(2)" style="cursor:pointer"><fmt:message key="planta"/> 2</span>
 					</th>
-					<td><fmt:message key="incendio"/> (${firesResi.rowCount})</td>
-					<td><img alt="" src="markers/fuego.png" class="rayas"></td>
-					<td><fmt:message key="leves"/> (${slightResi.rowCount})</td>
-					<td><img alt="" src="markers/leve1.png" class="rayas"></td>
+					<td><img alt="" src="markers/fuego.png"></td>
+					<td>(${firesResi.rowCount})</td>
+					<td><img alt="" src="markers/leve1.png"></td>
+					<td>(${slightResi.rowCount})</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="inundacion"/> (${floodsResi.rowCount})</td>
-					<td><img alt="" src="markers/agua.png" class="rayas"></td>
-					<td><fmt:message key="graves"/> (${seriousResi.rowCount})</td>
-					<td><img alt="" src="markers/grave1.png" class="rayas"></td>
+					<td><img alt="" src="markers/agua.png"></td>
+					<td>(${floodsResi.rowCount})</td>
+					<td><img alt="" src="markers/grave1.png"></td>
+					<td>(${seriousResi.rowCount})</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="derrumbamiento"/> (${collapsesResi.rowCount})</td>
-					<td><img alt="" src="markers/casa.png" class="rayas"></td>
-					<td><fmt:message key="muertos"/> (${deadResi.rowCount})</td>
-					<td><img alt=""src="markers/muerto1.png" class="rayas"></td>
+					<td><img alt="" src="markers/casa.png"></td>
+					<td>(${collapsesResi.rowCount})</td>
+					<td><img alt="" src="markers/muerto1.png"></td>
+					<td>(${deadResi.rowCount})</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="personaherida"/> (${injuredPeopleResi.rowCount})</td>
-					<td><img alt="" src="markers/personaHerida.png" class="rayas"></td>
-					<td><fmt:message key="atrapados"/> (${trappedResi.rowCount})</td>
-					<td><img alt="" src="markers/trapped1.png" class="rayas"></td>
+					<td><img alt="" src="markers/personaHerida.png"></td>
+					<td>(${injuredPeopleResi.rowCount})</td>
+					<td><img alt="" src="markers/trapped1.png"></td>
+					<td>(${trappedResi.rowCount})</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="personaperdida"/> (${lostPeopleResi.rowCount})</td>
-					<td><img alt="" src="markers/personaPerdida.png" class="rayas"></td>
-					<td><fmt:message key="sanos"/> (${healthyResi.rowCount})</td>
-					<td><img alt="" src="markers/sano1.png" class="rayas"></td>
+					<td><img alt="" src="markers/personaPerdida.png"></td>
+					<td>(${lostPeopleResi.rowCount})</td>
+					<td><img alt="" src="markers/sano1.png"></td>
+					<td>(${healthyResi.rowCount})</td>
 				</tr>
 			</table>
 		</div>

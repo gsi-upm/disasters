@@ -1,0 +1,24 @@
+#minitabs{
+	width: 120px;
+	height: 31px;
+	margin: 0px -3px 0px auto;
+}
+
+.minitab{
+	position: relative;
+	float: left;
+}
+
+.minitab :hover{
+	position: relative;
+	top: -6px;
+}
+
+#messages{
+    margin-top: 0px;
+    height: 528px;
+}
+
+#close_messages, #open_messages{
+    margin-top: 0px;
+}

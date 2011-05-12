@@ -1,6 +1,6 @@
 package jadex.desastres.disasters.sanitarios.ambulancia;
 
-import jadex.desastres.ambulance.*;
+import jadex.desastres.*;
 import jadex.bdi.runtime.*;
 import jadex.desastres.Environment;
 import jadex.desastres.Position;

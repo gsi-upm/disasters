@@ -24,7 +24,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 		// Obtenemos un objeto de la clase entorno para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
-		System.out.println("&& coordinador: Buscando desastre");
+		Environment.printout("OO coordinador: Buscando desastre",0);
 
 		Disaster des = null;
 		while (des == null) {
@@ -33,52 +33,19 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 			des = findDisaster(env);
 		}
 
-		System.out.println("&& coordinador: emergencia encontrada!!");
+		Environment.printout("OO coordinador: emergencia encontrada!!",0);
 
 		getBeliefbase().getBelief("desastreActual").setFact(des.getId());
 		// lo publicamos en el tablon!
 		env.setTablon(des.getId());
 
-		People herido = null;
-
-		if (des.getSlight() != null) {
-			herido = des.getSlight();
-		}
-		if (des.getSerious() != null) {
-			herido = des.getSerious();
-		}
-		if (des.getDead() != null) {
-			herido = des.getDead();
-		}
-
-		if (herido != null) {
-			System.out.println("&& coordinador: He encontrado un herido cuya id es: " + herido.getId() + "!!");
-			herido.setAtendido(true);
-		} else {
-			System.out.println("&& coordinador: La emergencia no tiene heridos!!");
-		}
-
-		System.out.println("&& coordinator: Avisando al enfermero...");
-		String resultado1 = enviarMensaje("nurse", "aviso_geriatrico", "go");
-
-		if ((des.getSize().equals("small") == false) ||
-				((herido != null) && (herido.getType().equals("slight") == false))) {
-			System.out.println("&& coordinator: Avisando la central... (en espera)...");
-			String resultado = enviarMensaje("centralEmergencias", "aviso_geriatrico", "go");
-			System.out.println("&& coordinador: Respuesta recibida de central: " + resultado);
-		}
-
-		//IMessageEvent req = waitForMessageEvent("terminado");
-		//enviarRespuesta("ack_terminado", "Terminado recibido");
-		//System.out.println("&& coordinator: Ack mandado");
-
 		//Creamos un nuevo objetivo.
-		IGoal esperaSolucion = createGoal("esperaSolucion");
-		dispatchSubgoalAndWait(esperaSolucion);
+		IGoal avisarAgentes = createGoal("avisarAgentes");
+		dispatchSubgoalAndWait(avisarAgentes);
 	}
 
 	private Disaster findDisaster(Environment env) {
-		//System.out.println("&& coordinator: Comenzamos a buscar la emergencia mas grave...");
+		//System.out.println("OO coordinador: Comenzamos a buscar la emergencia mas grave...");
 		Iterator it = env.disasters.entrySet().iterator();
 
 		// waitFor(500);
@@ -91,68 +58,68 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 		if (it.hasNext()) {
 			// Cogemos el primer desastre para compararlo con el resto
 			// encontrados
-			System.out.println("&& coordinator: Extraemos la primera emergencia, sera la emergencia mas grave...");
+			System.out.println("OO coordinador: Extraemos la primera emergencia, sera la emergencia mas grave...");
 			try {
 				e = (Map.Entry) it.next();
 				desastreAtendido = (Disaster) e.getValue();
-				System.out.println("&& coordinator: La emergencia atendida es: " + desastreAtendido.getId());
+				System.out.println("OO coordinador: La emergencia atendida es: " + desastreAtendido.getId());
 			} catch (Exception exc) {
-				System.out.println("&& coordinator: Error extrayendo la primera emergencia: " + exc);
+				System.out.println("OO coordinador: Error extrayendo la primera emergencia: " + exc);
 			}
 			while (it.hasNext()) {
 
 				try {
 					e = (Map.Entry) it.next();
 					desastreEvaluado = (Disaster) e.getValue();
-					System.out.println("&& coordinator: La emergencia evaluada es: " + desastreEvaluado.getId());
+					System.out.println("OO coordinador: La emergencia evaluada es: " + desastreEvaluado.getId());
 
 					if ((desastreEvaluado.getState().equals("erased"))
 							|| (desastreEvaluado.getState().equals("controlled"))) {
-						System.out.println("&& coordinator: La emergencia encontrada esta controlada...");
+						System.out.println("OO coordinador: La emergencia encontrada esta controlada...");
 						continue;
 					}
 					boolean desastreMasGrave = false;
 					// Comprobamos los heridos graves
 					desastreMasGrave = compruebaGrave();
 					if (desastreMasGrave) {
-						System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave...");
+						System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave...");
 						continue;
 					}
 					// Comprobamos los heridos atrapados
 					desastreMasGrave = compruebaAtrapado();
 					if (desastreMasGrave) {
-						System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave...");
+						System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave...");
 						continue;
 					}
 					// Comprobamos los heridos leves
 					desastreMasGrave = compruebaLeve();
 					if (desastreMasGrave) {
-						System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave...");
+						System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave...");
 						continue;
 					}
 					// Comprobamos los heridos muertos
 					desastreMasGrave = compruebaMuerto();
 					if (desastreMasGrave) {
-						System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave...");
+						System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave...");
 						continue;
 					}
 					// La emergencia no tiene heridos que tratar
 					// Comprobamos el tamano de la emergencia
-					System.out.println("&& coordinator: Comprobamos la magnitud de la emergencia...");
+					System.out.println("OO coordinador: Comprobamos la magnitud de la emergencia...");
 					String tamanoEvaluado = desastreEvaluado.getSize();
 					String tamanoAtendido = desastreAtendido.getSize();
 					if (tamanoAtendido.equals(tamanoEvaluado)) {
 						continue;
 					} else {
 						if (tamanoAtendido.equals("huge")) {
-							System.out.println("&& coordinator: El atendido es huge...");
+							System.out.println("OO coordinador: El atendido es huge...");
 							continue;
 						} else {
 							if (((tamanoAtendido.equals("big")) && (tamanoEvaluado.equals("huge")))
 									|| ((tamanoAtendido.equals("medium")) && ((tamanoEvaluado.equals("huge")) || (tamanoEvaluado.equals("big"))))
 									|| ((tamanoAtendido.equals("small")) && ((tamanoEvaluado.equals("huge"))
 									|| (tamanoEvaluado.equals("big")) || (tamanoEvaluado.equals("medium"))))) {
-								System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave...");
+								System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave...");
 								// Hemos encontrado una emergencia mas grave
 								desastreAtendido = desastreEvaluado;
 							} else {
@@ -161,12 +128,12 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 						}
 					}
 				} catch (Exception exc) {
-					System.out.println("&& coordinator: Error extrayendo las siguientes emergencias: " + exc);
+					System.out.println("OO coordinador: Error extrayendo las siguientes emergencias: " + exc);
 				}
 			}
 		}
 		if(desastreAtendido != null){
-			System.out.println("&& coordinator: La emergencia mas grave es la: " + desastreAtendido.getId());
+			System.out.println("OO coordinador: La emergencia mas grave es la: " + desastreAtendido.getId());
 		}
 		return desastreAtendido;
 	}
@@ -184,13 +151,13 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 					&& (numAtend < numEval)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en serious...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en serious...");
 				return true;
 			}
 			if ((evalActivo == true) && (atendActivo == false)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en serious...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en serious...");
 				return true;
 			}
 			return false;
@@ -201,7 +168,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 			if (evalActivo == true) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en serious...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en serious...");
 				return true;
 			}
 			return false;
@@ -221,13 +188,13 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 					&& (numAtend < numEval)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en atrapado...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en atrapado...");
 				return true;
 			}
 			if ((evalActivo == true) && (atendActivo == false)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en atrapado...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en atrapado...");
 				return true;
 			}
 			return false;
@@ -238,7 +205,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 			if (evalActivo == true) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en atrapado...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en atrapado...");
 				return true;
 			}
 			return false;
@@ -259,13 +226,13 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 					&& (numAtend < numEval)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en leve...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en leve...");
 				return true;
 			}
 			if ((evalActivo == true) && (atendActivo == false)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en leve...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en leve...");
 				return true;
 			}
 			return false;
@@ -276,7 +243,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 			if (evalActivo == true) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en leve...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en leve...");
 				return true;
 			}
 			return false;
@@ -296,13 +263,13 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 					&& (numAtend < numEval)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en muerto...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en muerto...");
 				return true;
 			}
 			if ((evalActivo == true) && (atendActivo == false)) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en muerto...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en muerto...");
 				return true;
 			}
 			return false;
@@ -313,7 +280,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 			if (evalActivo == true) {
 				// Hemos encontrado una emergencia mas grave
 				desastreAtendido = desastreEvaluado;
-				System.out.println("&& coordinator: Hemos encontrado una emergencia mas grave en muerto...");
+				System.out.println("OO coordinador: Hemos encontrado una emergencia mas grave en muerto...");
 				return true;
 			}
 			return false;

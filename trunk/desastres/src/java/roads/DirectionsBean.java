@@ -4,7 +4,6 @@ import java.util.*;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
 import org.directwebremoting.proxy.dwr.Util;
-import org.directwebremoting.util.Logger;
 
 /**
  *
@@ -80,7 +79,7 @@ public class DirectionsBean {
 			Util utilAll = new Util(sessions);
 			utilAll.setValues(hm, true);
 		} catch (Exception e) {
-			System.out.println("Excepcion: " + e);
+			System.out.println("Excepcion en DirectionsBean.sendDirections(): " + e);
 		}
 	}
 }

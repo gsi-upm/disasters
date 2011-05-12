@@ -78,7 +78,7 @@ form table img{
 /* AQUI ACABA EL FORMULARIO */
 
 #left{
-    width: 240px;
+    width: 234px;
 }
 
 #right{
@@ -87,23 +87,6 @@ form table img{
 
 #cabecera{
     float: left;
-}
-
-#minitabs{
-	width: 120px;
-	height: 10px;
-}
-
-.minitab{
-	position: relative;
-	top: 11px;
-	left: 164px;
-	float: left;
-}
-
-.minitab :hover{
-	position: relative;
-	top: -6px;
 }
 
 #screen{
@@ -279,4 +262,30 @@ form table img{
 .error a {
 	color: maroon;
 	text-decoration: none;
+}
+
+#messages{
+    font-family: Courier, monospace;
+    font-size: 12px;
+    /*margin-top: 21px;
+    height: 508px;*/
+	width: 285px;
+	margin-left: 6px;
+    padding: 10px;
+    border: 1px solid #919b9c;
+    background-color: #efefef;
+    color: #000000;
+    overflow: scroll;
+}
+
+#close_messages, #open_messages{
+    text-decoration: none;
+    background-color: #CCCCCC;
+    border: 1px #919b9c solid;
+    color: black;
+    padding: 0px 3px 0px 3px;
+    position: absolute;
+    right: 10px;
+    /*margin-top: 4px;*/
+	margin-right: -2px;
 }

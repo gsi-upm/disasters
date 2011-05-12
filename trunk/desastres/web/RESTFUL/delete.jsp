@@ -41,6 +41,26 @@
 			modificado = <%=modif%>
 		</sql:update>
 	</c:when>
+	<c:when test="${param.action eq 'user'}">
+		<sql:update dataSource="${CatastrofesServer}" >
+			UPDATE CATASTROFES SET
+			estado = 'erased',
+			modificado = <%=modif%>
+			WHERE nombre = ?
+			<sql:param value="${param.nombre}"/>
+		</sql:update>
+	</c:when>
+
+	<c:when test="${param.action eq 'healthy'}">
+		<sql:update dataSource="${CatastrofesServer}" >
+			UPDATE CATASTROFES SET
+			tipo = 'healthy',
+			estado='active',
+			modificado = <%=modif%>
+			WHERE id = ?
+			<sql:param value="${param.id}"/>
+		</sql:update>
+	</c:when>
 </c:choose>
 
 OK

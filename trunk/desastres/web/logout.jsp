@@ -1,3 +1,5 @@
+<%@page import="jadex.desastres.Environment"%>
+<%@page import="gsi.rest.Connection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">-->
@@ -8,8 +10,11 @@
         <title>Log out</title>
     </head>
     <body>
-        <% session.invalidate(); %>
-        You have been logged out of the SecurityFilter example application.<p>
+        <%
+			Connection.connect(Environment.URL + "delete/user/" + request.getRemoteUser());
+			session.invalidate();
+		%>
+        <p>You have been logged out of the SecurityFilter example application.</p>
         <% response.sendRedirect("index.jsp"); %>
     </body>
 </html>

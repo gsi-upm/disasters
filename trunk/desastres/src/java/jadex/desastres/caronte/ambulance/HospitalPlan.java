@@ -1,4 +1,4 @@
-package jadex.desastres.ambulance;
+package jadex.desastres.caronte.ambulance;
 
 import jadex.bdi.runtime.*;
 import jadex.desastres.Environment;
