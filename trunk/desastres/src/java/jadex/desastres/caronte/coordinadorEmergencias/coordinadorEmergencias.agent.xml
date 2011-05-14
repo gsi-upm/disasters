@@ -100,17 +100,55 @@
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_aviso_geriatrico")</match>
+		</messageevent>
+
+		<messageevent name="estadoEmergencia" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("estadoEmergencia")</match>
+		</messageevent>
+		<messageevent name="ack_estadoEmergencia" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+
+		<messageevent name="estadoHeridos" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("estadoHeridos")</match>
+		</messageevent>
+		<messageevent name="ack_estadoHeridos" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
 		</messageevent>
 
 		<messageevent name="terminado_geriatrico" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("terminado_geriatrico")</match>
 		</messageevent>
 		<messageevent name="ack_terminado_geriatrico" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
+		</messageevent>
+
+		<messageevent name="fin_emergencia" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="ack_fin_emergencia" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_fin_emergencia")</match>
 		</messageevent>
 	</events>
 

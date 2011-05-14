@@ -574,6 +574,7 @@ public class DisasterApplication extends Application {
 			}
 		};
 
+                
 		// Get all the healthy people in the center
 		Restlet healthy = new Restlet(getContext()) {
 			@Override
@@ -583,12 +584,40 @@ public class DisasterApplication extends Application {
 			}
 		};
 
-		// Get all the healthy people in the center
+		// Get all the unhealthy people in the center
+		Restlet unhealthy = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector = URL_BASE + "get.jsp?action=unhealthy";
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+                
+		// 
 		Restlet updateHealthy = new Restlet(getContext()) {
 			@Override
 			public void handle(Request request, Response response) {
 				String id = (String) request.getAttributes().get("id");
 				String redirector = URL_BASE + "delete.jsp?action=healthy&id=" + id;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Get all the slight people in the center
+		Restlet slight = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector = URL_BASE + "get.jsp?action=slight";
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Get the person
+		Restlet person = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String id = (String) request.getAttributes().get("id");
+				String redirector = URL_BASE + "get.jsp?action=person&id=" + id;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -750,7 +779,10 @@ public class DisasterApplication extends Application {
 		router.attach("/users", users);
 		router.attach("/users/modified/{dateTime}", usersModified);
 		router.attach("/healthy", healthy);
+		router.attach("/unhealthy", unhealthy);
+		router.attach("/slight", slight);
 		router.attach("/healthy/id/{id}", updateHealthy);
+		router.attach("/person/{id}", person);
 
 		router.attach("/proyects", proyects);
 		router.attach("/user/{nombre_usuario}/{password}", user);

@@ -37,15 +37,9 @@
 			<fact>new Position(38.232237, -1.699016)</fact>
 		</belief>
 
-		<!-- Posicion del agente evaluada dinamicamente->
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
-		</belief-->
-		<belief name="agente" class="WorldObject">
-			<fact>$beliefbase.env.getAgent($scope.getAgentName())</fact>
-		</belief>
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.agente.getPosition()</fact>
+		<!-- Posicion del agente -->
+		<belief name="pos" class="Position">
+			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
 		
 		<!-- Indica si el material esta disponible para su uso o hay que reponerlo -->
@@ -67,6 +61,7 @@
 		
 		<performgoal name="vigilarHabitaciones" retry="true" exclude="never"/>
 		<achievegoal name="atenderHeridos"/>
+		<achievegoal name="evacuarHeridos"/>
 		<achievegoal name="reponerMaterial"/>
 	</goals>
 
@@ -83,6 +78,12 @@
 				<messageevent ref="aviso_geriatrico"/>
 			</trigger>
 		</plan>
+		<plan name="evacuarHeridos-plan">
+			<body class="EvacuarHeridosPlan"/>
+			<trigger>
+				<goal ref="evacuarHeridos"/>
+			</trigger>
+		</plan>
 		<plan name="reponerMaterial-plan">
 			<body class="ReponerMaterialPlan"/>
 			<trigger>
@@ -96,6 +97,7 @@
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("aviso_geriatrico")</match>
 		</messageevent>
 		<messageevent name="ack_aviso_geriatrico" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
@@ -103,12 +105,37 @@
 			</parameter>
 		</messageevent>
 
-		<messageevent name="terminado" direction="send" type="fipa">
+		<messageevent name="estadoHeridos" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
 		</messageevent>
-		<messageevent name="ack_terminado" direction="receive" type="fipa">
+		<messageevent name="ack_estadoHeridos" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_estadoHeridos")</match>
+		</messageevent>
+
+		<messageevent name="terminado_geriatrico" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="ack_terminado_geriatrico" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_terminado_geriatrico")</match>
+		</messageevent>
+
+		<messageevent name="fin_emergencia" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("fin_emergencia")</match>
+		</messageevent>
+		<messageevent name="ack_fin_emergencia" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>

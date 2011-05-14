@@ -17,12 +17,18 @@ public class EsperarSolucionPlan extends EnviarMensajePlan {
 	public void body() {
 		Environment.printout("OO coordinador: esperando una solucion...",0);
 
-		esperarYEnviarRespuesta("terminado_geriatrico", "Terminado recibido");
+		String recibido = esperarYEnviarRespuesta("terminado_geriatrico", "Terminado recibido");
 
 		Environment.printout("OO coordinador: Ack mandado",0);
 		Environment.printout("OO coordinador: Emergencia solucionada",0);
 
-		waitFor(7000); // ESPERO A QUE EL ENTORNO SE ACTUALICE!!
+		Environment.printout("OO coordinador: informando al gerocultor...",0);
+		String resultado2 = enviarMensaje("gerocultor", "fin_emergencia", "ok");
+
+		Environment.printout("OO coordinador: informando al enfermero...",0);
+		String resultado1 = enviarMensaje("nurse", "fin_emergencia", "ok");
+
+		waitFor(8000); // ESPERO A QUE EL ENTORNO SE ACTUALICE!!
 
 		//Creamos un nuevo objetivo
 		//IGoal encuentraEmergencia = createGoal("encuentraEmergencia");

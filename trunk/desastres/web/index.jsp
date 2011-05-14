@@ -22,7 +22,6 @@
 	</c:if>
 </c:if>
 
-<!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">-->
 <!DOCTYPE HTML>
 <html>
 	<fmt:bundle basename="fmt.eji8n">
@@ -33,12 +32,8 @@
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css">
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen">
 			<!--[if lt IE 9]>
-				<script type="text/javascript">
-					window.alert('Esta pagina no es compatible con Internet Explorer 8 y anteriores.\nUtilice IE 9 u otro navegador web.');
-					document.write('<h2 class="error">Esta p&aacute;gina no es compatible con Internet Explorer 8 y anteriores.</h2>');
-					document.write('<h2 class="error">Utilice IE 9 u otro navegador web, como <a href="http://www.mozilla-europe.org/firefox/">Firefox</a>, ' +
-						'<a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.opera.com/browser">Opera</a> o <a href="http://www.apple.com/safari/download">Safari</a>.</h2>');
-				</script>
+				<script type="text/javascript" src="js/mensajeIE.js"></script>
+				<script type="text/javascript"><fmt:message key="mensajeIE"/></script>
 			<![endif]-->
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
@@ -237,17 +232,11 @@
 			<!-- Screen for the servlet information -->
 			<div id="close_screen"><a href="#"><fmt:message key="ocultar"/></a></div>
 			<div id="screen"></div>
-			<!--p class="iconos_validacion">
-				<a href="http://validator.w3.org/check?uri=referer">
-					<img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Strict">
-				</a>
-				<a href="http://jigsaw.w3.org/css-validator/check/referer">
-					<img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!">
-				</a>
-				<a href="http://www.w3.org/html/logo/">
-					<img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3.png" alt="HTML5 Powered with CSS3 / Styling">
-				</a>
-			</p-->
+			<!--<p class="iconos_validacion">
+				<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Strict"></a>
+				<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a>
+				<a href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3.png" alt="HTML5 Powered with CSS3 / Styling"></a>
+			</p>-->
 			<%
 					int[] rscs = recursos.getResourcesList();
 					for (int i = 0; i < rscs.length; i++) {

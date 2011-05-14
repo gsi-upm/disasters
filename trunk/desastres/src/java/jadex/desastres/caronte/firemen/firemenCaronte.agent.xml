@@ -41,15 +41,9 @@
 			<fact>new Position(38.21602, -1.72306)</fact> <!-- TEMPORAL -->
 		</belief>
 		
-		<!-- Poscion del agente evaluada dinamicamente-->
-		<!--belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
-		</belief-->
-		<belief name="agente" class="WorldObject">
-			<fact>$beliefbase.env.getAgent($scope.getAgentName())</fact>
-		</belief>
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.agente.getPosition()</fact>
+		<!-- Poscion del agente evaluada -->
+		<belief name="pos" class="Position">
+			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
  		
  		<!-- id del herido atrapado si lo hay-->

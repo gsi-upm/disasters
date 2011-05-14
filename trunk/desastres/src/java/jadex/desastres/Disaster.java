@@ -1,5 +1,7 @@
 package jadex.desastres;
 
+import java.util.ArrayList;
+
 /**
  * Class that represents a disaster
  * @author julio camarero
@@ -54,19 +56,23 @@ public class Disaster {
 	/**
 	 * Number of slight injuries
 	 */
-	private People slight;
+	private int numSlight;
+	private ArrayList<People> slight;
 	/**
 	 * Number of serious injuries
 	 */
-	private People serious;
+	private int numSerious;
+	private ArrayList<People> serious;
 	/**
 	 * Number of dead people
 	 */
-	private People dead;
+	private int numDead;
+	private ArrayList<People> dead;
 	/**
 	 * Number of trapped people
 	 */
-	private People trapped;
+	private int numTrapped;
+	private ArrayList<People> trapped;
 	/**
 	 * Number of policemen cars assigned
 	 */
@@ -138,6 +144,19 @@ public class Disaster {
 		this.policeMarker = 0;
 		this.ambulanceMarker = 0;
 		this.firemenMarker = 0;
+
+		numSlight = 0;
+		numSerious = 0;
+		numDead = 0;
+		numTrapped = 0;
+		slight = new ArrayList();
+		slight.add(null);
+		serious = new ArrayList();
+		serious.add(null);
+		dead = new ArrayList();
+		dead.add(null);
+		trapped = new ArrayList();
+		trapped.add(null);
 	}
 
 	/**
@@ -378,71 +397,135 @@ public class Disaster {
 	 * @return the slight
 	 */
 	public People getSlight() {
-		return slight;
+		return slight.get(numSlight);
 	}
 
 	/**
 	 * @param slight the slight to set
 	 */
 	public void setSlight(People slight) {
-		this.slight = slight;
+		boolean existe = false;
+		int index = 0;
+		for(int i=1; i<numSlight; i++){
+			if(this.slight.get(i).getId() == slight.getId()){
+				existe = true;
+				index = i;
+			}
+		}
+		if(existe){
+			this.slight.add(index, slight);
+		}else{
+			this.slight.add(slight);
+			numSlight++;
+		}
 	}
 
 	public void setSlight() {
-		this.slight = null;
+		this.slight.remove(numSlight);
+		if(numSlight > 0){
+			numSlight--;
+		}
 	}
 
 	/**
 	 * @return the serious
 	 */
 	public People getSerious() {
-		return serious;
+		return serious.get(numSerious);
 	}
 
 	/**
 	 * @param serious the serious to set
 	 */
 	public void setSerious(People serious) {
-		this.serious = serious;
+		boolean existe = false;
+		int index = 0;
+		for(int i=1; i<numSerious; i++){
+			if(this.serious.get(i).getId() == serious.getId()){
+				existe = true;
+				index = i;
+			}
+		}
+		if(existe){
+			this.serious.add(index, serious);
+		}else{
+			this.serious.add(serious);
+			numSerious++;
+		}
 	}
 
 	public void setSerious() {
-		this.serious = null;
+		this.serious.remove(numSerious);
+		if(numSerious > 0){
+			numSerious--;
+		}
 	}
 
 	/**
 	 * @return the dead
 	 */
 	public People getDead() {
-		return dead;
+		return dead.get(numDead);
 	}
 
 	/**
 	 * @param dead the dead to set
 	 */
 	public void setDead(People dead) {
-		this.dead = dead;
+		boolean existe = false;
+		int index = 0;
+		for(int i=1; i<numDead; i++){
+			if(this.dead.get(i).getId() == dead.getId()){
+				existe = true;
+				index = i;
+			}
+		}
+		if(existe){
+			this.dead.add(index, dead);
+		}else{
+			this.dead.add(dead);
+			numDead++;
+		}
 	}
 
 	public void setDead() {
-		this.dead = null;
+		this.dead.remove(numDead);
+		if(numDead > 0){
+			numDead--;
+		}
 	}
 
 	/**
 	 * @return the trapped
 	 */
 	public People getTrapped() {
-		return trapped;
+		return trapped.get(numTrapped);
 	}
 
 	/**
 	 * @param trapped the trapped to set
 	 */
 	public void setTrapped(People trapped) {
-		this.trapped = trapped;
+		boolean existe = false;
+		int index = 0;
+		for(int i=1; i<numTrapped; i++){
+			if(this.trapped.get(i).getId() == trapped.getId()){
+				existe = true;
+				index = i;
+			}
+		}
+		if(existe){
+			this.trapped.add(index, trapped);
+		}else{
+			this.trapped.add(trapped);
+			numTrapped++;
+		}
 	}
 
 	public void setTrapped() {
-		this.trapped = null;
+		this.trapped.remove(numTrapped);
+		if(numTrapped > 0){
+			numTrapped--;
+		}
 	}
 }

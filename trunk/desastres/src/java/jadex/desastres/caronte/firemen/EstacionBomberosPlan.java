@@ -19,9 +19,7 @@ public class EstacionBomberosPlan extends Plan {
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
 		// Posicion actual del bombero
-		//Position pos = (Position) getBeliefbase().getBelief("pos").getFact();
-		WorldObject agente = (WorldObject)getBeliefbase().getBelief("agente").getFact();
-		Position pos = agente.getPosition();
+		Position pos = (Position) getBeliefbase().getBelief("pos").getFact();
 
 		// Identifica la posicion del desastre
 		Position destino = null;

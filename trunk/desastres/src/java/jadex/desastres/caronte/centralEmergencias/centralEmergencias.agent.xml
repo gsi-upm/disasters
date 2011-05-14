@@ -39,9 +39,9 @@
 			<fact>new Position(38.229225, -1.701830)</fact> <!-- Posicion aleatoria de la central -->
 		</belief>
 
-		<!-- Posicion del agente evaluada dinamicamente-->
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
+		<!-- Posicion del agente -->
+		<belief name="pos" class="Position">
+			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
 
  		<!-- id del desastre que tienen que atender-->
@@ -79,7 +79,7 @@
 		<plan name="mandaAviso-plan">
 			<body class="MandaAvisoPlan"/>
 			<trigger>
-				<goal ref="mandaAviso"/>
+				<messageevent ref="aviso_geriatrico"/>
 			</trigger>
 		</plan>
 
