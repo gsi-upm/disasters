@@ -18,9 +18,7 @@ public class PatrullaPlan extends Plan {
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 		//Necesito mi posicion y la nueva posicion a la que andara si no hay desastre que atender
 
-		//Position oldPos = (Position)getBeliefbase().getBelief("pos").getFact();
-		WorldObject agente = (WorldObject)getBeliefbase().getBelief("agente").getFact();
-		Position oldPos = agente.getPosition();
+		Position oldPos = (Position)getBeliefbase().getBelief("pos").getFact();
 
 		//Creamos una nueva posicion aleatoria
 		Position newPos = (Position)env.getRandomPosition("caronte");

@@ -17,7 +17,7 @@ public class EsperaSolucionPlan extends EnviarMensajePlan {
 	public void body() {
 		Environment.printout("CC central: esperando una solucion...", 0);
 
-		esperarYEnviarRespuesta("terminado", "Terminado recibido");
+		String recibido = esperarYEnviarRespuesta("terminado", "Terminado recibido");
 
 		Environment.printout("CC central: Ack mandado", 0);
 		Environment.printout("CC central: Emergencia solucionada", 0);

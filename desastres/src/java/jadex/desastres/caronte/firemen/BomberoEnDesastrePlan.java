@@ -19,23 +19,20 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 	 * Cuerpo del plan
 	 */
 	public void body() {
-
+		String recibido = enviarRespuesta("ack_aviso", "Aviso recibido");
+		Environment.printout("FF firemen: Ack mandado",0);
+		
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
 		// Posicion actual del bombero, que le permite recoger al herido.
-		//Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();
-		WorldObject agente = (WorldObject)getBeliefbase().getBelief("agente").getFact();
-		Position posicionActual = agente.getPosition();
+		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();
 
 		// Posicion del parque de bomberos que le corresponde
 		Position posicionParque = (Position) getBeliefbase().getBelief("parqueDeBomberos").getFact();
-		
-		enviarRespuesta("ack_aviso", "Aviso recibido");
-		Environment.printout("FF firemen: Ack mandado",0);
 
 		//id y posicion del Desastre atendiendose
-		int idDes = env.getTablon();
+		int idDes = new Integer(recibido);
 		Disaster des = env.getEvent(idDes);
 		Environment.printout("FF firemen: Estoy destinado al desastre: " + idDes,0);
 		Position destino = new Position(des.getLatitud(), des.getLongitud());
@@ -87,21 +84,22 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 		// El bombero regresa a su parque correspondiente cuando no hay heridos.
 		try {
 			// HAY QUE ELIMINAR EL DESASTRE
-			String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
 			Environment.printout("FF firemen: Eliminado el desastre " + idDes,0);
+			String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
 			// System.out.println(resultado);
-
-			//waitFor(6000); // ESPERO A QUE EL ENTORNO SE ACTUALICE!!
-			//Comunicacion con la central...
-			Environment.printout("FF firemen: Mando mensaje de terminado a la central",0);
 			
+			//Comunicacion con la central...
+			Environment.printout("FF firemen: Mando mensaje de terminado a la central", 0);
 			String respuesta = enviarMensaje("centralEmergencias", "terminado", "done");
-			Environment.printout("FF firemen: Respuesta recibida de central: " + respuesta,0);
+			Environment.printout("FF firemen: Respuesta recibida de central: " + respuesta, 0);
 
-			Environment.printout("FF firemen: Me dirijo al parque de bomberos",0);
+			String respuesta2 = enviarMensaje("policeCaronte", "terminado", "done");
+			Environment.printout("FF firemen: Respuesta recibida del policia: " + respuesta2, 0);
+
+			Environment.printout("FF firemen: Me dirijo al parque de bomberos", 0);
 			
 			env.andar(getComponentName(), posicionActual, posicionParque, env.getAgent(getComponentName()).getId(), 0);
-			Environment.printout("FF firemen: He vuelto al parque de bomberos",0);
+			Environment.printout("FF firemen: He vuelto al parque de bomberos", 0);
 		} catch (Exception e) {
 			System.out.println("FF firemen: Error metodo andar: " + e);
 		}

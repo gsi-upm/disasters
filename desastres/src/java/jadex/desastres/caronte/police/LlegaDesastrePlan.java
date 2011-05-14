@@ -17,23 +17,18 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 	 * Cuerpo del plan
 	 */
 	public void body() {
+		String recibido = enviarRespuesta("ack_aviso", "Aviso recibido");
+		Environment.printout("PP police: Ack mandado",0);
 
 		//Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		env = (Environment) getBeliefbase().getBelief("env").getFact();
 		//Obtengo mi posicion
-		//Position oldPos = (Position) getBeliefbase().getBelief("pos").getFact();
-		WorldObject agente = (WorldObject)getBeliefbase().getBelief("agente").getFact();
+		Position oldPos = (Position) getBeliefbase().getBelief("pos").getFact();
 
 		Position posicionComisaria = (Position) getBeliefbase().getBelief("Comisaria").getFact();
 
-		Position oldPos = agente.getPosition();
-		
 		//id del Desastre atendiendose
-		//int idDes = (Integer)getBeliefbase().getBelief("desastreActual").getFact();
-		int idDes = env.getTablon();
-
-		enviarRespuesta("ack_aviso", "Aviso recibido");
-		Environment.printout("PP police: Ack mandado",0);
+		int idDes = new Integer(recibido);
 
 		//Espero a que se borre el desastre (lo borra el bombero) para irme a otra cosa...
 		Disaster des = env.getEvent(idDes);
@@ -45,13 +40,10 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		} catch (Exception e) {
 			System.out.println("PP police: Error metodo andar: " + e);
 		}
-		while (des != null) {
-			//System.out.println("PP police: No puedo marcharme hasta que se solucione este jaleo, espero un poco mas...");
-			//waitFor(2000);
-			des = env.getEvent(idDes);
-		}
 
-		Environment.printout("PP police: Desastre solucionado: " + idDes,0);
+		String recibido2 = esperarYEnviarRespuesta("terminado", "Terminado recibido");
+
+		Environment.printout("PP police: Desastre " + idDes + " solucionado",0);
 		Environment.printout("PP police: Vuelvo a la comisaria",0);
 		
 		try {

@@ -225,6 +225,40 @@
 		</sql:query>
 	</c:when>
 
+	<c:when test="${param.action eq 'unhealthy'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
+				   WHERE marcador = 'people'
+				   AND tipo != 'healthy'
+				   AND estado != 'erased';">
+		</sql:query>
+	</c:when>
+
+	<c:when test="${param.action eq 'slight'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
+				   WHERE marcador = 'people'
+				   AND tipo = 'slight'
+				   AND estado != 'erased';">
+		</sql:query>
+	</c:when>
+
+	<c:when test="${param.action eq 'person'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
+				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
+				   WHERE id = ?
+				   AND marcador = 'people'
+				   AND estado != 'erased';">
+			<sql:param value="${param.id}"/>
+		</sql:query>
+	</c:when>
+
 	<c:when test="${param.action eq 'proyects'}">
 		<sql:query var="proyectos" dataSource="${CatastrofesServer}" sql="
 				   SELECT id, proyecto

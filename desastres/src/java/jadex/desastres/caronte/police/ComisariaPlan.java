@@ -22,9 +22,7 @@ public class ComisariaPlan extends Plan {
 		Position posicionComisaria = (Position) getBeliefbase().getBelief("Comisaria").getFact();
 
 		// Posicion actual de la ambulancia
-		//Position pos = (Position) getBeliefbase().getBelief("pos").getFact();
-		WorldObject agente = (WorldObject)getBeliefbase().getBelief("agente").getFact();
-		Position pos = agente.getPosition();
+		Position pos = (Position) getBeliefbase().getBelief("pos").getFact();
 
 		waitFor(1000);
 	}

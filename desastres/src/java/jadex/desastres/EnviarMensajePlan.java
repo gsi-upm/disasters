@@ -43,17 +43,21 @@ public abstract class EnviarMensajePlan extends Plan {
 
 	}
 
-	protected void enviarRespuesta(String evento, String respuesta){
+	protected String enviarRespuesta(String evento, String respuesta){
 		IMessageEvent solReq = (IMessageEvent) getReason();
+		String recibido = ((String)solReq.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
 		IMessageEvent msgResp = getEventbase().createReply(solReq, evento);
 		msgResp.getParameter(SFipa.CONTENT).setValue(evento + ":" + respuesta);
 		sendMessage(msgResp);
+		return recibido;
 	}
 
-	protected void esperarYEnviarRespuesta(String evento, String respuesta){
+	protected String esperarYEnviarRespuesta(String evento, String respuesta){
 		IMessageEvent solReq = waitForMessageEvent(evento);
+		String recibido = ((String)solReq.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
 		IMessageEvent msgResp = getEventbase().createReply(solReq, "ack_" + evento);
 		msgResp.getParameter(SFipa.CONTENT).setValue("ack_" + evento + ":" + respuesta);
 		sendMessage(msgResp);
+		return recibido;
 	}
 }

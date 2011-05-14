@@ -39,15 +39,9 @@
 			<fact>new Position(38.231125, -1.697560)</fact> <!-- comisaria centro de Calasparra-->
 		</belief>
 		
-		<!-- Posicion del agente evaluada dinamicamente->
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
-		</belief-->
-		<belief name="agente" class="WorldObject">
-			<fact>$beliefbase.env.getAgent($scope.getAgentName())</fact>
-		</belief>
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.agente.getPosition()</fact>
+		<!-- Posicion del agente -->
+		<belief name="pos" class="Position">
+			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
 
 		<!-- desastre que esta atendiendo-->
@@ -104,8 +98,21 @@
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("aviso")</match>
 		</messageevent>
 		<messageevent name="ack_aviso" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+
+		<messageevent name="terminado" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("terminado")</match>
+		</messageevent>
+		<messageevent name="ack_terminado" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>

@@ -13,37 +13,28 @@ public class AvisarAgentesPlan extends EnviarMensajePlan {
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 		
-		int idDes = env.getTablon();
-		Disaster des = env.getEvent(idDes);
+		int id = env.getTablon();
+		String idDes = new Integer(id).toString();
 		
-		People herido = null;
+		Environment.printout("OO coordinador: Avisando al gerocultor...",0);
+		String resultado2 = enviarMensaje("gerocultor", "aviso_geriatrico", idDes);
 
-		if (des.getSlight() != null) {
-			herido = des.getSlight();
-		}
-		if (des.getSerious() != null) {
-			herido = des.getSerious();
-		}
-		if (des.getDead() != null) {
-			herido = des.getDead();
-		}
+		Environment.printout("OO coordinador: Avisando al enfermero...",0);
+		String resultado1 = enviarMensaje("nurse", "aviso_geriatrico", idDes);
 
-		if (herido != null) {
-			Environment.printout("OO coordinador: He encontrado un herido cuya id es: " + herido.getId() + "!!",0);
-			herido.setAtendido(true);
+		String emergencia = esperarYEnviarRespuesta("estadoEmergencia","ok");
+		Environment.printout("OO coordinador: estado de la emergencia: " + emergencia, 0);
+
+		String heridos = esperarYEnviarRespuesta("estadoHeridos","ok");
+		if (!heridos.equals("null")) {
+			Environment.printout("OO coordinador: estado del herido: " + heridos, 0);
 		} else {
 			Environment.printout("OO coordinador: La emergencia no tiene heridos!!",0);
 		}
 
-		Environment.printout("OO coordinador: Avisando al enfermero...",0);
-		String resultado1 = enviarMensaje("nurse", "aviso_geriatrico", "go");
-		Environment.printout("OO coordinador: Avisando al gerocultor...",0);
-		String resultado2 = enviarMensaje("gerocultor", "aviso_geriatrico", "go");
-
-		if ((des.getSize().equals("small") == false) ||
-				((herido != null) && (herido.getType().equals("slight") == false))) {
+		if (!emergencia.equals("small") || (!heridos.equals("null") && !heridos.equals("slight"))) {
 			Environment.printout("OO coordinador: Avisando la central... (en espera)...",0);
-			String resultado = enviarMensaje("centralEmergencias", "aviso_geriatrico", "go");
+			String resultado = enviarMensaje("centralEmergencias", "aviso_geriatrico", idDes);
 			Environment.printout("OO coordinador: Respuesta recibida de central: " + resultado,0);
 		}
 
