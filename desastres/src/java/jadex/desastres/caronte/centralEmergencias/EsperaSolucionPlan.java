@@ -15,15 +15,16 @@ public class EsperaSolucionPlan extends EnviarMensajePlan {
 	 * Cuerpo del plan
 	 */
 	public void body() {
-		Environment.printout("CC central: esperando una solucion...", 0);
+		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
+		env.printout("CC central: esperando una solucion...", 0);
 		String recibido = esperarYEnviarRespuesta("terminado", "Terminado recibido");
 
-		Environment.printout("CC central: Ack mandado", 0);
-		Environment.printout("CC central: Emergencia solucionada", 0);
+		env.printout("CC central: Ack mandado", 0);
+		env.printout("CC central: Emergencia solucionada", 0);
 
-		Environment.printout("CC central: Mandando mensaje al coordinador", 0);
+		env.printout("CC central: Mandando mensaje al coordinador", 0);
 		String resultado = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "go");
-		Environment.printout("CC central: Respuesta recibida del coordinador: " + resultado, 0);
+		env.printout("CC central: Respuesta recibida del coordinador: " + resultado, 0);
 	}
 }

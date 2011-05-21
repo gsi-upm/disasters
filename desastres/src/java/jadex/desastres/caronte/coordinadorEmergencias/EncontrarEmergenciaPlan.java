@@ -23,8 +23,9 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 	public void body() {
 		// Obtenemos un objeto de la clase entorno para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		Position posResi = (Position) getBeliefbase().getBelief("residencia").getFact();
 
-		Environment.printout("OO coordinador: Buscando desastre",0);
+		env.printout("OO coordinador: Buscando desastre",0);
 
 		Disaster des = null;
 		while (des == null) {
@@ -33,11 +34,25 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 			des = findDisaster(env);
 		}
 
-		Environment.printout("OO coordinador: emergencia encontrada!!",0);
+		env.printout("OO coordinador: emergencia encontrada!!",0);
+
+		// EL COORDINADOR SE DESPLAZA HASTA LA EMERGENCIA PARA EVALUARLA
+		/*try {
+			env.andar(getComponentName(), (Position) getBeliefbase().getBelief("pos").getFact(), new Position(des.getLatitud(),des.getLongitud()), env.getAgent(getComponentName()).getId(), 0);
+		} catch (Exception ex) {
+			System.out.println("Error al andar: " + ex);
+		}*/
 
 		getBeliefbase().getBelief("desastreActual").setFact(des.getId());
 		// lo publicamos en el tablon!
 		env.setTablon(des.getId());
+
+		// EL COORDINADOR VUELVE HASTA SU POSICION EN LA RESIDENCIA
+		/*try {
+			env.andar(getComponentName(), (Position) getBeliefbase().getBelief("pos").getFact(), posResi, env.getAgent(getComponentName()).getId(), 0);
+		} catch (Exception ex) {
+			System.out.println("Error al andar: " + ex);
+		}*/
 
 		//Creamos un nuevo objetivo.
 		IGoal avisarAgentes = createGoal("avisarAgentes");

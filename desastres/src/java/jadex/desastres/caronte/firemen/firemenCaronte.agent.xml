@@ -52,9 +52,9 @@
 		</belief>
  		
  		<!-- desastre que esta atendiendo-->
-		<!--belief name="desastreActual" class="Integer" evaluationmode="dynamic">
-			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
-		</belief-->
+		<belief name="idEmergencia" class="Integer"> <!-- evaluationmode="dynamic"> -->
+			<fact>0</fact>
+		</belief>
 		<!--belief name="assignedId" class="Integer" evaluationmode="dynamic">
 			<fact>1</fact>
 		</belief-->

@@ -270,6 +270,21 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td colspan="2">
+							S&iacute;ntomas:<br>
+							<input type="checkbox" name="fatigue">Fatiga
+							<input type="checkbox" name="fever">Fiebre
+							<input type="checkbox" name="dyspnea">Disnea
+							<input type="checkbox" name="nausea">Nauseas
+							<input type="checkbox" name="headache">Dolor de cabeza
+							<input type="checkbox" name="vomiting">V&oacute;mitos
+							<input type="checkbox" name="abdominal_pain">Dolor abdominal
+							<input type="checkbox" name="weight_loss">Perdida de peso
+							<input type="checkbox" name="blurred_vision">Visi&oacute;n borrosa
+							<input type="checkbox" name="muscle_weakness">Debilidad muscular
+						</td>
+					</tr>
 					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="<fmt:message key="personas"/>"></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1"><fmt:message key="nombres"/></textarea></td></tr>
 					<tr><td colspan="2"><textarea name="descripcion" class="descripcion" rows="3" cols="1"><fmt:message key="descripciongravedad"/></textarea></td></tr>
@@ -299,7 +314,8 @@
 					<input type="button" id="submit31" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(3);return false;">
 					<input type="button" id="submit32" value="<fmt:message key="annadir"/>" class="btn" onclick="crearCatastrofe(
 						marcador.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
-						descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0);
+						descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0,
+						fatigue.checked,fever.checked,dyspnea.checked,nausea.checked,headache.checked,vomiting.checked,abdominal_pain.checked,weight_loss.checked,blurred_vision.checked,muscle_weakness.checked);
 						borrarFormulario(this.form,3);return false;">
 				</p>
 				<!--a href="#" onclick="pinchaMapa(3)">Marcar en mapa</a-->
@@ -307,7 +323,8 @@
 					<p><fmt:message key="puntoalmacenado"/></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe(marcador.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0);
+							descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0,
+							fatigue.checked,fever.checked,dyspnea.checked,nausea.checked,headache.checked,vomiting.checked,abdominal_pain.checked,weight_loss.checked,blurred_vision.checked,muscle_weakness.checked);
 							$('#dialog3').jqm().jqmHide();borrarFormulario(this.form,3);return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>
@@ -347,6 +364,6 @@
 	</div>
 	<!--aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1_1',Array('<fmt:message key="eventos"/>','<fmt:message key="recursos"/>','<fmt:message key="victimas"/>','<fmt:message key="experto"/>'),0,228,490);
+		initTabs('dhtmlgoodies_tabView1_1',Array('<fmt:message key="eventos"/>','<fmt:message key="recursos"/>','<fmt:message key="victimas"/>','<fmt:message key="experto"/>'),0,254,490);
 	</script>
 </fmt:bundle>

@@ -11,15 +11,17 @@ import org.json.me.*;
  */
 public class EvacuarResidenciaPlan extends EnviarMensajePlan {
 
+	Environment env;
+
 	public void body() {
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		env = (Environment) getBeliefbase().getBelief("env").getFact();
 		Position posResi = (Position) getBeliefbase().getBelief("residencia").getFact();
 
-		int idDes = env.getTablon();
+		int idDes = (Integer) getBeliefbase().getBelief("idEmergencia").getFact();
 		Disaster des = env.getEvent(idDes);
 		double dif = 0.0006;
 
-		Environment.printout("GG gerocultor: evacuando la residencia", 0);
+		env.printout("GG gerocultor: evacuando la residencia", 0);
 
 		try {
 			String sanosAux = Connection.connect(Environment.URL + "healthy");
@@ -32,10 +34,10 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan {
 				evacuar(sano, 0);
 			}
 
-			Environment.printout("GG gerocultor: todos los residentes evacuados!!", 0);
+			env.printout("GG gerocultor: todos los residentes evacuados!!", 0);
 
 			String recibido = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
-			Environment.printout("GG gerocultor: llevo a los residentes de vuelta", 0);
+			env.printout("GG gerocultor: llevo a los residentes de vuelta", 0);
 
 			for (int i = 0; i < leves.length(); i++) {
 				JSONObject leve = leves.getJSONObject(i);
@@ -57,7 +59,7 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan {
 			System.out.println("Error al andar: " + ex);
 		}
 
-		Environment.printout("GG gerocultor: todos los residentes de vuelta en la residencia!!", 0);
+		env.printout("GG gerocultor: todos los residentes de vuelta en la residencia!!", 0);
 	}
 
 	/**
@@ -66,7 +68,6 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan {
 	 * @param dir Accion: 0=sacar, 1=meter
 	 */
 	private void evacuar(JSONObject persona, int dir) {
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 		double dif1 = 0.0;
 		double dif2 = 0.0006;
 		String msg = "evacuando al anciano";
@@ -81,7 +82,7 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan {
 			Position posSano2 = new Position(new Double(persona.getString("latitud")), new Double(persona.getString("longitud")) - dif2);
 			Position posAnt = (Position) getBeliefbase().getBelief("pos").getFact();
 			env.andar(getComponentName(), posAnt, posSano1, env.getAgent(getComponentName()).getId(), 0);
-			Environment.printout("GG gerocultor: " + msg + " " + id, 0);
+			env.printout("GG gerocultor: " + msg + " " + id, 0);
 			env.andar(getComponentName(), posSano1, posSano2, env.getAgent(getComponentName()).getId(), id);
 		} catch (Exception ex) {
 			System.out.println("Excepcion en evacuar: " + ex);

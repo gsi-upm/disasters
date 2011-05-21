@@ -11,10 +11,12 @@ import jadex.desastres.*;
 public class ReponerMaterialPlan extends Plan {
 
 	public void body() {
-		Environment.printout("GG gerocultor: reponiendo el material usado", 0);
+		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+
+		env.printout("GG gerocultor: reponiendo el material usado", 0);
 		waitFor(1000);
 		getBeliefbase().getBelief("material").setFact(true);
-		Environment.printout("GG gerocultor: material repuesto", 0);
+		env.printout("GG gerocultor: material repuesto", 0);
 	}
 
 }

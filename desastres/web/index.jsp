@@ -10,15 +10,11 @@
 <c:set var="nombreUsuario" value="<%= request.getRemoteUser()%>"/>
 
 <c:if test="${nombreUsuario != null}">
-	<c:if test="${proyecto.number == null}">
-		<c:redirect url="logout.jsp"/>
-	</c:if>
 	<c:if test="${param.proyect == null}">
 		<c:redirect url="/proyect?user=${nombreUsuario}"/>
 	</c:if>
 	<c:if test="${param.proyect != null}"> <!-- and param.alert == null -->
 		<jsp:setProperty name="proyecto" property="proyect" value="${param.proyect}"/>
-		<jsp:setProperty name="proyecto" property="number" value="${param.number}"/>
 	</c:if>
 </c:if>
 
@@ -125,38 +121,9 @@
 							</c:if>
 							<c:if test="${nombreUsuario != null}">
 								<!-- and if the user is autenticated, we show the username and logout button -->
-								<c:if test="${proyecto.number == 1}">
-									<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
-									<br>
-									<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
-								</c:if>
-								<c:if test="${proyecto.number > 1}">
-									<table style="width:100%">
-										<tr>
-											<td>
-												<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
-												<br>
-												<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
-											</td>
-											<td style="width:100px">
-												<form action="index.jsp" style="text-align:right; margin-right:8px">
-													<select name="proyect">
-														<c:if test="${proyecto.proyect == 'disasters'}">
-															<option value="disasters">disasters</option>
-															<option value="caronte">caronte</option>
-														</c:if>
-														<c:if test="${proyecto.proyect == 'caronte'}">
-															<option value="caronte">caronte</option>
-															<option value="disasters">disasters</option>
-														</c:if>
-													</select>
-													<input type="hidden" value="2" name="number">
-													<input type="submit" value="<fmt:message key="aceptar"/>">
-												</form>
-											</td>
-										</tr>
-									</table>
-								</c:if>
+								<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
+								<br>
+								<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
 								<c:if test="${proyecto.proyect == 'disasters'}">
 									<c:import url="menu_disasters.jsp"/>
 								</c:if>
@@ -193,6 +160,9 @@
 										</div>
 									</div>
 								</c:if>
+								<c:if test="${proyecto.proyect == 'caronte'}">
+									<div style="height:21px"></div>
+								</c:if>
 								<div id="map_canvas"></div>
 							</c:if>
 							<c:if test="${nombreUsuario != null}">
@@ -222,7 +192,10 @@
 					<td>
 						<div id="open_messages"><a href="#"><fmt:message key="mostrar"/></a></div>
 						<div id="close_messages"><a href="#"><fmt:message key="ocultar"/></a></div>
-						<div id="messages"><div id="messages0"></div></div>
+						<div id="messages">
+							<p>MENSAJES:</p>
+							<div id="messages0"></div>
+						</div>
 					</td>
 				</tr>
 			</table>

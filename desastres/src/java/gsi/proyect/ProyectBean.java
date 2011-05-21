@@ -10,16 +10,14 @@ import java.io.Serializable;
 public class ProyectBean implements Serializable {
 
 	public static final String PROYECT = "proyect";
-	public static final String NUMBER = "number";
 
 	private String proyect;
-	private int number;
 
 	private PropertyChangeSupport propertySupport;
 
 	public ProyectBean() {
 		propertySupport = new PropertyChangeSupport(this);
-		proyect = "disasters";
+		proyect = "caronte";
 	}
 
 	public String getProyect() {
@@ -30,16 +28,6 @@ public class ProyectBean implements Serializable {
 		String oldValue = proyect;
 		proyect = value;
 		propertySupport.firePropertyChange(PROYECT, oldValue, proyect);
-	}
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int value) {
-		int oldValue = number;
-		number = value;
-		propertySupport.firePropertyChange(NUMBER, oldValue, number);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {

@@ -1,4 +1,4 @@
-function ObjMarcador(id,marcador,tipo,cantidad,nombre,descripcion,info,latitud,longitud,direccion,estado,fecha, modificado,nombre_usuario, tipo_usuario, marker)
+function ObjMarcador(id,marcador,tipo,cantidad,nombre,descripcion,info,latitud,longitud,direccion,estado,fecha, modificado,nombre_usuario, tipo_usuario, marker,sintomas)
 {
 	
 //variables privadas
@@ -21,6 +21,7 @@ this.marker=marker;
 this.size="";
 this.traffic="";
 this.idAssigned=0;
+this.sintomas=sintomas;
 /*marker.marker_num = 3;
 marker.tabs = ["One", "Two", "Three"];*/
 //metodos

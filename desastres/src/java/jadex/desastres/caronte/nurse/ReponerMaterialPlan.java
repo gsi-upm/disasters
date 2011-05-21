@@ -11,9 +11,11 @@ import jadex.desastres.*;
 public class ReponerMaterialPlan extends Plan {
 
 	public void body() {
-		Environment.printout("EE enfermero: reponiendo el material usado", 0);
+		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		
+		env.printout("EE enfermero: reponiendo el material usado", 0);
 		waitFor(1000);
 		getBeliefbase().getBelief("material").setFact(true);
-		Environment.printout("EE enfermero: material repuesto", 0);
+		env.printout("EE enfermero: material repuesto", 0);
 	}
 }

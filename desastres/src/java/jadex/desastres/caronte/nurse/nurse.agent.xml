@@ -41,6 +41,11 @@
 		<belief name="pos" class="Position">
 			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
+
+		<!-- ID del desastre que atiende -->
+		<belief name="idEmergencia" class="Integer">
+			<fact>0</fact>
+		</belief>
 		
 		<!-- Indica si el material esta disponible para su uso o hay que reponerlo -->
 		<belief name="material" class="boolean">
