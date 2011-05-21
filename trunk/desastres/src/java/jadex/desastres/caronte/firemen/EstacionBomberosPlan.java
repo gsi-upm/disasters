@@ -15,15 +15,6 @@ public class EstacionBomberosPlan extends Plan {
 	 * Cuerpo del plan.
 	 */
 	public void body() {
-		// Obtenemos un objeto de la clase entorno para poder usar sus metodos
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-
-		// Posicion actual del bombero
-		Position pos = (Position) getBeliefbase().getBelief("pos").getFact();
-
-		// Identifica la posicion del desastre
-		Position destino = null;
-
 		waitFor(1000);
 	}
 }

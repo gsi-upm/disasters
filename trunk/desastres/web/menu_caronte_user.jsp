@@ -92,6 +92,6 @@
 	</div>
 	<!--aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1_2',Array('<fmt:message key="eventos"/>','<fmt:message key="recursos"/>','<fmt:message key="victimas"/>'),0,228,490);
+		initTabs('dhtmlgoodies_tabView1_2',Array('<fmt:message key="eventos"/>','<fmt:message key="recursos"/>','<fmt:message key="victimas"/>'),0,254,490);
 	</script>
 </fmt:bundle>

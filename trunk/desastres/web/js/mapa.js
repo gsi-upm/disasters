@@ -32,7 +32,7 @@ var usuario_actual_tipo;
         
 var estado_Experto = "off";
         
-var tiempoActualizacion = 1500;
+var tiempoActualizacion = 2000;
 var tiempoInicial = 5000;
 
 var userName = null;
@@ -594,11 +594,24 @@ function verMenos(id){
 	marcadores_definitivos[id].marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+"</div>");
 }
 
-function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size, traffic, idAssigned){
+function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
+		fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+
+	var sintomas = '';
+	if(fatigue) sintomas += 'fatigue,';
+	if(fever) sintomas += 'fever,';
+	if(dyspnea) sintomas += 'dyspnea,';
+	if(nausea) sintomas += 'nausea,';
+	if(headache) sintomas += 'headache,';
+	if(vomiting) sintomas += 'vomiting,';
+	if(abdominal_pain) sintomas += 'abdominal_pain,';
+	if(weight_loss) sintomas += 'weight_loss,';
+	if(blurred_vision) sintomas += 'blurred_vision,';
+	if(muscle_weakness) sintomas += 'muscle_weakness,';
 	
 	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,
 		descripcion,info,latitud,longitud,direccion,estado,
-		obtiene_fecha(), obtiene_fecha(),usuario_actual, usuario_actual_tipo,null);
+		obtiene_fecha(), obtiene_fecha(),usuario_actual, usuario_actual_tipo,null,sintomas);
         
 	if(marcador=="event"){
 		nuevomarcador.size=size;
@@ -613,18 +626,32 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	marcadores_temporales[nuevomarcador.id]=nuevomarcador;
 }
 
-function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned){
+function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
+		fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 	//utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if (caracter_temp==TEMPORAL){
 		//Actualizar la matriz temporal
     
 		eliminar(marcadores_temporales[id],TEMPORAL);
-		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned);
+		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
+				fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness);
              
 	//"marcadores_temporales[puntero.id].nombre=nombre.value;marcadores_temporales[puntero.id].cantidad=cantidad.value;marcadores_temporales[puntero.id].info=info.value;marcadores_temporales[puntero.id].descripcion=descripcion.value; marcadores_temporales[puntero.id].direccon=direccion.value;marcadores_temporales[puntero.id].latitud=latitud.value;marcadores_temporales[puntero.id].longitud=longitud.value;marcadores_temporales[puntero.id].estado=estado.value;eliminar(marcadores_temporales[puntero.id],TEMPORAL);marcadores_temporales[puntero.id].marker=generaMarcador(marcadores_temporales[puntero.id],TEMPORAL);borrarFormulario(this.form,0);$('#modificar').jqm().jqmHide();return false;";
     
 	}
 	if (caracter_temp==DEFINITIVO){
+		var sintomas = '';
+		if(fatigue) sintomas += 'fatigue,';
+		if(fever) sintomas += 'fever,';
+		if(dyspnea) sintomas += 'dyspnea,';
+		if(nausea) sintomas += 'nausea,';
+		if(headache) sintomas += 'headache,';
+		if(vomiting) sintomas += 'vomiting,';
+		if(abdominal_pain) sintomas += 'abdominal_pain,';
+		if(weight_loss) sintomas += 'weight_loss,';
+		if(blurred_vision) sintomas += 'blurred_vision,';
+		if(muscle_weakness) sintomas += 'muscle_weakness,';
+
 		//hay que hacer un update a la base de datos
 		$.post('update.jsp',{
 			'id':id,
@@ -642,7 +669,8 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 			'traffic':traffic,
 			'idAssigned':idAssigned,
 			'fecha':puntero_temp.fecha,
-			'usuario':usuario_actual
+			'usuario':usuario_actual,
+			'sintomas':sintomas
 		});
 	//actualizar();
 	}
@@ -660,14 +688,17 @@ function cargarModificar(puntero,caracter){
 		document.getElementById('size-traffic').style.visibility = 'visible';
 		document.getElementById('traffic-select').style.visibility = 'visible';
 		document.getElementById('control').style.visibility = 'visible';
+		document.getElementById('sintomas').style.visibility = 'hidden';
 	}else{
 		//document.getElementById('quantity').style.display='inline';
 		//document.getElementById('size-traffic').style.display='none';
 		document.getElementById('quantity').style.visibility = 'visible';
 		document.getElementById('size-traffic').style.visibility = 'hidden';
 		document.getElementById('traffic-select').style.visibility = 'hidden';
+		document.getElementById('sintomas').style.visibility = 'visible';
 		if(puntero.marcador=='resource'){
 			document.getElementById('control').style.visibility = 'hidden';
+			document.getElementById('sintomas').style.visibility = 'hidden';
 		}else{
 			document.getElementById('control').style.visibility = 'visible';
 		}
@@ -717,7 +748,8 @@ function guardar(puntero){
 		'traffic':puntero.traffic,
 		'idAssigned':puntero.idAssigned,
 		'fecha':puntero.fecha,
-		'usuario':puntero.nombre_usuario
+		'usuario':puntero.nombre_usuario,
+		'sintomas':puntero.sintomas
 	},
 	function(data){
 		$('#guardar').innerHTML=data;

@@ -28,20 +28,10 @@ public class ProyectServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		try {
 			//String proyecto = getServletContext().getInitParameter("proyect");
-
 			String usuario = request.getParameter("user");
 			String proyectoAux = Connection.connect(Environment.URL + "userProyect/" + usuario);
 			JSONArray proyecto = new JSONArray(proyectoAux);
-			if (proyecto.length() == 1) {
-				response.sendRedirect("/desastres/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect") + "&number=1");
-			}else{
-				/*String respuesta = "/desastres/index.jsp?num=" + proyecto.length();
-				for (int i = 0; i < proyecto.length(); i++) {
-					respuesta = respuesta + "&proyect" + i + "=" + proyecto.getJSONObject(i).getString("proyect");
-				}
-				response.sendRedirect(respuesta);*/
-				response.sendRedirect("/desastres/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect") + "&number=2");
-			}
+			response.sendRedirect("/desastres/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect"));
 		} catch (JSONException ex) {
 			System.out.println("Excepcion en ProyectServlet.processRequest(): " + ex);
 		}finally{

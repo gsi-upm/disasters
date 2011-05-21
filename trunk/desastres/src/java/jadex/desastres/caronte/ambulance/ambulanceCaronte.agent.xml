@@ -45,10 +45,10 @@
 			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
  		
- 		<!-- id del herido que atiendo-->
-		<!--belief name="idHerido" class="Integer" evaluationmode="dynamic">
-			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
-		</belief-->
+ 		<!-- id de la emergencia que atiendo-->
+		<belief name="idEmergencia" class="Integer"> <!-- evaluationmode="dynamic"> -->
+			<fact>0</fact>
+		</belief>
 	</beliefs>
 
 	<goals>

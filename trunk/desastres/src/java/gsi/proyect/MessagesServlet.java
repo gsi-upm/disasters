@@ -38,12 +38,11 @@ public class MessagesServlet extends HttpServlet {
 			JSONArray mensajes = new JSONArray(resultado);
 
 			//if (mensajes.length() != 0) {
-				out.println("</div>");
 				for (int i = 0; i < mensajes.length(); i++) {
 					JSONObject msg = mensajes.getJSONObject(i);
 					out.println("<p>" + msg.getString("mensaje") + "</p>");
 				}
-				out.println("<div id=\"messages" + (action + 1) + "\">");
+				out.println("</div><div id=\"messages" + (action + 1) + "\">");
 				index += mensajes.length();
 			//}
 		} catch (Exception ex) {

@@ -38,6 +38,21 @@
 				</tr>
 				<tr><td id="asociacion"></td></tr>
 				<tr><td><input type="text" name="nombre" id="nombre" class="nombre"></td></tr>
+				<tr id="sintomas">
+					<td colspan="2">
+						S&iacute;ntomas:<br>
+						<input type="checkbox" name="fatigue">Fatiga
+						<input type="checkbox" name="fever">Fiebre
+						<input type="checkbox" name="dyspnea">Disnea
+						<input type="checkbox" name="nausea">Nauseas
+						<input type="checkbox" name="headache">Dolor de cabeza
+						<input type="checkbox" name="vomiting">V&oacute;mitos
+						<input type="checkbox" name="abdominal_pain">Dolor abdominal
+						<input type="checkbox" name="weight_loss">Perdida de peso
+						<input type="checkbox" name="blurred_vision">Visi&oacute;n borrosa
+						<input type="checkbox" name="muscle_weakness">Debilidad muscular
+					</td>
+				</tr>
 			</table>
 			<table class="tabla_menu">
 				<tr><td colspan="2"><textarea name="info" id="info" class="info" rows="3" cols="1"><fmt:message key="informacion"/></textarea></td></tr>
@@ -100,7 +115,8 @@
 			<p><a href="#" onclick="pinchaMapa(0);" id="pincha"><fmt:message key="marcarmapa"/></a></p>
 			<p><input type="button" id="submit0" value="<fmt:message key="modificar"/>" class="btn" onclick="modificar(
 				iden.value,cantidad.value,nombre.value,info.value,descripcion.value,direccion.value,
-				longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,idAssigned.value);
+				longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,idAssigned.value,
+						fatigue.checked,fever.checked,dyspnea.checked,nausea.checked,headache.checked,vomiting.checked,abdominal_pain.checked,weight_loss.checked,blurred_vision.checked,muscle_weakness.checked);
 				borrarFormulario(this.form,1);$('#modificar').jqm().jqmHide();return false;">
 			</p>
 		</form>

@@ -56,15 +56,14 @@
 package org.securityfilter.example.realm;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.securityfilter.example.Constants;
 import org.securityfilter.realm.SimpleSecurityRealmBase;
 import jadex.desastres.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
-import java.util.Calendar;
+import java.sql.Timestamp;
+import java.util.Date;
 import org.json.me.*;
 
 /**
@@ -99,21 +98,12 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 			
 			if(usuario.length() == 1) {
 				autenticado = true;
-				Calendar cal = Calendar.getInstance();
-				String date = cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.DAY_OF_MONTH)
-						+ " " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND);
+				String date = new Timestamp(new Date().getTime()).toString();
 				Connection.connect("http://localhost:8080/desastres/rest/post/type=user&name=" + username + "&quantity=1&latitud=0&longitud=0" + "&fecha=" + date + "&idAssigned=0");
 			}
 		} catch (Exception ex) {
 			System.out.println("Excepcion en TrivialSecurityRealm.booleanAuthenticate(): " + ex);
 		}
-
-	   /*return (
-         (Constants.VALID_USERNAME.equals(username) && Constants.VALID_PASSWORD.equals(password)) ||
-         (Constants.VALID_USERNAME2.equals(username) && Constants.VALID_PASSWORD.equals(password)) ||
-         (Constants.VALID_USERNAME3.equals(username) && Constants.VALID_PASSWORD.equals(password)) ||
-         (Constants.VALID_USERNAME4.equals(username) && Constants.VALID_PASSWORD.equals(password))
-      );*/
 	   return autenticado;
    }
 
@@ -157,13 +147,6 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 		} catch (JSONException ex) {
 			System.out.println("Excepcion: " + ex);
 		}
-
-	   /*return (
-         (Constants.VALID_USERNAME.equals(username) && Constants.VALID_ROLE.equals(role)) ||
-		 (Constants.VALID_USERNAME2.equals(username) && Constants.VALID_ROLE.equals(role)) ||
-		 (Constants.VALID_USERNAME3.equals(username) && Constants.VALID_ROLE2.equals(role)) ||
-		 (Constants.VALID_USERNAME4.equals(username) && Constants.VALID_ROLE3.equals(role))
-      );*/
 	   return rol;
    }
 

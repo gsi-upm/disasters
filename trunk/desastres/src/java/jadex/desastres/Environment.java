@@ -730,7 +730,7 @@ public class Environment {
 	 * @param valor String a imprimir
 	 * @param cat   nivel del mensaje (0 todos los usuarios, 1 todos los conectados,...)
 	 */
-	public static void printout(String valor, int nivel) {
+	public void printout(String valor, int nivel) {
 		Connection.connect(Environment.URL + "message/" + valor + "/" + nivel);
 		System.out.println(valor);
 	}

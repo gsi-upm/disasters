@@ -13,7 +13,7 @@ public class EvacuarHeridosPlan extends EnviarMensajePlan {
 
 	public void body() {
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		int idDes = env.getTablon();
+		int idDes = (Integer) getBeliefbase().getBelief("idEmergencia").getFact();
 		Disaster des = env.getEvent(idDes);
 		double dif = 0.0006;
 
@@ -36,7 +36,7 @@ public class EvacuarHeridosPlan extends EnviarMensajePlan {
 					System.out.println("Error al andar: " + ex);
 				}
 
-				Environment.printout("EE enfermero: evacuando al herido " + id, 0);
+				env.printout("EE enfermero: evacuando al herido " + id, 0);
 
 				try {
 					env.andar(getComponentName(), posHerido1, posHerido2, env.getAgent(getComponentName()).getId(), id);

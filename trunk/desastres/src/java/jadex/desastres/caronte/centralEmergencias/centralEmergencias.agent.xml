@@ -45,7 +45,7 @@
 		</belief>
 
  		<!-- id del desastre que tienen que atender-->
-		<belief name="desastreActual" class="Integer"> <!-- evaluationmode="dynamic" -->
+		<belief name="idEmergencia" class="Integer"> <!-- evaluationmode="dynamic" -->
 			<fact>0</fact>
 		</belief>
 	</beliefs>

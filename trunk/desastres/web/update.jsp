@@ -15,7 +15,7 @@
 <sql:update dataSource="${CatastrofesServer}">
     UPDATE CATASTROFES SET
     marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?, latitud = ?, 
-    longitud = ?, direccion = ?, estado = ?, size=?,traffic=?,idAssigned=?, fecha = ?, usuario = ?, modificado = <%=modif%> 
+    longitud = ?, direccion = ?, estado = ?, size=?,traffic=?,idAssigned=?, fecha = ?, usuario = ?, sintomas = ?, modificado = <%=modif%>
     WHERE id = ?
     
     <sql:param value="${param.marcador}"/>
@@ -33,6 +33,7 @@
     <sql:param value="${param.idAssigned}"/>
     <sql:param value="${param.fecha}"/>
     <sql:param value="${param.usuario}"/>
+	<sql:param value="${param.sintomas}"/>
     <sql:param value="${param.id}"/>
 </sql:update>  
 ok

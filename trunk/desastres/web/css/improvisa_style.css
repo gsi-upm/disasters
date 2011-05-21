@@ -78,7 +78,7 @@ form table img{
 /* AQUI ACABA EL FORMULARIO */
 
 #left{
-    width: 234px;
+    width: 260px;
 }
 
 #right{
@@ -269,13 +269,13 @@ form table img{
     font-size: 12px;
     /*margin-top: 21px;
     height: 508px;*/
-	width: 285px;
+	width: 254px;
 	margin-left: 6px;
     padding: 10px;
     border: 1px solid #919b9c;
     background-color: #efefef;
     color: #000000;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #close_messages, #open_messages{
