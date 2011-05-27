@@ -40,28 +40,8 @@
 			<input type="hidden" name="marcador" value="resource">
 			<table class="tabla_menu">
 				<tr>
-					<td><fmt:message key="policia"/> (${policemen.rowCount})</td>
-					<td><img alt="" src="markers/policia1.png" class="rayas"></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="bomberos"/> (${firemen.rowCount})</td>
-					<td><img alt="" src="markers/bombero1.png" class="rayas"></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="ambulancia"/> (${ambulance.rowCount})</td>
-					<td><img alt="" src="markers/ambulancia1.png" class="rayas"></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="enfermero"/> (${nurse.rowCount})</td>
-					<td><img alt="" src="markers/enfermero1.png" class="rayas"></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="gerocultor"/> (${gerocultor.rowCount})</td>
-					<td><img alt="" src="markers/gerocultor1.png" class="rayas"></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="auxiliar"/> (${assistant.rowCount})</td>
-					<td><img alt="" src="markers/auxiliar1.png" class="rayas"></td>
+					<td><fmt:message key="sanos"/> (${healthy.rowCount})</td>
+					<td><img alt="" src="markers/sano1.png" class="rayas"></td>
 				</tr>
 			</table>
 		</div>
@@ -83,15 +63,11 @@
 					<td><fmt:message key="atrapados"/> (${trapped.rowCount})</td>
 					<td><img alt="" src="markers/trapped1.png" class="rayas"></td>
 				</tr>
-				<tr>
-					<td><fmt:message key="sanos"/> (${healthy.rowCount})</td>
-					<td><img alt="" src="markers/sano1.png" class="rayas"></td>
-				</tr>
 			</table>
 		</div>
 	</div>
 	<!--aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1_2',Array('<fmt:message key="eventos"/>','<fmt:message key="recursos"/>','<fmt:message key="victimas"/>'),0,254,490);
+		initTabs('dhtmlgoodies_tabView1_2',Array('<fmt:message key="eventos"/>','Residentes','<fmt:message key="victimas"/>'),0,254,490);
 	</script>
 </fmt:bundle>

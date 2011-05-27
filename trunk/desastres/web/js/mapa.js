@@ -32,7 +32,7 @@ var usuario_actual_tipo;
         
 var estado_Experto = "off";
         
-var tiempoActualizacion = 2000;
+var tiempoActualizacion = 1500;
 var tiempoInicial = 5000;
 
 var userName = null;
@@ -676,6 +676,43 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 	}
 }
 
+function modificar2(id,tipo,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+	puntero = marcadores_definitivos[id];
+
+		var sintomas = '';
+		if(fatigue) sintomas += 'fatigue,';
+		if(fever) sintomas += 'fever,';
+		if(dyspnea) sintomas += 'dyspnea,';
+		if(nausea) sintomas += 'nausea,';
+		if(headache) sintomas += 'headache,';
+		if(vomiting) sintomas += 'vomiting,';
+		if(abdominal_pain) sintomas += 'abdominal_pain,';
+		if(weight_loss) sintomas += 'weight_loss,';
+		if(blurred_vision) sintomas += 'blurred_vision,';
+		if(muscle_weakness) sintomas += 'muscle_weakness,';
+
+		//hay que hacer un update a la base de datos
+		$.post('update.jsp',{
+			'id':id,
+			'marcador':puntero.marcador,
+			'tipo':tipo,
+			'cantidad':puntero.cantidad,
+			'nombre':puntero.nombre,
+			'descripcion':puntero.descripcion,
+			'info':puntero.info,
+			'latitud':puntero.latitud,
+			'longitud':puntero.longitud,
+			'direccion':puntero.direccion,
+			'estado':puntero.estado,
+			'size':puntero.size,
+			'traffic':puntero.traffic,
+			'idAssigned':puntero.idAssigned,
+			'fecha':puntero.fecha,
+			'usuario':usuario_actual,
+			'sintomas':sintomas
+		});
+}
+
 function cargarModificar(puntero,caracter){
 	//mostrar la ventanita
 	//carga el evento a modificar en una variabla accesible por todos
@@ -816,48 +853,48 @@ function guardar_asociacion (idEvento, idRecurso){
     
 	//Hallar las nuevas distancias
 	if(recurso.tipo=="police"){
-		nueva_latitud=latitud+0.0005;
-		nueva_longitud=longitud+0.00025;
+		nueva_latitud=latitud+0.00005;
+		nueva_longitud=longitud+0.000025;
 	}
 	if(recurso.tipo=="nurse"){
-		nueva_latitud=latitud+0.0005;
-		nueva_longitud=longitud-0.00025;
+		nueva_latitud=latitud+0.00005;
+		nueva_longitud=longitud-0.000025;
 	}
 	if(recurso.tipo=="gerocultor"){
-		nueva_latitud=latitud+0.0005;
-		nueva_longitud=longitud-0.00025;
+		nueva_latitud=latitud+0.00005;
+		nueva_longitud=longitud-0.000025;
 	}
 	if(recurso.tipo=="assistant"){
-		nueva_latitud=latitud+0.0005;
-		nueva_longitud=longitud-0.00025;
+		nueva_latitud=latitud+0.00005;
+		nueva_longitud=longitud-0.000025;
 	}
 	if(recurso.tipo=="firemen"){
-		nueva_latitud=latitud+0.00025;
-		nueva_longitud=longitud-0.0005;
+		nueva_latitud=latitud+0.000025;
+		nueva_longitud=longitud-0.00005;
 	}
 	if(recurso.tipo=="ambulance" || recurso.tipo=="ambulancia"){
-		nueva_latitud=latitud+0.00025;
-		nueva_longitud=longitud+0.0005;
+		nueva_latitud=latitud+0.000025;
+		nueva_longitud=longitud+0.00005;
 	}
 	if(recurso.tipo=="trapped"){
-		nueva_latitud=latitud+0.0005;
-		nueva_longitud=longitud-0.001;
+		nueva_latitud=latitud+0.00005;
+		nueva_longitud=longitud-0.0001;
 	}
 	if(recurso.tipo=="healthy"){
-		nueva_latitud=latitud+0.0005;
-		nueva_longitud=longitud+0.001;
+		nueva_latitud=latitud+0.00005;
+		nueva_longitud=longitud+0.0001;
 	}
 	if(recurso.tipo=="slight"){
-		nueva_latitud=latitud+0.001;
-		nueva_longitud=longitud-0.0005;
+		nueva_latitud=latitud+0.0001;
+		nueva_longitud=longitud-0.00005;
 	}
 	if(recurso.tipo=="serious"){
-		nueva_latitud=latitud+0.001;
-		nueva_longitud=longitud+0.0005;
+		nueva_latitud=latitud+0.0001;
+		nueva_longitud=longitud+0.00005;
 	}
 	if(recurso.tipo=="dead"){
-		nueva_latitud=latitud+0.0005;
-		nueva_longitud=longitud+0.001;
+		nueva_latitud=latitud+0.00005;
+		nueva_longitud=longitud+0.0001;
 	}
     
 	//actualizar las modificaciones con el metodo modificar

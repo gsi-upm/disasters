@@ -30,6 +30,9 @@ public class EsperarSolucionPlan extends EnviarMensajePlan {
 		env.printout("OO coordinador: informando al enfermero...",0);
 		String resultado1 = enviarMensaje("nurse", "fin_emergencia", "ok");
 
+		env.printout("OO coordinador: informando al auxiliar...",0);
+		String resultado3 = enviarMensaje("auxiliar", "fin_emergencia", "ok");
+
 		waitFor(8000); // ESPERO A QUE EL ENTORNO SE ACTUALICE!!
 
 		//Creamos un nuevo objetivo

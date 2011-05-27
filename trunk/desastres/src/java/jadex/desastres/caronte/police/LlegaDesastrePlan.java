@@ -18,7 +18,7 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		//Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
-		String recibido = enviarRespuesta("ack_aviso", "Aviso recibido");
+		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
 		env.printout("PP police: Ack mandado",0);
 
 		//Obtengo mi posicion
@@ -27,7 +27,7 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		Position posicionComisaria = (Position) getBeliefbase().getBelief("Comisaria").getFact();
 
 		//id del Desastre atendiendose
-		int idDes = new Integer(recibido);
+		int idDes = recibido.getId();
 		getBeliefbase().getBelief("idEmergencia").setFact(idDes);
 
 		//Espero a que se borre el desastre (lo borra el bombero) para irme a otra cosa...

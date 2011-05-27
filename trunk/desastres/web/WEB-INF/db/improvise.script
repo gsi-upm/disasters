@@ -35,7 +35,7 @@ INSERT INTO RESOURCES VALUES(13,'ambulance','Unit A-001','description...','info.
 INSERT INTO RESOURCES VALUES(14,'ambulance','Unit A-001','description...','info...',0.0E0,0.0E0,'','active',0)
 INSERT INTO RESOURCES VALUES(15,'ambulance','Unit A-001','description...','info...',0.0E0,0.0E0,'','active',0)
 INSERT INTO CATASTROFES VALUES(1,'event','fire',1,'Incendio en la residencia','Fuego en la cocina de la residencia','Explosion de gas',38.232237E0,-1.699016E0,'Calle del Molinico','active','big','low','2001-04-03 00:00:01.000000000',0,'2008-04-15 13:07:00.509000000',1,'')
-INSERT INTO CATASTROFES VALUES(2,'people','slight',2,'Heridos leves','contusiones','No peligroso',38.232237E0,-1.698966E0,'Calle del Molinico','active','','','2001-04-03 00:00:01.000000000',1,'2008-04-15 13:07:00.509000000',1,'nausea,headache,abdominal_pain,')
+INSERT INTO CATASTROFES VALUES(2,'people','slight',1,'Heridos leves','contusiones','No peligroso',38.232237E0,-1.698966E0,'Calle del Molinico','active','','','2001-04-03 00:00:01.000000000',1,'2008-04-15 13:07:00.509000000',1,'nausea,headache,abdominal_pain,')
 INSERT INTO CATASTROFES VALUES(3,'people','healthy',1,'Persona sana','Anciano de la residencia','',38.232287E0,-1.699066E0,'Calle del Molinico','active','','','2001-04-03 00:00:01.000000000',0,'2008-04-15 13:07:00.509000000',1,'')
 INSERT INTO CATASTROFES VALUES(4,'people','healthy',1,'Persona sana','Anciano de la residencia','',38.232187E0,-1.699066E0,'Calle del Molinico','active','','','2001-04-03 00:00:01.000000000',0,'2008-04-15 13:07:00.509000000',1,'')
 INSERT INTO PROYECTOS VALUES(1,'disasters')

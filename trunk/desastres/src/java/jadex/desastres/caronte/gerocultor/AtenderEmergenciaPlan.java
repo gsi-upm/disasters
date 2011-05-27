@@ -18,37 +18,48 @@ public class AtenderEmergenciaPlan extends EnviarMensajePlan {
 	public void body() {
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		Position posicion = (Position) getBeliefbase().getBelief("pos").getFact();
 
-		String recibido = enviarRespuesta("ack_aviso_geriatrico", "Aviso recibido");
+		Desastre recibido = (Desastre) enviarRespuestaObjeto("ack_aviso_geriatrico", "Aviso recibido");
 		env.printout("GG gerocultor: Ack mandado", 0);
 
-		int idDes =  new Integer(recibido);
+		int idDes = recibido.getId();
 		getBeliefbase().getBelief("idEmergencia").setFact(idDes);
 		Disaster des = env.getEvent(idDes);
 		Position positionDesastre = new Position(des.getLatitud(), des.getLongitud());
 
-		env.printout("GG gerocultor: Estoy atendiendo la emergencia: " + idDes, 0);
-                
-		// Emergencia
-		if (des.getSize().equals("small") || des.getSize().equals("medium")) {
-			String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
-			getBeliefbase().getBelief("material").setFact(false);
-			env.printout("GG gerocultor: Eliminado el desastre " + idDes, 0);
-
-			waitFor(2000);
-
-			String respuesta = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "done");
-			env.printout("GG gerocultor: Respuesta recibida del coordinador: " + respuesta, 0);
-
-			String recibido2 = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
-		} else {
-			env.printout("GG gerocultor: emergencia atendida por bomberos", 0);
-
-			IGoal evacuarResidencia = createGoal("evacuarResidencia");
-			dispatchSubgoalAndWait(evacuarResidencia);
+		try {
+			env.andar(getComponentName(), posicion, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
+		} catch (Exception ex) {
+			System.out.println("Error al andar: " + ex);
 		}
 
-		IGoal reponerMaterial = createGoal("reponerMaterial");
-		dispatchSubgoalAndWait(reponerMaterial);
+		env.printout("GG gerocultor: Estoy atendiendo la emergencia: " + idDes, 0);
+
+		if (!des.getType().equals("injuredPerson")) {
+			if (des.getSize().equals("small") || des.getSize().equals("medium")) {
+				String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
+				getBeliefbase().getBelief("material").setFact(false);
+				env.printout("GG gerocultor: Eliminado el desastre " + idDes, 0);
+
+				waitFor(2000);
+
+				String respuesta = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "done");
+				env.printout("GG gerocultor: Respuesta recibida del coordinador: " + respuesta, 0);
+
+				String recibido2 = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
+			} else {
+				env.printout("GG gerocultor: emergencia atendida por bomberos", 0);
+
+				IGoal evacuarResidencia = createGoal("evacuarResidencia");
+				dispatchSubgoalAndWait(evacuarResidencia);
+			}
+		} else {
+			env.printout("GG gerocultor: emergencia de caracter medico", 0);
+			String recibido2 = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
+		}
+
+		//IGoal reponerMaterial = createGoal("reponerMaterial");
+		//dispatchSubgoalAndWait(reponerMaterial);
 	}
 }

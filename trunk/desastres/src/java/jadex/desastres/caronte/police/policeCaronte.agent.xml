@@ -98,7 +98,14 @@
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("aviso")</match>
+			<parameter name="language" class="String" direction="fixed">
+				<value>SFipa.JADEX_XML</value>
+ 			</parameter>
+			<parameter name="ontology" class="String" direction="fixed">
+				<value>CaronteOntology.ONTOLOGY_NAME</value>
+			</parameter>
+			<match>$content instanceof Desastre</match>
+			<!--<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("aviso")</match>-->
 		</messageevent>
 		<messageevent name="ack_aviso" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">

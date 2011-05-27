@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>
+<%--<jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>--%>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 <c:set var="nombreUsuario" value="<%= request.getRemoteUser()%>"/>
 
@@ -39,7 +39,7 @@
 				<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false&language=es&region=ES"></script>
 			-->
 			<script type="text/javascript" src="js/mapa_${proyecto.proyect}.js"></script>
-			<script type="text/javascript" src="js/mapa.js"></script>
+			<script type="text/javascript" src="js/mapa.js"></script>  <!-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin -->
 			<!-- Objeto Marcador -->
 			<script type="text/javascript" src="js/marcador.js"></script>
 			<!--Hora y Fecha -->
@@ -210,7 +210,7 @@
 				<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a>
 				<a href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3.png" alt="HTML5 Powered with CSS3 / Styling"></a>
 			</p>-->
-			<%
+			<%--
 					int[] rscs = recursos.getResourcesList();
 					for (int i = 0; i < rscs.length; i++) {
 						String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\">";
@@ -218,7 +218,7 @@
 						String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\">";
 						out.println(ed);
 					}
-			%>
+			--%>
 			<c:if test="${param.alert == true}">
 				<script type="text/javascript">
 					window.alert("Fin de la simulacion.")

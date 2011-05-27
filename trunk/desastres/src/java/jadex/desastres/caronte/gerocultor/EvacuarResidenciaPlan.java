@@ -5,7 +5,7 @@ import jadex.desastres.*;
 import org.json.me.*;
 
 /**
- * Plan de ENFERMERO
+ * Plan de GEROCULTOR
  *
  * @author Lorena Lopez Lebon y Juan Luis Molina
  */
@@ -29,12 +29,16 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan {
 			String levesAux = Connection.connect(Environment.URL + "slight");
 			JSONArray leves = new JSONArray(levesAux);
 
-			for (int i = 0; i < sanos.length(); i++) {
+			int numeroEvacuadosSanos = Math.round(2*sanos.length()/3);
+			env.printout("GG gerocultor: de " + sanos.length() + " residentes sanos me encargo de evacuar a " + numeroEvacuadosSanos, 0);
+			// del resto de sanos se encarga el auxiliar
+
+			for (int i = 0; i < numeroEvacuadosSanos; i++) {
 				JSONObject sano = sanos.getJSONObject(i);
 				evacuar(sano, 0);
 			}
 
-			env.printout("GG gerocultor: todos los residentes evacuados!!", 0);
+			env.printout("GG gerocultor: todos los residentes a cargo del gerocultor evacuados!!", 0);
 
 			String recibido = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
 			env.printout("GG gerocultor: llevo a los residentes de vuelta", 0);
@@ -71,7 +75,7 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan {
 		double dif1 = 0.0;
 		double dif2 = 0.0006;
 		String msg = "evacuando al anciano";
-		if(dir==1){
+		if (dir == 1) {
 			dif1 = 0.0006;
 			dif2 = 0.0;
 			msg = "llevando de vuelta al anciano";

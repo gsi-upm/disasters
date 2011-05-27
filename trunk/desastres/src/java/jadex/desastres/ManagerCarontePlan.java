@@ -40,6 +40,11 @@ public class ManagerCarontePlan extends Plan{
 		sp6.getParameter("type").setValue("jadex/desastres/caronte/gerocultor/gerocultor.agent.xml");
 		dispatchSubgoalAndWait(sp6);
 		System.out.println("Gerocultor creado");
+
+		IGoal sp9 = createGoal("cms_create_component");
+		sp9.getParameter("type").setValue("jadex/desastres/caronte/auxiliar/auxiliar.agent.xml");
+		dispatchSubgoalAndWait(sp9);
+		System.out.println("Auxiliar creado");
 		
 		IGoal sp7 = createGoal("cms_create_component");
 		sp7.getParameter("type").setValue("jadex/desastres/caronte/centralEmergencias/centralEmergencias.agent.xml");

@@ -18,7 +18,7 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
-		String recibido = enviarRespuesta("ack_aviso", "Aviso recibido");
+		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
 		env.printout("AA ambulance: Ack mandado", 0);
 
 		// Posicion actual de la ambulancia, que le permite recoger al herido.
@@ -27,15 +27,12 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 		// Posicion del hospital que le corresponde
 		Position posicionHospital = (Position) getBeliefbase().getBelief("hospital").getFact();
 
-		// 0:id, 1:estadoHerido
-		String recibido2[] = recibido.split("-");
-
 		//id y posicion del Desastre atendiendose
-		int idDes = new Integer(recibido2[0]);
+		int idDes = recibido.getId();
 		getBeliefbase().getBelief("idEmergencia").setFact(idDes);
 		Disaster des = env.getEvent(idDes);
 		Position posicionDesastre = new Position(des.getLatitud(), des.getLongitud());
-		String estadoHerido = recibido2[1];
+		String estadoHerido = recibido.getEstadoHeridos();
 
 		env.printout("AA ambulance: Estoy destinado al desastre " + idDes + " con herido " + estadoHerido, 0);
 
