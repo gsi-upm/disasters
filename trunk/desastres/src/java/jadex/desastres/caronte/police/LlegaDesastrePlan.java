@@ -19,7 +19,7 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
-		env.printout("PP police: Ack mandado",0);
+		//env.printout("PP police: Ack mandado",0);
 
 		//Obtengo mi posicion
 		Position oldPos = (Position) getBeliefbase().getBelief("pos").getFact();

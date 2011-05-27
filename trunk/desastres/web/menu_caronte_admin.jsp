@@ -66,6 +66,7 @@
 					<tr><td class="img_menu"><img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion1" src="images/iconos/no.png"></td></tr>
 				</table>
 				<!--a href="#" onclick="pinchaMapa(1);">Marcar en mapa</a-->
+				<br>
 				<table class="tabla_menu">
 					<tr>
 						<td><label for="size"><fmt:message key="tamanno"/>:</label></td>
@@ -146,6 +147,7 @@
 					<input type="hidden" name="latitud" id="latitud2" value="">
 					<input type="hidden" name="longitud" id="longitud2" value="">
 					<input type="hidden" name="estado" value="active">
+					<input type="hidden" name="tipo" value="healthy">
 					<input type="hidden" name="magnitude" id="magnitude2" value="">
 					<input type="hidden" name="traffic" id="traffic2" value="">
 					<input type="hidden" name="cantidad" value="1">
@@ -153,7 +155,7 @@
 				<p>
 					<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;">
 					<input type="button" id="submit22" value="<fmt:message key="annadir"/>" class="btn" onclick="crearCatastrofe(
-						marcador.value,seleccionRadio(this.form,1),cantidad.value,nombre.value,info.value,
+						marcador.value,'healthy',cantidad.value,nombre.value,info.value,
 						descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0);
 						borrarFormulario(this.form,2);return false;">
 				</p>
@@ -161,7 +163,7 @@
 				<div class="jqmWindow" id="dialog2">
 					<p><fmt:message key="puntoalmacenado"/></p>
 					<p class="centrado">
-						<button onclick="crearCatastrofe(marcador.value,seleccionRadio(this.form,1),cantidad.value,nombre.value,info.value,
+						<button onclick="crearCatastrofe(marcador.value,'healthy',cantidad.value,nombre.value,info.value,
 							descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0);
 							$('#dialog2').jqm().jqmHide();borrarFormulario(this.form,2);return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
@@ -201,19 +203,24 @@
 				</table>
 				<br>
 				<table class="tabla_menu">
-					<tr>
-						<td colspan="2">
-							<sql:query var="residentes" dataSource="${CatastrofesServer}" sql="
-								SELECT * FROM catastrofes where tipo='healthy' and estado!='erased';">
-							</sql:query>
-							<select name="residente" id="residente">
-								<c:forEach var="residente" items="${residentes.rows}">
-									<option value="${residente.id}">${residente.id} - ${residente.nombre}</option>
-								</c:forEach>
-							</select>
-						</td>
+					<tr>			
+						<sql:query var="residentes" dataSource="${CatastrofesServer}" sql="
+							SELECT * FROM catastrofes where tipo='healthy' and estado!='erased';">
+						</sql:query>
+						<c:if test="${residentes.rowCount > 0}">
+							<td><label for="residente">Residentes:</label></td>
+							<td>
+								<select name="residente" id="residente">
+									<c:forEach var="residente" items="${residentes.rows}">
+										<option value="${residente.id}">${residente.id} - ${residente.nombre}</option>
+									</c:forEach>
+								</select>
+							</td>
+						</c:if>
+						<c:if test="${residentes.rowCount == 0}">
+							<td colspan="2"><b>Sin residentes que asociar</b></td>
+						</c:if>		
 					</tr>
-					<br>
 					<tr>
 						<td colspan="2">
 							S&iacute;ntomas:<br>

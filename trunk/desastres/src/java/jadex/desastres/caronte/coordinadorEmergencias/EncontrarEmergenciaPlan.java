@@ -34,6 +34,8 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan {
 			des = findDisaster(env);
 		}
 
+		waitFor(10000); // Retardo para asociar heridos
+
 		env.printout("OO coordinador: emergencia encontrada!!",0);
 
 		// EL COORDINADOR SE DESPLAZA HASTA LA EMERGENCIA PARA EVALUARLA

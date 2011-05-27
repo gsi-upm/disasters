@@ -21,7 +21,7 @@ public class AyudarHeridosPlan extends EnviarMensajePlan {
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre) enviarRespuestaObjeto("ack_aviso_geriatrico", "Aviso recibido");
-		env.printout("XX auxiliar: Ack mandado", 0);
+		//env.printout("XX auxiliar: Ack mandado", 0);
 
 		// Posicion de la residencia que le corresponde
 		Position posResi = (Position) getBeliefbase().getBelief("residencia").getFact();
@@ -67,9 +67,6 @@ public class AyudarHeridosPlan extends EnviarMensajePlan {
 				System.out.println("Error al andar: " + ex);
 			}
 		}
-
-		IGoal reponerMaterial = createGoal("reponerMaterial");
-		dispatchSubgoalAndWait(reponerMaterial);
 	}
 
 	/**
