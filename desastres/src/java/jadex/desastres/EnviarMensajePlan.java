@@ -83,7 +83,6 @@ public abstract class EnviarMensajePlan extends Plan {
 		sendMessage(msg);
 		IMessageEvent answer = waitForMessageEvent("ack_" + evento);
 		return ((String)answer.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
-
 	}
 
 	/**

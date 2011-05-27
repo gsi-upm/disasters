@@ -66,8 +66,6 @@
 		
 		<performgoal name="vigilarHabitaciones" retry="true" exclude="never"/>
 		<achievegoal name="atenderHeridos"/>
-		<achievegoal name="evacuarHeridos"/>
-		<achievegoal name="reponerMaterial"/>
 	</goals>
 
 	<plans>
@@ -83,18 +81,6 @@
 				<messageevent ref="aviso_geriatrico"/>
 			</trigger>
 		</plan>
-		<plan name="evacuarHeridos-plan">
-			<body class="EvacuarHeridosPlan"/>
-			<trigger>
-				<goal ref="evacuarHeridos"/>
-			</trigger>
-		</plan>
-		<plan name="reponerMaterial-plan">
-			<body class="ReponerMaterialPlan"/>
-			<trigger>
-				<goal ref="reponerMaterial"/>
-			</trigger>
-		</plan>
 	</plans>
 
 	<events>
@@ -102,7 +88,14 @@
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("aviso_geriatrico")</match>
+			<parameter name="language" class="String" direction="fixed">
+				<value>SFipa.JADEX_XML</value>
+ 			</parameter>
+			<parameter name="ontology" class="String" direction="fixed">
+				<value>CaronteOntology.ONTOLOGY_NAME</value>
+			</parameter>
+			<match>$content instanceof Desastre</match>
+			<!--<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("aviso_geriatrico")</match>-->
 		</messageevent>
 		<messageevent name="ack_aviso_geriatrico" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">

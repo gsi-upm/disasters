@@ -10,21 +10,156 @@
 	   package="jadex.desastres.caronte.auxiliar">
 
 	<imports>
+		<import>jadex.base.fipa.*</import>
+		<import>jadex.bdi.planlib.protocols.request.Request</import>
+		<import>jadex.bdi.planlib.df.DF</import>
+		<import>jadex.bridge.fipa.ComponentIdentifier</import>
+		<import>jadex.commons.*</import>
+		<import>jadex.commons.service.*</import>
+		<import>jadex.util.*</import>
 		<import>jadex.runtime.*</import>
+		<import>jadex.desastres.*</import>
 	</imports>
+        
+	<capabilities>
+		<capability name="procap" file="Request"/>
+		<capability name="dfcap" file="DF"/>
+	</capabilities>
 
 	<beliefs>
+            <!-- Creamos el agente como instancia del Entorno. Por defecto, en la residencia -->
+		<belief name="env" class="Environment">
+			<fact>Environment.getInstance(Environment.AUXILIAR, $scope.getAgentName(), $beliefbase.residencia)</fact>
+		</belief>
+            
+            <!-- Definimos la posicion de la residencia -->
+		<belief name="residencia" class="Position">
+			<fact>new Position(38.232237, -1.699016)</fact>
+		</belief>
+            
+		<!-- Posicion del agente -->
+		<belief name="pos" class="Position">
+			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
+		</belief>
+
+		<!-- ID del desastre que atiende -->
+		<belief name="idEmergencia" class="Integer">
+			<fact>0</fact>
+		</belief>
+
+		<!-- Indica si el material esta disponible para su uso o hay que reponerlo -->
+		<belief name="material" class="boolean">
+			<fact>true</fact>
+		</belief>
+
+		<belief name="sanosEvacuacion" class="String">
+			<fact>"-"</fact>
+		</belief>
 	</beliefs>
 
 	<goals>
+		<achievegoalref name="rp_initiate">
+			<concrete ref="procap.rp_initiate"/>
+		</achievegoalref>
+		<achievegoalref name="df_search">
+			<concrete ref="dfcap.df_search"/>
+		</achievegoalref>
+		<maintaingoalref name="df_keep_registered">
+			<concrete ref="dfcap.df_keep_registered"/>
+		</maintaingoalref>
+		
+		<performgoal name="esperarEmergencia" retry="true" exclude="never"/>
+		<achievegoal name="ayudarHeridos"/>
+		<achievegoal name="evacuarHeridos"/>
+		<achievegoal name="colaborarEvacuarSanos"/>
+		<achievegoal name="reponerMaterial"/>
 	</goals>
 
 	<plans>
+		<plan name="esperarEmergencia-plan">
+			<body class="EsperarEmergenciaPlan"/>
+			<trigger>
+				<goal ref="esperarEmergencia"/>
+			</trigger>
+		</plan>
+		<plan name="ayudarHeridos-plan">
+			<body class="AyudarHeridosPlan"/>
+			<trigger>
+				<messageevent ref="aviso_geriatrico"/>
+			</trigger>
+		</plan>
+		<plan name="evacuarHeridos-plan">
+			<body class="EvacuarHeridosPlan"/>
+			<trigger>
+				<goal ref="evacuarHeridos"/>
+			</trigger>
+		</plan>
+		<plan name="colaborarEvacuarSanos-plan">
+			<body class="ColaborarEvacuarSanosPlan"/>
+			<trigger>
+				<goal ref="colaborarEvacuarSanos"/>
+			</trigger>
+		</plan>
+		<plan name="reponerMaterial-plan">
+			<body class="ReponerMaterialPlan"/>
+			<trigger>
+				<goal ref="reponerMaterial"/>
+			</trigger>
+		</plan>
 	</plans>
 
 	<events>
+		<messageevent name="aviso_geriatrico" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="language" class="String" direction="fixed">
+				<value>SFipa.JADEX_XML</value>
+ 			</parameter>
+			<parameter name="ontology" class="String" direction="fixed">
+				<value>CaronteOntology.ONTOLOGY_NAME</value>
+			</parameter>
+			<match>$content instanceof Desastre</match>
+			<!--<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("aviso_geriatrico")</match>-->
+		</messageevent>
+		<messageevent name="ack_aviso_geriatrico" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+
+		<messageevent name="fin_emergencia" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("fin_emergencia")</match>
+		</messageevent>
+		<messageevent name="ack_fin_emergencia" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
 	</events>
 
+ 	<!-- Inicialmente activamos el objetivo con nombre esperarEmergencia -->
 	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="df_keep_registered">
+					<parameter ref="description">
+						<value>
+							$propertybase.getProperty("dfservice")
+								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
+								.createDFServiceDescription("auxiliar_service", "auxiliar", "GSI DIT UPM"))
+ 						</value>
+					</parameter>
+				</initialgoal>
+				<initialgoal ref="esperarEmergencia"/>
+			</goals>
+		</configuration>
 	</configurations>
+
+	<properties>
+		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(),IDF.class)</property>
+	</properties>
 </agent>

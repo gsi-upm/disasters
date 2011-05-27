@@ -22,7 +22,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
-		String recibido = enviarRespuesta("ack_aviso", "Aviso recibido");
+		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
 		env.printout("FF firemen: Ack mandado",0);
 		
 		// Posicion actual del bombero, que le permite recoger al herido.
@@ -31,16 +31,13 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 		// Posicion del parque de bomberos que le corresponde
 		Position posicionParque = (Position) getBeliefbase().getBelief("parqueDeBomberos").getFact();
 
-		// 0:id, 1:estadoEmergencia
-		String recibido2[] = recibido.split("-");
-
 		//id y posicion del Desastre atendiendose
-		int idDes = new Integer(recibido2[0]);
+		int idDes = recibido.getId();
 		getBeliefbase().getBelief("idEmergencia").setFact(idDes);
 		Disaster des = env.getEvent(idDes);
 		env.printout("FF firemen: Estoy destinado al desastre: " + idDes,0);
 		Position destino = new Position(des.getLatitud(), des.getLongitud());
-		String estadoEmergencia = recibido2[1];
+		String estadoEmergencia = recibido.getEstadoEmergencia();
 
 		//in case the agent hasn't an assigned disaster yet, we have to put
 		//the new value for the idAssigned parameter in the DB
