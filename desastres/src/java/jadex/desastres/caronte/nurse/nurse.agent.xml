@@ -46,11 +46,6 @@
 		<belief name="idEmergencia" class="Integer">
 			<fact>0</fact>
 		</belief>
-		
-		<!-- Indica si el material esta disponible para su uso o hay que reponerlo -->
-		<belief name="material" class="boolean">
-			<fact>true</fact>
-		</belief>
 	</beliefs>
 
 	<goals>
@@ -90,7 +85,7 @@
 			</parameter>
 			<parameter name="language" class="String" direction="fixed">
 				<value>SFipa.JADEX_XML</value>
- 			</parameter>
+			</parameter>
 			<parameter name="ontology" class="String" direction="fixed">
 				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
@@ -138,6 +133,18 @@
 				<value>SFipa.INFORM</value>
 			</parameter>
 		</messageevent>
+                
+		<messageevent name="reponer_material" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="ack_reponer_material" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_reponer_material")</match>
+		</messageevent>
 	</events>
 
  	<!-- Inicialmente activamos el objetivo con nombre vigilarHabitaciones -->
@@ -150,7 +157,7 @@
 							$propertybase.getProperty("dfservice")
 								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
 								.createDFServiceDescription("nurse_service", "nurse", "GSI DIT UPM"))
- 						</value>
+						</value>
 					</parameter>
 				</initialgoal>
 				<initialgoal ref="vigilarHabitaciones"/>

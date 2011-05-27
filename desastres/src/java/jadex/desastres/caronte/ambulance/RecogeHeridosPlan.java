@@ -19,7 +19,7 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
-		env.printout("AA ambulance: Ack mandado", 0);
+		//env.printout("AA ambulance: Ack mandado", 0);
 
 		// Posicion actual de la ambulancia, que le permite recoger al herido.
 		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();

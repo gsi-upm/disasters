@@ -48,7 +48,12 @@
 		</belief>
 
 		<!-- Indica si el material esta disponible para su uso o hay que reponerlo -->
-		<belief name="material" class="boolean">
+		<belief name="material-incendio" class="Boolean">
+			<fact>true</fact>
+		</belief>
+
+		<!-- Indica si el material esta disponible para su uso o hay que reponerlo -->
+		<belief name="material-medico" class="Boolean">
 			<fact>true</fact>
 		</belief>
 
@@ -68,7 +73,7 @@
 			<concrete ref="dfcap.df_keep_registered"/>
 		</maintaingoalref>
 		
-		<performgoal name="esperarEmergencia" retry="true" exclude="never"/>
+		<performgoal name="esperarEmergencia"/>
 		<achievegoal name="ayudarHeridos"/>
 		<achievegoal name="evacuarHeridos"/>
 		<achievegoal name="colaborarEvacuarSanos"/>
@@ -103,7 +108,7 @@
 		<plan name="reponerMaterial-plan">
 			<body class="ReponerMaterialPlan"/>
 			<trigger>
-				<goal ref="reponerMaterial"/>
+				<messageevent ref="reponer_material"/>
 			</trigger>
 		</plan>
 	</plans>
@@ -115,7 +120,7 @@
 			</parameter>
 			<parameter name="language" class="String" direction="fixed">
 				<value>SFipa.JADEX_XML</value>
- 			</parameter>
+			</parameter>
 			<parameter name="ontology" class="String" direction="fixed">
 				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
@@ -139,6 +144,18 @@
 				<value>SFipa.INFORM</value>
 			</parameter>
 		</messageevent>
+                
+		<messageevent name="reponer_material" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("reponer_material")</match>
+		</messageevent>
+		<messageevent name="ack_reponer_material" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
 	</events>
 
  	<!-- Inicialmente activamos el objetivo con nombre esperarEmergencia -->
@@ -151,7 +168,7 @@
 							$propertybase.getProperty("dfservice")
 								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
 								.createDFServiceDescription("auxiliar_service", "auxiliar", "GSI DIT UPM"))
- 						</value>
+						</value>
 					</parameter>
 				</initialgoal>
 				<initialgoal ref="esperarEmergencia"/>

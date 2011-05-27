@@ -23,7 +23,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
-		env.printout("FF firemen: Ack mandado",0);
+		//env.printout("FF firemen: Ack mandado",0);
 		
 		// Posicion actual del bombero, que le permite recoger al herido.
 		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();

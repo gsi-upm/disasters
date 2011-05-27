@@ -679,38 +679,38 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 function modificar2(id,tipo,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 	puntero = marcadores_definitivos[id];
 
-		var sintomas = '';
-		if(fatigue) sintomas += 'fatigue,';
-		if(fever) sintomas += 'fever,';
-		if(dyspnea) sintomas += 'dyspnea,';
-		if(nausea) sintomas += 'nausea,';
-		if(headache) sintomas += 'headache,';
-		if(vomiting) sintomas += 'vomiting,';
-		if(abdominal_pain) sintomas += 'abdominal_pain,';
-		if(weight_loss) sintomas += 'weight_loss,';
-		if(blurred_vision) sintomas += 'blurred_vision,';
-		if(muscle_weakness) sintomas += 'muscle_weakness,';
+	var sintomas = '';
+	if(fatigue) sintomas += 'fatigue,';
+	if(fever) sintomas += 'fever,';
+	if(dyspnea) sintomas += 'dyspnea,';
+	if(nausea) sintomas += 'nausea,';
+	if(headache) sintomas += 'headache,';
+	if(vomiting) sintomas += 'vomiting,';
+	if(abdominal_pain) sintomas += 'abdominal_pain,';
+	if(weight_loss) sintomas += 'weight_loss,';
+	if(blurred_vision) sintomas += 'blurred_vision,';
+	if(muscle_weakness) sintomas += 'muscle_weakness,';
 
-		//hay que hacer un update a la base de datos
-		$.post('update.jsp',{
-			'id':id,
-			'marcador':puntero.marcador,
-			'tipo':tipo,
-			'cantidad':puntero.cantidad,
-			'nombre':puntero.nombre,
-			'descripcion':puntero.descripcion,
-			'info':puntero.info,
-			'latitud':puntero.latitud,
-			'longitud':puntero.longitud,
-			'direccion':puntero.direccion,
-			'estado':puntero.estado,
-			'size':puntero.size,
-			'traffic':puntero.traffic,
-			'idAssigned':puntero.idAssigned,
-			'fecha':puntero.fecha,
-			'usuario':usuario_actual,
-			'sintomas':sintomas
-		});
+	//hay que hacer un update a la base de datos
+	$.post('update.jsp',{
+		'id':id,
+		'marcador':puntero.marcador,
+		'tipo':tipo,
+		'cantidad':puntero.cantidad,
+		'nombre':puntero.nombre,
+		'descripcion':puntero.descripcion,
+		'info':puntero.info,
+		'latitud':puntero.latitud,
+		'longitud':puntero.longitud,
+		'direccion':puntero.direccion,
+		'estado':puntero.estado,
+		'size':puntero.size,
+		'traffic':puntero.traffic,
+		'idAssigned':puntero.idAssigned,
+		'fecha':puntero.fecha,
+		'usuario':usuario_actual,
+		'sintomas':sintomas
+	});
 }
 
 function cargarModificar(puntero,caracter){

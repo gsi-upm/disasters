@@ -25,7 +25,7 @@ public class AtenderHeridosPlan extends EnviarMensajePlan {
 		env = (Environment) getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre) enviarRespuestaObjeto("ack_aviso_geriatrico", "Aviso recibido");
-		env.printout("EE enfermero: Ack mandado", 0);
+		//env.printout("EE enfermero: Ack mandado", 0);
 
 		// Posicion de la residencia que le corresponde
 		Position posResi = (Position) getBeliefbase().getBelief("residencia").getFact();
@@ -97,7 +97,6 @@ public class AtenderHeridosPlan extends EnviarMensajePlan {
 					herido.setAtendido(true);
 					String resultado1 = Connection.connect(Environment.URL + "put/" + id + "/idAssigned/0");
 					des.setSlight();
-					getBeliefbase().getBelief("material").setFact(false);
 
 					env.printout("EE enfermero: curando herido " + id, 0);
 					//String resultado = Connection.connect(Environment.URL + "delete/id/" + id);
@@ -139,6 +138,9 @@ public class AtenderHeridosPlan extends EnviarMensajePlan {
 			}
 		}
 
+		env.printout("EE enfermero: Solicitar reposicion de material al auxiliar...",0);
+		String resultado2 = enviarMensaje("auxiliar", "reponer_material", "medico");
+                
 		//IGoal reponerMaterial = createGoal("reponerMaterial");
 		//dispatchSubgoalAndWait(reponerMaterial);
 	}
@@ -204,13 +206,13 @@ public class AtenderHeridosPlan extends EnviarMensajePlan {
 				enfermedades[i - 1] = texto2[i].substring(1, texto2[i].indexOf("\"", 1)); // el 0 es ", asi que mira desde el 1
 				listaEnfermedades += enfermedades[i - 1];
 
-				System.out.print(enfermedades[i - 1] + ": ");
+				/*System.out.print(enfermedades[i - 1] + ": ");
 				String texto3[] = texto2[i].split("\"TRATAMIENTO:name\": ", -1);
 				for (int j = 1; j < texto3.length; j++) {
 					tratamientos.add(texto3[j].substring(1, texto3[j].indexOf("\"", 1)));
 					System.out.print(texto3[j].substring(1, texto3[j].indexOf("\"", 1)) + ", ");
 				}
-				System.out.println("");
+				System.out.println("");*/
 
 				if (i < texto2.length - 2) {
 					listaEnfermedades += ", ";
