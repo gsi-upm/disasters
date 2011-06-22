@@ -288,7 +288,7 @@
 
 	<c:when test="${param.action eq 'userProyect'}">
 		<sql:query var="proyectos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id_usuarios, proyectos.id, proyecto,
+				   SELECT id_usuarios, tipo_usuario, proyectos.id, proyecto,
 				   relaciones.id, id_usuario, id_proyecto
 				   FROM usuarios, proyectos, relaciones
 				   WHERE nombre_usuario = ?
@@ -301,7 +301,9 @@
 	<c:when test="${param.action eq 'messages'}">
 		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
 				   SELECT id, mensaje, nivel, fecha
-				   FROM mensajes;">
+				   FROM mensajes
+				   WHERE nivel <= ?;">
+			<sql:param value="${param.nivel}"/>
 		</sql:query>
 	</c:when>
 
@@ -309,7 +311,9 @@
 		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
 				   SELECT id, mensaje, nivel, fecha
 				   FROM mensajes
-				   WHERE fecha > ?;">
+				   WHERE nivel <= ?
+				   AND fecha > ?;">
+			<sql:param value="${param.nivel}"/>
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -318,7 +322,9 @@
 		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
 				   SELECT id, mensaje, nivel, fecha
 				   FROM mensajes
-				   WHERE id > ?;">
+				   WHERE nivel <= ?
+				   AND id > ?;">
+			<sql:param value="${param.nivel}"/>
 			<sql:param value="${param.index}"/>
 		</sql:query>
 	</c:when>
@@ -379,6 +385,7 @@
 		<c:forEach var="proyecto" items="${proyectos.rows}">
 			<json:object name="temporal">
 				<json:property name="proyect" value="${proyecto.proyecto}"/>
+				<json:property name="rol" value="${proyecto.tipo_usuario}"/>
 			</json:object> ,
 		</c:forEach>
 		<c:forEach var="mensaje" items="${mensajes.rows}">

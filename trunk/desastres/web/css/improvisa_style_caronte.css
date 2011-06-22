@@ -1,6 +1,6 @@
 #messages{
     margin-top: 21px;
-    height: 508px;
+    height: 508px; /* 380 con botones */
 }
 
 #close_messages, #open_messages{

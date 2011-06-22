@@ -16,6 +16,9 @@
 	<c:if test="${param.proyect != null}"> <!-- and param.alert == null -->
 		<jsp:setProperty name="proyecto" property="proyect" value="${param.proyect}"/>
 	</c:if>
+	<c:if test="${param.rol != null}">
+		<jsp:setProperty name="proyecto" property="rol" value="${param.rol}"/>
+	</c:if>
 </c:if>
 
 <!DOCTYPE HTML>
@@ -23,7 +26,7 @@
 	<fmt:bundle basename="fmt.eji8n">
 		<head><meta http-equiv="content-type" content="text/html; charset=UTF-8">
 			<title><fmt:message key="title_${proyecto.proyect}"/></title>
-			<link type="image/x-icon" rel="shotcut icon" href="images/favicon_${proyecto.proyect}.ico">
+			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_${proyecto.proyect}.ico">
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css">
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css">
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen">
@@ -38,6 +41,7 @@
 				<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 				<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false&language=es&region=ES"></script>
 			-->
+			<script type="text/javascript">var nivelMsg = ${proyecto.nivelMsg};</script>
 			<script type="text/javascript" src="js/mapa_${proyecto.proyect}.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>  <!-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin -->
 			<!-- Objeto Marcador -->
@@ -74,11 +78,12 @@
 		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true); mostrarMensajes();" onunload="GUnload()">
 			<c:if test="${nombreUsuario != null}">
 				<c:import url="ventana_modificacion.jsp"/>
+				<c:import url="ventana_acciones.jsp"/>
 			</c:if>
-			<!-- Cabecera con imagen y hora -->
 			<table class="tabla_menu">
+				<!-- Cabecera con imagen y hora -->
 				<tr>
-					<td>
+					<td colspan="2">
 						<div id="cabecera"><img src="images/<fmt:message key="header"/>_${proyecto.proyect}.gif" alt=""></div>
 					</td>
 					<td class="derecha">
@@ -91,9 +96,7 @@
 						</div>
 					</td>
 				</tr>
-			</table>
-			<!-- Cuerpo de la pagina -->
-			<table class="tabla_menu">
+				<!-- Cuerpo de la pagina -->
 				<tr style="vertical-align:top">
 					<td>
 						<div id="left">
@@ -129,11 +132,11 @@
 								</c:if>
 
 								<c:if test="${proyecto.proyect == 'caronte'}">
-									<c:if test="<%= request.isUserInRole("administrator") || request.isUserInRole("agent")%>">
+									<c:if test="${proyecto.rol == 'administrator' || proyecto.rol == 'agent' || proyecto.rol == 'nurse' || proyecto.rol == 'otherStaff'}">
 										<!-- if the user is in role 'administrator' or 'agent' -->
 										<c:import url="menu_caronte_admin.jsp"/>
 									</c:if>
-									<c:if test="<%= request.isUserInRole("citizen")%>">
+									<c:if test="${proyecto.rol == 'citizen'}">
 										<!-- if the user is in role 'citizen' -->
 										<c:import url="menu_caronte_user.jsp"/>
 									</c:if>
@@ -184,7 +187,13 @@
 									<div id="map_canvas"></div>
 								</c:if>
 								<c:if test="${proyecto.proyect == 'caronte'}">
-									<c:import url="residencia_caronte.jsp"/>
+									<c:if test="${proyecto.rol != 'citizen'}">
+										<c:import url="residencia_caronte.jsp"/>
+									</c:if>
+									<c:if test="${proyecto.rol == 'citizen'}">
+										<div style="height:21px"></div>
+										<div id="map_canvas"></div>
+									</c:if>
 								</c:if>
 							</c:if>
 						</div>
@@ -194,7 +203,6 @@
 						<div id="close_messages"><a href="#"><fmt:message key="ocultar"/></a></div>
 						<div id="messages">
 							<p>MENSAJES:</p>
-							<div id="messages0"></div>
 						</div>
 					</td>
 				</tr>

@@ -20,7 +20,7 @@ function MostrarFechaActual() {
 
 function MostrarFechaActualEn() {
 	var nombre_dia = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
-	var nombre_mes = new Array("January", "February", "March", "April", "May", "June", "July", "Agost", "September", "October", "November", "December");
+	var nombre_mes = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 	var hoy_es = new Date();
 	var dia_mes = hoy_es.getDate();
