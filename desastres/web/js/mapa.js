@@ -5,8 +5,8 @@ var marcadores_definitivos;
 var marcadores_temporales;
 var indices;
 var ultimamodif;
-var timeout; 
-        
+var timeout;
+
 var hospitals;
 var hospIndex = 0;
 var firemenStations;
@@ -16,22 +16,22 @@ var policeIndex = 0;
 var geriatricCenters;
 var geriatricIndex = 0;
 var geriatricLines;
-         
+
 var pos_def;
 var pos_temp;
 var pos_indices;
 var puntero_temp;
 var caracter_temp;
-         
+
 var TEMPORAL = 0;
 var DEFINITIVO = 1;
 
 var ANONYMOUS = 1;
 var usuario_actual;
 var usuario_actual_tipo;
-        
+
 var estado_Experto = "off";
-        
+
 var tiempoActualizacion = 1500;
 var tiempoInicial = 5000;
 
@@ -51,12 +51,12 @@ function initialize() {
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-		*/
+		 */
 
 		map = new GMap2(document.getElementById("map_canvas"));
 		localizador = new GClientGeocoder();
 		mapInit();
-		
+
 		//empezamos con un usuario anonimo, permitir registrarse mas tarde
 		usuario_actual = ANONYMOUS;
 		usuario_actual_tipo = "citizen";
@@ -74,12 +74,12 @@ function initialize() {
 		firemenStations = new Array;
 		geriatricCenters = new Array;
 		geriatricLines = new Array;
-         
+
 		indices = new Array;
 		pos_indices = 0;
-	
+
 		buildingInit();
-        
+
 		ultimamodif = '1992-01-01 00:00:01'; //(una fecha antigua para empezar)
 		//hacemos la peticion inicial del json (baja todo menos los borrados)
 		$.getJSON('leeEventos.jsp', {
@@ -91,7 +91,7 @@ function initialize() {
 					entry['quantity'],entry['name'],entry['description'],entry['info'],
 					entry['latitud'],entry['longitud'],entry['address'],entry['state'],
 					entry['date'], entry['modified'],entry['user_name'],entry['user_type'],null);
-            
+
 				if (nuevomarcador.item == "event"){
 					nuevomarcador.size = entry['size'];
 					nuevomarcador.traffic = entry['traffic'];
@@ -117,7 +117,7 @@ function initialize() {
 		if(document.getElementById("signeduser") != null){
 			userName = document.getElementById("signeduser").innerHTML;
 		}
-		
+
 		if(navigator.geolocation){
 			navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 		}
@@ -169,7 +169,7 @@ function actualizar(){
 				nuevomarcador.traffic = 0;
 				nuevomarcador.size=0;
 			}
-                         
+
 			//pintamos los nuevos, para lo que comprobamos que no existian
 			if(marcadores_definitivos[nuevomarcador.id]==null){
 				//alert("Vamos a pintar un marcador nuevo");
@@ -199,16 +199,16 @@ function actualizar(){
 					map.removeOverlay(marcadores_definitivos[nuevomarcador.id].marker);
 					marcadores_definitivos[nuevomarcador.id]=null;
 					pos_indices--;
-                   
+
 					//eliminamos el indice de la matriz de indices sin dejar huecos
 					var id = nuevomarcador.id;
 					var index;
-                    
+
 					for (i=0;i<indices.length;i++){
 						index = i;
 						if (indices[i]== id) break;
 					}
-                    
+
 					while(indices[index+1]!=null){
 						indices[index]=indices[index+1];
 						index++;
@@ -218,7 +218,7 @@ function actualizar(){
 			}
 		});
 	});
-    
+
 	ultimamodif = obtiene_fecha();
 	timeout = setTimeout("actualizar()", tiempoActualizacion);
 }
@@ -239,7 +239,7 @@ function showPoliceStations(){
 function showGeriatricCenters(){
 	generateBuilding("geriatricCenter","Residencia Virgen de la Esperanza", 38.232237, -1.699016); // Calasparra, Murcia
 }
-         
+
 function generateBuilding(type, mensaje, latitud, longitud){
 	var imagen;
 	var matrix;
@@ -261,10 +261,10 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		matrix = geriatricCenters;
 		matrixIndex = geriatricIndex;
 	}
-             
+
 	var icono = new GIcon();
 	icono.image = "markers/"+imagen;
-           
+
 	//icono.shadow = "markers/shadow50.png";
 	icono.iconSize = new GSize(50, 49);
 	//icono.shadowSize = new GSize(43, 43);
@@ -273,7 +273,7 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	opciones = {
 		icon:icono
 	}; //se pueden arrastrar para asociarlo
-            
+
 	var marker = new GMarker (new GLatLng(latitud,longitud), opciones);
 	if(type=='geriatricCenter'){
 		var linea1 = new GPolyline([new GLatLng(38.232634, -1.699622), new GLatLng(38.232634, -1.698201)], "#00ff00", 1, 0.5);
@@ -293,7 +293,7 @@ function generateBuilding(type, mensaje, latitud, longitud){
 			marker.openInfoWindowHtml("<div id='bocadillo'>"+mensaje+"</div>");
 		});
 	}
-	
+
 	map.addOverlay(marker);
 	matrix[matrixIndex]=marker;
 	matrixIndex++;
@@ -311,9 +311,9 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		geriatricCenters = matrix;
 		geriatricIndex = matrixIndex;
 	}
-	
+
 	return marker;
-        
+
 }
 
 function hideBuilding(type){
@@ -381,7 +381,7 @@ function visualize(selected, type){
 function generaMarcador(evento, caracter){
 	var opciones;
 	var icono;
-		
+
 	//Es un evento
 	if (evento.marcador=="event"){
 		//Incendio
@@ -423,7 +423,7 @@ function generaMarcador(evento, caracter){
 				icono.image ="markers/personaHerida_control.png";
 			}
 		}
-		
+
 		opciones = {
 			icon:icono
 		}; //No se pueden arrastrar
@@ -459,7 +459,7 @@ function generaMarcador(evento, caracter){
 		if (evento.tipo=="assistant"){
 			icono.image = "markers/auxiliar"+evento.cantidad+".png";
 		}
-				
+
 		opciones = {
 			icon:icono,
 			draggable: true
@@ -468,12 +468,12 @@ function generaMarcador(evento, caracter){
 	//es una victima
 	if (evento.marcador=="people"){
 		icono = new GIcon();
-			
+
 		//MAXIMO DE VICTIMAS POR MARCADOR ES 10
 		if (evento.cantidad>10){
 			evento.cantidad=10;
 		}
-                         
+
 		//personas atrapadas
 		if (evento.tipo=="trapped"){
 			icono.image = "markers/trapped"+evento.cantidad+".png";
@@ -520,23 +520,23 @@ function generaMarcador(evento, caracter){
 			draggable: true
 		}; //se pueden arrastrar para asociarlo
 	}
-		
+
 	var marker = new GMarker (new GLatLng(evento.latitud, evento.longitud), opciones);
-		
+
 	//Annadimos el comportamiento
-		
+
 	if(caracter == TEMPORAL){ //aqui hay que guardar los datos
 		var content = evento.nombre +"<br>" + evento.info + "<br>" +evento.descripcion + "<br>"
 		+ "<a id=\"guardar\" href=\"#\" onclick=\"guardar(marcadores_temporales["+evento.id+"]); return false;\" > Guardar </a>"
 		+" - "+ "<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_temporales["+evento.id+"],TEMPORAL); return false;\" > Modificar </a>"
 		+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_temporales["+evento.id+"],TEMPORAL); return false;\" > Eliminar </a>";
 		//marker.openInfoWindowHtml("<div id=\"bocadillo\">"+content+"</div>");//el globito se abre solo pero esto no lo consigo
-		
+
 		GEvent.addListener(marker, "click", function() {
 			// content = evento.nombre + "<a href=\"#\" onclick=\"guardar(marcadores_temporales["+evento.id+"]); return false;\" > Guardar </a>";
 			marker.openInfoWindowHtml("<div id=\"bocadillo\">"+content+"</div>");
 		});
-		
+
 		GEvent.addListener(marker, "dragstart", function() {
 			map.closeInfoWindow();
 		});
@@ -547,17 +547,29 @@ function generaMarcador(evento, caracter){
 				+" - "+ "<a id=\"cancelar\" href=\"#\" onclick=\"map.closeInfoWindow();\" > Cancelar </a>"+"</div>"  );
 		});
 	}
-		
+
 	if(caracter == DEFINITIVO){ //aqui podemos realizar modificaciones a los ya existentes
-		GEvent.addListener(marker, "click", function() {           
-			var small = evento.nombre +"<br>" + evento.descripcion;
-			//AQUI SE PUEDEN AUMENTAR LAS OPCIONES A MOSTRAR!!!
-			var links1 = "<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
-			+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
-			+" - "+ "<a id='ver_mas1' href='#'onclick=\"verMas("+evento.id+");return false;\"  > Ver m&aacute;s </a>";
-			marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+
-				"<div id='bocadillo_links2'>"+"</div>"+"</div>");            
-		});
+		if(nivelMsg >= 1){
+			GEvent.addListener(marker, "click", function() {
+				var small = evento.nombre +"<br>" + evento.descripcion;
+				//AQUI SE PUEDEN AUMENTAR LAS OPCIONES A MOSTRAR!!!
+				var links1 = "<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
+				+" - "+ "<a id=\"acciones\" href='#'onclick=\"cargarAcciones(marcadores_definitivos["+evento.id+"])\"  > Acciones </a>"
+				+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
+				+" - "+ "<a id='ver_mas1' href='#'onclick=\"verMas("+evento.id+");return false;\"  > Ver m&aacute;s </a>";
+				marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+
+					"<div id='bocadillo_links2'>"+"</div>"+"</div>");
+			});
+		}else{
+			GEvent.addListener(marker, "click", function() {
+				var small = evento.nombre +"<br>" + evento.descripcion;
+				//AQUI SE PUEDEN AUMENTAR LAS OPCIONES A MOSTRAR!!!
+				var links1 = "<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
+				+" - "+ "<a id='ver_mas1' href='#'onclick=\"verMas("+evento.id+");return false;\"  > Ver m&aacute;s </a>";
+				marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+
+					"<div id='bocadillo_links2'>"+"</div>"+"</div>");
+			});
+		}
 
 		GEvent.addListener(marker, "dragstart", function() {
 			map.closeInfoWindow();
@@ -569,7 +581,7 @@ function generaMarcador(evento, caracter){
 				+" - "+ "<a id=\"cancelar\" href=\"#\" onclick=\"cancelar_asignacion("+evento.id+"); return false;\" > Cancelar </a>"+"</div>" );
 		});
 	}
-    
+
 	//if (!(evento.marcador=="resource" && caracter==1)){
 	map.addOverlay(marker);
 	//}
@@ -580,6 +592,7 @@ function verMas(id){
 	var evento = marcadores_definitivos[id];
 	var complete = evento.nombre +"<br>" + evento.info + "<br>" +evento.descripcion + "<br>" + "Direccion: " + evento.direccion +"<br>";
 	var links2 ="<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
+	+" - "+ "<a id=\"acciones\" href='#'onclick=\"cargarAcciones(marcadores_definitivos["+evento.id+"])\"  > Acciones </a>"
 	+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
 	+" - "+ "<a id='ver_mas2' href='#' onclick=\"verMenos("+evento.id+");return false;\" > Ver menos </a>";
 	marcadores_definitivos[id].marker.openInfoWindowHtml("<div id='bocadillo'>"+complete+"<div id='bocadillo_links'>"+links2+"</div>"+"</div>");
@@ -589,13 +602,14 @@ function verMenos(id){
 	var evento = marcadores_definitivos[id];
 	var small = evento.nombre +"<br>" + evento.descripcion ;
 	var links1 ="<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
+	+" - "+ "<a id=\"acciones\" href='#'onclick=\"cargarAcciones(marcadores_definitivos["+evento.id+"])\"  > Acciones </a>"
 	+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
 	+" - "+ "<a id='ver_mas1' href='#' onclick=\"verMas("+evento.id+");return false;\" > Ver m&aacute;s </a>";
 	marcadores_definitivos[id].marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+"</div>");
 }
 
 function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-		fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+	fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 
 	var sintomas = '';
 	if(fatigue) sintomas += 'fatigue,';
@@ -608,36 +622,36 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	if(weight_loss) sintomas += 'weight_loss,';
 	if(blurred_vision) sintomas += 'blurred_vision,';
 	if(muscle_weakness) sintomas += 'muscle_weakness,';
-	
+
 	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,
 		descripcion,info,latitud,longitud,direccion,estado,
 		obtiene_fecha(), obtiene_fecha(),usuario_actual, usuario_actual_tipo,null,sintomas);
-        
+
 	if(marcador=="event"){
 		nuevomarcador.size=size;
 		nuevomarcador.traffic=traffic;
 	}
 	if(marcador=="resource"||marcador=="people"){
-		nuevomarcador.idAssigned=idAssigned;    
+		nuevomarcador.idAssigned=idAssigned;
 	}
-        
+
 	pos_temp = pos_temp +1;
 	nuevomarcador.marker=generaMarcador(nuevomarcador, TEMPORAL);
 	marcadores_temporales[nuevomarcador.id]=nuevomarcador;
 }
 
 function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-		fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+	fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 	//utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if (caracter_temp==TEMPORAL){
 		//Actualizar la matriz temporal
-    
+
 		eliminar(marcadores_temporales[id],TEMPORAL);
 		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-				fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness);
-             
+			fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness);
+
 	//"marcadores_temporales[puntero.id].nombre=nombre.value;marcadores_temporales[puntero.id].cantidad=cantidad.value;marcadores_temporales[puntero.id].info=info.value;marcadores_temporales[puntero.id].descripcion=descripcion.value; marcadores_temporales[puntero.id].direccon=direccion.value;marcadores_temporales[puntero.id].latitud=latitud.value;marcadores_temporales[puntero.id].longitud=longitud.value;marcadores_temporales[puntero.id].estado=estado.value;eliminar(marcadores_temporales[puntero.id],TEMPORAL);marcadores_temporales[puntero.id].marker=generaMarcador(marcadores_temporales[puntero.id],TEMPORAL);borrarFormulario(this.form,0);$('#modificar').jqm().jqmHide();return false;";
-    
+
 	}
 	if (caracter_temp==DEFINITIVO){
 		var sintomas = '';
@@ -746,7 +760,7 @@ function cargarModificar(puntero,caracter){
 
 	$('#modificar').jqm().jqmShow();
 	//rellenamos con los campos recibidos
-    
+
 	document.getElementById('iden').value=puntero.id;
 	document.getElementById('item_tipo').innerHTML=puntero.marcador+" - "+puntero.tipo;
 	document.getElementById('iconoAdecuado').src=iconoAdecuado(puntero.marcador,puntero.tipo,puntero.cantidad);
@@ -764,11 +778,69 @@ function cargarModificar(puntero,caracter){
 	document.getElementById("validacion0").src="images/iconos/no.png";
 	//annadir las que faltan....
 	document.getElementById("pincha").innerHTML="Marcar posicion en el mapa";
-    
+
+}
+
+function cargarAcciones(puntero){
+	//mostrar la ventanita
+	//carga el evento a modificar en una variabla accesible por todos
+	puntero_temp=puntero;
+
+	document.getElementById('aceptarAccion').style.display = 'block';
+	if(puntero.marcador == 'event'){
+		document.getElementById('apagar').style.display = 'block';
+		document.getElementById('atender').style.display = 'none';
+		document.getElementById('evacuar').style.display = 'none';
+		document.getElementById('trasladar').style.display = 'none';
+		document.getElementById('ayudar').style.display = 'block';
+		document.getElementById('evacuado').style.display = 'none';
+		document.getElementById('volver').style.display = 'none';
+		document.getElementById('apagado').style.display = 'block';
+		document.getElementById('curado').style.display = 'none';
+		document.getElementById('vuelto').style.display = 'none';
+	}else if(puntero.marcador == 'people'){
+		if(puntero.tipo == 'healthy'){
+			document.getElementById('apagar').style.display = 'none';
+			document.getElementById('atender').style.display = 'none';
+			document.getElementById('evacuar').style.display = 'block';
+			document.getElementById('trasladar').style.display = 'none';
+			document.getElementById('ayudar').style.display = 'block';
+			document.getElementById('evacuado').style.display = 'block';
+			document.getElementById('volver').style.display = 'block';
+			document.getElementById('apagado').style.display = 'none';
+			document.getElementById('curado').style.display = 'none';
+			document.getElementById('vuelto').style.display = 'block';
+		}else{
+			document.getElementById('apagar').style.display = 'none';
+			document.getElementById('atender').style.display = 'block';
+			document.getElementById('evacuar').style.display = 'none';
+			document.getElementById('trasladar').style.display = 'block';
+			document.getElementById('ayudar').style.display = 'block';
+			document.getElementById('evacuado').style.display = 'none';
+			document.getElementById('volver').style.display = 'none';
+			document.getElementById('apagado').style.display = 'none';
+			document.getElementById('curado').style.display = 'block';
+			document.getElementById('vuelto').style.display = 'none';
+		}
+	}else{
+		document.getElementById('apagar').style.display = 'none';
+		document.getElementById('atender').style.display = 'none';
+		document.getElementById('evacuar').style.display = 'none';
+		document.getElementById('trasladar').style.display = 'none';
+		document.getElementById('ayudar').style.display = 'none';
+		document.getElementById('evacuado').style.display = 'none';
+		document.getElementById('volver').style.display = 'none';
+		document.getElementById('apagado').style.display = 'none';
+		document.getElementById('curado').style.display = 'none';
+		document.getElementById('vuelto').style.display = 'none';
+		document.getElementById('aceptarAccion').style.display = 'none';
+	}
+
+	$('#acciones').jqm().jqmShow();
 }
 
 function guardar(puntero){
-	
+
 	//1. Guardar el elemento en la base de datos
 	$.post('guardaEvento.jsp',{
 		'marcador':puntero.marcador,
@@ -792,40 +864,40 @@ function guardar(puntero){
 		$('#guardar').innerHTML=data;
 	}
 	);
-        
+
 	//2. Borrar el elemento del mapa y la matriz temporal
 	eliminar(puntero,TEMPORAL);
 	marcadores_temporales[puntero.id]=null;
-	
+
 //3. Recargar el mapa para que aparezca el elemento nuevo
 //actualizar();//esto adelanta el timeOut a ahora mismo
 }
-	
+
 function asociar (id, marker){
 	//1. hallar el punto del marcador pasado
-    
+
 	latitud1 = marker.getLatLng().lat();
 	longitud1 = marker.getLatLng().lng();
-    
+
 	//latitud1=marcadores_definitivos[id].marker.lat();
 	//longitud1=marcadores_definitivos[id].marker.lng();
 	//2. hallar la distancia a cada catastrofe de la matriz definitiva
-    
+
 	var i;
 	var diferencia=999999999999;
 	var id_mas_cercano;
-    
+
 	for (i=0;indices[i]!=null;i++) {
-       
+
 		idDefinitivo=indices[i];
 		//nos quedamos solo con los eventos (catastrofes)
 		if(marcadores_definitivos[idDefinitivo].marcador!="event"){
 			continue;
 		}
-      
+
 		latitud2=marcadores_definitivos[idDefinitivo].latitud;
 		longitud2=marcadores_definitivos[idDefinitivo].longitud;
-       
+
 		dif_lat=Math.pow(latitud1-latitud2,2);
 		dif_long=Math.pow(longitud1-longitud2,2);
 		distancia=Math.sqrt(dif_lat+dif_long);
@@ -834,23 +906,23 @@ function asociar (id, marker){
 			id_mas_cercano=idDefinitivo;
 		}
 	}
-     
+
 	//3. Devolver el id de la catastrofe mas cercana o hacer el post directamente
 	return id_mas_cercano;
-}	
+}
 
 function guardar_asociacion (idEvento, idRecurso){
 	//alert(idEvento+"-"+idRecurso);
 	//Hallar la nueva posicion del recurso en funcion del tipo
 	var evento = marcadores_definitivos[idEvento];
 	var recurso = marcadores_definitivos[idRecurso];
-    
+
 	latitud = evento.latitud;
 	longitud = evento.longitud;
-	
+
 	var nueva_latitud;
 	var nueva_longitud;
-    
+
 	//Hallar las nuevas distancias
 	if(recurso.tipo=="police"){
 		nueva_latitud=latitud+0.00005;
@@ -896,7 +968,7 @@ function guardar_asociacion (idEvento, idRecurso){
 		nueva_latitud=latitud+0.00005;
 		nueva_longitud=longitud+0.0001;
 	}
-    
+
 	//actualizar las modificaciones con el metodo modificar
 	caracter_temp=DEFINITIVO;
 	puntero_temp=recurso;
@@ -915,48 +987,69 @@ function eliminar(puntero,caracter){
 	}
 	if (caracter == DEFINITIVO){
 		//hay que hacer un update
-		$.post('update.jsp',{
-			'id':puntero.id,
-			'marcador':puntero.marcador,
-			'tipo':puntero.tipo,
-			'cantidad':puntero.cantidad,
-			'nombre':puntero.nombre,
-			'descripcion':puntero.descripcion,
-			'info':puntero.info,
-			'latitud':puntero.latitud,
-			'longitud':puntero.longitud,
-			'direccion':puntero.direccion,
-			'estado':"erased",
-			'size':puntero.size,
-			'traffic':puntero.traffic,
-			'idAssigned':puntero.idAssigned,
-			'fecha':puntero.fecha,
-			'usuario':usuario_actual
-		});
+		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
+			$.post('update.jsp',{
+				'id':puntero.id,
+				'marcador':puntero.marcador,
+				'tipo':'healthy',
+				'cantidad':puntero.cantidad,
+				'nombre':puntero.nombre,
+				'descripcion':puntero.descripcion,
+				'info':puntero.info,
+				'latitud':puntero.latitud,
+				'longitud':puntero.longitud,
+				'direccion':puntero.direccion,
+				'estado':puntero.estado,
+				'size':puntero.size,
+				'traffic':puntero.traffic,
+				'idAssigned':puntero.idAssigned,
+				'fecha':puntero.fecha,
+				'usuario':usuario_actual
+			});
+		}else{
+			$.post('update.jsp',{
+				'id':puntero.id,
+				'marcador':puntero.marcador,
+				'tipo':puntero.tipo,
+				'cantidad':puntero.cantidad,
+				'nombre':puntero.nombre,
+				'descripcion':puntero.descripcion,
+				'info':puntero.info,
+				'latitud':puntero.latitud,
+				'longitud':puntero.longitud,
+				'direccion':puntero.direccion,
+				'estado':"erased",
+				'size':puntero.size,
+				'traffic':puntero.traffic,
+				'idAssigned':puntero.idAssigned,
+				'fecha':puntero.fecha,
+				'usuario':usuario_actual
+			});
+		}
 	//actualizar();
 	}
 }
 
-function obtiene_fecha() {  
+function obtiene_fecha() {
 	//llega a algo como esto: 1992-01-01 00:00:01 , necesario para MySql a partir de la fecha actual
-     
+
 	var fecha_actual = new Date()  ;
-   
+
 	var dia = fecha_actual.getDate()  ;
 	var mes = fecha_actual.getMonth() + 1  ;
 	var anio = fecha_actual.getFullYear()  ;
 	var horas = fecha_actual.getHours();
 	var minutos = fecha_actual.getMinutes();
 	var segundos = fecha_actual.getSeconds();
-	
+
 	if (mes < 10)  mes = '0' + mes;
 	if (dia < 10)  dia = '0' + dia ;
 	if (horas < 10)  horas = '0' + horas ;
 	if (minutos < 10)  minutos = '0' + minutos ;
 	if (segundos < 10)  segundos = '0' + segundos ;
-   
+
 	return (anio + "-" + mes + "-" + dia + " " + horas+":"+minutos+":"+segundos)  ;
-}  
+}
 
 function lanzaExperto(){
 	$.get(url_base,{
@@ -964,13 +1057,13 @@ function lanzaExperto(){
 	}, function(data) {
 		$('#screen').html(data);
 	});
-         
+
 	$('#close_screen').click(function(){
 		$('#screen').slideUp();
 		$('#close_screen').slideUp();
 		return false;
 	});
-         
+
 	$('#screen').slideDown();
 	$('#close_screen').slideDown();
 
@@ -1011,19 +1104,21 @@ function mostrarMensajes(){
 		$('#open_messages').slideUp();
 		return false;
 	});
-	
-	mostrarMensajes2(0);
+
+	mostrarMensajes2();
 }
 
-function mostrarMensajes2(i){
+function mostrarMensajes2(){
+	var msgs = document.getElementById('messages');
+	
 	$.get("/desastres/messages",{
-		'action':i
+		'nivel':nivelMsg
 	}, function(data) {
-		$('#messages'+i).html(data);
+		//$('#messages').html(data);
+		msgs.innerHTML += data;
 	});
 
-	var scc = document.getElementById('messages');
-	scc.scrollTop = scc.scrollHeight + scc.offsetHeight;
+	msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
 
-	setTimeout("mostrarMensajes2("+(i+1)+")",2000);
+	setTimeout("mostrarMensajes2()",2000);
 }

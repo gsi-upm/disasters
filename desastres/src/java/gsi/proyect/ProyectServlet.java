@@ -31,7 +31,9 @@ public class ProyectServlet extends HttpServlet {
 			String usuario = request.getParameter("user");
 			String proyectoAux = Connection.connect(Environment.URL + "userProyect/" + usuario);
 			JSONArray proyecto = new JSONArray(proyectoAux);
-			response.sendRedirect("/desastres/index.jsp?proyect=" + proyecto.getJSONObject(0).getString("proyect"));
+			String proyect = proyecto.getJSONObject(0).getString("proyect");
+			String rol = proyecto.getJSONObject(0).getString("rol");
+			response.sendRedirect("/desastres/index.jsp?proyect=" + proyect + "&rol=" + rol);
 		} catch (JSONException ex) {
 			System.out.println("Excepcion en ProyectServlet.processRequest(): " + ex);
 		}finally{

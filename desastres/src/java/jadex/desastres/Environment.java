@@ -123,7 +123,7 @@ public class Environment {
 						instancia.getString("state"),
 						instancia.getString("size"),
 						instancia.getString("traffic"));
-				printout("## ENV: New Disaster: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ") ##", 0);
+				printout("- Nueva emergencia: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ")", 0);
 				disasters.put(nuevo.getId(), nuevo);
 			}
 
@@ -140,13 +140,14 @@ public class Environment {
 						instancia.getInt("quantity"),
 						instancia.getString("state"));
 				//si no esta asignado a nadie o a alguien que no existe pasa al siguiente
-				if (nuevo.getIdAssigned() == 0 || !disasters.containsKey(nuevo.getIdAssigned())) {
-					continue;
-				}
+				// VOLVER A PONER
+				//if (nuevo.getIdAssigned() == 0 || !disasters.containsKey(nuevo.getIdAssigned())) {
+				//	continue;
+				//}
 
 				people.put(nuevo.getId(), nuevo);
 				Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
-				printout("## ENV: Updating Disaster Victims for " + dis.getName(), 0);
+				printout("- Herido: " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")", 3);
 
 				if (nuevo.getType().equals("slight")) {
 					dis.setSlight(nuevo);
@@ -165,8 +166,8 @@ public class Environment {
 			// Por cada usuario logueado
 			for (int i = 0; i < usuarios.length(); i++) {
 				JSONObject instancia = usuarios.getJSONObject(i);
-				printout("## ENV: New user: " + instancia.getString("name") + " (id:" + instancia.getInt("id") + ") en ["
-						+ new Double(instancia.getString("latitud")) + "," + new Double(instancia.getString("longitud")) + "]", 0);
+				printout("- ENV: New user: " + instancia.getString("name") + " (id:" + instancia.getInt("id") + ") en ["
+						+ new Double(instancia.getString("latitud")) + "," + new Double(instancia.getString("longitud")) + "]", 5);
 			}
 		} catch (JSONException e) {
 			System.out.println("Error with JSON **** : " + e);
@@ -209,8 +210,6 @@ public class Environment {
 
 				if (disasters.containsKey(nuevo.getId())) {
 					//si ya existia actualizo el desastre existente
-					printout("## ENV: Updating Disaster... "
-							+ nuevo.getName() + " - " + nuevo.getState(), 0);
 					Disaster viejo = (Disaster) disasters.get(nuevo.getId());
 					viejo.setType(nuevo.getType());
 					viejo.setName(nuevo.getName());
@@ -226,9 +225,12 @@ public class Environment {
 					//si se ha eliminado lo borro directamente
 					if (viejo.getState().equals("erased")) {
 						disasters.remove(viejo.getId());
+						printout("- Emergencia eliminada: " + nuevo.getName() + " (id:" + nuevo.getId() + ")", 0);
+					}else{
+						printout("- Emergencia actualizada... " + nuevo.getName() + " - " + nuevo.getState() + " (id:" + nuevo.getId() + ")", 0);
 					}
 				} else {
-					printout("### New Disaster: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ") ##", 0);
+					printout("- Nueva emergencia: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ")", 0);
 					disasters.put(nuevo.getId(), nuevo);
 				}
 			}
@@ -246,9 +248,10 @@ public class Environment {
 						instancia.getInt("quantity"),
 						instancia.getString("state"));
 				if (nuevo.getState().equals("erased")) {
-					continue;
-				}
-				if (nuevo.getIdAssigned() == 0) {
+					printout("- Herido " + nuevo.getName() + " curado (id:" + nuevo.getId() + ")",3);
+					//continue;
+				//}
+				/*if (nuevo.getIdAssigned() == 0) {
 					if (!people.containsKey(nuevo.getId())) {
 						continue;
 					} //cuando ya existia y tengo que actualizar el desastres borrando sus heridos
@@ -256,7 +259,7 @@ public class Environment {
 						People antiguo = (People) people.get(nuevo.getId());
 						int idDesastre = antiguo.getIdAssigned();
 						people.remove(antiguo.getId());
-						printout("## ENV: Voy a desasociar el herido " + nuevo.getId() + " del desastre " + idDesastre, 0);
+						printout("- ENV: Voy a desasociar el herido " + nuevo.getId() + " del desastre " + idDesastre, 3);
 						//Disaster extraido = (Disaster) disasters.get(idDesastre);
 						//disasters.remove(idDesastre);
 
@@ -272,14 +275,18 @@ public class Environment {
 						extraido.getState(),
 						extraido.getSize(),
 						extraido.getTraffic());
-						disasters.put(insertado.getId(), insertado);*/
-					}
+						disasters.put(insertado.getId(), insertado);
+					}*/
 				} else {
 					People antiguo = (People) people.get(nuevo.getId());
 					Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
-					printout("## ENV: Updating Disaster Victims for " + dis.getName() + " -- " + nuevo.getQuantity() + " " + nuevo.getType(), 0);
+					if(!people.containsKey(nuevo.getId())){
+						printout("- Herido " + nuevo.getName() + " con estado " + nuevo.getType(), 3);
+					}else{
+						printout("- Herido " + nuevo.getName() + " actualizado con estado " + nuevo.getType(), 3);
+					}
 					people.put(nuevo.getId(), nuevo);
-					if (!antiguo.getType().equals(nuevo.getType())) {
+					if (!antiguo.getType().equals(nuevo.getType()) && nuevo.getIdAssigned()!=0) {
 						if (nuevo.getType().equals("slight")) {
 							dis.setSlight(nuevo);
 						}else if (nuevo.getType().equals("serious")) {
@@ -305,7 +312,7 @@ public class Environment {
 
 			for (int i = 0; i < usuarios.length(); i++) {
 				JSONObject instancia = usuarios.getJSONObject(i);
-				printout("## ENV: Updating user " + instancia.getString("name"), 0);
+				printout("- ENV: Updating user " + instancia.getString("name"), 5);
 			}
 
 		} catch (JSONException e) {

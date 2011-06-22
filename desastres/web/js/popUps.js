@@ -3,6 +3,7 @@ $().ready(function() {
 	$('#dialog2').jqm();
 	$('#dialog3').jqm();
 	$('#modificar').jqm();
+	$('#acciones').jqm();
 });
 
 $(document).ready(function() {

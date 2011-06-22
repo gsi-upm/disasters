@@ -690,7 +690,8 @@ public class DisasterApplication extends Application {
 
 			@Override
 			public void handle(Request request, Response response) {
-				String redirector = URL_BASE + "get.jsp?action=messages"; //&fecha=" + fecha;
+				String nivel = (String) request.getAttributes().get("nivel");
+				String redirector = URL_BASE + "get.jsp?action=messages&nivel=" + nivel; //&fecha=" + fecha;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -700,8 +701,9 @@ public class DisasterApplication extends Application {
 
 			@Override
 			public void handle(Request request, Response response) {
+				String nivel = (String) request.getAttributes().get("nivel");
 				String fecha = (String) request.getAttributes().get("fecha");
-				String redirector = URL_BASE + "get.jsp?action=messagesDate&fecha=" + fecha;
+				String redirector = URL_BASE + "get.jsp?action=messagesDate&nivel=" + nivel + "&fecha=" + fecha;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -711,8 +713,9 @@ public class DisasterApplication extends Application {
 
 			@Override
 			public void handle(Request request, Response response) {
+				String nivel = (String) request.getAttributes().get("nivel");
 				String index = (String) request.getAttributes().get("index");
-				String redirector = URL_BASE + "get.jsp?action=messagesId&index=" + index;
+				String redirector = URL_BASE + "get.jsp?action=messagesId&nivel=" + nivel + "&index=" + index;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -792,9 +795,9 @@ public class DisasterApplication extends Application {
 		router.attach("/delete/user/{nombre}", delUser);
 
 		router.attach("/message/{valor}/{nivel}", message);
-		router.attach("/messages", messages);
-		router.attach("/messages/{fecha}", messagesDate);
-		router.attach("/messages/id/{index}", messagesId);
+		router.attach("/messages/{nivel}", messages);
+		router.attach("/messages/{nivel}/date/{fecha}", messagesDate);
+		router.attach("/messages/{nivel}/id/{index}", messagesId);
 
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);
 		//router.attachDefault(inicial);

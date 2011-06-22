@@ -2,6 +2,8 @@ package gsi.proyect;
 
 import jadex.desastres.Connection;
 import java.io.*;
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.json.me.*;
@@ -12,9 +14,7 @@ import org.json.me.*;
  */
 public class MessagesServlet extends HttpServlet {
 
-	//private final Timestamp fechaIni = new Timestamp(new Date().getTime());
-	//private static Timestamp fecha;
-	private static int index;
+	//private static int index;
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -26,25 +26,28 @@ public class MessagesServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		int action = new Integer(request.getParameter("action"));
-		
+		int nivel = new Integer(request.getParameter("nivel"));
+		String fecha = new Timestamp(new Date().getTime() - 2000).toString();
 		try {
 			String resultado;
-			if (index == 0) {
-				resultado = Connection.connect("http://localhost:8080/desastres/rest/messages");
+			resultado = Connection.connect("http://localhost:8080/desastres/rest/messages/" + nivel + "/date/" + fecha);
+
+			/* ESTO PARA LA PARTE DE SIMULACION
+			 if (index == 0) {
+				resultado = Connection.connect("http://localhost:8080/desastres/rest/messages/" + nivel);
 			} else {
-				resultado = Connection.connect("http://localhost:8080/desastres/rest/messages/id/" + index);
-			}
+				resultado = Connection.connect("http://localhost:8080/desastres/rest/messages/" + nivel + "/id/" + index);
+			}*/
+
 			JSONArray mensajes = new JSONArray(resultado);
 
-			//if (mensajes.length() != 0) {
+			if (mensajes.length() > 0) {
 				for (int i = 0; i < mensajes.length(); i++) {
 					JSONObject msg = mensajes.getJSONObject(i);
 					out.println("<p>" + msg.getString("mensaje") + "</p>");
 				}
-				out.println("</div><div id=\"messages" + (action + 1) + "\">");
-				index += mensajes.length();
-			//}
+				//index += mensajes.length();
+			}
 		} catch (Exception ex) {
 			System.out.println("Excepcion en MessageServlet: " + ex);
 		} finally {
