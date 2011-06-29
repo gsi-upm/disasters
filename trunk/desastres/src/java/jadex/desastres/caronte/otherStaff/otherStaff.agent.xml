@@ -1,5 +1,5 @@
 <!--
-  <h3>Agente de ciudadano</h3>
+  <h3>Otro personal</h3>
 -->
 
 <agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
@@ -7,7 +7,7 @@
        xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
 	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
        name="nurse"
-	   package="jadex.desastres.usuarios.ciudadano">
+	   package="jadex.desastres.caronte.otherStaff">
 
 	<imports>
 		<import>jadex.base.fipa.*</import>
@@ -29,9 +29,9 @@
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, en la residencia -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.CIUDADANO, $scope.getAgentName(),$beliefbase.residencia)</fact>
+			<fact>Environment.getInstance(Environment.OTRO_PERSONAL, $scope.getAgentName(),$beliefbase.residencia)</fact>
 		</belief>
-
+		
 		<!-- Definimos la posicion de la residencia -->
 		<belief name="residencia" class="Position">
 			<fact>new Position(38.232237, -1.699016)</fact>
@@ -82,7 +82,7 @@
 						<value>
 							$propertybase.getProperty("dfservice")
 								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
-								.createDFServiceDescription("ciudadano_service", "ciudadano", "GSI DIT UPM"))
+								.createDFServiceDescription("otherStaff_service", "otherStaff", "GSI DIT UPM"))
 						</value>
 					</parameter>
 				</initialgoal>

@@ -60,7 +60,8 @@
 		<c:set var="item">
 			<c:choose>
 				<c:when test="${param.type=='fire'||param.type=='flood'||param.type=='collapse'||param.type=='lostPerson'||param.type=='injuredPerson'}">event</c:when>
-				<c:when test="${param.type=='police'||param.type=='firemen'||param.type=='ambulance'||param.type=='ambulancia'||param.type=='nurse'||param.type=='gerocultor'||param.type=='assistant'}">resource</c:when>
+				<c:when test="${param.type=='police'||param.type=='firemen'||param.type=='ambulance'||param.type=='ambulancia'||
+								param.type=='nurse'||param.type=='gerocultor'||param.type=='assistant'||param.type=='otherStaff'||param.type=='citizen'}">resource</c:when>
 				<c:when test="${param.type=='slight'||param.type=='serious'||param.type=='dead'||param.type=='trapped'||param.type=='healthy'}">people</c:when>
 				<c:when test="${param.type=='user'}">user</c:when>
 				<c:otherwise>

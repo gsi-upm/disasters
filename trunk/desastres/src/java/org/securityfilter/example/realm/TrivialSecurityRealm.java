@@ -99,7 +99,9 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 			if(usuario.length() == 1) {
 				autenticado = true;
 				String date = new Timestamp(new Date().getTime()).toString();
-				Connection.connect("http://localhost:8080/desastres/rest/post/type=user&name=" + username + "&quantity=1&latitud=0&longitud=0" + "&fecha=" + date + "&idAssigned=0");
+				String tipoUsuario = usuario.getJSONObject(0).getString("user_type");
+				Connection.connect("http://localhost:8080/desastres/rest/post/type=" + tipoUsuario + "&name=" + username
+						+ "&quantity=1&latitud=0&longitud=0&idAssigned=0");
 			}
 		} catch (Exception ex) {
 			System.out.println("Excepcion en TrivialSecurityRealm.booleanAuthenticate(): " + ex);

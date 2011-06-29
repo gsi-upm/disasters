@@ -197,7 +197,7 @@
 				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
 				   direccion, estado, size, traffic, idAssigned, fecha, modificado
 				   FROM catastrofes
-				   WHERE marcador = 'user'
+				   WHERE marcador = 'resource'
 				   AND estado != 'erased';">
 		</sql:query>
 	</c:when>
@@ -207,9 +207,8 @@
 				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
 				   direccion, estado, size, traffic, idAssigned, fecha, modificado
 				   FROM catastrofes
-				   WHERE marcador = 'user'
-				   AND modificado > ?
-				   AND estado != 'erased';">
+				   WHERE marcador = 'resource'
+				   AND modificado > ?;">
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -268,7 +267,7 @@
 
 	<c:when test="${param.action eq 'user'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id_usuarios, nombre_usuario, password
+				   SELECT id_usuarios, nombre_usuario, password, tipo_usuario
 				   FROM usuarios
 				   WHERE nombre_usuario = ?
 				   AND password = ?;">
@@ -318,7 +317,7 @@
 		</sql:query>
 	</c:when>
 
-	<c:when test="${param.action eq 'messagesId'}">
+	<c:when test="${(param.action eq 'messagesId') and (param.index ne -1)}">
 		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
 				   SELECT id, mensaje, nivel, fecha
 				   FROM mensajes
@@ -326,6 +325,16 @@
 				   AND id > ?;">
 			<sql:param value="${param.nivel}"/>
 			<sql:param value="${param.index}"/>
+		</sql:query>
+	</c:when>
+
+	<c:when test="${(param.action eq 'messagesId') and (param.index eq -1)}">
+		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
+				   SELECT TOP 1 id, mensaje, nivel, fecha
+				   FROM mensajes
+				   WHERE nivel <= ?
+				   ORDER BY id DESC;">
+			<sql:param value="${param.nivel}"/>
 		</sql:query>
 	</c:when>
 </c:choose>
