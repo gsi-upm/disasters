@@ -135,14 +135,25 @@ function coordenadasUsuario(pos){
 	opciones = {
 		icon:icono
 	};
-	var marker = new GMarker (new GLatLng(latitudUser,longitudUser), opciones);
-	map.addOverlay(marker);
+	
+	if(nivelMsg==null || nivelMsg==0){
+		var marker = new GMarker (new GLatLng(latitudUser,longitudUser), opciones);
+		map.addOverlay(marker);
+	}
 
 	if(userName != null){
-		$.post('updateLatLong.jsp',{
+		/*$.post('updateLatLong.jsp',{
 			'nombre':userName,
 			'latitud':latitudUser,
 			'longitud':longitudUser
+		});*/
+		//*************
+		// PRUEBAAA!!!
+		//*************
+		$.post('updateLatLong.jsp',{
+			'nombre':userName,
+			'latitud':38.232062 + (2*Math.random()-1)*0.0001,
+			'longitud':-1.698394 + (2*Math.random()-1)*0.0001
 		});
 	}
 }
@@ -434,30 +445,41 @@ function generaMarcador(evento, caracter){
 		if (evento.cantidad > 10) {
 			evento.cantidad = 10;
 		}
+		var active;
+		if(evento.estado == 'active'){
+			active = '_no';
+		}else{
+			active = evento.cantidad;
+		}
+
 		icono = new GIcon(G_DEFAULT_ICON);
 		//es un policia
 		if (evento.tipo=="police"){
-			icono.image = "markers/policia"+evento.cantidad+".png";
+			icono.image = "markers/policia"+active+".png";
 		}
 		//es un bombero
 		if (evento.tipo=="firemen"){
-			icono.image = "markers/bombero"+evento.cantidad+".png";
+			icono.image = "markers/bombero"+active+".png";
 		}
 		//es una ambulancia
 		if (evento.tipo=="ambulance" || evento.tipo=="ambulancia"){
-			icono.image = "markers/ambulancia"+evento.cantidad+".png";
+			icono.image = "markers/ambulancia"+active+".png";
 		}
 		//es un enfermero
 		if (evento.tipo=="nurse"){
-			icono.image = "markers/enfermero"+evento.cantidad+".png";
+			icono.image = "markers/enfermero"+active+".png";
 		}
 		//es un gerocultor
 		if (evento.tipo=="gerocultor"){
-			icono.image = "markers/gerocultor"+evento.cantidad+".png";
+			icono.image = "markers/gerocultor"+active+".png";
 		}
 		//es un auxiliar
 		if (evento.tipo=="assistant"){
-			icono.image = "markers/auxiliar"+evento.cantidad+".png";
+			icono.image = "markers/auxiliar"+active+".png";
+		}
+		//otro
+		if (evento.tipo=="otherStaff"){
+			icono.image = "markers/otro"+active+".png";
 		}
 
 		opciones = {
@@ -485,9 +507,9 @@ function generaMarcador(evento, caracter){
 		//heridos leves
 		if (evento.tipo=="healthy"){
 			icono.image = "markers/sano"+evento.cantidad+".png";
-			if(evento.estado=="controlled"){
-				icono.image = "markers/sano_control.png";
-			}
+			//if(evento.estado=="controlled"){
+			//	icono.image = "markers/sano_control.png";
+			//}
 		}
 		//heridos leves
 		if (evento.tipo=="slight"){
@@ -727,6 +749,39 @@ function modificar2(id,tipo,fatigue,fever,dyspnea,nausea,headache,vomiting,abdom
 	});
 }
 
+function actuar(idEvento,nombreUsuario,accionAux){
+	var accion;
+	for(i=0;i<accionAux.length;i++){
+		if(accionAux[i].checked){
+			accion = accionAux[i].value;
+		}
+	}
+
+	var estadoEvento;
+	var estadoUsuario;
+	if(accion=='apagar' || accion=='atender' || accion=='evacuar'){
+		estadoEvento = 'controlled';
+		estadoUsuario = 'acting';
+	}else if(accion=='ayudar' || accion=='trasladar' || accion=='evacuado' || accion=='volver'){
+		estadoEvento = 'controlled2';
+		estadoUsuario = 'acting';
+	}else if(accion=='apagado' || accion=='curado'){
+		estadoEvento = 'erased';
+		estadoUsuario = 'active';
+	}else if(accion=='vuelto'){
+		estadoEvento = 'active';
+		estadoUsuario = 'active';
+	}
+
+	$.post('updateEstado.jsp',{
+		'idEvento':idEvento,
+		'nombreUsuario':nombreUsuario,
+		'estadoEvento':estadoEvento,
+		'estadoUsuario':estadoUsuario,
+		'accion':accion
+	});
+}
+
 function cargarModificar(puntero,caracter){
 	//mostrar la ventanita
 	//carga el evento a modificar en una variabla accesible por todos
@@ -782,61 +837,48 @@ function cargarModificar(puntero,caracter){
 }
 
 function cargarAcciones(puntero){
-	//mostrar la ventanita
-	//carga el evento a modificar en una variabla accesible por todos
-	puntero_temp=puntero;
+	puntero_temp = puntero;
+	var elementos = ['apagar', 'atender', 'evacuar', 'trasladar', 'ayudar',
+		'evacuado', 'volver', 'apagado', 'curado', 'vuelto', 'aceptarAccion'];
+	var mostrar;
 
+	for(i=0; i<elementos.length; i++){
+		document.getElementById(elementos[i]).style.display = 'none';
+	}
 	document.getElementById('aceptarAccion').style.display = 'block';
+
 	if(puntero.marcador == 'event'){
-		document.getElementById('apagar').style.display = 'block';
-		document.getElementById('atender').style.display = 'none';
-		document.getElementById('evacuar').style.display = 'none';
-		document.getElementById('trasladar').style.display = 'none';
-		document.getElementById('ayudar').style.display = 'block';
-		document.getElementById('evacuado').style.display = 'none';
-		document.getElementById('volver').style.display = 'none';
-		document.getElementById('apagado').style.display = 'block';
-		document.getElementById('curado').style.display = 'none';
-		document.getElementById('vuelto').style.display = 'none';
+		if(puntero.estado == 'active'){
+			document.getElementById('apagar').style.display = 'block';
+		}else if(puntero.estado == 'controlled'){
+			document.getElementById('ayudar').style.display = 'block';
+			document.getElementById('apagado').style.display = 'block';
+		}
 	}else if(puntero.marcador == 'people'){
 		if(puntero.tipo == 'healthy'){
-			document.getElementById('apagar').style.display = 'none';
-			document.getElementById('atender').style.display = 'none';
-			document.getElementById('evacuar').style.display = 'block';
-			document.getElementById('trasladar').style.display = 'none';
-			document.getElementById('ayudar').style.display = 'block';
-			document.getElementById('evacuado').style.display = 'block';
-			document.getElementById('volver').style.display = 'block';
-			document.getElementById('apagado').style.display = 'none';
-			document.getElementById('curado').style.display = 'none';
-			document.getElementById('vuelto').style.display = 'block';
+			if(puntero.estado == 'active'){
+				document.getElementById('evacuar').style.display = 'block';
+			}else if(puntero.estado == 'controlled'){
+				document.getElementById('ayudar').style.display = 'block';
+				document.getElementById('evacuado').style.display = 'block';
+				document.getElementById('volver').style.display = 'block';
+				document.getElementById('vuelto').style.display = 'block';
+			}
 		}else{
-			document.getElementById('apagar').style.display = 'none';
-			document.getElementById('atender').style.display = 'block';
-			document.getElementById('evacuar').style.display = 'none';
-			document.getElementById('trasladar').style.display = 'block';
-			document.getElementById('ayudar').style.display = 'block';
-			document.getElementById('evacuado').style.display = 'none';
-			document.getElementById('volver').style.display = 'none';
-			document.getElementById('apagado').style.display = 'none';
-			document.getElementById('curado').style.display = 'block';
-			document.getElementById('vuelto').style.display = 'none';
+			if(puntero.estado == 'active'){
+				document.getElementById('atender').style.display = 'block';
+			}else if(puntero.estado == 'controlled'){
+				document.getElementById('ayudar').style.display = 'block';
+				document.getElementById('trasladar').style.display = 'block';
+				document.getElementById('curado').style.display = 'block';
+			}
 		}
 	}else{
-		document.getElementById('apagar').style.display = 'none';
-		document.getElementById('atender').style.display = 'none';
-		document.getElementById('evacuar').style.display = 'none';
-		document.getElementById('trasladar').style.display = 'none';
-		document.getElementById('ayudar').style.display = 'none';
-		document.getElementById('evacuado').style.display = 'none';
-		document.getElementById('volver').style.display = 'none';
-		document.getElementById('apagado').style.display = 'none';
-		document.getElementById('curado').style.display = 'none';
-		document.getElementById('vuelto').style.display = 'none';
 		document.getElementById('aceptarAccion').style.display = 'none';
 	}
 
 	$('#acciones').jqm().jqmShow();
+	document.getElementById('iden2').value=puntero.id;
 }
 
 function guardar(puntero){
@@ -1105,20 +1147,23 @@ function mostrarMensajes(){
 		return false;
 	});
 
-	mostrarMensajes2();
+	mostrarMensajes2(-1);
 }
 
-function mostrarMensajes2(){
+function mostrarMensajes2(index){
 	var msgs = document.getElementById('messages');
-	
+	var id = index;
 	$.get("/desastres/messages",{
-		'nivel':nivelMsg
+		'nivel':nivelMsg, 'index':index
 	}, function(data) {
 		//$('#messages').html(data);
-		msgs.innerHTML += data;
+		var data2 = data.split('<span>');
+		if(data2[1] != null){
+			id = data2[1].split('</span>',1);
+			msgs.innerHTML += data2[0];
+		}
+		
+		msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
+		setTimeout('mostrarMensajes2(' + id + ')',2000);
 	});
-
-	msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
-
-	setTimeout("mostrarMensajes2()",2000);
 }

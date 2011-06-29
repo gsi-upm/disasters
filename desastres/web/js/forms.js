@@ -41,6 +41,9 @@ function cambiaIcono(marcador,tipo,cantidad){
 		if (tipo=="assistant"){
 			imagen="markers/auxiliar"+cantidad+".png";
 		}
+		if (tipo=="otherStaff"){
+			imagen="markers/otro"+cantidad+".png";
+		}
 		document.getElementById("icono_recursos").src=imagen;
 	}
 	if (marcador=="people"){
@@ -156,6 +159,9 @@ function iconoAdecuado(marcador,tipo,cantidad){
 		}
 		if (tipo=="assistant"){
 			imagen="markers/auxiliar"+cantidad+".png";
+		}
+		if (tipo=="otherStaff"){
+			imagen="markers/otro"+cantidad+".png";
 		}
 	}
 	if (marcador=="people"){

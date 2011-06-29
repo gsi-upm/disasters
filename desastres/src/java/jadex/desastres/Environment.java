@@ -7,6 +7,8 @@ import java.sql.Timestamp;
 import jadex.commons.collection.MultiCollection;
 import jadex.commons.SimplePropertyChangeSupport;
 import java.io.*;
+import jadex.bdi.runtime.*;
+import jadex.bridge.IComponentIdentifier;
 
 /**
  * 
@@ -16,7 +18,7 @@ import java.io.*;
  * @author aebeda y Juan Luis Molina
  * 
  */
-public class Environment {
+public class Environment{
 	//------constantes ----
 
 	/** Los nombres de los agentes */
@@ -26,6 +28,8 @@ public class Environment {
 	public static final String ENFERMERO = "nurse";
 	public static final String GEROCULTOR = "gerocultor";
 	public static final String AUXILIAR = "assistant";
+	public static final String OTRO_PERSONAL = "otherStaff";
+	public static final String CIUDADANO = "citizen";
 	public static final String AMBULANCIA2 = "ambulancia";
 	public static final String GSO = "grupoSanitarioOperativo";
 	public static final String MEDICO_CACH = "medicoCACH";
@@ -81,6 +85,8 @@ public class Environment {
 	public SimplePropertyChangeSupport pcs;
 	private int tablon;
 
+	private HashMap<String,IComponentIdentifier> listado;
+
 	//---------------------
 	/**
 	 * Constructor
@@ -95,6 +101,8 @@ public class Environment {
 		this.temporizador = new TimerJSON(tiempoJSON, this);
 		this.tempoMover = new TimerMove(tiempoMove);
 
+		listado = new HashMap<String,IComponentIdentifier>();
+
 		//Esto LA PRIMERA VEZ - recibo el json
 		try {
 			String eventos = Connection.connect(URL + "events");
@@ -103,8 +111,8 @@ public class Environment {
 			String victimas = Connection.connect(URL + "people");
 			JSONArray personas = new JSONArray(victimas);
 
-			String logueados = Connection.connect(URL + "users");
-			JSONArray usuarios = new JSONArray(logueados);
+			//String logueados = Connection.connect(URL + "users");
+			//JSONArray usuarios = new JSONArray(logueados);
 
 			ahora = new Timestamp(new Date().getTime()).toString();
 
@@ -164,11 +172,11 @@ public class Environment {
 			}
 
 			// Por cada usuario logueado
-			for (int i = 0; i < usuarios.length(); i++) {
+			/*for (int i = 0; i < usuarios.length(); i++) {
 				JSONObject instancia = usuarios.getJSONObject(i);
 				printout("- ENV: New user: " + instancia.getString("name") + " (id:" + instancia.getInt("id") + ") en ["
 						+ new Double(instancia.getString("latitud")) + "," + new Double(instancia.getString("longitud")) + "]", 5);
-			}
+			}*/
 		} catch (JSONException e) {
 			System.out.println("Error with JSON **** : " + e);
 		}
@@ -187,8 +195,8 @@ public class Environment {
 			String victimas = Connection.connect(URL + "people/modified/" + ahora);
 			JSONArray personas = new JSONArray(victimas);
 
-			String logueados = Connection.connect(URL + "users/modified/" + ahora);
-			JSONArray usuarios = new JSONArray(logueados);
+			//String logueados = Connection.connect(URL + "users/modified/" + ahora);
+			//JSONArray usuarios = new JSONArray(logueados);
 
 			ahora = new Timestamp(new Date().getTime()).toString();
 
@@ -309,11 +317,20 @@ public class Environment {
 					}
 				}
 			}
-
+/*
 			for (int i = 0; i < usuarios.length(); i++) {
 				JSONObject instancia = usuarios.getJSONObject(i);
-				printout("- ENV: Updating user " + instancia.getString("name"), 5);
-			}
+				if(instancia.getString("state").equals("active")){
+					printout("- ENV: New user " + instancia.getString("name"), 5);
+					String tipoUsuario = instancia.getString("info");
+					//IGoal sp = createGoal("cms_create_component");
+					//sp.getParameter("type").setValue("jadex/desastres/caronte/" +
+					//	tipoUsuario + "/" + tipoUsuario + ".agent.xml");
+					//dispatchSubgoalAndWait(sp);
+				}else if(instancia.getString("state").equals("erased")){
+					printout("- ENV: User " + instancia.getString("name") + " has logged out", 5);
+				}
+			}*/
 
 		} catch (JSONException e) {
 			System.out.println("Error with JSON *****" + e);
@@ -358,9 +375,9 @@ public class Environment {
 		WorldObject wo = new WorldObject(name, type, position, null);
 
 		if (type.equals(AMBULANCIA) || type.equals(BOMBERO) || type.equals(POLICIA)
-				|| type.equals(ENFERMERO) || type.equals(AMBULANCIA2) || type.equals(GEROCULTOR) || type.equals(AUXILIAR)) {
+				|| type.equals(ENFERMERO) || type.equals(AMBULANCIA2) || type.equals(GEROCULTOR) || type.equals(AUXILIAR) || type.equals(OTRO_PERSONAL)) {
 			//REST -> cree el recurso
-			String longitud = String.valueOf(position.getY());
+			/*String longitud = String.valueOf(position.getY());
 			String latitud = String.valueOf(position.getX());
 			System.out.println("LLamada a REST creando agente...");
 			String resultado = Connection.connect(URL + "post/type=" + type
@@ -371,15 +388,16 @@ public class Environment {
 				JSONObject idJson = new JSONObject(resultado);
 				int id = idJson.getInt("id");
 				wo.setId(id);
-				System.out.println("Id del objeto creado: " + id);
+				System.out.println("Id del objeto creado: " + id);*/
+				System.out.println("Creando agente del tipo " + type);
 				agentes.put(name, wo); //Si es un pironamo, se anade a la tabla de agentes
 				objetos.put(position, wo); //Y tambien a la de elementos del mundo
 				numAgentes++;
-			} catch (Exception e) {
+			/*} catch (Exception e) {
 				System.out.println("Error json: " + e);
-			}
+			}*/
 		}
-		if (type.equals(CENTRAL) || type.equals(CENTRAL_EMERGENCIAS) || type.equals(COORDINADOR_EMERGENCIAS)
+		if (type.equals(CENTRAL) || type.equals(CIUDADANO) || type.equals(CENTRAL_EMERGENCIAS) || type.equals(COORDINADOR_EMERGENCIAS)
 				|| type.equals(GSO) || type.equals(MEDICO_CACH) || type.equals(COORDINADOR_HOSPITAL) || type.equals(COORDINADOR_MEDICO)) {
 			System.out.println("Creando agente de tipo " + type);
 			agentes.put(name, wo); //Si es una central, se anade a la tabla de agentes
@@ -740,5 +758,29 @@ public class Environment {
 	public void printout(String valor, int nivel) {
 		Connection.connect(Environment.URL + "message/" + valor + "/" + nivel);
 		System.out.println(valor);
+	}
+
+	//*****************
+	// LISTADO
+	//*****************
+
+	public void putListado(String nombre, IComponentIdentifier id){
+		//HashMap listado = (HashMap) getBeliefbase().getBelief("listado").getFact();
+		listado.put(nombre,id);
+		//getBeliefbase().getBelief("listado").setFact(listado);
+	}
+
+	public IComponentIdentifier getListado(String nombre){
+		//HashMap<String,IComponentIdentifier> listado = (HashMap) getBeliefbase().getBelief("listado").getFact();
+		return listado.get(nombre);
+	}
+
+	public void removeListado(String usuario){
+		//HashMap<String,IComponentIdentifier> listado = (HashMap) getBeliefbase().getBelief("listado").getFact();
+		listado.remove(usuario);
+	}
+
+	public boolean containsListado(String nombre){
+		return listado.containsKey(nombre);
 	}
 }

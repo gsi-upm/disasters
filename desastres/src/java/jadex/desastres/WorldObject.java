@@ -25,6 +25,7 @@ public class WorldObject {
 				|| type.equals(Environment.ENFERMERO)
 				|| type.equals(Environment.GEROCULTOR)
 				|| type.equals(Environment.AUXILIAR)
+				|| type.equals(Environment.OTRO_PERSONAL)
 				|| type.equals(Environment.INUNDACION)
 				|| type.equals(Environment.TERREMOTO)
 				|| type.equals(Environment.FUEGO)

@@ -3,9 +3,9 @@
 <fmt:bundle basename="fmt.eji8n">
 	<!-- Ventana de acciones -->
 	<div class="jqmWindow" id="acciones">
-		<form id="form-modifica" action="#">
+		<form id="form-modifica" name="form_acciones" action="#">
 			<table class="tabla_menu">
-				<tr><th>Acciones a realizar</th></tr>
+				<tr><th><label for="accion">Acciones a realizar</label></th></tr>
 				<!-- acciones iniciales -->
 				<tr id="apagar"><td><input type="radio" name="accion" value="apagar">Apagar fuego</td></tr>
 				<tr id="atender"><td><input type="radio" name="accion" value="atender">Atender herido</td></tr>
@@ -23,7 +23,8 @@
 				<tr id="vuelto"><td><input type="radio" name="accion" value="vuelto">Todos de vuelta</td></tr>
 			</table>
 			<br>
-			<input id="aceptarAccion" type="button" value="Aceptar">
+			<input type="hidden" id="iden2" name="iden2" value="">
+			<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(iden2.value,'<%= request.getRemoteUser()%>',document.form_acciones.accion);$('#acciones').jqm().jqmHide();return false;">
 		</form>
 	</div>
 </fmt:bundle>

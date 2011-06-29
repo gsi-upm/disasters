@@ -108,8 +108,7 @@
 										<table>
 											<tr>
 												<td><fmt:message key="usuario"/>:</td>
-												<!-- ELIMINAR value="agent"!!! -->
-												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" size="26" value="agent"></td>
+												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" size="26"></td>
 											</tr>
 											<tr>
 												<td><fmt:message key="contrasenna"/>:</td>

@@ -58,12 +58,20 @@
 		<maintaingoalref name="df_keep_registered">
 			<concrete ref="dfcap.df_keep_registered"/>
 		</maintaingoalref>
-		
+
+		<achievegoal name="registro"/>
 		<performgoal name="vigilarHabitaciones" retry="true" exclude="never"/>
 		<achievegoal name="atenderHeridos"/>
 	</goals>
 
 	<plans>
+		<plan name="registro-plan">
+			<body class="RegistroPlan"/>
+			<trigger>
+				<goal ref="registro"/>
+			</trigger>
+		</plan>
+
 		<plan name="vigilarHabitaciones-plan">
 			<body class="VigilarHabitacionesPlan"/>
 			<trigger>
@@ -160,6 +168,7 @@
 						</value>
 					</parameter>
 				</initialgoal>
+				<initialgoal ref="registro"/>
 				<initialgoal ref="vigilarHabitaciones"/>
 			</goals>
 		</configuration>

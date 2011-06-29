@@ -16,6 +16,7 @@
     UPDATE CATASTROFES SET
     latitud = ?, longitud = ?, modificado = <%=modif%> 
     WHERE nombre = ?
+	AND estado != 'erased';
     <sql:param value="${param.latitud}"/>
     <sql:param value="${param.longitud}"/>
     <sql:param value="${param.nombre}"/>

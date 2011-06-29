@@ -1,5 +1,5 @@
 <%@ page contentType="application/json"  pageEncoding="UTF-8"%>
-<%@ page language = "java"  %>
+<%@ page language = "java" %>
 <%@ page import="java.sql.*" %>
 <%@ page isELIgnored = "false" %>
 
@@ -9,7 +9,7 @@
 
 <%@ include file="database.jspf" %>
 
-<% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
+<% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>
 
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver" 
         url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
@@ -17,21 +17,21 @@
     <c:when test="${param.action eq 'firstTime'}">               
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
                    SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, 
-                   direccion, estado, size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario FROM CATASTROFES, usuarios 
+                   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
                    WHERE modificado > ?
                    AND estado != 'erased'
-				   AND tipo != 'user'
-                   AND catastrofes.usuario=usuarios.id_usuarios;">
+				   AND tipo != 'user';">
             <sql:param value="${param.fecha}"/>
         </sql:query>  
     </c:when>
     <c:when test="${param.action eq 'notFirst'}">               
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, 
-                   direccion, estado, size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario FROM catastrofes, usuarios 
+                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+                   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
                    WHERE modificado > ?
-				   AND tipo != 'user'
-                   AND catastrofes.usuario=usuarios.id_usuarios;">
+				   AND tipo != 'user';">
             <sql:param value="${param.fecha}"/>
         </sql:query>                
     </c:when>

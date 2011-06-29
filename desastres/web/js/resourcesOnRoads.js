@@ -20,6 +20,8 @@ function moveAgents () {
             roadsInfo[resourcesList[i]].icon.image="markers/gerocultor"+marcadores_definitivos[indices[i]].cantidad+".png";
         } else if (marcadores_definitivos[indices[i]].tipo=="assistant"){
             roadsInfo[resourcesList[i]].icon.image="markers/auxiliar"+marcadores_definitivos[indices[i]].cantidad+".png";
+        } else if (marcadores_definitivos[indices[i]].tipo=="otherStaff"){
+            roadsInfo[resourcesList[i]].icon.image="markers/otro"+marcadores_definitivos[indices[i]].cantidad+".png";
         }
     }
     DirectionsBean.sendDirections();
