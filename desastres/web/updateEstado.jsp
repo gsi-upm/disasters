@@ -12,23 +12,6 @@
 
 <% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
 
-<c:if test="${param.estadoEvento != 'controlled2' && param.accion != 'curado'}">
-	<sql:update dataSource="${CatastrofesServer}">
-		UPDATE catastrofes
-		SET estado = ?, modificado = <%=modif%>
-		WHERE id = ?;
-		<sql:param value="${param.estadoEvento}"/>
-		<sql:param value="${param.idEvento}"/>
-	</sql:update>
-</c:if>
-<c:if test="${param.accion == 'curado'}">
-	<sql:update dataSource="${CatastrofesServer}">
-		UPDATE catastrofes
-		SET estado = 'active', tipo = 'healthy', modificado = <%=modif%>
-		WHERE id = ?;
-		<sql:param value="${param.idEvento}"/>
-	</sql:update>
-</c:if>
 <sql:update dataSource="${CatastrofesServer}">
 	UPDATE catastrofes
 	SET estado = ?, modificado = <%=modif%>, idAssigned = ?
@@ -38,6 +21,7 @@
 	<sql:param value="${param.idEvento}"/>
 	<sql:param value="${param.nombreUsuario}"/>
 </sql:update>
+
 <c:if test="${param.estadoEvento == 'erased'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
@@ -47,5 +31,40 @@
 		AND estado != 'erased';
 		<sql:param value="${param.idEvento}"/>
 	</sql:update>
+</c:if>
+
+<c:if test="${param.estadoEvento != 'controlled2' && param.accion != 'curado' && param.accion != 'dejar'}">
+	<sql:update dataSource="${CatastrofesServer}">
+		UPDATE catastrofes
+		SET estado = ?, modificado = <%=modif%>
+		WHERE id = ?;
+		<sql:param value="${param.estadoEvento}"/>
+		<sql:param value="${param.idEvento}"/>
+	</sql:update>
+</c:if>
+		
+<c:if test="${param.accion == 'curado'}">
+	<sql:update dataSource="${CatastrofesServer}">
+		UPDATE catastrofes
+		SET estado = 'active', tipo = 'healthy', modificado = <%=modif%>
+		WHERE id = ?;
+		<sql:param value="${param.idEvento}"/>
+	</sql:update>
+</c:if>
+
+<c:if test="${param.accion == 'dejar'}">
+	<sql:update dataSource="${CatastrofesServer}">
+		UPDATE catastrofes
+		SET estado = 'active', idAssigned = 0, modificado = <%=modif%>
+		WHERE nombre = ?;
+		<sql:param value="${param.nombreUsuario}"/>
+	</sql:update>
+	<sql:update dataSource="${CatastrofesServer}">
+		UPDATE catastrofes
+		SET estado = 'active', modificado = <%=modif%>
+		WHERE id = ?;
+		<sql:param value="${param.idEvento}"/>
+	</sql:update>
+	<!--AND id NOT IN (SELECT DISTINCT idAssigned FROM catastrofes);-->
 </c:if>
 ok

@@ -13,9 +13,10 @@
 <% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
 
 <sql:update dataSource="${CatastrofesServer}">
-    UPDATE CATASTROFES SET
-    marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?, latitud = ?, 
-    longitud = ?, direccion = ?, estado = ?, size=?,traffic=?,idAssigned=?, fecha = ?, usuario = ?, sintomas = ?, modificado = <%=modif%>
+    UPDATE catastrofes SET
+    marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?,
+	latitud = ?, longitud = ?, direccion = ?, estado = ?, size=?, traffic=?,
+	idAssigned=?, fecha = ?, usuario = ?, sintomas = ?, modificado = <%=modif%>
     WHERE id = ?
     
     <sql:param value="${param.marcador}"/>
