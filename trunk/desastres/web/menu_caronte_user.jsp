@@ -201,7 +201,7 @@
 					<input type="hidden" name="traffic" id="traffic3" value="">
 				</p>
 				<p>
-					<input type="button" id="submit32" value="<fmt:message key="annadir"/>" class="btn" onclick="modificar2(
+					<input type="button" id="submit32" value="<fmt:message key="annadir"/>" class="btn" onclick="modificar3(
 						residente.value,seleccionRadio(this.form,2),fatigue.checked,fever.checked,dyspnea.checked,nausea.checked,headache.checked,vomiting.checked,abdominal_pain.checked,weight_loss.checked,blurred_vision.checked,muscle_weakness.checked);
 						return false;">
 				</p>

@@ -14,7 +14,7 @@
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver" 
         url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
 <c:choose>
-    <c:when test="${param.action eq 'firstTime'}">               
+    <c:when test="${(param.action eq 'firstTime') and (param.nivel gt 1)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
                    SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, 
                    direccion, estado, size, traffic, idAssigned, fecha, modificado
@@ -25,7 +25,19 @@
             <sql:param value="${param.fecha}"/>
         </sql:query>  
     </c:when>
-    <c:when test="${param.action eq 'notFirst'}">               
+	<c:when test="${(param.action eq 'firstTime') and (param.nivel le 1)}">
+        <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
+                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+                   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
+                   WHERE modificado > ?
+				   AND marcador != 'people'
+                   AND estado != 'erased'
+				   AND tipo != 'user';">
+            <sql:param value="${param.fecha}"/>
+        </sql:query>
+    </c:when>
+    <c:when test="${(param.action eq 'notFirst') and (param.nivel gt 1)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
                    SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
                    direccion, estado, size, traffic, idAssigned, fecha, modificado
@@ -34,6 +46,17 @@
 				   AND tipo != 'user';">
             <sql:param value="${param.fecha}"/>
         </sql:query>                
+    </c:when>
+	<c:when test="${(param.action eq 'notFirst') and (param.nivel le 1)}">
+        <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
+                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+                   direccion, estado, size, traffic, idAssigned, fecha, modificado
+				   FROM catastrofes
+                   WHERE modificado > ?
+				   AND marcador != 'people'
+				   AND tipo != 'user';">
+            <sql:param value="${param.fecha}"/>
+        </sql:query>
     </c:when>
     <c:otherwise>            
         <p class="textoError">Invalid action:${param.action}</p>

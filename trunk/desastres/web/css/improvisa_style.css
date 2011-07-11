@@ -290,6 +290,14 @@ form table img{
 	margin-right: -2px;
 }
 
+:-webkit-input-placeholder {
+    color: silver;
+}
+
+:-moz-placeholder {
+    color: silver;
+}
+
 /*#messageButtons{
     height: 114px;
 	width: 264px;

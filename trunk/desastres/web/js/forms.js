@@ -1,28 +1,33 @@
 // Javascripts para los formularios
 
 function cambiaIcono(marcador,tipo,cantidad){
-	
+	var nombre;
+	var imagen;
 	if (marcador=="event"){
-		//var imagen="markers/fuego.png"
 		if (tipo=="fire"){
 			imagen="markers/fuego.png";
+			nombre = 'Fuego';
 		}
 		if (tipo=="flood"){
 			imagen="markers/agua.png";
+			nombre = 'Inundacion';
 		}
 		if (tipo=="collapse"){
 			imagen="markers/casa.png";
+			nombre = 'Derrumbamiento';
 		}
 		if (tipo=="lostPerson"){
 			imagen="markers/personaPerdida.png";
+			nombre = 'Persona perdida';
 		}
 		if (tipo=="injuredPerson"){
 			imagen="markers/personaHerida.png";
+			nombre = 'Persona herida';
 		}
 		document.getElementById("icono_catastrofes").src=imagen;
+		document.getElementById('catastrofes').nombre.value = nombre;
 	}
 	if (marcador=="resource"){
-		//var imagen="markers/policia1.png";
 		if (tipo=="police"){
 			imagen="markers/policia"+cantidad+".png";
 		}
@@ -47,10 +52,6 @@ function cambiaIcono(marcador,tipo,cantidad){
 		document.getElementById("icono_recursos").src=imagen;
 	}
 	if (marcador=="people"){
-		//var imagen="markers/leve1.png";
-		if (tipo=="trapped"){
-			imagen="markers/trapped"+cantidad+".png";
-		}
 		if (tipo=="healthy"){
 			imagen="markers/sano"+cantidad+".png";
 		}
@@ -62,6 +63,9 @@ function cambiaIcono(marcador,tipo,cantidad){
 		}
 		if (tipo=="dead"){
 			imagen="markers/muerto"+cantidad+".png";
+		}
+		if (tipo=="trapped"){
+			imagen="markers/trapped"+cantidad+".png";
 		}
 		document.getElementById("icono_heridos").src=imagen;
 	}	

@@ -155,7 +155,10 @@ public class Environment{
 
 				people.put(nuevo.getId(), nuevo);
 				Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
-				printout("- Herido: " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")", 3);
+				if(!instancia.getString("type").equals("healthy")){
+					printout("- Herido: " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")", 3);
+				}
+				
 
 				if (nuevo.getType().equals("slight")) {
 					dis.setSlight(nuevo);

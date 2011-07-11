@@ -41,9 +41,11 @@
 				<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 				<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false&language=es&region=ES"></script>
 			-->
-			<script type="text/javascript">var nivelMsg = ${proyecto.nivelMsg};</script>
+			<script type="text/javascript">var nivelMsg = ${proyecto.nivelMsg}; var nombreUsuario = '${nombreUsuario}';</script>
 			<script type="text/javascript" src="js/mapa_${proyecto.proyect}.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>  <!-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin -->
+			<script type="text/javascript" src="js/mapa2.js"></script>
+			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
 			<!-- Objeto Marcador -->
 			<script type="text/javascript" src="js/marcador.js"></script>
 			<!--Hora y Fecha -->
@@ -77,8 +79,8 @@
 		</head>
 		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true); mostrarMensajes();" onunload="GUnload()">
 			<c:if test="${nombreUsuario != null}">
-				<c:import url="ventana_modificacion.jsp"/>
-				<c:import url="ventana_acciones.jsp"/>
+				<%--<c:import url="ventana_modificacion.jsp"/>
+				<c:import url="ventana_acciones.jsp"/>--%>
 			</c:if>
 			<table class="tabla_menu">
 				<!-- Cabecera con imagen y hora -->
@@ -94,6 +96,7 @@
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
+						v.71
 					</td>
 				</tr>
 				<!-- Cuerpo de la pagina -->
@@ -203,6 +206,7 @@
 						<div id="messages">
 							<p>MENSAJES:</p>
 						</div>
+						<!--<audio id="player" src="images/alarm.mp3" autoplay="false" style="display:none"></audio>-->
 					</td>
 				</tr>
 			</table>

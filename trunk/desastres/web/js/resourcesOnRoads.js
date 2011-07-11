@@ -25,8 +25,8 @@ function moveAgents () {
         }
     }
     DirectionsBean.sendDirections();
-    setTimeout("startRoute()",4000);
-    setTimeout("update()",6000);
+    //setTimeout("startRoute()",4000);
+    //setTimeout("update()",6000);
 }
 
 

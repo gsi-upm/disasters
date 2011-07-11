@@ -2,8 +2,8 @@ $().ready(function() {
 	$('#dialog1').jqm();
 	$('#dialog2').jqm();
 	$('#dialog3').jqm();
-	$('#modificar').jqm();
-	$('#acciones').jqm();
+	//$('#modificar').jqm();
+	//$('#acciones').jqm();
 });
 
 $(document).ready(function() {
