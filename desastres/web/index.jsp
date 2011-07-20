@@ -13,7 +13,7 @@
 	<c:if test="${param.proyect == null}">
 		<c:redirect url="/proyect?user=${nombreUsuario}"/>
 	</c:if>
-	<c:if test="${param.proyect != null}"> <!-- and param.alert == null -->
+	<c:if test="${param.proyect != null}"> <%-- and param.alert == null --%>
 		<jsp:setProperty name="proyecto" property="proyect" value="${param.proyect}"/>
 	</c:if>
 	<c:if test="${param.rol != null}">
@@ -24,12 +24,13 @@
 <!DOCTYPE HTML>
 <html>
 	<fmt:bundle basename="fmt.eji8n">
-		<head><meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<head>
+			<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 			<title><fmt:message key="title_${proyecto.proyect}"/></title>
-			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_${proyecto.proyect}.ico">
-			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css">
-			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css">
-			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen">
+			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_${proyecto.proyect}.ico"/>
+			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
+			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css"/>
+			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen"/>
 			<!--[if lt IE 9]>
 				<script type="text/javascript" src="js/mensajeIE.js"></script>
 				<script type="text/javascript"><fmt:message key="mensajeIE"/></script>
@@ -46,6 +47,7 @@
 			<script type="text/javascript" src="js/mapa.js"></script>  <!-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin -->
 			<script type="text/javascript" src="js/mapa2.js"></script>
 			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
+			<script type="text/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->
 			<script type="text/javascript" src="js/marcador.js"></script>
 			<!--Hora y Fecha -->
@@ -85,8 +87,8 @@
 			<table class="tabla_menu">
 				<!-- Cabecera con imagen y hora -->
 				<tr>
-					<td colspan="2">
-						<div id="cabecera"><img src="images/<fmt:message key="header"/>_${proyecto.proyect}.gif" alt=""></div>
+					<td>
+						<div id="cabecera"><img src="images/<fmt:message key="header"/>_${proyecto.proyect}.gif" alt=""/></div>
 					</td>
 					<td class="derecha">
 						<!--reloj -->
@@ -96,9 +98,11 @@
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
-						v.71
+						v.72 <span id="prueba"></span>
 					</td>
 				</tr>
+			</table>
+			<table class="tabla_menu">
 				<!-- Cuerpo de la pagina -->
 				<tr style="vertical-align:top">
 					<td>
@@ -111,15 +115,40 @@
 										<table>
 											<tr>
 												<td><fmt:message key="usuario"/>:</td>
-												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" size="26"></td>
+												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" size="26"/></td>
 											</tr>
 											<tr>
 												<td><fmt:message key="contrasenna"/>:</td>
-												<td><input type="password" name="<%=Constants.LOGIN_PASSWORD_FIELD%>" id="pwd" size="26"></td>
+												<td><input type="password" name="<%=Constants.LOGIN_PASSWORD_FIELD%>" id="pwd" size="26"/></td>
 											</tr>
 											<tr>
-												<td colspan="2"><input type="submit" name="Submit" id="submit_butt" value="<fmt:message key="aceptar"/>"></td>
+												<td colspan="2"><input type="submit" name="Submit" id="submit_butt" value="<fmt:message key="aceptar"/>"/></td>
 											</tr>
+										</table>
+										<p style="display:none">
+											&iquest;No est&aacute; registrado?
+											<input type="button" value="Registrarse" onclick="registro()"/>
+										</p>
+									</form>
+									<form action="#" id="registro" style="display:none">
+										<table>
+											<tr>
+												<td>Nombre usuario</td>
+												<td><input type="text" name="user1"size="26"/></td>
+											</tr>
+											<tr>
+												<td>Repetir nombre</td>
+												<td><input type="text" name="user2"size="26"/></td>
+											</tr>
+											<tr>
+												<td>Contraseña</td>
+												<td><input type="password" name="pass1"size="26"/></td>
+											</tr>
+											<tr>
+												<td>Repetir contraseña</td>
+												<td><input type="password" name="pass2"size="26"/></td>
+											</tr>
+											<tr><td><input type="button" value="Aceptar" onclick="registrar(user1.value, user2.value, pass1.value, pass2.value)"/></td></tr>
 										</table>
 									</form>
 								</div>
@@ -127,7 +156,7 @@
 							<c:if test="${nombreUsuario != null}">
 								<!-- and if the user is autenticated, we show the username and logout button -->
 								<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
-								<br>
+								<br/>
 								<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
 								<c:if test="${proyecto.proyect == 'disasters'}">
 									<c:import url="menu_disasters.jsp"/>
@@ -154,14 +183,14 @@
 									<div id="minitabs">
 										<c:if test="${nombreUsuario != null}">
 											<div id="minitab3" class="minitab">
-												<img alt="ver" src="images/tab_simulator.png">
+												<img alt="ver" src="images/tab_simulator.png"/>
 											</div>
 										</c:if>
 										<div id="minitab2" class="minitab">
-											<img alt="ver" src="images/tab_building.png">
+											<img alt="ver" src="images/tab_building.png"/>
 										</div>
 										<div id="minitab1" class="minitab">
-											<img alt="más info" src="images/tab_eye.png">
+											<img alt="más info" src="images/tab_eye.png"/>
 										</div>
 									</div>
 								</c:if>
@@ -176,14 +205,14 @@
 									<div id="minitabs">
 										<c:if test="${nombreUsuario != null}">
 											<div id="minitab3" class="minitab">
-												<img alt="ver" src="images/tab_simulator.png">
+												<img alt="ver" src="images/tab_simulator.png"/>
 											</div>
 										</c:if>
 										<div id="minitab2" class="minitab">
-											<img alt="ver" src="images/tab_building.png">
+											<img alt="ver" src="images/tab_building.png"/>
 										</div>
 										<div id="minitab1" class="minitab">
-											<img alt="más info" src="images/tab_eye.png">
+											<img alt="más info" src="images/tab_eye.png"/>
 										</div>
 									</div>
 									<div id="map_canvas"></div>
@@ -206,7 +235,10 @@
 						<div id="messages">
 							<p>MENSAJES:</p>
 						</div>
-						<!--<audio id="player" src="images/alarm.mp3" autoplay="false" style="display:none"></audio>-->
+						<audio id="audio" controls="controls" style="display:none">
+							<source src="images/bad.ogg" type="audio/ogg"/>
+							<source src="images/alarm.mp3" type="audio/mpeg"/>
+						</audio>
 					</td>
 				</tr>
 			</table>
@@ -217,22 +249,22 @@
 			<div id="close_screen"><a href="#"><fmt:message key="ocultar"/></a></div>
 			<div id="screen"></div>
 			<!--<p class="iconos_validacion">
-				<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Strict"></a>
-				<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a>
-				<a href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3.png" alt="HTML5 Powered with CSS3 / Styling"></a>
+				<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Strict"/></a>
+				<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"/></a>
+				<a href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3.png" alt="HTML5 Powered with CSS3 / Styling"/></a>
 			</p>-->
 			<%--
 					int[] rscs = recursos.getResourcesList();
 					for (int i = 0; i < rscs.length; i++) {
-						String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\">";
+						String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\"/>";
 						out.println(st);
-						String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\">";
+						String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\"/>";
 						out.println(ed);
 					}
 			--%>
 			<c:if test="${param.alert == true}">
 				<script type="text/javascript">
-					window.alert("Fin de la simulacion.")
+					window.alert('Fin de la simulacion')
 				</script>
 			</c:if>
 		</body>

@@ -6,10 +6,10 @@
 <html>
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
-			<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+			<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 			<title><fmt:message key="title_${proyecto.proyect}"/> - Acceso denegado</title>
-			<link type="image/x-icon" rel="shotcut icon" href="images/favicon_${proyecto.proyect}.ico">
-			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css">
+			<link type="image/x-icon" rel="shotcut icon" href="images/favicon_${proyecto.proyect}.ico"/>
+			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<script type="text/javascript" src="js/hora_fecha.js"></script>
 		</head>
 		<body onload="IniciarReloj24()">

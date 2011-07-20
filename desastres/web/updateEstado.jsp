@@ -27,13 +27,13 @@
 		UPDATE catastrofes
 		SET estado = 'active', modificado = <%=modif%>, idAssigned = 0
 		WHERE idAssigned = ?
-		AND marcador != 'people'
 		AND estado != 'erased';
 		<sql:param value="${param.idEvento}"/>
 	</sql:update>
 </c:if>
 
-<c:if test="${param.estadoEvento != 'controlled2' && param.accion != 'curado' && param.accion != 'dejar'}">
+<c:if test="${param.estadoEvento != 'controlled2' && param.accion != 'curado' &&
+		param.accion != 'rescatado' && param.accion != 'dejar'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
 		SET estado = ?, modificado = <%=modif%>
@@ -43,7 +43,7 @@
 	</sql:update>
 </c:if>
 		
-<c:if test="${param.accion == 'curado'}">
+<c:if test="${param.accion == 'curado' || param.accion == 'rescatado'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
 		SET estado = 'active', tipo = 'healthy', modificado = <%=modif%>
@@ -62,9 +62,9 @@
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
 		SET estado = 'active', modificado = <%=modif%>
-		WHERE id = ?;
+		WHERE id = ?
+		AND id NOT IN (SELECT DISTINCT idAssigned FROM catastrofes);
 		<sql:param value="${param.idEvento}"/>
 	</sql:update>
-	<!--AND id NOT IN (SELECT DISTINCT idAssigned FROM catastrofes);-->
 </c:if>
 ok

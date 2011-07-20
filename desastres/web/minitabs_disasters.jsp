@@ -13,19 +13,19 @@
 					<td colspan="2"><fmt:message key="edificios"/></td>
 				</tr>
 				<tr>
-					<td><input type="checkbox" name="hospital" value="hospital" checked="checked" onchange="visualize(this.checked,'hospital');"></td>
+					<td><input type="checkbox" name="hospital" value="hospital" checked="checked" onchange="visualize(this.checked,'hospital');"/></td>
 					<td><fmt:message key="hospitales"/></td>
 				</tr>
 				<tr>
-					<td><input type="checkbox" name="policeStation" value="policeStation" checked="checked" onchange="visualize(this.checked,'policeStation');"></td>
+					<td><input type="checkbox" name="policeStation" value="policeStation" checked="checked" onchange="visualize(this.checked,'policeStation');"/></td>
 					<td><fmt:message key="comisarias"/></td>
 				</tr>
 				<tr>
-					<td><input type="checkbox" name="firemenStation" value="firemenStation" checked="checked" onchange="visualize(this.checked,'firemenStation');"></td>
+					<td><input type="checkbox" name="firemenStation" value="firemenStation" checked="checked" onchange="visualize(this.checked,'firemenStation');"/></td>
 					<td><fmt:message key="parquesbomberos"/></td>
 				</tr>
 				<tr>
-					<td><input type="checkbox" name="geriatricCenter" value="geriatricCenter" checked="checked" onchange="visualize(this.checked,'geriatricCenter');"></td>
+					<td><input type="checkbox" name="geriatricCenter" value="geriatricCenter" checked="checked" onchange="visualize(this.checked,'geriatricCenter');"/></td>
 					<td><fmt:message key="centrosgeriatricos"/></td>
 				</tr>
 				<tr>
@@ -39,28 +39,29 @@
 			<form id="SimOptions" method="post" action="/desastres/RunSimulation">
 				<table>
 					<tr>
-						<td><p class="bigger"><fmt:message key="opcionessimulador"/></td>
+						<td><span class="bigger"><fmt:message key="opcionessimulador"/></span></td>
 					</tr>
 					<tr>
-						<td><input id="runSim" type="radio" name="sim" value="run" checked="checked"><fmt:message key="arrancasimulador"/></td>
+						<td><input id="runSim" type="radio" name="sim" value="run" checked="checked"/><fmt:message key="arrancasimulador"/></td>
 					</tr>
 					<tr id="options2">
 						<td>
-							<fmt:message key="victimas"/> <input type="text" name="victims0" size="3">
-							<br>
-							<fmt:message key="incendios"/> <input type="text" name="fires0" size="3">
+							<fmt:message key="victimas"/> <input type="text" name="victims0" size="3"/>
+							<br/>
+							<fmt:message key="incendios"/> <input type="text" name="fires0" size="3"/>
+							<input type="hidden" name="proyectName" value="disasters"/>
 						</td>
 					</tr>
-					<input type="hidden" name="proyectName" value="disasters">
 					<tr>
-						<td><input id="restartSim" type="radio" name="sim" value="restart"><fmt:message key="reiniciarsimulador"/></td>
+						<td><input id="restartSim" type="radio" name="sim" value="restart"/><fmt:message key="reiniciarsimulador"/></td>
 					</tr>
 					<tr>
-						<td><input id="pauseSim" type="radio" name="sim" value="pause"><fmt:message key="pause"/></td>
+						<td><input id="pauseSim" type="radio" name="sim" value="pause"/><fmt:message key="pause"/></td>
 					</tr>
 					<tr>
-						<td><input id="submit_simulador" type="submit" name="aceptar" value="<fmt:message key="aceptar"/>"></td>
-					</tr><tr>
+						<td><input id="submit_simulador" type="submit" name="aceptar" value="<fmt:message key="aceptar"/>"/></td>
+					</tr>
+					<tr>
 						<td><a id="hideSimOptions" href="#"><fmt:message key="ocultar"/></a></td>
 					</tr>
 				</table>

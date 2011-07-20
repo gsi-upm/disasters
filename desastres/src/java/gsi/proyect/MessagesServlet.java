@@ -49,7 +49,7 @@ public class MessagesServlet extends HttpServlet {
 				
 				if(i == (mensajes.length()-1)){
 					if(index == -1){
-						out.println("<hr>");
+						out.println("<hr/>");
 					}
 					out.println("<span>" + msg.getString("id") + "</span>");
 				}

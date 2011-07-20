@@ -36,5 +36,14 @@
     <sql:param value="${param.usuario}"/>
 	<sql:param value="${param.sintomas}"/>
     <sql:param value="${param.id}"/>
-</sql:update>  
+</sql:update>
+<c:if test="${param.estado == 'erased'}">
+	<sql:update dataSource="${CatastrofesServer}">
+		UPDATE catastrofes
+		SET estado = 'active', modificado = <%=modif%>, idAssigned = 0
+		WHERE idAssigned = ?
+		AND estado != 'erased';
+		<sql:param value="${param.id}"/>
+	</sql:update>
+</c:if>
 ok

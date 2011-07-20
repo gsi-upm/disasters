@@ -1,31 +1,31 @@
 function verMas(id){
 	var evento = marcadores_definitivos[id];
-	var complete = evento.nombre +"<br>" + evento.info + "<br>" +evento.descripcion + "<br>" + "Direccion: " + evento.direccion +"<br>";
+	var complete = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>Direccion: ' + evento.direccion + '<br/>';
 	var links2;
 	if(nivelMsg > 1){
-		links2 = "<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
-		+" - "+ "<a id=\"acciones\" href='#'onclick=\"cargarAcciones(marcadores_definitivos["+evento.id+"])\"  > Acciones </a>"
-		+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
-		+" - "+ "<a id='ver_mas2' href='#' onclick=\"verMenos("+evento.id+");return false;\" > Ver menos </a>";
+		links2 = '<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;"> Modificar </a>'
+		+' - '+ '<a id="acciones" href="#" onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])"> Acciones </a>'
+		+' - '+ '<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;"> Eliminar </a>'
+		+' - '+ '<a id="ver_mas2" href="#" onclick="verMenos(' + evento.id + ');return false;"> Ver menos </a>';
 	}else{
-		links2 = "<a id='ver_mas2' href='#' onclick=\"verMenos("+evento.id+");return false;\" > Ver menos </a>";
+		links2 = '<a id="ver_mas2" href="#" onclick="verMenos(' + evento.id + ');return false;"> Ver menos </a>';
 	}
-	marcadores_definitivos[id].marker.openInfoWindowHtml("<div id='bocadillo'>"+complete+"<div id='bocadillo_links'>"+links2+"</div>"+"</div>");
+	marcadores_definitivos[id].marker.openInfoWindowHtml('<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links2 + '</div></div>');
 }
 
 function verMenos(id){
 	var evento = marcadores_definitivos[id];
-	var small = evento.nombre +"<br>" + evento.descripcion ;
+	var small = evento.nombre + '<br/>' + evento.descripcion ;
 	var links1;
 	if(nivelMsg > 1){
-		links1 = "<a id=\"modificar\" href=\"#\" onclick=\"cargarModificar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Modificar </a>"
-		+" - "+ "<a id=\"acciones\" href='#'onclick=\"cargarAcciones(marcadores_definitivos["+evento.id+"])\"  > Acciones </a>"
-		+" - "+ "<a id=\"eliminar\" href=\"#\" onclick=\"eliminar(marcadores_definitivos["+evento.id+"],DEFINITIVO); return false;\" > Eliminar </a>"
-		+" - "+ "<a id='ver_mas1' href='#' onclick=\"verMas("+evento.id+");return false;\" > Ver m&aacute;s </a>";
+		links1 = '<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;"> Modificar </a>'
+		+' - '+ '<a id="acciones" href="#"onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])"  > Acciones </a>'
+		+' - '+ '<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;" > Eliminar </a>'
+		+' - '+ '<a id="ver_mas1" href="#" onclick="verMas(' + evento.id + ');return false;"> Ver m&aacute;s </a>';
 	}else{
-		links1 = "<a id='ver_mas1' href='#' onclick=\"verMas("+evento.id+");return false;\" > Ver m&aacute;s </a>";
+		links1 = '<a id="ver_mas1" href="#" onclick="verMas(' + evento.id + ');return false;"> Ver m&aacute;s </a>';
 	}
-	marcadores_definitivos[id].marker.openInfoWindowHtml("<div id='bocadillo'>"+small+"<div id='bocadillo_links'>"+links1+"</div>"+"</div>");
+	marcadores_definitivos[id].marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 + '</div></div>');
 }
 
 function cargarModificar(puntero,caracter){
@@ -55,7 +55,7 @@ function cargarModificar(puntero,caracter){
 			document.getElementById('control').style.visibility = 'visible';
 		}
 		if(puntero.idAssigned != 0){
-			document.getElementById('asociacion').innerHTML = "Asociado a " + marcadores_temporales[puntero.idAssigned].nombre;
+			document.getElementById('asociacion').innerHTML = 'Asociado a ' + marcadores_temporales[puntero.idAssigned].nombre;
 		}
 	}
 
@@ -63,7 +63,7 @@ function cargarModificar(puntero,caracter){
 	//rellenamos con los campos recibidos
 
 	document.getElementById('iden').value=puntero.id;
-	document.getElementById('item_tipo').innerHTML=puntero.marcador+" - "+puntero.tipo;
+	document.getElementById('item_tipo').innerHTML=puntero.marcador+' - '+puntero.tipo;
 	document.getElementById('iconoAdecuado').src=iconoAdecuado(puntero.marcador,puntero.tipo,puntero.cantidad);
 	document.getElementById('cantidad').value=puntero.cantidad;
 	document.getElementById('nombre').value=puntero.nombre;
@@ -76,9 +76,9 @@ function cargarModificar(puntero,caracter){
 	document.getElementById('size').value=puntero.size;
 	document.getElementById('traffic').value=puntero.traffic;
 	document.getElementById('idAssigned').value=puntero.idAssigned;
-	document.getElementById("validacion0").src="images/iconos/no.png";
+	document.getElementById('validacion0').src='images/iconos/no.png';
 	//annadir las que faltan....
-	document.getElementById("pincha").innerHTML="Marcar posicion en el mapa";
+	document.getElementById('pincha').innerHTML='Marcar posicion en el mapa';
 }
 
 /*function cargarAcciones(puntero){

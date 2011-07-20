@@ -62,26 +62,26 @@
 <fmt:bundle basename="fmt.eji8n">
 	<p><fmt:message key="actualmentehay"/> ${eventos.rowCount} <fmt:message key="desastres"/>. (${controlled.rowCount} <fmt:message key="controlados"/>):</p>
 	<ul>
-		<li><img src="markers/fuego.png" height="25px" alt=""> ${fires.rowCount} <fmt:message key="incendios"/> </li>
-		<li><img src="markers/agua.png" height="25px" alt=""> ${floods.rowCount} <fmt:message key="inundaciones"/></li>
-		<li><img src="markers/casa.png" height="30px" alt=""> ${collapses.rowCount} <fmt:message key="derrumbamientos"/></li>
+		<li><img src="markers/fuego.png" height="25px" alt=""/> ${fires.rowCount} <fmt:message key="incendios"/> </li>
+		<li><img src="markers/agua.png" height="25px" alt=""/> ${floods.rowCount} <fmt:message key="inundaciones"/></li>
+		<li><img src="markers/casa.png" height="30px" alt=""/> ${collapses.rowCount} <fmt:message key="derrumbamientos"/></li>
 	</ul>
-	<br>
+	<br/>
 	<p><fmt:message key="hay"/> ${resources.rowCount} <fmt:message key="recursostrabajando"/></p>
 	<ul>
-		<li><img src="markers/policia${policemen.rowCount}.png" height="25px" alt=""> ${policemen.rowCount} <fmt:message key="policias"/></li>
-		<li><img src="markers/bombero${firemen.rowCount}.png" height="25px" alt=""> ${firemen.rowCount} <fmt:message key="bomberos"/></li>
-		<li><img src="markers/ambulancia${ambulance.rowCount}.png" height="25px" alt=""> ${ambulance.rowCount} <fmt:message key="ambulancias"/></li>
+		<li><img src="markers/policia${policemen.rowCount}.png" height="25px" alt=""/> ${policemen.rowCount} <fmt:message key="policias"/></li>
+		<li><img src="markers/bombero${firemen.rowCount}.png" height="25px" alt=""/> ${firemen.rowCount} <fmt:message key="bomberos"/></li>
+		<li><img src="markers/ambulancia${ambulance.rowCount}.png" height="25px" alt=""/> ${ambulance.rowCount} <fmt:message key="ambulancias"/></li>
 	</ul>
-	<br>
+	<br/>
 	<p><fmt:message key="hay"/> ${heridos.rowCount} <fmt:message key="victimas"/></p>
 	<ul>
-		<li><img src="markers/leve${slight.rowCount}.png" height="25px" alt=""> ${slight.rowCount} Leves</li>
-		<li><img src="markers/grave${serious.rowCount}.png" height="25px" alt=""> ${serious.rowCount} Graves</li>
-		<li><img src="markers/muerto${dead.rowCount}.png" height="25px" alt=""> ${dead.rowCount} Muertos</li>
-		<li><img src="markers/trapped${trapped.rowCount}.png" height="25px" alt=""> ${dead.rowCount} Atrapados</li>
+		<li><img src="markers/leve${slight.rowCount}.png" height="25px" alt=""/> ${slight.rowCount} Leves</li>
+		<li><img src="markers/grave${serious.rowCount}.png" height="25px" alt=""/> ${serious.rowCount} Graves</li>
+		<li><img src="markers/muerto${dead.rowCount}.png" height="25px" alt=""/> ${dead.rowCount} Muertos</li>
+		<li><img src="markers/trapped${trapped.rowCount}.png" height="25px" alt=""/> ${dead.rowCount} Atrapados</li>
 	</ul>
-	<br>
-	<br>
+	<br/>
+	<br/>
 	<a id="hideVisualize" href="#"><fmt:message key="ocultar"/></a>
 </fmt:bundle>
