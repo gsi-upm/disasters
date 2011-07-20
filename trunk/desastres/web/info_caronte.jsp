@@ -3,7 +3,7 @@
 <%@ include file="database.jspf" %>
 
 <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				SELECT * FROM CATASTROFES WHERE marcador = 'event' AND estado != 'erased';">
+		SELECT * FROM CATASTROFES WHERE marcador = 'event' AND estado != 'erased';">
 </sql:query>
 
 <sql:query var="controlled" dataSource="${CatastrofesServer}" sql="

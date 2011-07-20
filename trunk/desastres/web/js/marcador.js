@@ -21,7 +21,7 @@ function ObjMarcador(id,marcador,tipo,cantidad,nombre,descripcion,info,latitud,l
 	this.idAssigned=idAssigned;
 	this.sintomas=sintomas;
 	/*marker.marker_num = 3;
-	marker.tabs = ["One", "Two", "Three"];*/
+	marker.tabs = ['One', 'Two', 'Three'];*/
 	//metodos
 }
 
@@ -39,11 +39,11 @@ var gmarkers = [];
         marker.tabs = tabs;
         gmarkers[marker_num] = marker;
         
-        GEvent.addListener(gmarkers[marker_num], "click", function() {
+        GEvent.addListener(gmarkers[marker_num], 'click', function(){
           marker.openInfoWindowTabsHtml(gmarkers[marker_num].tabs);
         });
         // add a line to the sidebar html
-        //sidebar_html += '<a href="javascript:myclick(' + marker_num + ')">' + label + '</a><br>';
+        //sidebar_html += '<a href="javascript:myclick(' + marker_num + ')">' + label + '</a><br/>';
         //return marker;
       }
       // ==================================================*/

@@ -12,7 +12,7 @@
 <% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>
 
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver" 
-        url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+				   url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
 <c:choose>
     <c:when test="${(param.action eq 'firstTime') and (param.nivel gt 1)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
@@ -46,7 +46,7 @@
 				   AND tipo != 'user';">
             <sql:param value="${param.fecha}"/>
         </sql:query>                
-    </c:when>
+	</c:when>
 	<c:when test="${(param.action eq 'notFirst') and (param.nivel le 1)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
                    SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,

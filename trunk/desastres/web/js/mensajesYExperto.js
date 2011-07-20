@@ -1,3 +1,6 @@
+var estado_Experto = 'off';
+var url_base = '/desastres/Xpert';
+
 function mostrarMensajes(){
 	$('#close_messages').click(function(){
 		$('#messages').slideUp();
@@ -19,7 +22,7 @@ function mostrarMensajes(){
 function mostrarMensajes2(index){
 	var msgs = document.getElementById('messages');
 	var id = index;
-	$.get("/desastres/messages",{
+	$.get('/desastres/messages',{
 		'nivel':nivelMsg,
 		'index':index
 	}, function(data) {
@@ -28,7 +31,7 @@ function mostrarMensajes2(index){
 		if(data2[1] != null){
 			id = data2[1].split('</span>',1);
 			msgs.innerHTML += data2[0];
-			//if(id > 0) document.getElementById('player').play();
+			if(id > 0) document.getElementById('audio').play();
 		}
 
 		msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
@@ -38,7 +41,7 @@ function mostrarMensajes2(index){
 
 function lanzaExperto(){
 	$.get(url_base,{
-		'action':"start"
+		'action':'start'
 	}, function(data) {
 		$('#screen').html(data);
 	});
@@ -52,13 +55,13 @@ function lanzaExperto(){
 	$('#screen').slideDown();
 	$('#close_screen').slideDown();
 
-	estado_Experto = "on";
+	estado_Experto = 'on';
 }
 
 function avisaExperto(){
-	if(estado_Experto == "on"){
+	if(estado_Experto == 'on'){
 		$.get(url_base,{
-			'action':"call"
+			'action':'call'
 		}, function(data) {
 			alert(data);
 			$('#screen').append(data);
@@ -68,9 +71,9 @@ function avisaExperto(){
 
 function stopExperto(){
 	$.get(url_base,{
-		'action':"stop"
+		'action':'stop'
 	},function(data){
-		estado_Experto = "off";
+		estado_Experto = 'off';
 		$('#screen').append(data);
 	});
 }

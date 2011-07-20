@@ -17,7 +17,7 @@
 				</tr>
 				<tr>
 					<td id="item_tipo"></td>
-					<td id="item_tipo_icon" rowspan="4" class="img_menu"><img alt="" src="#" id="iconoAdecuado" class="rayas"></td>
+					<td id="item_tipo_icon" rowspan="4" class="img_menu"><img alt="" src="#" id="iconoAdecuado" class="rayas"/></td>
 				</tr>
 				<tr id="quantity">
 					<td>
@@ -37,20 +37,20 @@
 					</td>
 				</tr>
 				<tr><td id="asociacion"></td></tr>
-				<tr><td><input type="text" name="nombre" id="nombre" class="nombre"></td></tr>
+				<tr><td><input type="text" name="nombre" id="nombre" class="nombre"/></td></tr>
 				<tr id="sintomas">
 					<td colspan="2">
-						S&iacute;ntomas:<br>
-						<input type="checkbox" name="fatigue">Fatiga
-						<input type="checkbox" name="fever">Fiebre
-						<input type="checkbox" name="dyspnea">Disnea
-						<input type="checkbox" name="nausea">Nauseas
-						<input type="checkbox" name="headache">Dolor de cabeza
-						<input type="checkbox" name="vomiting">V&oacute;mitos
-						<input type="checkbox" name="abdominal_pain">Dolor abdominal
-						<input type="checkbox" name="weight_loss">Perdida de peso
-						<input type="checkbox" name="blurred_vision">Visi&oacute;n borrosa
-						<input type="checkbox" name="muscle_weakness">Debilidad muscular
+						S&iacute;ntomas:<br/>
+						<input type="checkbox" name="fatigue"/>Fatiga
+						<input type="checkbox" name="fever"/>Fiebre
+						<input type="checkbox" name="dyspnea"/>Disnea
+						<input type="checkbox" name="nausea"/>Nauseas
+						<input type="checkbox" name="headache"/>Dolor de cabeza
+						<input type="checkbox" name="vomiting"/>V&oacute;mitos
+						<input type="checkbox" name="abdominal_pain"/>Dolor abdominal
+						<input type="checkbox" name="weight_loss"/>Perdida de peso
+						<input type="checkbox" name="blurred_vision"/>Visi&oacute;n borrosa
+						<input type="checkbox" name="muscle_weakness"/>Debilidad muscular
 					</td>
 				</tr>
 			</table>
@@ -63,22 +63,22 @@
 					</td>
 					<td class="img_menu">
 						<img class="botones" alt="Validar direcci&oacute;n" id="validardireccion0" onclick="validarDireccion(0)"
-							 onmouseover="cambiaFlecha(0,0)" onmouseout="cambiaFlecha(1,0)" src="images/iconos/confirm2.png">
+							 onmouseover="cambiaFlecha(0,0)" onmouseout="cambiaFlecha(1,0)" src="images/iconos/confirm2.png"/>
 					</td>
 				</tr>
 				<tr>
 					<td class="img_menu">
-						<img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion0" src="images/iconos/no.png">
+						<img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion0" src="images/iconos/no.png"/>
 					</td>
 				</tr>
 			</table>
 			<table class="tabla_menu">
 				<tr>
 					<td colspan="2">
-						<input type="hidden" name="iden" id="iden" value="">
-						<input type="hidden" name="latitud" id="latitud0" value="">
-						<input type="hidden" name="longitud" id="longitud0" value="">
-						<input type="hidden" name="idAssigned" id="idAssigned" value="">
+						<input type="hidden" name="iden" id="iden" value=""/>
+						<input type="hidden" name="latitud" id="latitud0" value=""/>
+						<input type="hidden" name="longitud" id="longitud0" value=""/>
+						<input type="hidden" name="idAssigned" id="idAssigned" value=""/>
 					</td>
 				</tr>
 				<tr id="control">
@@ -117,7 +117,7 @@
 				iden.value,cantidad.value,nombre.value,info.value,descripcion.value,direccion.value,
 				longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,idAssigned.value,
 						fatigue.checked,fever.checked,dyspnea.checked,nausea.checked,headache.checked,vomiting.checked,abdominal_pain.checked,weight_loss.checked,blurred_vision.checked,muscle_weakness.checked);
-				borrarFormulario(this.form,1);$('#modificar').jqm().jqmHide();return false;">
+				borrarFormulario(this.form,1);$('#modificar').jqm().jqmHide();return false;"/>
 			</p>
 		</form>
 	</div>

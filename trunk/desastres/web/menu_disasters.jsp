@@ -8,31 +8,31 @@
 			<form id="catastrofes" action="#">
 				<table class="tabla_menu">
 					<tr>
-						<td><input type="hidden" name="marcador" value="event"></td>
-						<td><input type="hidden" name="cantidad" value="1"></td>
+						<td><input type="hidden" name="marcador" value="event"/></td>
+						<td><input type="hidden" name="cantidad" value="1"/></td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono(marcador.value,'fire');">
+							<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono(marcador.value,'fire');"/>
 							<fmt:message key="incendio"/>
 						</td>
-						<td rowspan="3"><img alt="" id="icono_catastrofes" src="markers/fuego.png" class="rayas"></td>
+						<td rowspan="3"><img alt="" id="icono_catastrofes" src="markers/fuego.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="flood" onclick="cambiaIcono(marcador.value,'flood');">
+							<input type="radio" name="tipo" value="flood" onclick="cambiaIcono(marcador.value,'flood');"/>
 							<fmt:message key="inundacion"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="collapse" onclick="cambiaIcono(marcador.value,'collapse');">
+							<input type="radio" name="tipo" value="collapse" onclick="cambiaIcono(marcador.value,'collapse');"/>
 							<fmt:message key="derrumbamiento"/>
 						</td>
 					</tr>
 				</table>
 				<table class="tabla_menu">
-					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="<fmt:message key="nombre"/>"></td></tr>
+					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="<fmt:message key="nombre"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1"><fmt:message key="informacion"/></textarea></td></tr>
 					<tr><td colspan="2"><textarea name="descripcion" class="descripcion" rows="3" cols="1"><fmt:message key="descripcion"/></textarea></td></tr>
 					<tr>
@@ -41,10 +41,10 @@
 						</td>
 						<td class="img_menu">
 							<img class="botones" alt="Validar direcci&oacute;n" id="validardireccion1" onclick="validarDireccion(1)"
-								 onmouseover="cambiaFlecha(0,1)" onmouseout="cambiaFlecha(1,1)" src="images/iconos/confirm2.png">
+								 onmouseover="cambiaFlecha(0,1)" onmouseout="cambiaFlecha(1,1)" src="images/iconos/confirm2.png"/>
 						</td>
 					</tr>
-					<tr><td class="img_menu"><img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion1" src="images/iconos/no.png"></td></tr>
+					<tr><td class="img_menu"><img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion1" src="images/iconos/no.png"/></td></tr>
 				</table>
 				<!--a href="#" onclick="pinchaMapa(1);">Marcar en mapa</a-->
 				<table class="tabla_menu">
@@ -71,16 +71,16 @@
 					</tr>
 				</table>
 				<p>
-					<input type="hidden" name="latitud" id="latitud1" value="">
-					<input type="hidden" name="longitud" id="longitud1" value="">
-					<input type="hidden" name="estado" value="active">
+					<input type="hidden" name="latitud" id="latitud1" value=""/>
+					<input type="hidden" name="longitud" id="longitud1" value=""/>
+					<input type="hidden" name="estado" value="active"/>
 				</p>
 				<p>
-					<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;">
+					<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;"/>
 					<input type="button" id="submit12" value="<fmt:message key="annadir"/>" class="btn" onclick="crearCatastrofe(
 						marcador.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
 						descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,size.value,traffic.value,0);
-						borrarFormulario(this.form,1);return false;">
+						borrarFormulario(this.form,1);return false;"/>
 				</p>
 
 				<div class="jqmWindow" id="dialog1">
@@ -97,23 +97,24 @@
 		<div class="dhtmlgoodies_aTab">
 			<form id="recursos" action="#">
 				<table class="tabla_menu">
-					<tr><td colspan="2"><input type="hidden" name="marcador" value="resource"></td></tr>
+					<tr><td colspan="2"><input type="hidden" name="marcador" value="resource"/>
+				<input type="hidden" name="proyectName" value="caronte"/></td></tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="police" checked="checked" onclick="cambiaIcono(marcador.value,'police', cantidad.value);">
+							<input type="radio" name="tipo" value="police" checked="checked" onclick="cambiaIcono(marcador.value,'police', cantidad.value);"/>
 							<fmt:message key="policia"/>
 						</td>
-						<td rowspan="3"><img alt="" id="icono_recursos" src="markers/policia1.png" class="rayas"></td>
+						<td rowspan="3"><img alt="" id="icono_recursos" src="markers/policia1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="firemen" onclick="cambiaIcono(marcador.value,'firemen', cantidad.value);">
+							<input type="radio" name="tipo" value="firemen" onclick="cambiaIcono(marcador.value,'firemen', cantidad.value);"/>
 							<fmt:message key="bomberos"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="ambulance" onclick="cambiaIcono(marcador.value,'ambulance',cantidad.value);">
+							<input type="radio" name="tipo" value="ambulance" onclick="cambiaIcono(marcador.value,'ambulance',cantidad.value);"/>
 							<fmt:message key="ambulancia"/>
 						</td>
 					</tr>
@@ -136,7 +137,7 @@
 							</select>
 						</td>
 					</tr>
-					<tr><td colspan="2"><input type="text" name="nombre" value="<fmt:message key="unidades"/>" class="nombre"></td></tr>
+					<tr><td colspan="2"><input type="text" name="nombre" value="<fmt:message key="unidades"/>" class="nombre"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1"><fmt:message key="informacion"/></textarea></td></tr>
 					<tr><td colspan="2"><textarea name="descripcion" class="descripcion" rows="3" cols="1"><fmt:message key="descripcion"/></textarea></td></tr>
 					<tr>
@@ -145,28 +146,28 @@
 						</td>
 						<td class="img_menu">
 							<img class="botones" alt="Validar direcci&oacute;n" id="validardireccion2" onclick="validarDireccion(2)"
-								 onmouseover="cambiaFlecha(0,2)" onmouseout="cambiaFlecha(1,2)" src="images/iconos/confirm2.png">
+								 onmouseover="cambiaFlecha(0,2)" onmouseout="cambiaFlecha(1,2)" src="images/iconos/confirm2.png"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="img_menu">
-							<img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion2" src="images/iconos/no.png">
+							<img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion2" src="images/iconos/no.png"/>
 						</td>
 					</tr>
 				</table>
 				<p>
-					<input type="hidden" name="latitud" id="latitud2" value="">
-					<input type="hidden" name="longitud" id="longitud2" value="">
-					<input type="hidden" name="estado" value="active">
-					<input type="hidden" name="magnitude" id="magnitude2" value="">
-					<input type="hidden" name="traffic" id="traffic2" value="">
+					<input type="hidden" name="latitud" id="latitud2" value=""/>
+					<input type="hidden" name="longitud" id="longitud2" value=""/>
+					<input type="hidden" name="estado" value="active"/>
+					<input type="hidden" name="magnitude" id="magnitude2" value=""/>
+					<input type="hidden" name="traffic" id="traffic2" value=""/>
 				</p>
 				<p>
-					<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;">
+					<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;"/>
 					<input type="button" id="submit22" value="<fmt:message key="annadir"/>" class="btn" onclick="crearCatastrofe(
 						marcador.value,seleccionRadio(this.form,1),cantidad.value,nombre.value,info.value,
 						descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0);
-						borrarFormulario(this.form,2);return false;">
+						borrarFormulario(this.form,2);return false;"/>
 				</p>
 
 				<div class="jqmWindow" id="dialog2">
@@ -183,29 +184,29 @@
 		<div class="dhtmlgoodies_aTab">
 			<form id="heridos" action="#">
 				<table class="tabla_menu">
-					<tr><td colspan="2"><input type="hidden" name="marcador" value="people"></td></tr>
+					<tr><td colspan="2"><input type="hidden" name="marcador" value="people"/></td></tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="slight" checked="checked" onclick="cambiaIcono(marcador.value,'slight',cantidad.value);">
+							<input type="radio" name="tipo" value="slight" checked="checked" onclick="cambiaIcono(marcador.value,'slight',cantidad.value);"/>
 							<fmt:message key="leves"/>
 						</td>
-						<td rowspan="4"><img alt="" id="icono_heridos" src="markers/leve1.png" class="rayas"></td>
+						<td rowspan="4"><img alt="" id="icono_heridos" src="markers/leve1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="serious" onclick="cambiaIcono(marcador.value,'serious',cantidad.value);">
+							<input type="radio" name="tipo" value="serious" onclick="cambiaIcono(marcador.value,'serious',cantidad.value);"/>
 							<fmt:message key="graves"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="dead" onclick="cambiaIcono(marcador.value,'dead',cantidad.value);">
+							<input type="radio" name="tipo" value="dead" onclick="cambiaIcono(marcador.value,'dead',cantidad.value);"/>
 							<fmt:message key="muertos"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="trapped" onclick="cambiaIcono(marcador.value,'trapped',cantidad.value);">
+							<input type="radio" name="tipo" value="trapped" onclick="cambiaIcono(marcador.value,'trapped',cantidad.value);"/>
 							<fmt:message key="atrapados"/>
 						</td>
 					</tr>
@@ -228,7 +229,7 @@
 							</select>
 						</td>
 					</tr>
-					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="<fmt:message key="personas"/>"></td></tr>
+					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="<fmt:message key="personas"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1"><fmt:message key="nombres"/></textarea></td></tr>
 					<tr><td colspan="2"><textarea name="descripcion" class="descripcion" rows="3" cols="1"><fmt:message key="descripciongravedad"/></textarea></td></tr>
 					<tr>
@@ -237,28 +238,28 @@
 						</td>
 						<td class="img_menu">
 							<img class="botones" alt="Validar direcci&oacute;n" id="validardireccion3" onclick="validarDireccion(3)"
-								 onmouseover="cambiaFlecha(0,3)" onmouseout="cambiaFlecha(1,3)" src="images/iconos/confirm2.png">
+								 onmouseover="cambiaFlecha(0,3)" onmouseout="cambiaFlecha(1,3)" src="images/iconos/confirm2.png"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="img_menu">
-							<img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion3" src="images/iconos/no.png">
+							<img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion3" src="images/iconos/no.png"/>
 						</td>
 					</tr>
 				</table>
 				<p>
-					<input type="hidden" name="latitud" id="latitud3" value="">
-					<input type="hidden" name="longitud" id="longitud3" value="">
-					<input type="hidden" name="estado" value="active">
-					<input type="hidden" name="magnitude" id="magnitude3" value="">
-					<input type="hidden" name="traffic" id="traffic3" value="">
+					<input type="hidden" name="latitud" id="latitud3" value=""/>
+					<input type="hidden" name="longitud" id="longitud3" value=""/>
+					<input type="hidden" name="estado" value="active"/>
+					<input type="hidden" name="magnitude" id="magnitude3" value=""/>
+					<input type="hidden" name="traffic" id="traffic3" value=""/>
 				</p>
 				<p>
-					<input type="button" id="submit31" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(3);return false;">
+					<input type="button" id="submit31" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(3);return false;"/>
 					<input type="button" id="submit32" value="<fmt:message key="annadir"/>" class="btn" onclick="crearCatastrofe(
 						marcador.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
 						descripcion.value,direccion.value,longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,0);
-						borrarFormulario(this.form,3);return false;">
+						borrarFormulario(this.form,3);return false;"/>
 				</p>
 				<!--a href="#" onclick="pinchaMapa(3)">Marcar en mapa</a-->
 				<div class="jqmWindow" id="dialog3">
@@ -276,8 +277,8 @@
 			<form id="experto" action="#">
 				<p><fmt:message key="explicacionexperto"/></p>
 				<p>
-					<input type="button" id="Start" value="<fmt:message key="comenzar"/>" class="btn" onclick="lanzaExperto(); return false;">
-					<input type="button" id="Stop" value="<fmt:message key="parar"/>" class="btn" onclick="stopExperto(); return false;">
+					<input type="button" id="Start" value="<fmt:message key="comenzar"/>" class="btn" onclick="lanzaExperto(); return false;"/>
+					<input type="button" id="Stop" value="<fmt:message key="parar"/>" class="btn" onclick="stopExperto(); return false;"/>
 				</p>
 			</form>
 		</div>

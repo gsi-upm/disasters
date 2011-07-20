@@ -1,108 +1,112 @@
 // Javascripts para los formularios
 
-function cambiaIcono(marcador,tipo,cantidad){
+function cambiaIcono(marcador, tipo, cantidad){
 	var nombre;
 	var imagen;
-	if (marcador=="event"){
-		if (tipo=="fire"){
-			imagen="markers/fuego.png";
-			nombre = 'Fuego';
+	if(marcador == 'event'){
+		if(tipo == 'fire'){
+			imagen = 'markers/fuego.png';
+			nombre = 'Incencio';
 		}
-		if (tipo=="flood"){
-			imagen="markers/agua.png";
-			nombre = 'Inundacion';
+		if(tipo == 'flood'){
+			imagen = 'markers/agua.png';
+			nombre = 'Inundación';
 		}
-		if (tipo=="collapse"){
-			imagen="markers/casa.png";
+		if(tipo == 'collapse'){
+			imagen = 'markers/casa.png';
 			nombre = 'Derrumbamiento';
 		}
-		if (tipo=="lostPerson"){
-			imagen="markers/personaPerdida.png";
+		if(tipo == 'lostPerson'){
+			imagen = 'markers/personaPerdida.png';
 			nombre = 'Persona perdida';
 		}
-		if (tipo=="injuredPerson"){
-			imagen="markers/personaHerida.png";
+		if(tipo == 'injuredPerson'){
+			imagen = 'markers/personaHerida.png';
 			nombre = 'Persona herida';
 		}
-		document.getElementById("icono_catastrofes").src=imagen;
+		document.getElementById('icono_catastrofes').src = imagen;
 		document.getElementById('catastrofes').nombre.value = nombre;
 	}
-	if (marcador=="resource"){
-		if (tipo=="police"){
-			imagen="markers/policia"+cantidad+".png";
+	if(marcador == 'resource'){
+		if(tipo == 'police'){
+			imagen = 'markers/policia' + cantidad + '.png';
 		}
-		if (tipo=="firemen"){
-			imagen="markers/bombero"+cantidad+".png";
+		if(tipo == 'firemen'){
+			imagen = 'markers/bombero' + cantidad + '.png';
 		}
-		if (tipo=="ambulance" || tipo=="ambulancia"){
-			imagen="markers/ambulancia"+cantidad+".png";
+		if(tipo == 'ambulance' || tipo == 'ambulancia'){
+			imagen = 'markers/ambulancia' + cantidad + '.png';
 		}
-		if (tipo=="nurse"){
-			imagen="markers/enfermero"+cantidad+".png";
+		if(tipo == 'nurse'){
+			imagen = 'markers/enfermero' + cantidad + '.png';
 		}
-		if (tipo=="gerocultor"){
-			imagen="markers/gerocultor"+cantidad+".png";
+		if(tipo == 'gerocultor'){
+			imagen = 'markers/gerocultor' + cantidad + '.png';
 		}
-		if (tipo=="assistant"){
-			imagen="markers/auxiliar"+cantidad+".png";
+		if(tipo == 'assistant'){
+			imagen = 'markers/auxiliar' + cantidad + '.png';
 		}
-		if (tipo=="otherStaff"){
-			imagen="markers/otro"+cantidad+".png";
+		if(tipo == 'otherStaff'){
+			imagen = 'markers/otro' + cantidad + '.png';
 		}
-		document.getElementById("icono_recursos").src=imagen;
+		document.getElementById('icono_recursos').src = imagen;
 	}
-	if (marcador=="people"){
-		if (tipo=="healthy"){
-			imagen="markers/sano"+cantidad+".png";
+	if(marcador == 'people'){
+		if(tipo == 'healthy'){
+			imagen = 'markers/sano' + cantidad + '.png';
+			nombre = 'Sano';
 		}
-		if (tipo=="slight"){
-			imagen="markers/leve"+cantidad+".png";
+		if(tipo == 'slight'){
+			imagen = 'markers/leve' + cantidad + '.png';
+			nombre = 'Leve';
 		}
-		if (tipo=="serious"){
-			imagen="markers/grave"+cantidad+".png";
+		if(tipo == 'serious'){
+			imagen = 'markers/grave' + cantidad + '.png';
+			nombre = 'Grave';
 		}
-		if (tipo=="dead"){
-			imagen="markers/muerto"+cantidad+".png";
+		if(tipo == 'dead'){
+			imagen = 'markers/muerto' + cantidad + '.png';
+			nombre = 'Muerto';
 		}
-		if (tipo=="trapped"){
-			imagen="markers/trapped"+cantidad+".png";
+		if(tipo == 'trapped'){
+			imagen = 'markers/trapped' + cantidad + '.png';
+			nombre = 'Atrapado';
 		}
-		document.getElementById("icono_heridos").src=imagen;
+		document.getElementById('icono_heridos').src = imagen;
+		document.getElementById('heridos').nombre.value = nombre;
 	}	
 }
 	
-function cambiaFlecha(i,numero){
-	if (i==0){
-		document.getElementById("validardireccion"+numero).src="images/iconos/confirm.png";
+function cambiaFlecha(i, numero){
+	if(i == 0){
+		document.getElementById('validardireccion'+numero).src = 'images/iconos/confirm.png';
 	}
-	if (i==1){
-		document.getElementById("validardireccion"+numero).src="images/iconos/confirm2.png";
+	if(i == 1){
+		document.getElementById('validardireccion'+numero).src = 'images/iconos/confirm2.png';
 	}
 } 	
 	
 function validarDireccion(numero){
-	
-	direccion = document.getElementById("direccion"+numero).value;
+	direccion = document.getElementById('direccion' + numero).value;
 	//alert (direccion);
 	
 	localizador.getLatLng(direccion,function(point) {
 		if (!point) {
-			document.getElementById("error_texto").innerHTML="La siguiente direccion no ha podido ser encontrada: <i>"+direccion+"</i>";
+			document.getElementById('error_texto').innerHTML = 'La siguiente direccion no ha podido ser encontrada: <i>'+direccion+'</i>';
 			$('#error').jqm().jqmShow();
-			//alert(direccion + " not found");
-			document.getElementById("validacion"+numero).src="images/iconos/no.png";
-		}
-		else {
+			//alert(direccion + ' not found');
+			document.getElementById('validacion'+numero).src = 'images/iconos/no.png';
+		}else {
 			map.setCenter(point, 15);
 			//alert(point);
-			document.getElementById("validacion"+numero).src="images/iconos/yes.png";
-			document.getElementById("validacion"+numero).alt="Direcci&oacute;n v&aacute;lida";
-			document.getElementById("latitud"+numero).value= point.lat();
-			document.getElementById("longitud"+numero).value= point.lng();
+			document.getElementById('validacion' + numero).src = 'images/iconos/yes.png';
+			document.getElementById('validacion' + numero).alt = 'Direcci&oacute;n v&aacute;lida';
+			document.getElementById('latitud' + numero).value = point.lat();
+			document.getElementById('longitud' + numero).value = point.lng();
 			//Esto es el puntero provisional
 			/*var marker = new GMarker(point);
        		map.addOverlay(marker);
-       		marker.openInfoWindowHtml("<b>My house</b> <br> Calle embajadores, 181");*/		
+       		marker.openInfoWindowHtml('<b>My house</b> <br/> Calle embajadores, 181');*/
 		}
 	});
 }
@@ -110,92 +114,96 @@ function validarDireccion(numero){
 function pinchaMapa(numero){
 	//var lat;
 	//var lng;
-	if (numero==0)$('#modificar').jqm().jqmHide();
+	limpiar = false;
+	if (numero == 0){
+		$('#modificar').jqm().jqmHide();
+	}
 	var handler = GEvent.addListener(map, 'click', function(overlay,point) {
-		document.getElementById("latitud"+numero).value= point.lat();
-		document.getElementById("longitud"+numero).value= point.lng();
-		if(numero!=0) $('#dialog'+numero).jqm().jqmShow();
-		else{
+		document.getElementById('latitud' + numero).value = point.lat();
+		document.getElementById('longitud' + numero).value = point.lng();
+		if(numero != 0){
+			$('#dialog'+numero).jqm().jqmShow();
+		}else{
 			$('#modificar').jqm().jqmShow();
-			document.getElementById("pincha").innerHTML="Posicion guardada. &iquest;Otra vez?";
+			document.getElementById('pincha').innerHTML = 'Posicion guardada. &iquest;Otra vez?';
 		}
-		//alert("Punto almacenado: "+point.lat()+", "+point.lng());
+		//alert('Punto almacenado: '+point.lat()+', '+point.lng());
 		GEvent.removeListener(handler);
 	} );
 }
 
 function iconoAdecuado(marcador,tipo,cantidad){
 	var imagen;
-	if (marcador=="event"){
-		imagen="markers/fuego.png"
-		if (tipo=="fire"){
-			imagen="markers/fuego.png";
+	if(marcador == 'event'){
+		imagen = 'markers/fuego.png'
+		if(tipo == 'fire'){
+			imagen = 'markers/fuego.png';
 		}
-		if (tipo=="flood"){
-			imagen="markers/agua.png";
+		if(tipo == 'flood'){
+			imagen = 'markers/agua.png';
 		}
-		if (tipo=="collapse"){
-			imagen="markers/casa.png";
+		if(tipo == 'collapse'){
+			imagen = 'markers/casa.png';
 		}
-		if (tipo=="lostPerson"){
-			imagen="markers/personaPerdida.png";
+		if(tipo == 'lostPerson'){
+			imagen = 'markers/personaPerdida.png';
 		}
-		if (tipo=="injuredPerson"){
-			imagen="markers/personaHerida.png";
-		}
-	}
-	if (marcador=="resource"){
-		imagen="markers/policia1.png";
-		if (tipo=="police"){
-			imagen="markers/policia"+cantidad+".png";
-		}
-		if (tipo=="firemen"){
-			imagen="markers/bombero"+cantidad+".png";
-		}
-		if (tipo=="ambulance" || tipo=="ambulancia"){
-			imagen="markers/ambulancia"+cantidad+".png";
-		}
-		if (tipo=="nurse"){
-			imagen="markers/enfermero"+cantidad+".png";
-		}
-		if (tipo=="gerocultor"){
-			imagen="markers/gerocultor"+cantidad+".png";
-		}
-		if (tipo=="assistant"){
-			imagen="markers/auxiliar"+cantidad+".png";
-		}
-		if (tipo=="otherStaff"){
-			imagen="markers/otro"+cantidad+".png";
+		if(tipo == 'injuredPerson'){
+			imagen = 'markers/personaHerida.png';
 		}
 	}
-	if (marcador=="people"){
-		imagen="markers/leve1.png";
-		if (tipo=="trapped"){
-			imagen="markers/trapped"+cantidad+".png";
+	if(marcador == 'resource'){
+		imagen = 'markers/policia1.png';
+		if(tipo == 'police'){
+			imagen = 'markers/policia' + cantidad + '.png';
 		}
-		if (tipo=="healthy"){
-			imagen="markers/sano"+cantidad+".png";
+		if(tipo == 'firemen'){
+			imagen = 'markers/bombero' + cantidad + '.png';
 		}
-		if (tipo=="slight"){
-			imagen="markers/leve"+cantidad+".png";
+		if(tipo == 'ambulance' || tipo=='ambulancia'){
+			imagen = 'markers/ambulancia' + cantidad + '.png';
 		}
-		if (tipo=="serious"){
-			imagen="markers/grave"+cantidad+".png";
+		if(tipo == 'nurse'){
+			imagen = 'markers/enfermero' + cantidad + '.png';
 		}
-		if (tipo=="dead"){
-			imagen="markers/muerto"+cantidad+".png";
+		if(tipo == 'gerocultor'){
+			imagen = 'markers/gerocultor' + cantidad + '.png';
+		}
+		if(tipo == 'assistant'){
+			imagen = 'markers/auxiliar' + cantidad + '.png';
+		}
+		if(tipo == 'otherStaff'){
+			imagen = 'markers/otro' + cantidad + '.png';
+		}
+	}
+	if(marcador == 'people'){
+		imagen = 'markers/leve1.png';
+		if(tipo == 'trapped'){
+			imagen = 'markers/trapped' + cantidad + '.png';
+		}
+		if(tipo == 'healthy'){
+			imagen = 'markers/sano' + cantidad + '.png';
+		}
+		if(tipo == 'slight'){
+			imagen = 'markers/leve' + cantidad + '.png';
+		}
+		if(tipo == 'serious'){
+			imagen = 'markers/grave' + cantidad + '.png';
+		}
+		if(tipo == 'dead'){
+			imagen = 'markers/muerto' + cantidad + '.png';
 		}
 	}
 	return imagen;
 }
 
-function borrarFormulario(form,numero){
-	form.nombre.value="nombre";
-	form.descripcion.value="descripcion";
-	form.info.value="info";
-	form.cantidad.value="1";
-	form.direccion.value="direccion";
-	form.latitud.value=0;
-	form.longitud.value=0;
-	document.getElementById("validacion"+numero).src="images/iconos/no.png"
+function borrarFormulario(form, numero){
+	form.nombre.value = 'nombre';
+	form.descripcion.value = 'descripcion';
+	form.info.value = 'info';
+	form.cantidad.value = '1';
+	form.direccion.value = 'direccion';
+	form.latitud.value = 0;
+	form.longitud.value = 0;
+	document.getElementById('validacion' + numero).src = 'images/iconos/no.png'
 }

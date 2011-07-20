@@ -57,12 +57,12 @@ $(document).ready(function() {
 		$('#console').slideUp();
 	});
 
-	$("#runSim").click(function() {
+	$('#runSim').click(function() {
 		$('#options2').show();
-		$('#runSim').val("run");
+		$('#runSim').val('run');
 	});
 
-	$("#pauseSim, #restartSim").click(function() {
+	$('#pauseSim, #restartSim').click(function() {
 		$('#options2').hide();
 	});
 });

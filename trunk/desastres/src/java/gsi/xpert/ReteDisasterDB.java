@@ -130,8 +130,7 @@ public class ReteDisasterDB {
 					+ newResource.getIdAssigned() + "##");
 			out.println("## New Resource: " + newResource.getType() + " - "
 					+ newResource.getName() + " (id:" + newResource.getId()
-					+ ") assigned:" + newResource.getIdAssigned() + "##"
-					+ "<br>");
+					+ ") assigned:" + newResource.getIdAssigned() + "##<br/>");
 			out.flush();//be careful with this!
 			resourcesHash.put(newResource.getId(), newResource);
 		}
@@ -154,7 +153,7 @@ public class ReteDisasterDB {
 	private void evaluateDisaster(Disaster disaster) throws JessException {
 		//rete.resetToMark(marcador);
 		System.out.println("Evaluamos desastre...");
-		out.println("Evaluamos desastre..." + "<br>");
+		out.println("Evaluamos desastre..." + "<br/>");
 		rete.add(disaster); // LANZA EXCEPCION!!! Jess reported an error in routine DefinstanceList.updateMultipleSlots. Message: Called method threw an exception.
 
 		rete.run();
@@ -170,10 +169,10 @@ public class ReteDisasterDB {
 		while (it.hasNext()) {
 			Assignment eval = (Assignment) it.next();
 			System.out.println("Assignement: " + eval.getMessage());
-			out.println("Assignement: " + eval.getMessage() + "<br>");
+			out.println("Assignement: " + eval.getMessage() + "<br/>");
 		}
 		System.out.println("Fin de evaluacion de desastre...");
-		out.println("Fin de evaluacion de desastre..." + "<br>");
+		out.println("Fin de evaluacion de desastre..." + "<br/>");
 	}
 
 	/**
@@ -331,7 +330,7 @@ public class ReteDisasterDB {
 					+ newDisaster.getId() + ") ##");
 			out.println("### New Disaster: " + newDisaster.getType() + " - "
 					+ newDisaster.getName() + " (id:" + newDisaster.getId()
-					+ ") ##" + "<br>");
+					+ ") ##<br/>");
 
 			disastersHash.put(newDisaster.getId(), newDisaster);
 			evaluateDisaster(newDisaster);
@@ -356,7 +355,7 @@ public class ReteDisasterDB {
 
 			Disaster dis = (Disaster) disastersHash.get(newPeople.getIdAssigned());
 			System.out.println("*** Updating Disaster Victims for " + dis.getName());
-			out.println("*** Updating Disaster Victims for " + dis.getName() + "<br>");
+			out.println("*** Updating Disaster Victims for " + dis.getName() + "<br/>");
 
 			/* TODO: Temporary solution until individual persons can be saved in
 			 * the database. Victims don't have to be default but must have the
@@ -422,7 +421,7 @@ public class ReteDisasterDB {
 				System.out.println("*** Updating Disaster... "
 						+ newDisaster.getName() + " - " + newDisaster.getState());
 				out.println("*** Updating Disaster... " + newDisaster.getName()
-						+ " - " + newDisaster.getState() + "<br>");
+						+ " - " + newDisaster.getState() + "<br/>");
 
 				Disaster old = (Disaster) disasters.get(newDisaster.getId());
 				old.setType(newDisaster.getType());
@@ -444,7 +443,7 @@ public class ReteDisasterDB {
 						+ newDisaster.getId() + ") ##");
 				out.println("### New Disaster: " + newDisaster.getType() + " - "
 						+ newDisaster.getName() + " (id:" + newDisaster.getId()
-						+ ") ##" + "<br>");
+						+ ") ##<br/>");
 
 				disasters.put(newDisaster.getId(), newDisaster);
 				evaluateDisaster(newDisaster);
@@ -476,7 +475,7 @@ public class ReteDisasterDB {
 					+ newPeople.getType());
 			out.println("*** Updating Disaster Victims for " + dis.getName()
 					+ " -- " + newPeople.getQuantity()
-					+ newPeople.getType() + "<br>");
+					+ newPeople.getType() + "<br/>");
 
 			/* TODO: Temporary solution until individual persons can be saved in
 			 * the database. Victims don't have to be default but must have the
