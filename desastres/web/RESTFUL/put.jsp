@@ -180,6 +180,21 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
+	<c:when test="${param.action eq 'registrar'}">
+		<c:catch var="errorInsert">
+			<sql:update dataSource="${CatastrofesServer}">
+				INSERT INTO usuarios (nombre_usuario, password, tipo_usuario)
+				VALUES (?, ?, 'citizen')
+				<sql:param value="${param.user}"/>
+				<sql:param value="${param.pass}"/>
+			</sql:update>
+			<sql:update dataSource="${CatastrofesServer}">
+				INSERT INTO relaciones (id_usuario, id_proyecto)
+				VALUES (SELECT id_usuarios FROM usuarios WHERE nombre_usuario = ?, 2)
+				<sql:param value="${param.user}"/>
+			</sql:update>
+		</c:catch>
+	</c:when>
 </c:choose>
 
 <c:choose>

@@ -37,7 +37,7 @@
 	<sql:param value="${param.sintomas}"/>
     <sql:param value="${param.id}"/>
 </sql:update>
-<c:if test="${param.estado == 'erased'}">
+<c:if test="${param.accion == 'eliminar'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
 		SET estado = 'active', modificado = <%=modif%>, idAssigned = 0

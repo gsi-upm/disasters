@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+			http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
@@ -30,6 +33,7 @@
         <servlet-name>XpertServlet</servlet-name>
         <url-pattern>/Xpert</url-pattern>
     </servlet-mapping>
+
     <!-- DWR -->
     <servlet>
         <servlet-name>dwr-invoker</servlet-name>
@@ -80,6 +84,14 @@
     <servlet-mapping>
         <servlet-name>MessagesServlet</servlet-name>
         <url-pattern>/messages</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RegistroServlet</servlet-name>
+        <servlet-class>gsi.proyect.RegistroServlet</servlet-class>
+    </servlet>
+	<servlet-mapping>
+        <servlet-name>RegistroServlet</servlet-name>
+        <url-pattern>/registro</url-pattern>
     </servlet-mapping>
     <!-- Filtering-->
     <filter>

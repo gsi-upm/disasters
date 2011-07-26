@@ -12,13 +12,25 @@
 
 <% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
 
-<sql:update dataSource="${CatastrofesServer}">
-    UPDATE CATASTROFES SET
-    latitud = ?, longitud = ?, modificado = <%=modif%> 
-    WHERE nombre = ?
-	AND estado != 'erased';
-    <sql:param value="${param.latitud}"/>
-    <sql:param value="${param.longitud}"/>
-    <sql:param value="${param.nombre}"/>
-</sql:update>  
+<c:if test="${param.nombre ne ''}">
+	<sql:update dataSource="${CatastrofesServer}">
+	    UPDATE CATASTROFES SET
+		latitud = ?, longitud = ?, modificado = <%=modif%>
+	    WHERE nombre = ?
+		AND estado != 'erased';
+		<sql:param value="${param.latitud}"/>
+		<sql:param value="${param.longitud}"/>
+		<sql:param value="${param.nombre}"/>
+	</sql:update>
+</c:if>
+<c:if test="${param.id ne ''}">
+	<sql:update dataSource="${CatastrofesServer}">
+	    UPDATE CATASTROFES SET
+		latitud = ?, longitud = ?, modificado = <%=modif%>
+	    WHERE id = ?;
+		<sql:param value="${param.latitud}"/>
+		<sql:param value="${param.longitud}"/>
+		<sql:param value="${param.id}"/>
+	</sql:update>
+</c:if>
 ok
