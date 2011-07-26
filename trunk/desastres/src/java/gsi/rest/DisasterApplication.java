@@ -55,10 +55,9 @@ public class DisasterApplication extends Application {
 	public Restlet createRoot() {
 		// Create a root router
 		Router router = new Router(getContext());
-
+		
 		// Getting data by Id
 		Restlet id = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector = URL_BASE + "get.jsp?action=id&id=" + request.getAttributes().get("id");
@@ -68,14 +67,12 @@ public class DisasterApplication extends Application {
 
 		// Get all data for a year
 		Restlet year = new Restlet() {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int year = Integer.parseInt((String) request.getAttributes().get("year"));
 				String redirector = URL_BASE + "get.jsp?action=year&year1="
 						+ year + "-01-01 00:00:01" + "&year2=" + (year + 1) + "-01-01 00:00:01";
 				//response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
-
 				//response.redirectPermanent(redirectorYear);
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -83,7 +80,6 @@ public class DisasterApplication extends Application {
 
 		// Get events by year
 		Restlet eventYear = new Restlet() {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int year = Integer.parseInt((String) request.getAttributes().get("year"));
@@ -95,7 +91,6 @@ public class DisasterApplication extends Application {
 
 		// Get resources by year
 		Restlet resourceYear = new Restlet() {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int year = Integer.parseInt((String) request.getAttributes().get("year"));
@@ -107,7 +102,6 @@ public class DisasterApplication extends Application {
 
 		// Get injured people by year
 		Restlet peopleYear = new Restlet() {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int year = Integer.parseInt((String) request.getAttributes().get("year"));
@@ -119,11 +113,9 @@ public class DisasterApplication extends Application {
 
 		// DELETE data by id
 		Restlet delId = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
-				String redirector = URL_BASE + "delete.jsp?action=id&id="
-						+ request.getAttributes().get("id");
+				String redirector = URL_BASE + "delete.jsp?action=id&id=" + request.getAttributes().get("id");
 				//response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -131,12 +123,9 @@ public class DisasterApplication extends Application {
 
 		// DELETE events
 		Restlet delEvents = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
-
 				String redirector = URL_BASE + "delete.jsp?action=events";
-
 				//response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -144,11 +133,9 @@ public class DisasterApplication extends Application {
 
 		// DELETE all
 		Restlet delAll = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector = URL_BASE + "delete.jsp?action=all";
-
 				//response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -156,18 +143,14 @@ public class DisasterApplication extends Application {
 
 		//Post Events in the database
 		Restlet post = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector = URL_BASE + "postFul.jsp?" + request.getAttributes().get("params") + "&date="
 						+ new Timestamp(new Date().getTime()).toString() + "&state=active&user=1";
-
 				//default anonymous user id is 1
 				//default state created is active
 				//date is right now!
-
 				//Hallar latitud y longitud en el jsp
-
 				//response.setEntity(redirector_year, MediaType.TEXT_PLAIN);
 				response.redirectPermanent(removeBlanks(redirector));
 			}
@@ -175,15 +158,12 @@ public class DisasterApplication extends Application {
 
 		//Updating Events in the database
 		Restlet put = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String parameter = (String) request.getAttributes().get("parameter");
 				int id = Integer.parseInt((String) request.getAttributes().get("id"));
 				String value = (String) request.getAttributes().get("value");
-
 				String redirector = URL_BASE + "put.jsp?action=" + parameter + "&id=" + id + "&" + "value=" + value;
-
 				if (parameter.equals("state")) {
 					if (!(value.equals("controlled") || value.equals("active") || value.equals("erased"))) {
 						response.setEntity("State format is not correct. (active, controlled or erased)", MediaType.TEXT_PLAIN);
@@ -195,42 +175,32 @@ public class DisasterApplication extends Application {
 
 		//Updating Events in the database
 		Restlet putLatLong = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int id = Integer.parseInt((String) request.getAttributes().get("id"));
 				String valueLat = (String) request.getAttributes().get("latitud");
 				String valueLong = (String) request.getAttributes().get("longitud");
-
 				String redirector = URL_BASE + "put.jsp?action=latlong&id=" + id + "&" + "latitud=" + valueLat + "&" + "longitud=" + valueLong;
-
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
 
 		//Increments 1 the quantity
 		Restlet putAdd = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int id = Integer.parseInt((String) request.getAttributes().get("id"));
 				String action = (String) request.getAttributes().get("action");
-
 				String redirector = URL_BASE + "put.jsp?action=" + action + "&id=" + id;
-
 				if (!(action.equals("add") || action.equals("remove"))) {
 					response.setEntity("Action is not correct (add or remove).", MediaType.TEXT_PLAIN);
 				}
-
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
 
-
-
 		//Increments latitud and longitud, used due to limitations to add float numbers in mobile
 		Restlet putInc = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int id = Integer.parseInt((String) request.getAttributes().get("id"));
@@ -238,21 +208,16 @@ public class DisasterApplication extends Application {
 				if (!(parameter.equals("latitud") || parameter.equals("longitud"))) {
 					response.setEntity("Parameter is not correct (latitud or longitud).", MediaType.TEXT_PLAIN);
 				}
-
 				Double valueParameter = Double.parseDouble((String) request.getAttributes().get("valueParameter"));
 				Double increment = Double.parseDouble((String) request.getAttributes().get("valueIncrement"));
-
 				valueParameter += increment;
-
 				String redirector = URL_BASE + "put.jsp?action=" + parameter + "&id=" + id + "&value=" + valueParameter;
-
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
 
 		// Get Events
 		Restlet evento = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String event = (String) request.getAttributes().get("event");
@@ -268,7 +233,6 @@ public class DisasterApplication extends Application {
 
 		// Get Resources
 		Restlet recurso = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String event = (String) request.getAttributes().get("resource");
@@ -282,10 +246,8 @@ public class DisasterApplication extends Application {
 			}
 		};
 
-
 		// Get injured people
 		Restlet persona = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String event = (String) request.getAttributes().get("people");
@@ -301,7 +263,6 @@ public class DisasterApplication extends Application {
 
 		// Get all data from a date
 		Restlet fecha = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				boolean fecha_correcta = true;
@@ -316,7 +277,6 @@ public class DisasterApplication extends Application {
 					if (year < 0 || month > 12 || day > 31) {
 						fecha_correcta = false;
 					}
-
 				}
 				//En caso de fecha no correcta pasando los 3 parametors, imprime un mensaje de error
 				//si se mete entera mal hace lo que puede...
@@ -331,7 +291,6 @@ public class DisasterApplication extends Application {
 
 		// Get all events from a date
 		Restlet eventDate = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				boolean fecha_correcta = true;
@@ -360,7 +319,6 @@ public class DisasterApplication extends Application {
 
 		// Get all resources from a date
 		Restlet resourceDate = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				boolean fecha_correcta = true;
@@ -375,7 +333,6 @@ public class DisasterApplication extends Application {
 					if (year < 0 || month > 12 || day > 31) {
 						fecha_correcta = false;
 					}
-
 				}
 				//En caso de fecha no correcta pasando los 3 parametors, imprime un mensaje de error
 				//si se mete entera mal hace lo que puede...
@@ -390,7 +347,6 @@ public class DisasterApplication extends Application {
 
 		// Get all injured people from a date
 		Restlet peopleDate = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				boolean fecha_correcta = true;
@@ -419,7 +375,6 @@ public class DisasterApplication extends Application {
 
 		// Get Resources from a disaster
 		Restlet resourcesAssociated = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int id = Integer.parseInt((String) request.getAttributes().get("id"));
@@ -430,7 +385,6 @@ public class DisasterApplication extends Application {
 
 		// Get Victims from a disaster
 		Restlet peopleAssociated = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				int id = Integer.parseInt((String) request.getAttributes().get("id"));
@@ -441,7 +395,6 @@ public class DisasterApplication extends Application {
 
 		// Get real Resources from another database
 		Restlet freeResources = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String event = (String) request.getAttributes().get("resource");
@@ -452,11 +405,9 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified events from a timestamp
 		Restlet eventsModified = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector_date = (String) request.getAttributes().get("dateTime");
-
 				String redirector = URL_BASE + "get.jsp?action=eventsModified&fecha=" + redirector_date;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -464,11 +415,9 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified victims from a timestamp
 		Restlet peopleModified = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector_date = (String) request.getAttributes().get("dateTime");
-
 				String redirector = URL_BASE + "get.jsp?action=peopleModified&fecha=" + redirector_date;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -476,24 +425,19 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified resources from a timestamp
 		Restlet resourcesModified = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector_date = (String) request.getAttributes().get("dateTime");
-
 				String redirector = URL_BASE + "get.jsp?action=resourcesModified&fecha=" + redirector_date;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
 
-
 		// Get all the modified events from a timestamp in XML
 		Restlet eventsModifiedXML = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector_date = (String) request.getAttributes().get("dateTime");
-
 				String redirector = URL_BASE + "get.jsp?mode=xml&action=eventsModified&fecha=" + redirector_date;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -501,11 +445,9 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified victims from a timestamp in XML
 		Restlet peopleModifiedXML = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector_date = (String) request.getAttributes().get("dateTime");
-
 				String redirector = URL_BASE + "get.jsp?mode=xml&action=peopleModified&fecha=" + redirector_date;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -513,11 +455,9 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified resources from a timestamp in XML
 		Restlet resourcesModifiedXML = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector_date = (String) request.getAttributes().get("dateTime");
-
 				String redirector = URL_BASE + "get.jsp?mode=xml&action=resourcesModified&fecha=" + redirector_date;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -525,7 +465,6 @@ public class DisasterApplication extends Application {
 
 		// Get all  events from a timestamp in XML
 		Restlet eventsXML = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector = URL_BASE + "get.jsp?mode=xml&action=item&item=event";
@@ -535,7 +474,6 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified victims in XML
 		Restlet peopleXML = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector = URL_BASE + "get.jsp?mode=xml&action=item&item=people";
@@ -545,7 +483,6 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified resources in XML
 		Restlet resourcesXML = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector = URL_BASE + "get.jsp?mode=xml&action=item&item=resource";
@@ -564,11 +501,9 @@ public class DisasterApplication extends Application {
 
 		// Get all the modified users
 		Restlet usersModified = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String redirector_date = (String) request.getAttributes().get("dateTime");
-
 				String redirector = URL_BASE + "get.jsp?action=usersModified&fecha=" + redirector_date;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
@@ -664,7 +599,6 @@ public class DisasterApplication extends Application {
 
 		// DELETE user
 		Restlet delUser = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String nombre = (String) request.getAttributes().get("nombre");
@@ -675,7 +609,6 @@ public class DisasterApplication extends Application {
 
 		// Introducir mensaje
 		Restlet message = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String valor = (String) request.getAttributes().get("valor");
@@ -687,7 +620,6 @@ public class DisasterApplication extends Application {
 
 		// Leer mensajes
 		Restlet messages = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String nivel = (String) request.getAttributes().get("nivel");
@@ -698,7 +630,6 @@ public class DisasterApplication extends Application {
 
 		// Leer mensajes desde una fecha
 		Restlet messagesDate = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String nivel = (String) request.getAttributes().get("nivel");
@@ -710,12 +641,21 @@ public class DisasterApplication extends Application {
 
 		// Leer mensajes desde un id
 		Restlet messagesId = new Restlet(getContext()) {
-
 			@Override
 			public void handle(Request request, Response response) {
 				String nivel = (String) request.getAttributes().get("nivel");
 				String index = (String) request.getAttributes().get("index");
 				String redirector = URL_BASE + "get.jsp?action=messagesId&nivel=" + nivel + "&index=" + index;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		Restlet registrar = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String user = (String) request.getAttributes().get("user");
+				String pass = (String) request.getAttributes().get("pass");
+				String redirector = URL_BASE + "put.jsp?action=registrar&user=" + user + "&pass=" + pass;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -798,6 +738,8 @@ public class DisasterApplication extends Application {
 		router.attach("/messages/{nivel}", messages);
 		router.attach("/messages/{nivel}/date/{fecha}", messagesDate);
 		router.attach("/messages/{nivel}/id/{index}", messagesId);
+
+		router.attach("/registrar/{user}/{pass}", registrar);
 
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);
 		//router.attachDefault(inicial);

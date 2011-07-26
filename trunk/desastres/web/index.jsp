@@ -31,6 +31,7 @@
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css"/>
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen"/>
+			<script type="text/javascript" src="js/i18n.js"></script>
 			<!--[if lt IE 9]>
 				<script type="text/javascript" src="js/mensajeIE.js"></script>
 				<script type="text/javascript"><fmt:message key="mensajeIE"/></script>
@@ -42,7 +43,11 @@
 				<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 				<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false&language=es&region=ES"></script>
 			-->
-			<script type="text/javascript">var nivelMsg = ${proyecto.nivelMsg}; var nombreUsuario = '${nombreUsuario}';</script>
+			<script type="text/javascript">
+				var nivelMsg = ${proyecto.nivelMsg};
+				var nombreUsuario = '${nombreUsuario}';
+				var idioma = '<fmt:message key="idioma"/>';
+			</script>
 			<script type="text/javascript" src="js/mapa_${proyecto.proyect}.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>  <!-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin -->
 			<script type="text/javascript" src="js/mapa2.js"></script>
@@ -94,11 +99,11 @@
 						<!--reloj -->
 						<div id="reloj">
 							<div id="fecha">
-								<script type="text/javascript"><fmt:message key="mostrarfecha"/></script>
+								<script type="text/javascript">MostrarFechaActual()</script>
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
-						v.72 <span id="prueba"></span>
+<!--SPAN DE PRUEBAS -->	v.73 <span id="prueba"></span>
 					</td>
 				</tr>
 			</table>
@@ -113,6 +118,7 @@
 								<div id="login">
 									<form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="post" id="loginform">
 										<table>
+											<tr><td id="regMsg" colspan="2" style="color:lime"></td></tr>
 											<tr>
 												<td><fmt:message key="usuario"/>:</td>
 												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" size="26"/></td>
@@ -125,30 +131,37 @@
 												<td colspan="2"><input type="submit" name="Submit" id="submit_butt" value="<fmt:message key="aceptar"/>"/></td>
 											</tr>
 										</table>
-										<p style="display:none">
+										<p>
 											&iquest;No est&aacute; registrado?
 											<input type="button" value="Registrarse" onclick="registro()"/>
 										</p>
 									</form>
 									<form action="#" id="registro" style="display:none">
 										<table>
-											<tr>
+											<tr><td id="userError" colspan="2" style="color:red"></td></tr>
+											<tr id="user1">
 												<td>Nombre usuario</td>
 												<td><input type="text" name="user1"size="26"/></td>
 											</tr>
-											<tr>
+											<tr id="user2">
 												<td>Repetir nombre</td>
 												<td><input type="text" name="user2"size="26"/></td>
 											</tr>
-											<tr>
+											<tr><td id="passError" colspan="2" style="color:red"></td></tr>
+											<tr id="pass1">
 												<td>Contraseña</td>
 												<td><input type="password" name="pass1"size="26"/></td>
 											</tr>
-											<tr>
+											<tr id="pass2">
 												<td>Repetir contraseña</td>
 												<td><input type="password" name="pass2"size="26"/></td>
 											</tr>
-											<tr><td><input type="button" value="Aceptar" onclick="registrar(user1.value, user2.value, pass1.value, pass2.value)"/></td></tr>
+											<tr>
+												<td colspan="2">
+													<input type="button" value="Aceptar" onclick="registrar(user1.value, user2.value, pass1.value, pass2.value)"/>
+													<input type="button" value="Cancelar" onclick="cancelarRegistro()"/>
+												</td>
+											</tr>
 										</table>
 									</form>
 								</div>

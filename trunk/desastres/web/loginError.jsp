@@ -10,6 +10,8 @@
 			<title><fmt:message key="title_${proyecto.proyect}"/> - Acceso denegado</title>
 			<link type="image/x-icon" rel="shotcut icon" href="images/favicon_${proyecto.proyect}.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
+			<script type="text/javascript" src="js/i18n.js"></script>
+			<script type="text/javascript">var idioma = '<fmt:message key="idioma"/>'</script>
 			<script type="text/javascript" src="js/hora_fecha.js"></script>
 		</head>
 		<body onload="IniciarReloj24()">
@@ -21,11 +23,11 @@
 					<td align="right">
 						<div id="reloj">
 							<div id="fecha">
-								<script type="text/javascript"><fmt:message key="mostrarfecha"/></script>
+								<script type="text/javascript">MostrarFechaActual()</script>
 							</div>
 							<form id="Reloj24H" action="">
 								<div>
-									<input style="background:transparent; border:0px #999999; color:#999999; text-align:center; font-size:18pt; font-weight:bold" type="text" size="8" name="digitos" value="">
+									<input type="text" size="8" name="digitos" value="" style="background:transparent; border:0px #999999; color:#999999; text-align:center; font-size:18pt; font-weight:bold">
 								</div>
 							</form>
 						</div>

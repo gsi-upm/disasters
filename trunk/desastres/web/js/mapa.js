@@ -104,6 +104,23 @@ function initialize() {
 
 		if(navigator.geolocation){
 			navigator.geolocation.getCurrentPosition(coordenadasUsuario);
+		}else{
+			$.getJSON('getLatLong.jsp',{
+				'nombre':userName
+			}, function(data){
+				$.each(data, function(entryIndex, entry) {
+					var lat = entry['latitud'];
+					var lng = entry['longitud'];
+					var icono = new GIcon();
+					icono.image = 'markers/user.png';
+					icono.iconSize = new GSize(28, 43);
+					icono.iconAnchor = new GPoint(28, 43);
+					var opciones = {
+						icon:icono
+					};
+					var marker = new GMarker(new GLatLng(lat,lng), opciones);
+				});
+			});
 		}
 
 		if(nivelMsg > 0){
@@ -115,8 +132,10 @@ function initialize() {
 }
 
 function coordenadasUsuario(pos){
-	latitudUser = pos.coords.latitude;
-	longitudUser = pos.coords.longitude;
+	//* PRUEBAAA!!! **************************************************************
+	latitudUser = 38.232062 + (2*Math.random()-1)*0.0001 // pos.coords.latitude;
+	longitudUser = -1.698394 + (2*Math.random()-1)*0.0001 // pos.coords.longitude;
+	//****************************************************************************
 	
 	if(nivelMsg==null || nivelMsg==0){
 		var icono = new GIcon();
@@ -130,19 +149,11 @@ function coordenadasUsuario(pos){
 		map.addOverlay(marker);
 	}
 
-	if(userName != null && nivelMsg > 1){
-		/*$.post('updateLatLong.jsp',{
+	if(userName != null && nivelMsg > 0){
+		$.post('updateLatLong.jsp',{
 			'nombre':userName,
 			'latitud':latitudUser,
 			'longitud':longitudUser
-		});*/
-		//*************
-		// PRUEBAAA!!!
-		//*************
-		$.post('updateLatLong.jsp',{
-			'nombre':userName,
-			'latitud':38.232062 + (2*Math.random()-1)*0.0001,
-			'longitud':-1.698394 + (2*Math.random()-1)*0.0001
 		});
 	}
 }
@@ -207,6 +218,10 @@ function actualizar(){
 			}
 		});
 	});
+
+	if(navigator.geolocation && nivelMsg > 0){
+		navigator.geolocation.getCurrentPosition(coordenadasUsuario);
+	}
 
 	ultimamodif = obtiene_fecha();
 	timeout = setTimeout('actualizar()', tiempoActualizacion);
@@ -465,8 +480,8 @@ function generaMarcador(evento, caracter){
 		}
 
 		opciones = {
-			icon:icono,
-			draggable: false //No se puede arrastrar
+			icon:icono//,
+			//draggable: false //No se puede arrastrar
 		}; 
 	}
 	//es una victima
@@ -520,8 +535,8 @@ function generaMarcador(evento, caracter){
 		icono.iconAnchor = new GPoint(10, 40);
 		icono.infoWindowAnchor = new GPoint(5, 1);
 		opciones = {
-			icon:icono,
-			draggable: true //Se pueden arrastrar para asociarlo
+			icon:icono//,
+			//draggable: true //Se pueden arrastrar para asociarlo
 		}; 
 	}
 
@@ -645,14 +660,32 @@ function generaMarcador(evento, caracter){
 			map.closeInfoWindow();
 		});
 
-		GEvent.addListener(marker, 'dragend', function(overlay,point){
+		GEvent.addListener(marker, 'dragend', function(){
 			//var asociada = asociar(evento.id, evento.marker);
 			/*marker.openInfoWindowHtml('<div id="bocadillo">Asociado a cat&aacute;strofe: <br/>' + marcadores_definitivos[asociada].nombre
 				+ '<br/><a id="guardar_asociacion" href="#" onclick="guardar_asociacion(' + asociada + ',' + evento.id + '); return false;"> Guardar </a>'
 				+ ' - ' + '<a id="cancelar" href="#" onclick="cancelar_asignacion(' + evento.id + '); return false;"> Cancelar </a></div>');*/
 			marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>' +
-				'<a id="confirmar" href="#" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id + ',' + point + ')" > Confirmar </a>'+ ' - ' +
+				'<a id="confirmar" href="#" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
+				',' + marker.getLatLng().lat() + ',' + marker.getLatLng().lng() + ')" > Confirmar </a>'+ ' - ' +
 				'<a id="cancelar" href="#" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');"> Cancelar </a></div>');
+		});
+
+		GEvent.addListener(marker, 'dblclick', function(){
+			marker.openInfoWindowHtml('¿Donde desea moverlo?');
+			var event = GEvent.addListener(map, 'click', function(overlay, latlng){
+				var nuevaLat = latlng.lat();
+				var nuevaLong = latlng.lng();
+				var nuevaPos = new GLatLng(nuevaLat, nuevaLong);
+				map.removeOverlay(marker);
+				marker.setLatLng(nuevaPos);
+				map.addOverlay(marker);
+				marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>' +
+				'<a id="confirmar" href="#" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
+				',' + nuevaLat + ',' + nuevaLong + ')" > Confirmar </a>'+ ' - ' +
+				'<a id="cancelar" href="#" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');"> Cancelar </a></div>');
+				GEvent.removeListener(event);
+			});
 		});
 
 		GEvent.addListener(marker, 'infowindowclose', function() {
@@ -771,7 +804,8 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 			'idAssigned':idAssigned,
 			'fecha':puntero_temp.fecha,
 			'usuario':usuario_actual,
-			'sintomas':sintomas
+			'sintomas':sintomas,
+			'accion':'modificar'
 		});
 	//actualizar();
 	}
@@ -802,7 +836,8 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traf
 		'idAssigned':idA,
 		'fecha':puntero.fecha,
 		'usuario':usuario_actual,
-		'sintomas':puntero.sintomas
+		'sintomas':puntero.sintomas,
+		'accion':'modificar'
 	});
 	
 	registrarHistorial(userName, id, 'modif');
@@ -841,7 +876,8 @@ function modificar3(id,tipo,fatigue,fever,dyspnea,nausea,headache,vomiting,abdom
 		'idAssigned':puntero.idAssigned,
 		'fecha':puntero.fecha,
 		'usuario':usuario_actual,
-		'sintomas':sintomas
+		'sintomas':sintomas,
+		'accion':'modificar'
 	});
 }
 
@@ -1049,10 +1085,14 @@ function cancelar_asignacion(id){
 	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
 }
 
-function guardar_posicion(id, point){
-	var marcador = marcadores_definitivos[id];
-	modificar(marcador.id, marcador.cantidad, marcador.nombre, marcador.info, marcador.descripcion, marcador.direccion,
-		point.lng(), point.lat(), marcador.estado, marcador.size, marcador.traffic, marcador.idAssigned);
+function guardar_posicion(id, lat, lng){
+	marcadores_definitivos[id].marker.setLatLng(new GLatLng(lat, lng));
+	$.post('updateLatLong.jsp',{
+		'id':id,
+		'latitud':lat,
+		'longitud':lng
+	});
+	registrarHistorial(userName, id, 'mover');
 }
 
 function eliminar(puntero,caracter){
@@ -1073,12 +1113,13 @@ function eliminar(puntero,caracter){
 				'latitud':puntero.latitud,
 				'longitud':puntero.longitud,
 				'direccion':puntero.direccion,
-				'estado':puntero.estado,
+				'estado':'active',
 				'size':puntero.size,
 				'traffic':puntero.traffic,
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
-				'usuario':usuario_actual
+				'usuario':usuario_actual,
+				'accion':'eliminar'
 			});
 			registrarHistorial(userName, puntero.id, 'modif');
 		}else{
@@ -1098,7 +1139,8 @@ function eliminar(puntero,caracter){
 				'traffic':puntero.traffic,
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
-				'usuario':usuario_actual
+				'usuario':usuario_actual,
+				'accion':'eliminar'
 			});
 			registrarHistorial(userName, puntero.id, 'eliminar');
 		}
@@ -1137,7 +1179,8 @@ function obtiene_fecha() {
 
 function mostrarSanos(mostrar){
 	verSanos = mostrar;
-	for(i=1; i<marcadores_definitivos.length; i++){
+	//for(i=1; i<marcadores_definitivos.length; i++){
+	for(i in marcadores_definitivos){
 		if(marcadores_definitivos[i].tipo == 'healthy'){
 			if(mostrar){
 				map.addOverlay(marcadores_definitivos[i].marker);
@@ -1156,6 +1199,8 @@ function registrarHistorial(usuario, idEvento, accion){
 		evento = 'Emergencia ' + idEvento + ' modificada por ' + usuario;
 	}else if(accion == 'eliminar'){
 		evento = 'Emergencia ' + idEvento + ' eliminada por ' + usuario;
+	}else if(accion == 'mover'){
+		evento = 'Emergencia ' + idEvento + ' cambiada de sitio por ' + usuario;
 	}else{
 		evento = 'El usuario ' + usuario + ' ha actuado sobre ' + idEvento + ' - ' + accion;
 	}
