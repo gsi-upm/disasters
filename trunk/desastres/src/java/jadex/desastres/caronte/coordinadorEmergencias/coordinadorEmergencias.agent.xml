@@ -36,7 +36,7 @@
 		
 		<!-- Definimos la posicion de la residencia -->
 		<belief name="residencia" class="Position">
-			<fact>new Position(38.232237, -1.699016)</fact>
+			<fact>new Position(38.232272, -1.698925)</fact>
 		</belief>
 
 		<!-- id del desastre que tienen que atender-->

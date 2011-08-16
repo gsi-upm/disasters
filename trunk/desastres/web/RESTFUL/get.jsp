@@ -267,8 +267,7 @@
 
 	<c:when test="${param.action eq 'user'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id_usuarios, nombre_usuario, password, tipo_usuario
-				   FROM usuarios
+				   SELECT * FROM usuarios
 				   WHERE nombre_usuario = ?
 				   AND password = ?;">
 			<sql:param value="${param.nombre_usuario}"/>
@@ -386,9 +385,11 @@
 				<json:property name="idAssigned" value="${evento.idAssigned}"/>
 				<json:property name="date" value="${evento.fecha}"/>
 				<json:property name="modified" value="${evento.modificado}"/>
+				<json:property name="sintomas" value="${evento.sintomas}"/>
 				<json:property name="user_name" value="${evento.nombre_usuario}"/>
 				<json:property name="user_type" value="${evento.tipo_usuario}"/>
-				<json:property name="sintomas" value="${evento.sintomas}"/>
+				<json:property name="real_name" value="${evento.nombre_real}"/>
+				<json:property name="email" value="${evento.correo}"/>
 			</json:object> ,
 		</c:forEach>
 		<c:forEach var="proyecto" items="${proyectos.rows}">

@@ -30,13 +30,15 @@ public class RegistroServlet extends HttpServlet {
 		try {
 			String usuario = request.getParameter("user");
 			String contraAux = request.getParameter("pass");
+			String nombre = request.getParameter("nombre");
+			String email = request.getParameter("email");
 			String contra = MD5(contraAux);
 
 			String rolAux = Connection.connect(Environment.URL + "userProyect/" + usuario);
 			JSONArray rol = new JSONArray(rolAux);
 
 			if(rol.length() == 0){
-				String registro = Connection.connect(Environment.URL + "registrar/" + usuario + "/" + contra);
+				String registro = Connection.connect(Environment.URL + "registrar/" + usuario + "/" + contra + "/" + nombre + "/" + email);
 				out.print("ok");
 			}else{
 				out.print("no");

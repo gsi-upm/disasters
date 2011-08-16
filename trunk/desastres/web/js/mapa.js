@@ -31,18 +31,23 @@ var usuario_actual_tipo;
 
 var tiempoActualizacion = 1500;
 var tiempoInicial = 5000;
+var contador = 0;
 
-var userName = null;
+//var userName = null;
 var latitudUser = 0;
 var longitudUser = 0;
 
 var verSanos = false;
 var limpiar = true;
+var localizacion = navigator.geolocation;
+var resi; // marcador de la imagen de la residencia
+var centroAux = new Array();
+var puntoAux;
 
-function initialize() {
-	if (GBrowserIsCompatible()) {
+function initialize(proyecto){
+	if(GBrowserIsCompatible()){
 		/* GOOGLE MAPS v3
-		center = new google.maps.LatLng(38.232276, -1.699829); // Calasparra, Murcia (geriatrico)
+		center = new google.maps.LatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
 		var myOptions = {center:center, zoom:18, mapTypeId:google.maps.MapTypeId.ROADMAP};
 		map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
 		*/
@@ -57,6 +62,37 @@ function initialize() {
 		map.addControl(new GLargeMapControl()); //controles completos
 		map.addControl(new GScaleControl ()); //Escala
 		map.addControl(new GMapTypeControl()); //mapa, foto, hibrido
+
+		GEvent.addListener(map, 'zoomend', function(oldZoom, newZoom){
+			if(newZoom == 21 && map.getCurrentMapType().getName() == 'Mapa'){
+				map.addOverlay(resi);
+			}else if(newZoom < 21){
+				map.removeOverlay(resi);
+			}
+		});
+
+		GEvent.addListener(map, 'maptypechanged', function(){
+			var tipo = map.getCurrentMapType().getName();
+			if(tipo != 'Mapa'){
+				map.removeOverlay(resi);
+			}else{
+				if(map.getZoom() == 21){
+					map.addOverlay(resi);
+				}
+			}
+		});
+
+		var icono = new GIcon();
+		icono.image = 'images/residencia/planta0.jpg';
+		icono.iconSize = new GSize(733, 585);
+		icono.iconAnchor = new GPoint(367, 292);
+		var opciones = {
+			icon:icono,
+			clickable:false,
+			zIndexProcess:fondo
+		};
+		resi = new GMarker(new GLatLng(38.232272,-1.698925), opciones);
+		map.addOverlay(resi);
 
 		//inicializamos los arrays
 		marcadores_definitivos = new Array;
@@ -85,7 +121,7 @@ function initialize() {
 					entry['quantity'],entry['name'],entry['description'],entry['info'],
 					entry['latitud'],entry['longitud'],entry['address'],entry['state'],
 					entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
-					null,entry['size'],entry['traffic'],entry['idAssigned'],null);
+					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['weight'],entry['mobility'],null);
 
 				nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 				marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
@@ -95,53 +131,50 @@ function initialize() {
 		});
 		ultimamodif = obtiene_fecha();
 
-		setTimeout('moveAgents()',2000);
-		setTimeout('actualizar()',tiempoInicial);
-
-		if(document.getElementById('signeduser') != null){
+		/*if(document.getElementById('signeduser') != null){
 			userName = document.getElementById('signeduser').innerHTML;
-		}
+		}*/
 
-		if(navigator.geolocation){
-			navigator.geolocation.getCurrentPosition(coordenadasUsuario);
-		}else{
+		if(userName != null){
+			if(localizacion == null){
+				document.getElementById('form-posicion').localizacion.style.display = 'none';
+			}
 			$.getJSON('getLatLong.jsp',{
 				'nombre':userName
 			}, function(data){
-				$.each(data, function(entryIndex, entry) {
-					var lat = entry['latitud'];
-					var lng = entry['longitud'];
-					var icono = new GIcon();
-					icono.image = 'markers/user.png';
-					icono.iconSize = new GSize(28, 43);
-					icono.iconAnchor = new GPoint(28, 43);
-					var opciones = {
-						icon:icono
-					};
-					var marker = new GMarker(new GLatLng(lat,lng), opciones);
+				$.each(data, function(entryIndex, entry){
+					latitudUser = entry['latitud'];
+					longitudUser = entry['longitud'];
+					if(localizacion){ // si el navegador soporta geolocalizacion (valor inicial)
+						localizacion = entry['localizacion']; // entonces valor por defecto del usuario
+						document.getElementById('form-posicion').localizacion.checked = localizacion;
+					}
 				});
 			});
 		}
 
-		if(nivelMsg > 0){
-			if(document.getElementById('heridos').verSanos.checked){
-				verSanos = true;
-			}
+		if(localizacion){
+			navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 		}
+
+		initialize2(); /* en mapa_xxx.js */
+
+		setTimeout('moveAgents()',2000);
+		setTimeout('actualizar()',tiempoInicial);
 	}
 }
 
 function coordenadasUsuario(pos){
-	//* PRUEBAAA!!! **************************************************************
-	latitudUser = 38.232062 + (2*Math.random()-1)*0.0001 // pos.coords.latitude;
-	longitudUser = -1.698394 + (2*Math.random()-1)*0.0001 // pos.coords.longitude;
+	// PRUEBAAA!!! ***************************************************************
+	latitudUser = 38.232272 + (2*Math.random()-1)*0.0001 // pos.coords.latitude;
+	longitudUser = -1.698925 + (2*Math.random()-1)*0.0001 // pos.coords.longitude;
 	//****************************************************************************
 	
 	if(nivelMsg==null || nivelMsg==0){
 		var icono = new GIcon();
 		icono.image = 'markers/user.png';
 		icono.iconSize = new GSize(28, 43);
-		icono.iconAnchor = new GPoint(28, 43);
+		icono.iconAnchor = new GPoint(14, 43);
 		var opciones = {
 			icon:icono
 		};
@@ -158,6 +191,61 @@ function coordenadasUsuario(pos){
 	}
 }
 
+function findPos(lat, lng, dir){
+	if(dir != ''){
+		localizador.getLatLng(dir, function(point){
+			localizador.getLocations(point,function(response){
+				if(response.Status.code == 200){
+					document.getElementById('form-posicion').direccion.value = response.Placemark[0].address;
+					document.getElementById('form-posicion').longitud.value = response.Placemark[0].Point.coordinates[0];
+					document.getElementById('form-posicion').latitud.value = response.Placemark[0].Point.coordinates[1];
+					var coorAux = new GLatLng(response.Placemark[0].Point.coordinates[1],response.Placemark[0].Point.coordinates[0]);
+					puntoAux = new GMarker(coorAux);
+					map.setCenter(coorAux,14);
+					map.addOverlay(puntoAux);
+				}
+			});
+		});
+	}else{
+		localizador.getLocations(new GLatLng(lat,lng),function(response){
+			if(response.Status.code == 200){
+				document.getElementById('form-posicion').direccion.value = response.Placemark[0].address;
+				document.getElementById('form-posicion').longitud.value = response.Placemark[0].Point.coordinates[0];
+				document.getElementById('form-posicion').latitud.value = response.Placemark[0].Point.coordinates[1];
+				var coorAux = new GLatLng(response.Placemark[0].Point.coordinates[1],response.Placemark[0].Point.coordinates[0]);
+				puntoAux = new GMarker(coorAux);
+				map.setCenter(coorAux,14);
+				map.addOverlay(puntoAux);
+			}
+		});
+	}
+}
+
+function newPos(lat, lng, porDefecto){
+	if(porDefecto){
+		document.getElementById('form-posicion').porDefecto.checked = false;
+		$.post('updateLatLong.jsp',{
+			'nombre':userName,
+			'latitud':lat,
+			'longitud':lng,
+			'porDefecto':true
+		});
+	}
+	$.post('updateLatLong.jsp',{
+		'nombre':userName,
+		'latitud':lat,
+		'longitud':lng
+	});
+}
+
+function fondo(marker, b){
+	return -100000;
+}
+
+function orden(marker, b){
+	return 1;
+}
+
 function actualizar(){
 	//cada 10 segundos hacemos la peticion actualizadora de json
 	$.getJSON('leeEventos.jsp', {
@@ -171,7 +259,7 @@ function actualizar(){
 				entry['quantity'],entry['name'],entry['description'],entry['info'],
 				entry['latitud'],entry['longitud'],entry['address'],entry['state'],
 				entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
-				null,entry['size'],entry['traffic'],entry['idAssigned'],null);
+				null,entry['size'],entry['traffic'],entry['idAssigned'],entry['weight'],entry['mobility'],null);
 
 			//pintamos los nuevos, para lo que comprobamos que no existian
 			if(marcadores_definitivos[nuevomarcador.id] == null){
@@ -219,7 +307,9 @@ function actualizar(){
 		});
 	});
 
-	if(navigator.geolocation && nivelMsg > 0){
+	contador++;
+	if(localizacion && nivelMsg > 0 && contador >= 4){
+		contador = 0;
 		navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 	}
 
@@ -241,7 +331,7 @@ function showPoliceStations(){
 	generateBuilding('policeStation','Ayuntamiento y Polic&iacute;a municipal', 38.231125, -1.697560); // Calasparra, Murcia
 }
 function showGeriatricCenters(){
-	generateBuilding('geriatricCenter','Residencia Virgen de la Esperanza', 38.232237, -1.699016); // Calasparra, Murcia
+	generateBuilding('geriatricCenter','Residencia Virgen de la Esperanza', 38.232272, -1.698925); // Calasparra, Murcia
 }
 
 function generateBuilding(type, mensaje, latitud, longitud){
@@ -272,26 +362,28 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	//icono.shadow = 'markers/shadow50.png';
 	icono.iconSize = new GSize(50, 49);
 	//icono.shadowSize = new GSize(43, 43);
-	icono.iconAnchor = new GPoint(25, 40);
+	icono.iconAnchor = new GPoint(25, 49);
 	icono.infoWindowAnchor = new GPoint(5, 1);
 	var opciones = {
-		icon:icono
+		icon:icono,
+		zIndexProcess:orden
 	}; //se pueden arrastrar para asociarlo
 
 	var marker = new GMarker (new GLatLng(latitud,longitud), opciones);
 	if(type == 'geriatricCenter'){
 		var lineas = new Array();
-		var latMax = 38.232634;
-		var latMin = 38.231943;
-		var longMax = -1.698201;
-		var longMin = -1.699622;
+		var esquina1 = [38.232440, -1.699160]; // desplazado (-0.000095, 0.000120)
+		var esquina2 = [38.232380, -1.698640];
+		var esquina3 = [38.232105, -1.698690];
+		var esquina4 = [38.232165, -1.699210];
 		var color = '#00ff00';
 		var anchura = 1;
 		var opacidad = 0.5;
-		lineas[0] = new GPolyline([new GLatLng(latMax, longMin), new GLatLng(latMax, longMax)], color, anchura, opacidad);
-		lineas[1] = new GPolyline([new GLatLng(latMax, longMax), new GLatLng(latMin, longMax)], color, anchura, opacidad);
-		lineas[2] = new GPolyline([new GLatLng(latMin, longMax), new GLatLng(latMin, longMin)], color, anchura, opacidad);
-		lineas[3] = new GPolyline([new GLatLng(latMin, longMin), new GLatLng(latMax, longMin)], color, anchura, opacidad);
+
+		lineas[0] = new GPolyline([new GLatLng(esquina1[0],esquina1[1]), new GLatLng(esquina2[0],esquina2[1])], color, anchura, opacidad);
+		lineas[1] = new GPolyline([new GLatLng(esquina2[0],esquina2[1]), new GLatLng(esquina3[0],esquina3[1])], color, anchura, opacidad);
+		lineas[2] = new GPolyline([new GLatLng(esquina3[0],esquina3[1]), new GLatLng(esquina4[0],esquina4[1])], color, anchura, opacidad);
+		lineas[3] = new GPolyline([new GLatLng(esquina4[0],esquina4[1]), new GLatLng(esquina1[0],esquina1[1])], color, anchura, opacidad);
 		GEvent.addListener(marker, 'click', function() {
 			marker.openInfoWindowHtml('<div id="bocadillo">' + mensaje + '</div>');
 			for(i=0; i<4; i++){
@@ -433,6 +525,7 @@ function generaMarcador(evento, caracter){
 
 		opciones = {
 			icon:icono,
+			zIndexProcess:orden,
 			draggable: true //Para que se pueda arrastrar
 		}; 
 	}
@@ -480,8 +573,9 @@ function generaMarcador(evento, caracter){
 		}
 
 		opciones = {
-			icon:icono//,
-			//draggable: false //No se puede arrastrar
+			icon:icono,
+			zIndexProcess:orden
+		//draggable: false //No se puede arrastrar
 		}; 
 	}
 	//es una victima
@@ -532,11 +626,12 @@ function generaMarcador(evento, caracter){
 		icono.shadow = 'markers/shadow50.png';
 		icono.iconSize = new GSize(28, 43);
 		icono.shadowSize = new GSize(43, 43);
-		icono.iconAnchor = new GPoint(10, 40);
+		icono.iconAnchor = new GPoint(14, 43);
 		icono.infoWindowAnchor = new GPoint(5, 1);
 		opciones = {
-			icon:icono//,
-			//draggable: true //Se pueden arrastrar para asociarlo
+			icon:icono,
+			zIndexProcess:orden
+		//draggable: true //Se pueden arrastrar para asociarlo
 		}; 
 	}
 
@@ -619,32 +714,59 @@ function generaMarcador(evento, caracter){
 				document.getElementById('icono_heridos').src = 'markers/' + tipo + '1.png';
 				document.getElementById('sintomas').style.display = 'block';
 				document.getElementById('emergencia').value = evento.idAssigned;
-			}
-
-			for(i=0; i<5; i++){
-				if(lateral.tipo[i].value == evento.tipo){
-					lateral.tipo[i].checked = 'checked';
-					if(evento.marcador == 'event'){
-						cambiaIcono('event',evento.tipo);
-					}else if(evento.marcador == 'people'){
-						cambiaIcono('people',evento.tipo,1);
-					}
+			}else if(evento.marcador == 'resource'){
+				document.getElementById('listaRecursos').style.display = 'none';
+				document.getElementById('datos').style.display = 'block';
+				document.getElementById('datos-usuario').innerHTML = evento.nombre;
+				document.getElementById('datos-nombre').innerHTML = evento.descripcion;
+				document.getElementById('datos-correo').innerHTML = evento.info;
+				if(evento.nombre == userName){
+					document.getElementById('form-posicion').style.display = 'block';
+					document.getElementById('form-posicion').localizacion.checked = localizacion;
+					document.getElementById('form-posicion').latitud.value = evento.latitud;
+					document.getElementById('form-posicion').longitud.value = evento.longitud;
+					document.getElementById('form-posicion').direccion.value = '';
+					centroAux = [map.getCenter(),map.getZoom()];
 				}
 			}
-			lateral.nombre.value = evento.nombre;
-			lateral.info.value = evento.info;
-			lateral.descripcion.value = evento.descripcion;
-			lateral.direccion.value = evento.direccion;
-			lateral.iden.value = evento.id;
-			if(evento.marcador == 'event'){
-				for(i=0; i<4; i++){
-					if(lateral.size[i].value == evento.size){
-						lateral.size[i].selected = 'selected';
+			
+			if(lateral != null){
+				for(i=0; i<5; i++){
+					if(lateral.tipo[i].value == evento.tipo){
+						lateral.tipo[i].checked = 'checked';
+						if(evento.marcador == 'event'){
+							cambiaIcono('event',evento.tipo);
+						}else if(evento.marcador == 'people'){
+							cambiaIcono('people',evento.tipo,1);
+						}
 					}
 				}
-				for(i=0; i<3; i++){
-					if(lateral.traffic[i].value == evento.traffic){
-						lateral.traffic[i].selected = 'selected';
+				lateral.nombre.value = evento.nombre;
+				lateral.info.value = evento.info;
+				lateral.descripcion.value = evento.descripcion;
+				lateral.direccion.value = evento.direccion;
+				lateral.iden.value = evento.id;
+				if(evento.marcador == 'event'){
+					for(i=0; i<4; i++){
+						if(lateral.size[i].value == evento.size){
+							lateral.size[i].selected = 'selected';
+						}
+					}
+					for(i=0; i<3; i++){
+						if(lateral.traffic[i].value == evento.traffic){
+							lateral.traffic[i].selected = 'selected';
+						}
+					}
+				}else if(evento.marcador == 'people'){
+					for(i=0; i<4; i++){
+						if(lateral.peso[i].value == evento.weight){
+							lateral.peso[i].selected = 'selected';
+						}
+					}
+					for(i=0; i<5; i++){
+						if(lateral.movilidad[i].value == evento.mobility){
+							lateral.movilidad[i].selected = 'selected';
+						}
 					}
 				}
 			}
@@ -653,6 +775,8 @@ function generaMarcador(evento, caracter){
 				showTab('dhtmlgoodies_tabView1',0);
 			}else if(evento.marcador == 'people'){
 				showTab('dhtmlgoodies_tabView1',1);
+			}else if(evento.marcador == 'resource'){
+				showTab('dhtmlgoodies_tabView1',2);
 			}
 		});
 
@@ -665,28 +789,34 @@ function generaMarcador(evento, caracter){
 			/*marker.openInfoWindowHtml('<div id="bocadillo">Asociado a cat&aacute;strofe: <br/>' + marcadores_definitivos[asociada].nombre
 				+ '<br/><a id="guardar_asociacion" href="#" onclick="guardar_asociacion(' + asociada + ',' + evento.id + '); return false;"> Guardar </a>'
 				+ ' - ' + '<a id="cancelar" href="#" onclick="cancelar_asignacion(' + evento.id + '); return false;"> Cancelar </a></div>');*/
-			marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>' +
+			
+			// Temporal*****************************************************************************************
+			cancelar_asignacion(evento.id);
+		//**************************************************************************************************
+		/*marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>' +
 				'<a id="confirmar" href="#" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
 				',' + marker.getLatLng().lat() + ',' + marker.getLatLng().lng() + ')" > Confirmar </a>'+ ' - ' +
-				'<a id="cancelar" href="#" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');"> Cancelar </a></div>');
+				'<a id="cancelar" href="#" onclick="map.closeInfoWindow(); "> Cancelar </a></div>');*/
 		});
 
-		GEvent.addListener(marker, 'dblclick', function(){
-			marker.openInfoWindowHtml('¿Donde desea moverlo?');
-			var event = GEvent.addListener(map, 'click', function(overlay, latlng){
-				var nuevaLat = latlng.lat();
-				var nuevaLong = latlng.lng();
-				var nuevaPos = new GLatLng(nuevaLat, nuevaLong);
-				map.removeOverlay(marker);
-				marker.setLatLng(nuevaPos);
-				map.addOverlay(marker);
-				marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>' +
-				'<a id="confirmar" href="#" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
-				',' + nuevaLat + ',' + nuevaLong + ')" > Confirmar </a>'+ ' - ' +
-				'<a id="cancelar" href="#" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');"> Cancelar </a></div>');
-				GEvent.removeListener(event);
+		if(evento.marcador == 'event'){
+			GEvent.addListener(marker, 'dblclick', function(){
+				marker.openInfoWindowHtml('¿Donde desea moverlo?');
+				var event = GEvent.addListener(map, 'click', function(overlay, latlng){
+					var nuevaLat = latlng.lat();
+					var nuevaLong = latlng.lng();
+					var nuevaPos = new GLatLng(nuevaLat, nuevaLong);
+					map.removeOverlay(marker);
+					marker.setLatLng(nuevaPos);
+					map.addOverlay(marker);
+					marker.openInfoWindowHtml('<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/>' +
+						'<a id="confirmar" href="#" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
+						',' + nuevaLat + ',' + nuevaLong + ')" > Confirmar </a>'+ ' - ' +
+						'<a id="cancelar" href="#" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');"> Cancelar </a></div>');
+					GEvent.removeListener(event);
+				});
 			});
-		});
+		}
 
 		GEvent.addListener(marker, 'infowindowclose', function() {
 			var lateral;
@@ -699,27 +829,43 @@ function generaMarcador(evento, caracter){
 				document.getElementById('submit20').style.display = 'none';
 				document.getElementById('eliminar2').style.display = 'none';
 				document.getElementById('sintomas').style.display = 'none';
+			}else if(evento.marcador == 'resource'){
+				document.getElementById('datos').style.display = 'none';
+				document.getElementById('listaRecursos').style.display = 'block';
+				if(evento.nombre == userName){
+					document.getElementById('form-posicion').style.display = 'none';
+					map.setCenter(centroAux[0], centroAux[1]);
+					if(puntoAux != null){
+						map.removeOverlay(puntoAux);
+						puntoAux = null;
+					}
+				}
 			}
 
-			if(limpiar){
-				lateral.tipo[0].checked = 'checked';
-				if(evento.marcador == 'event'){
-					cambiaIcono('event', 'fire', 1);
-					lateral.nombre.value = 'Incendio';
-				}else if(evento.marcador == 'people'){
-					cambiaIcono('people', 'healthy', 1);
-					lateral.nombre.value = 'Sano';
+			if(lateral != null){
+				if(limpiar){
+					lateral.tipo[0].checked = 'checked';
+					if(evento.marcador == 'event'){
+						cambiaIcono('event', 'fire', 1);
+						lateral.nombre.value = 'Incendio';
+					}else if(evento.marcador == 'people'){
+						cambiaIcono('people', 'healthy', 1);
+						lateral.nombre.value = 'Sano';
+					}
+					lateral.info.value = '';
+					lateral.descripcion.value = '';
+					lateral.direccion.value = '';
+					lateral.iden.value = '';
+					if(evento.marcador == 'event'){
+						lateral.size[0].selected = 'selected';
+						lateral.traffic[0].selected = 'selected';
+					}else if(evento.marcador == 'people'){
+						lateral.peso[0].selected = 'selected';
+						lateral.movilidad[0].selected = 'selected';
+					}
 				}
-				lateral.info.value = '';
-				lateral.descripcion.value = '';
-				lateral.direccion.value = '';
-				lateral.iden.value = '';
-				if(evento.marcador == 'event'){
-					lateral.size[0].selected = 'selected';
-					lateral.traffic[0].selected = 'selected';
-				}
+				limpiar = true;
 			}
-			limpiar = true;
 		});
 	}
 
@@ -730,7 +876,7 @@ function generaMarcador(evento, caracter){
 }
 
 function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-	fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+	weight,mobility,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 
 	var sintomas = '';
 	if(fatigue) sintomas += 'fatigue,';
@@ -746,7 +892,8 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 
 	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,
 		descripcion,info,latitud,longitud,direccion,estado,
-		obtiene_fecha(), obtiene_fecha(),usuario_actual, usuario_actual_tipo,null,size,traffic,idAssigned,sintomas);
+		obtiene_fecha(), obtiene_fecha(),usuario_actual, usuario_actual_tipo,null,
+		size,traffic,idAssigned,weight,mobility,sintomas);
 
 	if(marcador=='event'){
 		nuevomarcador.size=size;
@@ -764,13 +911,13 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 }
 
 function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-	fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+	weight,mobility,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 	//utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if (caracter_temp==TEMPORAL){
 		//Actualizar la matriz temporal
 		eliminar(marcadores_temporales[id],TEMPORAL);
 		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-			fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness);
+			weight,mobility,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness);
 	}
 	
 	if (caracter_temp==DEFINITIVO){
@@ -804,6 +951,8 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 			'idAssigned':idAssigned,
 			'fecha':puntero_temp.fecha,
 			'usuario':usuario_actual,
+			'weight':weight,
+			'mobility':mobility,
 			'sintomas':sintomas,
 			'accion':'modificar'
 		});
@@ -811,7 +960,7 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 	}
 }
 
-function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traffic,idAssigned){
+function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traffic,idAssigned,weight,mobility){
 	var puntero = marcadores_definitivos[id];
 	var idA;
 	if(idAssigned != null){
@@ -836,6 +985,8 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traf
 		'idAssigned':idA,
 		'fecha':puntero.fecha,
 		'usuario':usuario_actual,
+		'weight':weight,
+		'mobility':mobility,
 		'sintomas':puntero.sintomas,
 		'accion':'modificar'
 	});
@@ -876,6 +1027,8 @@ function modificar3(id,tipo,fatigue,fever,dyspnea,nausea,headache,vomiting,abdom
 		'idAssigned':puntero.idAssigned,
 		'fecha':puntero.fecha,
 		'usuario':usuario_actual,
+		'weight':puntero.weight,
+		'mobility':puntero.mobility,
 		'sintomas':sintomas,
 		'accion':'modificar'
 	});
@@ -936,7 +1089,7 @@ function cargarMenuAcciones(puntero){
 	var vuelto = '<tr id="vuelto"><td><input type="radio" name="accion" value="vuelto"/>Todos de vuelta</td></tr>';
 	var rescatado = '<tr id="rescatado"><td><input type="radio" name="accion" value="rescatado"/>Atrapado rescatado</td></tr>';
 	var cierre = '</table><br/><input type="hidden" id="iden2" name="iden2" value="' + puntero.id + '"/>';
-	var boton = '<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(iden2.value,\'' + nombreUsuario + '\',accion);map.closeInfoWindow();"/>';
+	var boton = '<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(iden2.value,\'' + userName + '\',accion);map.closeInfoWindow();"/>';
 	
 	if(puntero.marcador == 'event'){
 		menu += titulo + oculto;
@@ -994,6 +1147,8 @@ function guardar(puntero){
 		'idAssigned':puntero.idAssigned,
 		'fecha':puntero.fecha,
 		'usuario':puntero.nombre_usuario,
+		'weight':puntero.weight,
+		'mobility':puntero.mobility,
 		'sintomas':puntero.sintomas
 	},
 	function(data){
@@ -1119,6 +1274,8 @@ function eliminar(puntero,caracter){
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual,
+				'weight':puntero.weight,
+				'mobility':puntero.mobility,
 				'accion':'eliminar'
 			});
 			registrarHistorial(userName, puntero.id, 'modif');
@@ -1140,6 +1297,8 @@ function eliminar(puntero,caracter){
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual,
+				'weight':puntero.weight,
+				'mobility':puntero.mobility,
 				'accion':'eliminar'
 			});
 			registrarHistorial(userName, puntero.id, 'eliminar');
@@ -1189,6 +1348,14 @@ function mostrarSanos(mostrar){
 			}
 		}
 	}
+}
+
+function cambiarGeolocalizacion(valor){
+	localizacion = valor;
+	$.post('updateLatLong.jsp',{
+		'nombre':userName,
+		'localizacion':valor
+	});
 }
 
 function registrarHistorial(usuario, idEvento, accion){

@@ -1,6 +1,14 @@
+function initialize2(){
+	if(nivelMsg > 1){
+		if(document.getElementById('heridos').verSanos.checked){
+			verSanos = true;
+		}
+	}
+}
+
 function mapInit(){
-	center = new GLatLng(38.232237, -1.699016); // Calasparra, Murcia (geriatrico)
-	map.setCenter(center, 19);
+	center = new GLatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
+	map.setCenter(center, 21);
 }
 
 function buildingInit(){

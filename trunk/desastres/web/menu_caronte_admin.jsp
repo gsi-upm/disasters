@@ -137,7 +137,7 @@
 				</table>
 				<p>
 					<sql:query var="emergencias" dataSource="${CatastrofesServer}"
-						sql="SELECT * FROM catastrofes WHERE marcador='event' AND estado!='erased'">
+							   sql="SELECT * FROM catastrofes WHERE marcador='event' AND estado!='erased'">
 					</sql:query>
 					<c:if test="${emergencias.rowCount > 0}">
 						Asociado a:
@@ -153,6 +153,31 @@
 						<input type="hidden" name="idAssigned" value="0"/>
 					</c:if>
 				</p>
+				<table class="tabla_menu">
+					<tr>
+						<td>Peso</td>
+						<td>
+							<select name="peso" id="peso">
+								<option value="indefinido">Indefinido</option>
+								<option value="bajo">Bajo (&lt;65kg)</option>
+								<option value="medio">Medio (65-100kg)</option>
+								<option value="alto">Alto (&gt;100kg)</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Movilidad</td>
+						<td>
+							<select name="movilidad" id="movilidad">
+								<option value="indefinida">Indefinida</option>
+								<option value="normal">Normal</option>
+								<option value="reducida">Reducida</option>
+								<option value="asistida">Asistida</option>
+								<option value="inconsciente">Inconsciente</option>
+							</select>
+						</td>
+					</tr>
+				</table>
 				<table class="tabla_menu">
 					<tr id="sintomas">
 						<td colspan="2">
@@ -199,7 +224,7 @@
 					<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;"/>
 					<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
 						iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
-						direccion.value,size.value,traffic.value,idAssigned.value);return false;"/>
+						direccion.value,size.value,traffic.value,idAssigned.value,peso.value,movilidad.value);return false;"/>
 					<input type="button" id="eliminar2" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 					<br/>
 					<br/>
@@ -209,7 +234,7 @@
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',size.value,traffic.value,0);
+							descripcion.value,direccion.value,longitud.value,latitud.value,'active',size.value,traffic.value,0,peso.value,movilidad.value);
 							$('#dialog2').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>
@@ -217,33 +242,81 @@
 			</form>
 		</div>
 		<div class="dhtmlgoodies_aTab">
-			<table class="tabla_menu">
-				<tr>
-					<td><fmt:message key="enfermero"/> <%--(${nurse.rowCount})--%></td>
-					<td><img alt="" src="markers/enfermero1.png" class="rayas"/></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="gerocultor"/> <%--(${gerocultor.rowCount})--%></td>
-					<td><img alt="" src="markers/gerocultor1.png" class="rayas"/></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="auxiliar"/> <%--(${assistant.rowCount})--%></td>
-					<td><img alt="" src="markers/auxiliar1.png" class="rayas"/></td>
-				</tr>
-				<tr><td colspan="2"><hr/></td></tr>
-				<tr>
-					<td><fmt:message key="policia"/> <%--(${policemen.rowCount})--%></td>
-					<td><img alt="" src="markers/policia1.png" class="rayas"/></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="bomberos"/> <%--(${firemen.rowCount})--%></td>
-					<td><img alt="" src="markers/bombero1.png" class="rayas"/></td>
-				</tr>
-				<tr>
-					<td><fmt:message key="ambulancia"/> <%--(${ambulance.rowCount})--%></td>
-					<td><img alt="" src="markers/ambulancia1.png" class="rayas"/></td>
-				</tr>
-			</table>
+			<div id="listaRecursos">
+				<table class="tabla_menu">
+					<tr>
+						<td><fmt:message key="enfermero"/> <%--(${nurse.rowCount})--%></td>
+						<td><img alt="" src="markers/enfermero1.png" class="rayas"/></td>
+					</tr>
+					<tr>
+						<td><fmt:message key="gerocultor"/> <%--(${gerocultor.rowCount})--%></td>
+						<td><img alt="" src="markers/gerocultor1.png" class="rayas"/></td>
+					</tr>
+					<tr>
+						<td><fmt:message key="auxiliar"/> <%--(${assistant.rowCount})--%></td>
+						<td><img alt="" src="markers/auxiliar1.png" class="rayas"/></td>
+					</tr>
+					<tr><td colspan="2"><hr/></td></tr>
+					<tr>
+						<td><fmt:message key="policia"/> <%--(${policemen.rowCount})--%></td>
+						<td><img alt="" src="markers/policia1.png" class="rayas"/></td>
+					</tr>
+					<tr>
+						<td><fmt:message key="bomberos"/> <%--(${firemen.rowCount})--%></td>
+						<td><img alt="" src="markers/bombero1.png" class="rayas"/></td>
+					</tr>
+					<tr>
+						<td><fmt:message key="ambulancia"/> <%--(${ambulance.rowCount})--%></td>
+						<td><img alt="" src="markers/ambulancia1.png" class="rayas"/></td>
+					</tr>
+				</table>
+			</div>
+			<div id="datos" style="display:none">
+				<table class="tabla_menu">
+					<tr>
+						<td>Usuario</td>
+						<td id="datos-usuario"></td>
+					</tr>
+					<tr>
+						<td>Nombre</td>
+						<td id="datos-nombre"></td>
+					</tr>
+					<tr>
+						<td>Correo</td>
+						<td id="datos-correo"></td>
+					</tr>
+				</table>
+			</div>
+			<form id="form-posicion" action="#" style="display:none">
+				<hr/>
+				<p>
+					<input type="checkbox" name="localizacion" onclick="cambiarGeolocalizacion(localizacion.checked)"/>Activar geolocalizaci&oacute;n
+				</p>
+				<table class="tabla_menu">
+					<tr>
+						<th colspan="2">Posici&oacute;n</th>
+					</tr>
+					<tr>
+						<td>Latitud</td>
+						<td><input type="number" name="latitud" max="90" min="-90" step="0.000001" value="" size="29"/></td>
+					</tr>
+					<tr>
+						<td>Longitud</td>
+						<td><input type="number" name="longitud" max="180" min="-179.999999" step="0.000001" value="" size="29"/></td>
+					</tr>
+					<tr>
+						<td>Direcci&oacute;n</td>
+						<td><textarea name="direccion" cols="28" rows="2"></textarea></td>
+					</tr>
+				</table>
+				<p>
+					<input type="checkbox" name="porDefecto">Guardar esta posici&oacute;n como la de por defecto
+				</p>
+				<p>
+					<input type="button" id="submit01" value="Comprobar" class="btn" onclick="findPos(latitud.value,longitud.value,direccion.value)"/>
+					<input type="button" id="submit02" value="Aceptar" class="btn" onclick="newPos(latitud.value,longitud.value,porDefecto.checked)"/>
+				</p>
+			</form>
 		</div>
 	</div>
 	<!--aqui se cambia el tamanno y titulo de las tabs -->
