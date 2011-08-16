@@ -83,5 +83,5 @@
 	</ul>
 	<br/>
 	<br/>
-	<a id="hideVisualize" href="#"><fmt:message key="ocultar"/></a>
+	<span class="pulsable"><fmt:message key="ocultar"/></span>
 </fmt:bundle>

@@ -7,7 +7,11 @@
 
 <%--<jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>--%>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
-<c:set var="nombreUsuario" value="<%= request.getRemoteUser()%>"/>
+<c:set var="nombreUsuario" value="<%= request.getRemoteUser() %>"/>
+
+<c:if test="${param.lang != null}">
+	<fmt:setLocale value="${param.lang}" scope="session"/>
+</c:if>
 
 <c:if test="${nombreUsuario != null}">
 	<c:if test="${param.proyect == null}">
@@ -21,8 +25,8 @@
 	</c:if>
 </c:if>
 
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE HTML> <%-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> --%>
+<html> <%-- <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> --%>
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
 			<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
@@ -31,11 +35,9 @@
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css"/>
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen"/>
+			<noscript><meta http-equiv="refresh" content="0; URL=nojscript.jsp"/></noscript> <%-- NO ES UN ERROR AUNQUE LO MARQUE --%>
+			<!--[if lt IE 9]><meta http-equiv="refresh" content="0; URL=mensajeIE.jsp"/><![endif]-->
 			<script type="text/javascript" src="js/i18n.js"></script>
-			<!--[if lt IE 9]>
-				<script type="text/javascript" src="js/mensajeIE.js"></script>
-				<script type="text/javascript"><fmt:message key="mensajeIE"/></script>
-			<![endif]-->
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
 			<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA_pvzu2eEg9OhdvcrhLRkgRSXZ-vMQ48x4C6FPZ72aXwxrdjUDxSASm6YS5fgxM4XDiwIpFkrYCIdUQ"></script>
@@ -45,11 +47,11 @@
 			-->
 			<script type="text/javascript">
 				var nivelMsg = ${proyecto.nivelMsg};
-				var nombreUsuario = '${nombreUsuario}';
+				var userName = '${nombreUsuario}';
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
 			<script type="text/javascript" src="js/mapa_${proyecto.proyect}.js"></script>
-			<script type="text/javascript" src="js/mapa.js"></script>  <!-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin -->
+			<script type="text/javascript" src="js/mapa.js"></script>  <%-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin --%>
 			<script type="text/javascript" src="js/mapa2.js"></script>
 			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
@@ -84,10 +86,9 @@
 			<!-- Areas around fires -->
 			<script type="text/javascript" src="js/einsert.js"></script>
 		</head>
-		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true); mostrarMensajes();" onunload="GUnload()">
-			<c:if test="${nombreUsuario != null}">
-				<%--<c:import url="ventana_modificacion.jsp"/>
-				<c:import url="ventana_acciones.jsp"/>--%>
+			<body onload="IniciarReloj24(); initialize(); mostrarMensajes(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+			<c:if test="${nombreUsuario != null && proyecto.proyect == 'disasters'}">
+				<c:import url="ventana_modificacion.jsp"/>
 			</c:if>
 			<table class="tabla_menu">
 				<!-- Cabecera con imagen y hora -->
@@ -103,7 +104,28 @@
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
-<!--SPAN DE PRUEBAS -->	v.73 <span id="prueba"></span>
+						v.76
+						<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png" alt="lang:<fmt:message key="idioma"/>"
+							 onclick="document.getElementById('langSelect').style.display='inline'; document.getElementById('langInit').style.display='none';"/>
+						<span id="langSelect" style="display:none">
+							<img class="pulsable" src="images/close.gif"
+								  onclick="document.getElementById('langSelect').style.display='none'; document.getElementById('langInit').style.display='inline';"/>
+							<c:url var="index_es" value="index.jsp"><c:param name="lang" value="es"/></c:url>
+							<a href="${index_es}"><img src="images/flags/es.png" alt="Espa&ntilde;ol" onclick="<fmt:setLocale value="es"/>"/></a>
+							<c:url var="index_en" value="index.jsp"><c:param name="lang" value="en"/></c:url>
+							<a href="${index_en}"><img src="images/flags/en.png" alt="English" onclick="<fmt:setLocale value="en"/>"/></a>
+							<c:url var="index_en_GB" value="index.jsp"><c:param name="lang" value="en_GB"/></c:url>
+							<a href="${index_en_GB}"><img src="images/flags/en_GB.png" alt="British English" onclick="<fmt:setLocale value="en_GB"/>"/></a>
+							<c:url var="index_fr" value="index.jsp"><c:param name="lang" value="fr"/></c:url>
+							<a href="${index_fr}"><img src="images/flags/fr.png" alt="Fran&ccedil;ais" onclick="<fmt:setLocale value="fr"/>"/></a>
+							<c:url var="index_de" value="index.jsp"><c:param name="lang" value="de"/></c:url>
+							<a href="${index_de}"><img src="images/flags/de.png" alt="Deutsch" onclick="<fmt:setLocale value="de"/>"/></a>
+						</span>
+						<span id="prueba"></span> <!-- SPAN DE PRUEBAS -->
+						<div>
+							<c:url value="acercaDe.jsp" var="acercaDe"/>
+							<a href="${acercaDe}">Acerca de</a>
+						</div>
 					</td>
 				</tr>
 			</table>
@@ -114,57 +136,7 @@
 						<div id="left">
 							<!-- If the user isn't autenticated, we show the login form -->
 							<c:if test="${nombreUsuario == null}">
-								<h2><fmt:message key="iniciarsesion"/></h2>
-								<div id="login">
-									<form action="<%=response.encodeURL(Constants.LOGIN_FORM_ACTION)%>" method="post" id="loginform">
-										<table>
-											<tr><td id="regMsg" colspan="2" style="color:lime"></td></tr>
-											<tr>
-												<td><fmt:message key="usuario"/>:</td>
-												<td><input type="text" name="<%=Constants.LOGIN_USERNAME_FIELD%>" id="username" size="26"/></td>
-											</tr>
-											<tr>
-												<td><fmt:message key="contrasenna"/>:</td>
-												<td><input type="password" name="<%=Constants.LOGIN_PASSWORD_FIELD%>" id="pwd" size="26"/></td>
-											</tr>
-											<tr>
-												<td colspan="2"><input type="submit" name="Submit" id="submit_butt" value="<fmt:message key="aceptar"/>"/></td>
-											</tr>
-										</table>
-										<p>
-											&iquest;No est&aacute; registrado?
-											<input type="button" value="Registrarse" onclick="registro()"/>
-										</p>
-									</form>
-									<form action="#" id="registro" style="display:none">
-										<table>
-											<tr><td id="userError" colspan="2" style="color:red"></td></tr>
-											<tr id="user1">
-												<td>Nombre usuario</td>
-												<td><input type="text" name="user1"size="26"/></td>
-											</tr>
-											<tr id="user2">
-												<td>Repetir nombre</td>
-												<td><input type="text" name="user2"size="26"/></td>
-											</tr>
-											<tr><td id="passError" colspan="2" style="color:red"></td></tr>
-											<tr id="pass1">
-												<td>Contraseña</td>
-												<td><input type="password" name="pass1"size="26"/></td>
-											</tr>
-											<tr id="pass2">
-												<td>Repetir contraseña</td>
-												<td><input type="password" name="pass2"size="26"/></td>
-											</tr>
-											<tr>
-												<td colspan="2">
-													<input type="button" value="Aceptar" onclick="registrar(user1.value, user2.value, pass1.value, pass2.value)"/>
-													<input type="button" value="Cancelar" onclick="cancelarRegistro()"/>
-												</td>
-											</tr>
-										</table>
-									</form>
-								</div>
+								<c:import url="formInicio.jsp"/>
 							</c:if>
 							<c:if test="${nombreUsuario != null}">
 								<!-- and if the user is autenticated, we show the username and logout button -->
@@ -243,8 +215,8 @@
 						</div>
 					</td>
 					<td>
-						<div id="open_messages"><a href="#"><fmt:message key="mostrar"/></a></div>
-						<div id="close_messages"><a href="#"><fmt:message key="ocultar"/></a></div>
+						<div id="open_messages" class="pulsable"><fmt:message key="mostrar"/></div>
+						<div id="close_messages" class="pulsable"><fmt:message key="ocultar"/></div>
 						<div id="messages">
 							<p>MENSAJES:</p>
 						</div>
@@ -259,7 +231,7 @@
 				<c:import url="minitabs_disasters.jsp"/>
 			</c:if>
 			<!-- Screen for the servlet information -->
-			<div id="close_screen"><a href="#"><fmt:message key="ocultar"/></a></div>
+			<div id="close_screen"><fmt:message key="ocultar"/></div>
 			<div id="screen"></div>
 			<!--<p class="iconos_validacion">
 				<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Strict"/></a>

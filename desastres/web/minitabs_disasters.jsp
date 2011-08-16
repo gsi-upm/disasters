@@ -29,7 +29,7 @@
 					<td><fmt:message key="centrosgeriatricos"/></td>
 				</tr>
 				<tr>
-					<td colspan="2"><a id="hideVisualize" href="#"><fmt:message key="ocultar"/></a></td>
+					<td id="hideVisualize" class="pulsable" colspan="2"><fmt:message key="ocultar"/></td>
 				</tr>
 			</table>
 		</form>

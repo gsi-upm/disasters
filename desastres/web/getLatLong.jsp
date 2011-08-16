@@ -8,14 +8,20 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="database.jspf" %> 
 
-<% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
-
-<sql:update dataSource="${CatastrofesServer}">
-	GET * FROM usuarios
-	WHERE nombre = ?;
+<sql:query var="datos" dataSource="${CatastrofesServer}" sql="
+	SELECT latitud, longitud, localizacion FROM usuarios
+	WHERE nombre_usuario = ?;">
 	<sql:param value="${param.nombre}"/>
-</sql:update>
-
+</sql:query>
+[
+<c:forEach var="dato" items="${datos.rows}">
+    <json:object name="temp">
+        <json:property name="latitud" value="${dato.latitud}"/>
+        <json:property name="longitud" value="${dato.longitud}"/>
+		<json:property name="localizacion" value="${dato.localizacion}"/>
+	</json:object> ,
+</c:forEach>
+]
 ok

@@ -2,8 +2,7 @@ $().ready(function() {
 	$('#dialog1').jqm();
 	$('#dialog2').jqm();
 	$('#dialog3').jqm();
-	//$('#modificar').jqm();
-	//$('#acciones').jqm();
+	$('#modificar').jqm();
 });
 
 $(document).ready(function() {
@@ -44,18 +43,20 @@ $(document).ready(function() {
 		}
 	);
 
-	$('#minitab1').toggle(function() {
-		$.get('info_disasters.jsp', {}, function(data) {
-			$('#console').html(data);
-		});
-		$('#console').slideDown();
-		$('#console').click(function() {
-			$(this).slideUp();
-		});
-		return false;
-	},function(){
-		$('#console').slideUp();
-	});
+	$('#minitab1').toggle(
+		function() {
+			$.get('info_disasters.jsp', {}, function(data) {
+				$('#console').html(data);
+			});
+			$('#console').slideDown();
+			$('#console').click(function(){
+				$(this).slideUp();
+			});
+			return false;
+		},function(){
+			$('#console').slideUp();
+		}
+	);
 
 	$('#runSim').click(function() {
 		$('#options2').show();

@@ -655,7 +655,10 @@ public class DisasterApplication extends Application {
 			public void handle(Request request, Response response) {
 				String user = (String) request.getAttributes().get("user");
 				String pass = (String) request.getAttributes().get("pass");
-				String redirector = URL_BASE + "put.jsp?action=registrar&user=" + user + "&pass=" + pass;
+				String nombre = (String) request.getAttributes().get("nombre");
+				String email = (String) request.getAttributes().get("email");
+				String redirector = URL_BASE + "put.jsp?action=registrar&user=" + user + "&pass=" + pass +
+						"&nombre=" + nombre + "&email=" + email;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -739,7 +742,7 @@ public class DisasterApplication extends Application {
 		router.attach("/messages/{nivel}/date/{fecha}", messagesDate);
 		router.attach("/messages/{nivel}/id/{index}", messagesId);
 
-		router.attach("/registrar/{user}/{pass}", registrar);
+		router.attach("/registrar/{user}/{pass}/{nombre}/{email}", registrar);
 
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);
 		//router.attachDefault(inicial);

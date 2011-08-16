@@ -110,9 +110,9 @@ public class Parameters {
     /**
      * Limits for latitude and longitude in Calasparra
      */
-	 public final double MIN_LATITUDE_CARONTE = 38.232276;
+	 public final double MIN_LATITUDE_CARONTE = 38.232272;
 	 public final double MAX_LATITUDE_CARONTE = MIN_LATITUDE_CARONTE;
-	 public final double MIN_LONGITUDE_CARONTE = -1.699829;
+	 public final double MIN_LONGITUDE_CARONTE = -1.698925;
 	 public final double MAX_LONGITUDE_CARONTE = MIN_LONGITUDE_CARONTE;
     //public final double MIN_LATITUDE_CARONTE = 38.225;
     //public final double MAX_LATITUDE_CARONTE = 38.233;

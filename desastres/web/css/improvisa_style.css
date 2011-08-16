@@ -290,6 +290,10 @@ form table img{
 	margin-right: -2px;
 }
 
+.pulsable:hover{
+	cursor: pointer;
+}
+
 :-webkit-input-placeholder {
     color: silver;
 }

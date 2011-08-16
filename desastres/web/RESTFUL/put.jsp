@@ -183,10 +183,12 @@
 	<c:when test="${param.action eq 'registrar'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO usuarios (nombre_usuario, password, tipo_usuario)
-				VALUES (?, ?, 'citizen')
+				INSERT INTO usuarios (nombre_usuario, password, tipo_usuario, nombre_real, correo)
+				VALUES (?, ?, 'citizen', ?, ?)
 				<sql:param value="${param.user}"/>
 				<sql:param value="${param.pass}"/>
+				<sql:param value="${param.nombre}"/>
+				<sql:param value="${param.email}"/>
 			</sql:update>
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO relaciones (id_usuario, id_proyecto)

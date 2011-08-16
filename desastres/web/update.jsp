@@ -16,7 +16,7 @@
     UPDATE catastrofes SET
     marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?,
 	latitud = ?, longitud = ?, direccion = ?, estado = ?, size=?, traffic=?,
-	idAssigned=?, fecha = ?, usuario = ?, sintomas = ?, modificado = <%=modif%>
+	idAssigned=?, fecha = ?, usuario = ?, peso = ?, movilidad = ?, sintomas = ?, modificado = <%=modif%>
     WHERE id = ?
     
     <sql:param value="${param.marcador}"/>
@@ -34,6 +34,8 @@
     <sql:param value="${param.idAssigned}"/>
     <sql:param value="${param.fecha}"/>
     <sql:param value="${param.usuario}"/>
+    <sql:param value="${param.weight}"/>
+    <sql:param value="${param.mobility}"/>
 	<sql:param value="${param.sintomas}"/>
     <sql:param value="${param.id}"/>
 </sql:update>

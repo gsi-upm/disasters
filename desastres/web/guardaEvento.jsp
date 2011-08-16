@@ -21,27 +21,28 @@
 
 	</c:otherwise>--%>
 
-    <sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO CATASTROFES (
-                marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, sintomas)
-                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
-        
-        <sql:param value="${param.marcador}"/>
-        <sql:param value="${param.tipo}"/>
-        <sql:param value="${param.cantidad}"/>
-        <sql:param value="${param.nombre}"/>
-        <sql:param value="${param.descripcion}"/>
-        <sql:param value="${param.info}"/>
-        <sql:param value="${param.latitud}"/>
-        <sql:param value="${param.longitud}"/>
-        <sql:param value="${param.direccion}"/>
-        <sql:param value="${param.estado}"/>
-        <sql:param value="${param.size}"/>
-        <sql:param value="${param.traffic}"/>
-        <sql:param value="${param.idAssigned}"/>
-        <sql:param value="${param.fecha}"/>
-        <sql:param value="${param.usuario}"/>
-        <sql:param value="${param.sintomas}"/>
-    </sql:update>
+	<sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO catastrofes(
+			marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, peso, movilidad, sintomas)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
+		<sql:param value="${param.marcador}"/>
+		<sql:param value="${param.tipo}"/>
+		<sql:param value="${param.cantidad}"/>
+		<sql:param value="${param.nombre}"/>
+		<sql:param value="${param.descripcion}"/>
+		<sql:param value="${param.info}"/>
+		<sql:param value="${param.latitud}"/>
+		<sql:param value="${param.longitud}"/>
+		<sql:param value="${param.direccion}"/>
+		<sql:param value="${param.estado}"/>
+		<sql:param value="${param.size}"/>
+		<sql:param value="${param.traffic}"/>
+		<sql:param value="${param.idAssigned}"/>
+		<sql:param value="${param.fecha}"/>
+		<sql:param value="${param.usuario}"/>
+		<sql:param value="${param.weight}"/>
+		<sql:param value="${param.mobility}"/>
+		<sql:param value="${param.sintomas}"/>
+	</sql:update>
 
     <%-- Uncomment this code in order to enable Twitter service for new disasters.
     DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR

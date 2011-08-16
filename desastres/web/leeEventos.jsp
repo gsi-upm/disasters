@@ -14,22 +14,18 @@
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver" 
 				   url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
 <c:choose>
-    <c:when test="${(param.action eq 'firstTime') and (param.nivel gt 1)}">
+    <c:when test="${(param.action eq 'firstTime') and (param.nivel gt 0)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, 
-                   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
+                   SELECT * FROM catastrofes
                    WHERE modificado > ?
                    AND estado != 'erased'
 				   AND tipo != 'user';">
             <sql:param value="${param.fecha}"/>
         </sql:query>  
     </c:when>
-	<c:when test="${(param.action eq 'firstTime') and (param.nivel le 1)}">
+	<c:when test="${(param.action eq 'firstTime') and (param.nivel eq 0)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-                   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
+                   SELECT * FROM catastrofes
                    WHERE modificado > ?
 				   AND marcador != 'people'
                    AND estado != 'erased'
@@ -37,21 +33,17 @@
             <sql:param value="${param.fecha}"/>
         </sql:query>
     </c:when>
-    <c:when test="${(param.action eq 'notFirst') and (param.nivel gt 1)}">
+    <c:when test="${(param.action eq 'notFirst') and (param.nivel gt 0)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-                   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
+                   SELECT * FROM catastrofes
                    WHERE modificado > ?
 				   AND tipo != 'user';">
             <sql:param value="${param.fecha}"/>
         </sql:query>                
 	</c:when>
-	<c:when test="${(param.action eq 'notFirst') and (param.nivel le 1)}">
+	<c:when test="${(param.action eq 'notFirst') and (param.nivel eq 0)}">
         <sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-                   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-                   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
+                   SELECT * FROM catastrofes
                    WHERE modificado > ?
 				   AND marcador != 'people'
 				   AND tipo != 'user';">
@@ -79,10 +71,12 @@
         <json:property name="size" value="${evento.size}"/>
         <json:property name="traffic" value="${evento.traffic}"/>
         <json:property name="idAssigned" value="${evento.idAssigned}"/>
+        <json:property name="weight" value="${evento.peso}"/>
+        <json:property name="mobility" value="${evento.movilidad}"/>
         <json:property name="date" value="${evento.fecha}"/>
         <json:property name="modified" value="${evento.modificado}"/>
         <json:property name="user_name" value="${evento.nombre_usuario}"/>
-        <json:property name="user_type" value="${evento.tipo_usuario}"/> 
+        <json:property name="user_type" value="${evento.tipo_usuario}"/>
     </json:object> ,
 </c:forEach>
 ]
