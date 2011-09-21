@@ -13,17 +13,10 @@
 <%@ include file="database.jspf" %>
 
 <c:catch var="errorUpdate">
-	<%--<c:when test="${(param.latitud lt 123) and (param.latitud gt 123) and
-				  (param.longitud lt 123) and (param.longitud gt 123)}">
-
-	</c:when>
-	<c:otherwise>
-
-	</c:otherwise>--%>
-
-	<sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO catastrofes(
-			marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, peso, movilidad, sintomas)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
+	<sql:update dataSource="${CatastrofesServer}" sql="
+			INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
+			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta, sintomas)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
 		<sql:param value="${param.cantidad}"/>
@@ -39,11 +32,23 @@
 		<sql:param value="${param.idAssigned}"/>
 		<sql:param value="${param.fecha}"/>
 		<sql:param value="${param.usuario}"/>
-		<sql:param value="${param.weight}"/>
-		<sql:param value="${param.mobility}"/>
+		<sql:param value="${param.planta}"/>
 		<sql:param value="${param.sintomas}"/>
 	</sql:update>
-
+	
+	<c:if test="${param.idAssigned != 0}">
+		<sql:update dataSource="${CatastrofesServer}">
+			INSERT INTO asociaciones_heridos_emergencias(id_herido, id_emergencia, estado)
+			VALUES(SELECT id FROM catastrofes WHERE idAssigned=?,?,'active')
+			<sql:param value="${param.idAssigned}"/>
+			<sql:param value="${param.idAssigned}"/>
+		</sql:update>
+		<sql:update dataSource="${CatastrofesServer}">
+			UPDATE catastrofes SET idAssigned=0
+			WHERE idAssigned=?
+			<sql:param value="${param.idAssigned}"/>
+		</sql:update>
+	</c:if>
     <%-- Uncomment this code in order to enable Twitter service for new disasters.
     DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR
     <%
@@ -66,9 +71,3 @@
     --%>
 </c:catch>
 ok
-
-
-
-
-
-

@@ -44,6 +44,8 @@ var resi; // marcador de la imagen de la residencia
 var centroAux = new Array();
 var puntoAux;
 
+var planta = -1;
+
 function initialize(proyecto){
 	if(GBrowserIsCompatible()){
 		/* GOOGLE MAPS v3
@@ -64,10 +66,21 @@ function initialize(proyecto){
 		map.addControl(new GMapTypeControl()); //mapa, foto, hibrido
 
 		GEvent.addListener(map, 'zoomend', function(oldZoom, newZoom){
-			if(newZoom == 21 && map.getCurrentMapType().getName() == 'Mapa'){
-				map.addOverlay(resi);
-			}else if(newZoom < 21){
-				map.removeOverlay(resi);
+			map.removeOverlay(resi);
+			if(newZoom == 21){
+				resi.getIcon().iconSize = new GSize(733, 585);
+				resi.getIcon().iconAnchor = new GPoint(367, 305);
+				if(map.getCurrentMapType().getName() == 'Mapa' && planta >= 0){
+					map.addOverlay(resi);
+				}
+			}else if(newZoom == 20){
+				resi.getIcon().iconSize = new GSize(367, 293);
+				resi.getIcon().iconAnchor = new GPoint(183, 155);
+				if(map.getCurrentMapType().getName() == 'Mapa' && planta >= 0){
+					map.addOverlay(resi);
+				}
+			}else{
+				cambiarPlanta(-2);
 			}
 		});
 
@@ -76,23 +89,23 @@ function initialize(proyecto){
 			if(tipo != 'Mapa'){
 				map.removeOverlay(resi);
 			}else{
-				if(map.getZoom() == 21){
+				if(map.getZoom() >= 20 && planta >= 0){
 					map.addOverlay(resi);
 				}
 			}
 		});
 
 		var icono = new GIcon();
-		icono.image = 'images/residencia/planta0.jpg';
+		icono.image = 'images/residencia/planta0.png';
 		icono.iconSize = new GSize(733, 585);
-		icono.iconAnchor = new GPoint(367, 292);
+		icono.iconAnchor = new GPoint(367, 305);
 		var opciones = {
 			icon:icono,
 			clickable:false,
 			zIndexProcess:fondo
 		};
 		resi = new GMarker(new GLatLng(38.232272,-1.698925), opciones);
-		map.addOverlay(resi);
+		//map.addOverlay(resi);
 
 		//inicializamos los arrays
 		marcadores_definitivos = new Array;
@@ -121,7 +134,7 @@ function initialize(proyecto){
 					entry['quantity'],entry['name'],entry['description'],entry['info'],
 					entry['latitud'],entry['longitud'],entry['address'],entry['state'],
 					entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
-					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['weight'],entry['mobility'],null);
+					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['floor'],null);
 
 				nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 				marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
@@ -134,8 +147,11 @@ function initialize(proyecto){
 		/*if(document.getElementById('signeduser') != null){
 			userName = document.getElementById('signeduser').innerHTML;
 		}*/
+		
+		if(userName != ''){
+			planta = 0;
+			map.addOverlay(resi);
 
-		if(userName != null){
 			if(localizacion == null){
 				document.getElementById('form-posicion').localizacion.style.display = 'none';
 			}
@@ -150,6 +166,21 @@ function initialize(proyecto){
 						document.getElementById('form-posicion').localizacion.checked = localizacion;
 					}
 				});
+			});
+			$.getJSON('getAsociaciones.jsp', {
+				'tipo':'todasEmergencias'
+			}, function(data) {
+				$.each(data, function(entryIndex, entry) {
+					if(entryIndex == 0){
+						document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
+						document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0"></option></select>';
+					}
+					document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
+				});
+				if(document.getElementById('selectAsoc').innerHTML == ''){
+					document.getElementById('textoAsoc').innerHTML = '';
+					document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar';
+				}
 			});
 		}
 
@@ -181,8 +212,8 @@ function coordenadasUsuario(pos){
 		var marker = new GMarker(new GLatLng(latitudUser,longitudUser), opciones);
 		map.addOverlay(marker);
 	}
-
-	if(userName != null && nivelMsg > 0){
+	
+	if(userName != '' && nivelMsg > 0 && localizacion){
 		$.post('updateLatLong.jsp',{
 			'nombre':userName,
 			'latitud':latitudUser,
@@ -259,7 +290,7 @@ function actualizar(){
 				entry['quantity'],entry['name'],entry['description'],entry['info'],
 				entry['latitud'],entry['longitud'],entry['address'],entry['state'],
 				entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
-				null,entry['size'],entry['traffic'],entry['idAssigned'],entry['weight'],entry['mobility'],null);
+				null,entry['size'],entry['traffic'],entry['idAssigned'],entry['floor'],null);
 
 			//pintamos los nuevos, para lo que comprobamos que no existian
 			if(marcadores_definitivos[nuevomarcador.id] == null){
@@ -713,7 +744,39 @@ function generaMarcador(evento, caracter){
 				}
 				document.getElementById('icono_heridos').src = 'markers/' + tipo + '1.png';
 				document.getElementById('sintomas').style.display = 'block';
-				document.getElementById('emergencia').value = evento.idAssigned;
+				//document.getElementById('emergencia').value = evento.idAssigned;
+
+				document.getElementById('textoAsoc').innerHTML = '';
+				document.getElementById('checkboxAsoc').innerHTML = '';
+				document.getElementById('selectAsoc').innerHTML = '';
+				$.getJSON('getAsociaciones.jsp', {
+					'tipo':'asociadas',
+					'iden': evento.id
+				}, function(data) {
+					$.each(data, function(entryIndex, entry) {
+						if(entryIndex == 0){
+							document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
+							asociadas = newArray();
+						}
+						document.getElementById('checkboxAsoc').innerHTML += '<input type="checkbox" name="assigned' + entryIndex + '" checked="checked"/>' + entry['id'] +' - ' + entry['nombre'] + '<br/>';
+						asociadas.put([entry['id'],true]);
+					});
+				});
+				$.getJSON('getAsociaciones.jsp', {
+					'tipo':'emergencias',
+					'iden': evento.id
+				}, function(data) {
+					$.each(data, function(entryIndex, entry){
+						if(entryIndex == 0){
+							document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
+							document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0"></option></select>';
+						}
+						document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
+					});
+					if(document.getElementById('selectAsoc').innerHTML == ''){
+						document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar';
+					}
+				});
 			}else if(evento.marcador == 'resource'){
 				document.getElementById('listaRecursos').style.display = 'none';
 				document.getElementById('datos').style.display = 'block';
@@ -727,6 +790,7 @@ function generaMarcador(evento, caracter){
 					document.getElementById('form-posicion').longitud.value = evento.longitud;
 					document.getElementById('form-posicion').direccion.value = '';
 					centroAux = [map.getCenter(),map.getZoom()];
+					localizacion = false;
 				}
 			}
 			
@@ -746,6 +810,11 @@ function generaMarcador(evento, caracter){
 				lateral.descripcion.value = evento.descripcion;
 				lateral.direccion.value = evento.direccion;
 				lateral.iden.value = evento.id;
+				for(i=0; i<5; i++){
+					if(lateral.planta[i].value == evento.planta){
+						lateral.planta[i].selected = 'selected';
+					}
+				}
 				if(evento.marcador == 'event'){
 					for(i=0; i<4; i++){
 						if(lateral.size[i].value == evento.size){
@@ -759,12 +828,12 @@ function generaMarcador(evento, caracter){
 					}
 				}else if(evento.marcador == 'people'){
 					for(i=0; i<4; i++){
-						if(lateral.peso[i].value == evento.weight){
+						if(lateral.peso[i].value == evento.size){
 							lateral.peso[i].selected = 'selected';
 						}
 					}
 					for(i=0; i<5; i++){
-						if(lateral.movilidad[i].value == evento.mobility){
+						if(lateral.movilidad[i].value == evento.traffic){
 							lateral.movilidad[i].selected = 'selected';
 						}
 					}
@@ -829,7 +898,27 @@ function generaMarcador(evento, caracter){
 				document.getElementById('submit20').style.display = 'none';
 				document.getElementById('eliminar2').style.display = 'none';
 				document.getElementById('sintomas').style.display = 'none';
+
+				document.getElementById('textoAsoc').innerHTML = '';
+				document.getElementById('checkboxAsoc').innerHTML = '';
+				document.getElementById('selectAsoc').innerHTML = '';
+				$.getJSON('getAsociaciones.jsp', {
+					'tipo':'todasEmergencias'
+				}, function(data) {
+					$.each(data, function(entryIndex, entry) {
+						if(entryIndex == 0){
+							document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
+							document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0"></option></select>';
+						}
+						document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
+					});
+					if(document.getElementById('selectAsoc').innerHTML == ''){
+						document.getElementById('textoAsoc').innerHTML = '';
+						document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar';
+					}
+				});
 			}else if(evento.marcador == 'resource'){
+				localizacion = document.getElementById('form-posicion').localizacion.checked;
 				document.getElementById('datos').style.display = 'none';
 				document.getElementById('listaRecursos').style.display = 'block';
 				if(evento.nombre == userName){
@@ -856,6 +945,7 @@ function generaMarcador(evento, caracter){
 					lateral.descripcion.value = '';
 					lateral.direccion.value = '';
 					lateral.iden.value = '';
+					lateral.planta[0].selected = 'selected';
 					if(evento.marcador == 'event'){
 						lateral.size[0].selected = 'selected';
 						lateral.traffic[0].selected = 'selected';
@@ -869,14 +959,14 @@ function generaMarcador(evento, caracter){
 		});
 	}
 
-	if((evento.tipo != 'healthy') || verSanos){ //(!(evento.marcador=='resource' && caracter==1)){
+	if((evento.planta == -2 || evento.planta == planta) &&((evento.tipo != 'healthy') || verSanos)){ //(!(evento.marcador=='resource' && caracter==1)){
 		map.addOverlay(marker);
 	}
 	return marker;
 }
 
 function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-	weight,mobility,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+	planta,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 
 	var sintomas = '';
 	if(fatigue) sintomas += 'fatigue,';
@@ -893,7 +983,7 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,
 		descripcion,info,latitud,longitud,direccion,estado,
 		obtiene_fecha(), obtiene_fecha(),usuario_actual, usuario_actual_tipo,null,
-		size,traffic,idAssigned,weight,mobility,sintomas);
+		size,traffic,idAssigned,planta,sintomas);
 
 	if(marcador=='event'){
 		nuevomarcador.size=size;
@@ -911,13 +1001,13 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 }
 
 function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-	weight,mobility,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
+	planta,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 	//utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if (caracter_temp==TEMPORAL){
 		//Actualizar la matriz temporal
 		eliminar(marcadores_temporales[id],TEMPORAL);
 		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,
-			weight,mobility,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness);
+			planta,fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness);
 	}
 	
 	if (caracter_temp==DEFINITIVO){
@@ -951,8 +1041,7 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 			'idAssigned':idAssigned,
 			'fecha':puntero_temp.fecha,
 			'usuario':usuario_actual,
-			'weight':weight,
-			'mobility':mobility,
+			'planta':planta,
 			'sintomas':sintomas,
 			'accion':'modificar'
 		});
@@ -960,7 +1049,7 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 	}
 }
 
-function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traffic,idAssigned,weight,mobility){
+function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traffic,idAssigned,planta){
 	var puntero = marcadores_definitivos[id];
 	var idA;
 	if(idAssigned != null){
@@ -985,8 +1074,7 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traf
 		'idAssigned':idA,
 		'fecha':puntero.fecha,
 		'usuario':usuario_actual,
-		'weight':weight,
-		'mobility':mobility,
+		'planta':planta,
 		'sintomas':puntero.sintomas,
 		'accion':'modificar'
 	});
@@ -1027,8 +1115,7 @@ function modificar3(id,tipo,fatigue,fever,dyspnea,nausea,headache,vomiting,abdom
 		'idAssigned':puntero.idAssigned,
 		'fecha':puntero.fecha,
 		'usuario':usuario_actual,
-		'weight':puntero.weight,
-		'mobility':puntero.mobility,
+		'planta':puntero.planta,
 		'sintomas':sintomas,
 		'accion':'modificar'
 	});
@@ -1147,8 +1234,7 @@ function guardar(puntero){
 		'idAssigned':puntero.idAssigned,
 		'fecha':puntero.fecha,
 		'usuario':puntero.nombre_usuario,
-		'weight':puntero.weight,
-		'mobility':puntero.mobility,
+		'planta':puntero.planta,
 		'sintomas':puntero.sintomas
 	},
 	function(data){
@@ -1274,8 +1360,7 @@ function eliminar(puntero,caracter){
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual,
-				'weight':puntero.weight,
-				'mobility':puntero.mobility,
+				'planta':puntero.planta,
 				'accion':'eliminar'
 			});
 			registrarHistorial(userName, puntero.id, 'modif');
@@ -1297,8 +1382,7 @@ function eliminar(puntero,caracter){
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual,
-				'weight':puntero.weight,
-				'mobility':puntero.mobility,
+				'planta':puntero.planta,
 				'accion':'eliminar'
 			});
 			registrarHistorial(userName, puntero.id, 'eliminar');
@@ -1351,7 +1435,7 @@ function mostrarSanos(mostrar){
 }
 
 function cambiarGeolocalizacion(valor){
-	localizacion = valor;
+	//localizacion = valor;
 	$.post('updateLatLong.jsp',{
 		'nombre':userName,
 		'localizacion':valor
@@ -1376,4 +1460,37 @@ function registrarHistorial(usuario, idEvento, accion){
 		'usuario':usuario,
 		'evento':evento
 	});
+}
+
+function cambiarPlanta(num){
+	map.removeOverlay(resi);
+	document.getElementById('planta'+planta).style.fontWeight = 'normal';
+	document.getElementById('planta'+planta).style.textDecoration = 'none';
+	
+	planta = num;
+	
+	document.getElementById('planta'+num).style.fontWeight = 'bold';
+	document.getElementById('planta'+num).style.textDecoration = 'underline';
+	if(num >= 0){
+		document.getElementById('planoResidencia').src = 'images/residencia/planta' + num + '.jpg';
+		document.getElementById('plantaPlano').innerHTML = num;
+		resi.getIcon().image = 'images/residencia/planta' + num + '.png';
+		map.addOverlay(resi);
+	}
+
+	//for(i=1; i<marcadores_definitivos.length; i++){
+	for(i in marcadores_definitivos){
+		map.removeOverlay(marcadores_definitivos[i].marker);
+		if(num != -2){
+			if(marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2){
+				if(marcadores_definitivos[i].tipo != 'healthy' || verSanos){
+					map.addOverlay(marcadores_definitivos[i].marker);
+				}
+			}
+		}else{
+			if(marcadores_definitivos[i].tipo != 'healthy' || verSanos){
+				map.addOverlay(marcadores_definitivos[i].marker);
+			}
+		}
+	}
 }

@@ -1,6 +1,6 @@
 function initialize2(){
 	if(nivelMsg > 1){
-		if(document.getElementById('heridos').verSanos.checked){
+		if(document.getElementById('opcionesMapa').verSanos.checked){
 			verSanos = true;
 		}
 	}

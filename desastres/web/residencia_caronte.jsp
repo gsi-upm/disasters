@@ -4,6 +4,14 @@
 
 <%@ include file="info_caronte.jsp" %>
 <fmt:bundle basename="fmt.eji8n">
+	<form action="#" id="opcionesMapa" style="float:right">
+		<input type="checkbox" name="verSanos" onclick="mostrarSanos(verSanos.checked)"/> Ver personas sanas //
+		<span id="planta-2" onclick="cambiarPlanta(-2)" style="cursor:pointer">Visi&oacute;n general</span> -
+		<span id="planta-1" onclick="cambiarPlanta(-1)" style="cursor:pointer">Exterior</span> -
+		<span id="planta0" onclick="cambiarPlanta(0)" style="cursor:pointer; font-weight:bold; text-decoration:underline"><fmt:message key="planta"/> 0</span> -
+		<span id="planta1" onclick="cambiarPlanta(1)" style="cursor:pointer"><fmt:message key="planta"/> 1</span> -
+		<span id="planta2" onclick="cambiarPlanta(2)" style="cursor:pointer"><fmt:message key="planta"/> 2</span>
+	</form>
 	<div id="dhtmlgoodies_tabView2">
 		<div class="dhtmlgoodies_aTab">
 			<div id="map_canvas"></div>
@@ -11,18 +19,13 @@
 		<div class="dhtmlgoodies_aTab">
 			<!-- Tabla de ejemplo hasta introducir imagenes -->
 			<script type="text/javascript">
-				function cambiarPlanta(num){
-					document.getElementById('planoResidencia').src = 'images/residencia/planta' + num + '.jpg'
-				}
 			</script>
 			<table class="tabla_menu">
 				<tr>
 					<th rowspan="5">
 						<img id="planoResidencia" src="images/residencia/planta0.jpg" alt="Residencia" style="width:611px;height:487px"/>
 						<br/>
-						<span onclick="cambiarPlanta(0)" style="cursor:pointer"><fmt:message key="planta"/> 0</span> -
-						<span onclick="cambiarPlanta(1)" style="cursor:pointer"><fmt:message key="planta"/> 1</span> -
-						<span onclick="cambiarPlanta(2)" style="cursor:pointer"><fmt:message key="planta"/> 2</span>
+						<fmt:message key="planta"/> <span id="plantaPlano">0</span>
 					</th>
 					<td><img alt="" src="markers/fuego.png"/></td>
 					<td>(${firesResi.rowCount})</td>

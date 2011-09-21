@@ -106,7 +106,7 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 				String informacion = usuario.getJSONObject(0).getString("email");
 				Connection.connect("http://localhost:8080/desastres/rest/post/type=" + tipoUsuario +
 						"&name=" + username + "&description=" + descripcion + "&info=" + informacion +
-						"&quantity=1&latitud=" + latitud + "&longitud=" + longitud + "&idAssigned=0");
+						"&quantity=1&latitud=" + latitud + "&longitud=" + longitud + "&idAssigned=0&floor=-2");
 			}
 		} catch (Exception ex) {
 			System.out.println("Excepcion en TrivialSecurityRealm.booleanAuthenticate(): " + ex);

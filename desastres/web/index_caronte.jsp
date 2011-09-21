@@ -104,11 +104,11 @@
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
-						v.76
+						v.77
 						<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png" alt="lang:<fmt:message key="idioma"/>"
 							 onclick="document.getElementById('langSelect').style.display='inline'; document.getElementById('langInit').style.display='none';"/>
 						<span id="langSelect" style="display:none">
-							<img class="pulsable" src="images/close.gif"
+							<img class="pulsable" src="images/close.gif" alt="cerrar"
 								  onclick="document.getElementById('langSelect').style.display='none'; document.getElementById('langInit').style.display='inline';"/>
 							<c:url var="index_es" value="index.jsp"><c:param name="lang" value="es"/></c:url>
 							<a href="${index_es}"><img src="images/flags/es.png" alt="Espa&ntilde;ol" onclick="<fmt:setLocale value="es"/>"/></a>

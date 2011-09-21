@@ -183,17 +183,13 @@
 	<c:when test="${param.action eq 'registrar'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO usuarios (nombre_usuario, password, tipo_usuario, nombre_real, correo)
-				VALUES (?, ?, 'citizen', ?, ?)
+				INSERT INTO usuarios (nombre_usuario, password, tipo_usuario, nombre_real, correo,
+				latitud, longitud, localizacion, proyecto)
+				VALUES (?, ?, 'citizen', ?, ?, 0.0, 0.0, FALSE, 'caronte')
 				<sql:param value="${param.user}"/>
 				<sql:param value="${param.pass}"/>
 				<sql:param value="${param.nombre}"/>
 				<sql:param value="${param.email}"/>
-			</sql:update>
-			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO relaciones (id_usuario, id_proyecto)
-				VALUES (SELECT id_usuarios FROM usuarios WHERE nombre_usuario = ?, 2)
-				<sql:param value="${param.user}"/>
 			</sql:update>
 		</c:catch>
 	</c:when>

@@ -71,8 +71,7 @@
         <json:property name="size" value="${evento.size}"/>
         <json:property name="traffic" value="${evento.traffic}"/>
         <json:property name="idAssigned" value="${evento.idAssigned}"/>
-        <json:property name="weight" value="${evento.peso}"/>
-        <json:property name="mobility" value="${evento.movilidad}"/>
+        <json:property name="floor" value="${evento.planta}"/>
         <json:property name="date" value="${evento.fecha}"/>
         <json:property name="modified" value="${evento.modificado}"/>
         <json:property name="user_name" value="${evento.nombre_usuario}"/>
