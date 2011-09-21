@@ -756,10 +756,8 @@ function generaMarcador(evento, caracter){
 					$.each(data, function(entryIndex, entry) {
 						if(entryIndex == 0){
 							document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-							asociadas = newArray();
 						}
 						document.getElementById('checkboxAsoc').innerHTML += '<input type="checkbox" name="assigned' + entryIndex + '" checked="checked"/>' + entry['id'] +' - ' + entry['nombre'] + '<br/>';
-						asociadas.put([entry['id'],true]);
 					});
 				});
 				$.getJSON('getAsociaciones.jsp', {
