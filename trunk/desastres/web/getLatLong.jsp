@@ -11,7 +11,8 @@
 <%@ include file="database.jspf" %> 
 
 <sql:query var="datos" dataSource="${CatastrofesServer}" sql="
-	SELECT latitud, longitud, localizacion FROM usuarios
+	SELECT latitud, longitud, localizacion
+	FROM usuarios
 	WHERE nombre_usuario = ?;">
 	<sql:param value="${param.nombre}"/>
 </sql:query>
@@ -24,4 +25,3 @@
 	</json:object> ,
 </c:forEach>
 ]
-ok

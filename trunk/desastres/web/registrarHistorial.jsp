@@ -15,7 +15,7 @@
 <c:catch var="errorUpdate">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO historial (usuario,evento)
-		VALUES (SELECT id_usuarios FROM usuarios WHERE nombre_usuario = ?,?)
+		VALUES (SELECT id FROM usuarios WHERE nombre_usuario = ?,?)
 		<sql:param value="${param.usuario}"/>
 		<sql:param value="${param.evento}"/>
 	</sql:update>

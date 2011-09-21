@@ -34,7 +34,7 @@ public class RegistroServlet extends HttpServlet {
 			String email = request.getParameter("email");
 			String contra = MD5(contraAux);
 
-			String rolAux = Connection.connect(Environment.URL + "userProyect/" + usuario);
+			String rolAux = Connection.connect(Environment.URL + "userRole/" + usuario);
 			JSONArray rol = new JSONArray(rolAux);
 
 			if(rol.length() == 0){

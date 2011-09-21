@@ -17,8 +17,8 @@
 
 <c:catch var="errorUpdate">
     <sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO CATASTROFES (
-				marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario)
-				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
+				marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
+				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
 		<sql:param value="${param.item}"/>
 		<sql:param value="${param.type}"/>
 		<sql:param value="${param.quantity}"/>
@@ -34,6 +34,7 @@
 		<sql:param value="${param.idAssigned}"/>
 		<sql:param value="${param.date}"/>
 		<sql:param value="${param.user}"/>
+		<sql:param value="${param.floor}"/>
 	</sql:update>
 </c:catch>
 <!-- Returns the ID of the las record inserted -->

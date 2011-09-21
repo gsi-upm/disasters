@@ -86,8 +86,8 @@
 
 <c:catch var="errorUpdate">
     <sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO CATASTROFES (
-				marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario)
-				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
+				marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
+				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
 		<sql:param value="${item}"/>
 		<sql:param value="${param.type}"/>
 		<sql:param value="${number}"/>
@@ -103,6 +103,7 @@
 		<sql:param value="${idAssigned}"/>
 		<sql:param value="${param.date}"/>
 		<sql:param value="${param.user}"/>
+		<sql:param value="${param.floor}"/>
 	</sql:update>
 </c:catch>
 

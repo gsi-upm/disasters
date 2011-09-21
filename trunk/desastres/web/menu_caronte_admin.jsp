@@ -57,6 +57,18 @@
 				</table>
 				<table class="tabla_menu">
 					<tr>
+						<td><fmt:message key="planta"/></td>
+						<td>
+							<select name="planta" id="select-planta1">
+								<option value="-2" selected="selected">Visi&oacute;n general</option>
+								<option value="-1">Exterior</option>
+								<option value="0"><fmt:message key="planta"/> 0</option>
+								<option value="1"><fmt:message key="planta"/> 1</option>
+								<option value="2"><fmt:message key="planta"/> 2</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
 						<td><label for="size"><fmt:message key="tamanno"/>:</label></td>
 						<td>
 							<select name="size" id="size">
@@ -86,14 +98,14 @@
 					<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;"/>
 					<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
 						iden.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,descripcion.value,
-						direccion.value,size.value,traffic.value);return false;"/>
+						direccion.value,size.value,traffic.value,null,planta.value);return false;"/>
 					<input type="button" id="eliminar1" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				</p>
 				<div class="jqmWindow" id="dialog1">
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('event',seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',size.value,traffic.value,0);
+							descripcion.value,direccion.value,longitud.value,latitud.value,'active',size.value,traffic.value,0,planta.value);
 							$('#dialog1').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>
@@ -135,25 +147,24 @@
 						</td>
 					</tr>
 				</table>
-				<p>
-					<sql:query var="emergencias" dataSource="${CatastrofesServer}"
-							   sql="SELECT * FROM catastrofes WHERE marcador='event' AND estado!='erased'">
-					</sql:query>
-					<c:if test="${emergencias.rowCount > 0}">
-						Asociado a:
-						<select name="idAssigned" id="emergencia">
-							<option value="0">0 - Sin asociar</option>
-							<c:forEach var="emergencia" items="${emergencias.rows}">
-								<option value="${emergencia.id}">${emergencia.id} - ${emergencia.nombre}</option>
-							</c:forEach>
-						</select>
-					</c:if>
-					<c:if test="${emergencias.rowCount == 0}">
-						Sin emergencias para asociar
-						<input type="hidden" name="idAssigned" value="0"/>
-					</c:if>
+				<p id="asociacionesEmergencias">
+					<span id="textoAsoc"></span>
+					<span id="checkboxAsoc"></span>
+					<span id="selectAsoc"></span>
 				</p>
 				<table class="tabla_menu">
+					<tr>
+						<td><fmt:message key="planta"/></td>
+						<td>
+							<select name="planta" id="select-planta2">
+								<option value="-2" selected="selected">Visi&oacute;n general</option>
+								<option value="-1">Exterior</option>
+								<option value="0"><fmt:message key="planta"/> 0</option>
+								<option value="1"><fmt:message key="planta"/> 1</option>
+								<option value="2"><fmt:message key="planta"/> 2</option>
+							</select>
+						</td>
+					</tr>
 					<tr>
 						<td>Peso</td>
 						<td>
@@ -216,25 +227,20 @@
 					<input type="hidden" name="iden" value=""/>
 					<input type="hidden" name="latitud" id="latitud2" value=""/>
 					<input type="hidden" name="longitud" id="longitud2" value=""/>
-					<input type="hidden" name="size" id="magnitude2" value=""/>
-					<input type="hidden" name="traffic" id="traffic2" value=""/>
 					<input type="hidden" name="cantidad" value="1"/>
 				</p>
 				<p>
 					<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;"/>
 					<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
 						iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
-						direccion.value,size.value,traffic.value,idAssigned.value,peso.value,movilidad.value);return false;"/>
+						direccion.value,peso.value,movilidad.value,idAssigned.value,planta.value);return false;"/>
 					<input type="button" id="eliminar2" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
-					<br/>
-					<br/>
-					VER PERSONAS SANAS <input type="checkbox" name="verSanos" onclick="mostrarSanos(verSanos.checked)"/>
 				</p>
 				<div class="jqmWindow" id="dialog2">
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',size.value,traffic.value,0,peso.value,movilidad.value);
+							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,idAssigned.value,planta.value);
 							$('#dialog2').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>
@@ -298,11 +304,11 @@
 					</tr>
 					<tr>
 						<td>Latitud</td>
-						<td><input type="number" name="latitud" max="90" min="-90" step="0.000001" value="" size="29"/></td>
+						<td><input type="number" name="latitud" size="29" value="0" max="90" min="-90" step="0.000001"/></td>
 					</tr>
 					<tr>
 						<td>Longitud</td>
-						<td><input type="number" name="longitud" max="180" min="-179.999999" step="0.000001" value="" size="29"/></td>
+						<td><input type="number" name="longitud" size="29" value="0" max="180" min="-179.999999" step="0.000001"/></td>
 					</tr>
 					<tr>
 						<td>Direcci&oacute;n</td>

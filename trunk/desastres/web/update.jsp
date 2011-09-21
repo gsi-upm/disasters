@@ -13,14 +13,13 @@
 <% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
 
 <sql:update dataSource="${CatastrofesServer}">
-    UPDATE catastrofes SET
-    marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?,
+	UPDATE catastrofes SET
+	marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?,
 	latitud = ?, longitud = ?, direccion = ?, estado = ?, size=?, traffic=?,
-	idAssigned=?, fecha = ?, usuario = ?, peso = ?, movilidad = ?, sintomas = ?, modificado = <%=modif%>
-    WHERE id = ?
-    
-    <sql:param value="${param.marcador}"/>
-    <sql:param value="${param.tipo}"/>
+	fecha = ?, usuario = ?, planta = ?, sintomas = ?, modificado = <%=modif%>
+	WHERE id = ?
+	<sql:param value="${param.marcador}"/>
+	<sql:param value="${param.tipo}"/>
     <sql:param value="${param.cantidad}"/>
     <sql:param value="${param.nombre}"/>
     <sql:param value="${param.descripcion}"/>
@@ -31,14 +30,20 @@
     <sql:param value="${param.estado}"/>
     <sql:param value="${param.size}"/>
     <sql:param value="${param.traffic}"/>
-    <sql:param value="${param.idAssigned}"/>
     <sql:param value="${param.fecha}"/>
     <sql:param value="${param.usuario}"/>
-    <sql:param value="${param.weight}"/>
-    <sql:param value="${param.mobility}"/>
+    <sql:param value="${param.planta}"/>
 	<sql:param value="${param.sintomas}"/>
     <sql:param value="${param.id}"/>
 </sql:update>
+<c:if test="${param.idAssigned != 0}">
+	<sql:update dataSource="${CatastrofesServer}">
+		INSERT INTO asociaciones_heridos_emergencias(id_herido, id_emergencia, estado)
+		VALUES(?,?,'active')
+		<sql:param value="${param.id}"/>
+		<sql:param value="${param.idAssigned}"/>
+	</sql:update>
+</c:if>
 <c:if test="${param.accion == 'eliminar'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
