@@ -912,6 +912,8 @@ exists or setup the property manually. For example like this:
 	<!--
         DIST BUILDING SECTION
        -->
+	<target depends="dist-caronte,dist-disasters" 
+	    		description="Build configurated distributions (WARs)." name="dist"/>
 			<!--
 				CARONTE PROJECT
 				-->
@@ -964,7 +966,7 @@ exists or setup the property manually. For example like this:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="init,compile,-pre-dist,do-dist,-post-dist" 
-    		description="Build Caronte distribution (WAR)." name="dist"/>
+    		description="Build Caronte distribution (WAR)." name="dist-caronte"/>
     <target depends="init,-clean-webinf-lib,-init-cos,compile,-pre-dist,do-ear-dist,-post-dist" 
     		description="Build Caronte distribution (WAR) to be packaged into an EAR." name="dist-ear"/>
 	<target depends="dist" description="Build Caronte jadex standalone .jar"
@@ -1274,6 +1276,9 @@ exists or setup the property manually. For example like this:
         <nbbrowse file="${dist.specific.javadoc.dir}/index.html"/>
     </target>
     <target depends="init" description="Build Javadoc." name="javadoc">
+    	<!--
+    			CARONTE PROJECT
+    				-->
     	<antcall target="javadoc-build">
     		<param name="dist.specific.javadoc.dir" value="${dist.javadoc.dir}"/>
     		<param name="specific.excludes" value="${excludes},${excludes.caronte.src}"/>
@@ -1282,6 +1287,9 @@ exists or setup the property manually. For example like this:
     	<antcall target="javadoc-browse">
     		<param name="dist.javadoc.dir" value="${dist.javadoc.dir}"/>
     	</antcall>
+    	<!--
+    			DISASTERS PROJECT
+    				-->
     	<antcall target="javadoc-build">
     		<param name="dist.specific.javadoc.dir" value="${dist.javadoc.dir.disasters}"/>
     		<param name="specific.excludes" value="${excludes},${excludes.disasters.src}"/>
@@ -1418,6 +1426,7 @@ exists or setup the property manually. For example like this:
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps"/>
     <target depends="init" name="do-clean">
+    	<echo message="Doing cleanup..."/>
         <condition property="build.dir.to.clean" value="${build.web.dir}">
             <isset property="dist.ear.dir"/>
         </condition>
@@ -1437,6 +1446,7 @@ exists or setup the property manually. For example like this:
         <nbundeploy failOnError="false" startServer="false"/>
     </target>
     <target name="-post-clean">
+    	<echo message="Cleanup completed"/>
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
