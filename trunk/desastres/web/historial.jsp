@@ -17,11 +17,17 @@
         <title>Historial</title>
     </head>
     <body>
-		<sql:query var="eventos" dataSource="${CatastrofesServer}"
-			sql="SELECT * FROM catastrofes">
+		<sql:query var="asociaciones" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM asociaciones_heridos_emergencias">
+		</sql:query>
+		<sql:query var="actividades" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM actividades">
 		</sql:query>
 		<sql:query var="usuarios" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM usuarios">
+		</sql:query>
+		<sql:query var="eventos" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM catastrofes">
 		</sql:query>
         <sql:query var="entradas" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM historial">
@@ -29,10 +35,73 @@
 		<sql:query var="mensajes" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM mensajes">
 		</sql:query>
-		<sql:query var="asociaciones" dataSource="${CatastrofesServer}"
-			sql="SELECT * FROM asociaciones_heridos_emergencias">
+		<sql:query var="tipos_estados" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM tipos_estados">
 		</sql:query>
-		<p>EVENTOS</p>
+		<sql:query var="tipos_emergencias" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM tipos_emergencias">
+		</sql:query>
+		<sql:query var="tipos_heridos" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM tipos_heridos">
+		</sql:query>
+		<sql:query var="tipos_usuarios" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM tipos_usuarios">
+		</sql:query>
+		<sql:query var="tipos_actividades" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM tipos_actividades">
+		</sql:query>
+		<sql:query var="tipos_eventos" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM tipos_eventos">
+		</sql:query>
+		<p>ASOCIACIONES_HERIDOS_EMERGENCIAS</p>
+		<table border="1">
+			<tr><th>ID</th><th>ID_HERIDO</th><th>ID_EMERGENCIA</th><th>ESTADO</th><th>FECHA</th></tr>
+			<c:forEach var="asociacion" items="${asociaciones.rows}">
+				<tr>
+					<td>${asociacion.id}</td>
+					<td>${asociacion.id_herido}</td>
+					<td>${asociacion.id_emergencia}</td>
+					<td>${asociacion.estado}</td>
+					<td>${asociacion.fecha}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>ACTIVIDADES</p>
+		<table border="1">
+			<tr><th>ID</th><th>ID_USUARIO</th><th>ID_EMERGENCIA</th><th>ID_TIPO_ACTIVIDAD</th><th>ESTADO</th><th>FECHA</th></tr>
+			<c:forEach var="actividad" items="${actividades.rows}">
+				<tr>
+					<td>${actividad.id}</td>
+					<td>${actividad.id_usuario}</td>
+					<td>${actividad.id_emergencia}</td>
+					<td>${actividad.id_tipo_actividad}</td>
+					<td>${actividad.estado}</td>
+					<td>${actividad.fecha}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>USUARIOS</p>
+		<table border="1">
+			<tr>
+				<th>ID</th><th>NOMBRE_USUARIO</th><th>PASSWORD</th><th>TIPO_USUARIO</th><th>NOMBRE_REAL</th>
+				<th>CORREO</th><th>LATITUD</th><th>LONGITUD</th><th>LOCALIZACION</th><th>PROYECTO</th>
+			</tr>
+			<c:forEach var="usuario" items="${usuarios.rows}">
+				<tr>
+					<td>${usuario.id}</td>
+					<td>${usuario.nombre_usuario}</td>
+					<td>${usuario.password}</td>
+					<td>${usuario.tipo_usuario}</td>
+					<td>${usuario.nombre_real}</td>
+					<td>${usuario.correo}</td>
+					<td>${usuario.latitud}</td>
+					<td>${usuario.longitud}</td>
+					<td>${usuario.localizacion}</td>
+					<td>${usuario.proyecto}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>CATASTROFES</p>
 		<table border="1">
 			<tr>
 				<th>ID</th><th>MARCADOR</th><th>TIPO</th><th>CANTIDAD</th><th>NOMBRE</th>
@@ -64,40 +133,6 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<p>USUARIOS</p>
-		<table border="1">
-			<tr>
-				<th>ID</th><th>NOMBRE_USUARIO</th><th>PASSWORD</th><th>TIPO_USUARIO</th><th>NOMBRE_REAL</th>
-				<th>CORREO</th><th>LATITUD</th><th>LONGITUD</th><th>LOCALIZACION</th><th>PROYECTO</th>
-			</tr>
-			<c:forEach var="usuario" items="${usuarios.rows}">
-				<tr>
-					<td>${usuario.id}</td>
-					<td>${usuario.nombre_usuario}</td>
-					<td>${usuario.password}</td>
-					<td>${usuario.tipo_usuario}</td>
-					<td>${usuario.nombre_real}</td>
-					<td>${usuario.correo}</td>
-					<td>${usuario.latitud}</td>
-					<td>${usuario.longitud}</td>
-					<td>${usuario.localizacion}</td>
-					<td>${usuario.proyecto}</td>
-				</tr>
-			</c:forEach>
-		</table>
-		<p>ASOCIACIONES_HERIDOS_EMERGENCIAS</p>
-		<table border="1">
-			<tr><th>ID</th><th>ID_HERIDO</th><th>ID_EMERGENCIA</th><th>ESTADO</th><th>FECHA</th></tr>
-			<c:forEach var="asociacion" items="${asociaciones.rows}">
-				<tr>
-					<td>${asociacion.id}</td>
-					<td>${asociacion.id_herido}</td>
-					<td>${asociacion.id_emergencia}</td>
-					<td>${asociacion.estado}</td>
-					<td>${asociacion.fecha}</td>
-				</tr>
-			</c:forEach>
-		</table>
 		<p>HISTORIAL</p>
 		<table border="1">
 			<tr><th>ID</th><th>USUARIO</th><th>EVENTO</th><th>FECHA</th></tr>
@@ -119,6 +154,76 @@
 					<td>${fila.mensaje}</td>
 					<td>${fila.nivel}</td>
 					<td>${fila.fecha}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<hr/>
+		<p>TIPOS_ESTADOS</p>
+		<table border="1">
+			<tr><th>ID</th><th>TIPO</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="estado" items="${tipos_estados.rows}">
+				<tr>
+					<td>${estado.id}</td>
+					<td>${estado.tipo}</td>
+					<td>${estado.descripcion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>TIPOS_EMERGENCIAS</p>
+		<table border="1">
+			<tr><th>ID</th><th>TIPO</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="emergencia" items="${tipos_emergencias.rows}">
+				<tr>
+					<td>${emergencia.id}</td>
+					<td>${emergencia.tipo}</td>
+					<td>${emergencia.descripcion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>TIPOS_HERIDOS</p>
+		<table border="1">
+			<tr><th>ID</th><th>TIPO</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="herido" items="${tipos_heridos.rows}">
+				<tr>
+					<td>${herido.id}</td>
+					<td>${herido.tipo}</td>
+					<td>${herido.descripcion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>TIPOS_USUARIOS</p>
+		<table border="1">
+			<tr><th>ID</th><th>TIPO</th><th>NIVEL</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="usuario" items="${tipos_usuarios.rows}">
+				<tr>
+					<td>${usuario.id}</td>
+					<td>${usuario.tipo}</td>
+					<td>${usuario.nivel}</td>
+					<td>${usuario.descripcion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>TIPOS_ACTIVIDADES</p>
+		<table border="1">
+			<tr><th>ID</th><th>TIPO</th><th>TIPO_EMERGENCIA</th><th>ESTADO_EMERGENCIA</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="actividad" items="${tipos_actividades.rows}">
+				<tr>
+					<td>${actividad.id}</td>
+					<td>${actividad.tipo}</td>
+					<td>${actividad.tipo_emergencia}</td>
+					<td>${actividad.estado_emergencia}</td>
+					<td>${actividad.descripcion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>TIPOS_EVENTOS</p>
+		<table border="1">
+			<tr><th>ID</th><th>TIPO</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="evento" items="${tipos_eventos.rows}">
+				<tr>
+					<td>${evento.id}</td>
+					<td>${evento.tipo}</td>
+					<td>${evento.descripcion}</td>
 				</tr>
 			</c:forEach>
 		</table>

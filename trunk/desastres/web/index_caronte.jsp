@@ -104,7 +104,7 @@
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
-						v.77
+						v.80
 						<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png" alt="lang:<fmt:message key="idioma"/>"
 							 onclick="document.getElementById('langSelect').style.display='inline'; document.getElementById('langInit').style.display='none';"/>
 						<span id="langSelect" style="display:none">

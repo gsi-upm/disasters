@@ -90,17 +90,16 @@
 						</td>
 					</tr>
 				</table>
-				<p>
-					<input type="hidden" name="iden" id="iden1" value=""/>
-					<input type="hidden" name="latitud" id="latitud1" value=""/>
-					<input type="hidden" name="longitud" id="longitud1" value=""/>
-					<input type="hidden" name="cantidad" value="1"/>
-					<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;"/>
-					<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
-						iden.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,descripcion.value,
-						direccion.value,size.value,traffic.value,null,planta.value);return false;"/>
-					<input type="button" id="eliminar1" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
-				</p>
+				<input type="hidden" name="iden" id="iden1" value=""/>
+				<input type="hidden" name="latitud" id="latitud1" value=""/>
+				<input type="hidden" name="longitud" id="longitud1" value=""/>
+				<input type="hidden" name="cantidad" value="1"/>
+				<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;"/>
+				<br/>
+				<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
+					iden.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,descripcion.value,
+					direccion.value,size.value,traffic.value,null,planta.value);return false;"/>
+				<input type="button" id="eliminar1" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog1">
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
@@ -223,19 +222,16 @@
 						</td>
 					</tr>
 				</table>
-				<p>
-					<input type="hidden" name="iden" value=""/>
-					<input type="hidden" name="latitud" id="latitud2" value=""/>
-					<input type="hidden" name="longitud" id="longitud2" value=""/>
-					<input type="hidden" name="cantidad" value="1"/>
-				</p>
-				<p>
-					<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;"/>
-					<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
-						iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
-						direccion.value,peso.value,movilidad.value,idAssigned.value,planta.value);return false;"/>
-					<input type="button" id="eliminar2" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
-				</p>
+				<input type="hidden" name="iden" value=""/>
+				<input type="hidden" name="latitud" id="latitud2" value=""/>
+				<input type="hidden" name="longitud" id="longitud2" value=""/>
+				<input type="hidden" name="cantidad" value="1"/>
+				<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;"/>
+				<br/>
+				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
+					iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
+					direccion.value,peso.value,movilidad.value,idAssigned.value,planta.value);return false;"/>
+				<input type="button" id="eliminar2" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog2">
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
@@ -290,6 +286,10 @@
 					<tr>
 						<td>Correo</td>
 						<td id="datos-correo"></td>
+					</tr>
+					<tr>
+						<td id="datos-actividades-titulo"></td>
+						<td id="datos-actividades"></td>
 					</tr>
 				</table>
 			</div>
