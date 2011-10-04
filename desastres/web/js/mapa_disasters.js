@@ -20,3 +20,7 @@ function buildingInit(){
 		showGeriatricCenters();
 	}
 }
+
+function cargarLateral(){}
+
+function limpiarLateral(){}

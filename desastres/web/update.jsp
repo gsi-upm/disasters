@@ -36,7 +36,7 @@
 	<sql:param value="${param.sintomas}"/>
     <sql:param value="${param.id}"/>
 </sql:update>
-<c:if test="${param.idAssigned != 0}">
+<c:if test="${param.idAssigned != 0 && param.accion != 'eliminarAsociacion'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO asociaciones_heridos_emergencias(id_herido, id_emergencia, estado)
 		VALUES(?,?,'active')
@@ -51,6 +51,35 @@
 		WHERE idAssigned = ?
 		AND estado != 'erased';
 		<sql:param value="${param.id}"/>
+	</sql:update>
+	<c:if test="${param.marcador == 'people'}">
+		<sql:update dataSource="${CatastrofesServer}">
+			UPDATE asociaciones_heridos_emergencias
+			SET estado = 'erased'
+			WHERE id_herido = ?
+			AND estado != 'erased'
+			<sql:param value="${param.id}"/>
+		</sql:update>
+	</c:if>
+	<c:if test="${param.marcador == 'event'}">
+		<sql:update dataSource="${CatastrofesServer}">
+			UPDATE asociaciones_heridos_emergencias
+			SET estado = 'erased'
+			WHERE id_emergencia = ?
+			AND estado != 'erased'
+			<sql:param value="${param.id}"/>
+		</sql:update>
+	</c:if>
+</c:if>
+<c:if test="${param.accion == 'eliminarAsociacion'}">
+	<sql:update dataSource="${CatastrofesServer}">
+		UPDATE asociaciones_heridos_emergencias
+		SET estado = 'erased'
+		WHERE id_herido = ?
+		AND id_emergencia = ?
+		AND estado != 'erased'
+		<sql:param value="${param.id_herido}"/>
+		<sql:param value="${param.id_emergencia}"/>
 	</sql:update>
 </c:if>
 ok

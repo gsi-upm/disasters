@@ -44,7 +44,8 @@ var resi; // marcador de la imagen de la residencia
 var centroAux = new Array();
 var puntoAux;
 
-var planta = -1;
+var plantaResidencia = -1;
+var emergenciasAsociadas = new Array();
 
 function initialize(proyecto){
 	if(GBrowserIsCompatible()){
@@ -70,13 +71,13 @@ function initialize(proyecto){
 			if(newZoom == 21){
 				resi.getIcon().iconSize = new GSize(733, 585);
 				resi.getIcon().iconAnchor = new GPoint(367, 305);
-				if(map.getCurrentMapType().getName() == 'Mapa' && planta >= 0){
+				if(map.getCurrentMapType().getName() == 'Mapa' && plantaResidencia >= 0){
 					map.addOverlay(resi);
 				}
 			}else if(newZoom == 20){
 				resi.getIcon().iconSize = new GSize(367, 293);
 				resi.getIcon().iconAnchor = new GPoint(183, 155);
-				if(map.getCurrentMapType().getName() == 'Mapa' && planta >= 0){
+				if(map.getCurrentMapType().getName() == 'Mapa' && plantaResidencia >= 0){
 					map.addOverlay(resi);
 				}
 			}else{
@@ -89,7 +90,7 @@ function initialize(proyecto){
 			if(tipo != 'Mapa'){
 				map.removeOverlay(resi);
 			}else{
-				if(map.getZoom() >= 20 && planta >= 0){
+				if(map.getZoom() >= 20 && plantaResidencia >= 0){
 					map.addOverlay(resi);
 				}
 			}
@@ -149,7 +150,7 @@ function initialize(proyecto){
 		}*/
 		
 		if(userName != ''){
-			planta = 0;
+			plantaResidencia = 0;
 			map.addOverlay(resi);
 
 			if(localizacion == null){
@@ -173,7 +174,7 @@ function initialize(proyecto){
 				$.each(data, function(entryIndex, entry) {
 					if(entryIndex == 0){
 						document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-						document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0"></option></select>';
+						document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0" selected="selected"></option></select>';
 					}
 					document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
 				});
@@ -696,155 +697,26 @@ function generaMarcador(evento, caracter){
 	if(caracter == DEFINITIVO){ //aqui podemos realizar modificaciones a los ya existentes
 		GEvent.addListener(marker, 'click', function(){
 			var small = evento.nombre + '<br/>' + evento.descripcion;
-			var menuAcciones = cargarMenuAcciones(marcadores_definitivos[evento.id]);
-			var links1 = '';
+			var links1 = '<br/><div id="acciones"><form id="form_acciones" name="form_acciones" action="#">' +
+				'<table id="tabla_acciones" class="tabla_menu"></table></form></div>';
 			if(nivelMsg > 1){
-				if(evento.marcador!='resource'){
-					links1 = '<br/>' + menuAcciones;
+				if(evento.marcador != 'resource'){
+					cargarMenuAcciones(marcadores_definitivos[evento.id]); // en mapa_xxx.js
 				}else{
-					if(evento.idAssigned == 0){
-						links1 = '<br/>' + 'Sin actuar';
-					}else{
-						links1 = '<br/>' + 'Actuando sobre la emergencia ' + evento.idAssigned;
-					}
+					cargarListaActividades(marcadores_definitivos[evento.id]); // en mapa_xxx.js
 				}
-				
+			}
 			/*'<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;"> Modificar </a>'
 				+ ' - ' + '<a id="acciones" href="#"onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])"> Acciones </a>'
 				+ ' - ' + '<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;"> Eliminar </a>'
-				+ ' - ' + '<a id="ver_mas1" href="#"onclick="verMas(' + evento.id + ');return false;"> Ver m&aacute;s </a>'*/
-			}
-			/*else{
+				+ ' - ' + '<a id="ver_mas1" href="#"onclick="verMas(' + evento.id + ');return false;"> Ver m&aacute;s </a>'
+			}else{
 				links1 = '<a id="ver_mas1" href="#"onclick="verMas(' + evento.id + ');return false;"  > Ver m&aacute;s </a><br/>';
 			}*/
 				
 			marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
 				'</div><div id="bocadillo_links2"></div></div>');
-
-			var lateral;
-			if(evento.marcador == 'event'){
-				lateral = document.getElementById('catastrofes');
-				document.getElementById('submit10').style.display = 'inline';
-				document.getElementById('eliminar1').style.display = 'inline';
-			}else if(evento.marcador == 'people'){
-				lateral = document.getElementById('heridos');
-				document.getElementById('submit20').style.display = 'inline';
-				document.getElementById('eliminar2').style.display = 'inline';
-				var tipo;
-				if(evento.tipo == 'healthy'){
-					tipo = 'sano';
-				}else if(evento.tipo == 'slight'){
-					tipo = 'leve';
-				}else if(evento.tipo == 'serious'){
-					tipo = 'grave';
-				}else if(evento.tipo == 'dead'){
-					tipo = 'muerto';
-				}else if(evento.tipo == 'trapped'){
-					tipo = 'trapped';
-				}
-				document.getElementById('icono_heridos').src = 'markers/' + tipo + '1.png';
-				document.getElementById('sintomas').style.display = 'block';
-				//document.getElementById('emergencia').value = evento.idAssigned;
-
-				document.getElementById('textoAsoc').innerHTML = '';
-				document.getElementById('checkboxAsoc').innerHTML = '';
-				document.getElementById('selectAsoc').innerHTML = '';
-				$.getJSON('getAsociaciones.jsp', {
-					'tipo':'asociadas',
-					'iden': evento.id
-				}, function(data) {
-					$.each(data, function(entryIndex, entry) {
-						if(entryIndex == 0){
-							document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-						}
-						document.getElementById('checkboxAsoc').innerHTML += '<input type="checkbox" name="assigned' + entryIndex + '" checked="checked"/>' + entry['id'] +' - ' + entry['nombre'] + '<br/>';
-					});
-				});
-				$.getJSON('getAsociaciones.jsp', {
-					'tipo':'emergencias',
-					'iden': evento.id
-				}, function(data) {
-					$.each(data, function(entryIndex, entry){
-						if(entryIndex == 0){
-							document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-							document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0"></option></select>';
-						}
-						document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
-					});
-					if(document.getElementById('selectAsoc').innerHTML == ''){
-						document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar';
-					}
-				});
-			}else if(evento.marcador == 'resource'){
-				document.getElementById('listaRecursos').style.display = 'none';
-				document.getElementById('datos').style.display = 'block';
-				document.getElementById('datos-usuario').innerHTML = evento.nombre;
-				document.getElementById('datos-nombre').innerHTML = evento.descripcion;
-				document.getElementById('datos-correo').innerHTML = evento.info;
-				if(evento.nombre == userName){
-					document.getElementById('form-posicion').style.display = 'block';
-					document.getElementById('form-posicion').localizacion.checked = localizacion;
-					document.getElementById('form-posicion').latitud.value = evento.latitud;
-					document.getElementById('form-posicion').longitud.value = evento.longitud;
-					document.getElementById('form-posicion').direccion.value = '';
-					centroAux = [map.getCenter(),map.getZoom()];
-					localizacion = false;
-				}
-			}
-			
-			if(lateral != null){
-				for(i=0; i<5; i++){
-					if(lateral.tipo[i].value == evento.tipo){
-						lateral.tipo[i].checked = 'checked';
-						if(evento.marcador == 'event'){
-							cambiaIcono('event',evento.tipo);
-						}else if(evento.marcador == 'people'){
-							cambiaIcono('people',evento.tipo,1);
-						}
-					}
-				}
-				lateral.nombre.value = evento.nombre;
-				lateral.info.value = evento.info;
-				lateral.descripcion.value = evento.descripcion;
-				lateral.direccion.value = evento.direccion;
-				lateral.iden.value = evento.id;
-				for(i=0; i<5; i++){
-					if(lateral.planta[i].value == evento.planta){
-						lateral.planta[i].selected = 'selected';
-					}
-				}
-				if(evento.marcador == 'event'){
-					for(i=0; i<4; i++){
-						if(lateral.size[i].value == evento.size){
-							lateral.size[i].selected = 'selected';
-						}
-					}
-					for(i=0; i<3; i++){
-						if(lateral.traffic[i].value == evento.traffic){
-							lateral.traffic[i].selected = 'selected';
-						}
-					}
-				}else if(evento.marcador == 'people'){
-					for(i=0; i<4; i++){
-						if(lateral.peso[i].value == evento.size){
-							lateral.peso[i].selected = 'selected';
-						}
-					}
-					for(i=0; i<5; i++){
-						if(lateral.movilidad[i].value == evento.traffic){
-							lateral.movilidad[i].selected = 'selected';
-						}
-					}
-				}
-			}
-
-			if(evento.marcador == 'event'){
-				showTab('dhtmlgoodies_tabView1',0);
-			}else if(evento.marcador == 'people'){
-				showTab('dhtmlgoodies_tabView1',1);
-			}else if(evento.marcador == 'resource'){
-				showTab('dhtmlgoodies_tabView1',2);
-			}
+			cargarLateral(evento); // en mapa_xxx.js
 		});
 
 		GEvent.addListener(marker, 'dragstart', function(){
@@ -886,78 +758,11 @@ function generaMarcador(evento, caracter){
 		}
 
 		GEvent.addListener(marker, 'infowindowclose', function() {
-			var lateral;
-			if(evento.marcador == 'event'){
-				lateral = document.getElementById('catastrofes');
-				document.getElementById('submit10').style.display = 'none';
-				document.getElementById('eliminar1').style.display = 'none';
-			}else if(evento.marcador == 'people'){
-				lateral = document.getElementById('heridos');
-				document.getElementById('submit20').style.display = 'none';
-				document.getElementById('eliminar2').style.display = 'none';
-				document.getElementById('sintomas').style.display = 'none';
-
-				document.getElementById('textoAsoc').innerHTML = '';
-				document.getElementById('checkboxAsoc').innerHTML = '';
-				document.getElementById('selectAsoc').innerHTML = '';
-				$.getJSON('getAsociaciones.jsp', {
-					'tipo':'todasEmergencias'
-				}, function(data) {
-					$.each(data, function(entryIndex, entry) {
-						if(entryIndex == 0){
-							document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-							document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0"></option></select>';
-						}
-						document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
-					});
-					if(document.getElementById('selectAsoc').innerHTML == ''){
-						document.getElementById('textoAsoc').innerHTML = '';
-						document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar';
-					}
-				});
-			}else if(evento.marcador == 'resource'){
-				localizacion = document.getElementById('form-posicion').localizacion.checked;
-				document.getElementById('datos').style.display = 'none';
-				document.getElementById('listaRecursos').style.display = 'block';
-				if(evento.nombre == userName){
-					document.getElementById('form-posicion').style.display = 'none';
-					map.setCenter(centroAux[0], centroAux[1]);
-					if(puntoAux != null){
-						map.removeOverlay(puntoAux);
-						puntoAux = null;
-					}
-				}
-			}
-
-			if(lateral != null){
-				if(limpiar){
-					lateral.tipo[0].checked = 'checked';
-					if(evento.marcador == 'event'){
-						cambiaIcono('event', 'fire', 1);
-						lateral.nombre.value = 'Incendio';
-					}else if(evento.marcador == 'people'){
-						cambiaIcono('people', 'healthy', 1);
-						lateral.nombre.value = 'Sano';
-					}
-					lateral.info.value = '';
-					lateral.descripcion.value = '';
-					lateral.direccion.value = '';
-					lateral.iden.value = '';
-					lateral.planta[0].selected = 'selected';
-					if(evento.marcador == 'event'){
-						lateral.size[0].selected = 'selected';
-						lateral.traffic[0].selected = 'selected';
-					}else if(evento.marcador == 'people'){
-						lateral.peso[0].selected = 'selected';
-						lateral.movilidad[0].selected = 'selected';
-					}
-				}
-				limpiar = true;
-			}
+			limpiarLateral(evento); // en mapa_xxx.js
 		});
 	}
 
-	if((evento.planta == -2 || evento.planta == planta) &&((evento.tipo != 'healthy') || verSanos)){ //(!(evento.marcador=='resource' && caracter==1)){
+	if((evento.planta == -2 || evento.planta == plantaResidencia) && ((evento.tipo != 'healthy') || verSanos)){ //(!(evento.marcador=='resource' && caracter==1)){
 		map.addOverlay(marker);
 	}
 	return marker;
@@ -1076,7 +881,17 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traf
 		'sintomas':puntero.sintomas,
 		'accion':'modificar'
 	});
-	
+
+	for(i=0; i<emergenciasAsociadas.length; i++){
+		if(emergenciasAsociadas[i][1] == false){
+			$.post('update.jsp',{
+				'id_herido':id,
+				'id_emergencia':emergenciasAsociadas[i][0],
+				'accion':'eliminarAsociacion'
+			});
+		}
+	}
+
 	registrarHistorial(userName, id, 'modif');
 }
 
@@ -1117,101 +932,6 @@ function modificar3(id,tipo,fatigue,fever,dyspnea,nausea,headache,vomiting,abdom
 		'sintomas':sintomas,
 		'accion':'modificar'
 	});
-}
-
-function actuar(idEvento,nombreUsuario,accionAux){
-	var accion;
-	for(i=0;i<accionAux.length;i++){
-		if(accionAux[i].checked){
-			accion = accionAux[i].value;
-		}
-	}
-	
-	var estadoEvento;
-	var estadoUsuario;
-	if(accion != ''){
-		if(accion=='apagar' || accion=='atender' || accion=='evacuar' || accion=='rescatar'){
-			estadoEvento = 'controlled';
-			estadoUsuario = 'acting';
-		}else if(accion=='ayudar' || accion=='trasladar' || accion=='evacuado' || accion=='volver'){
-			estadoEvento = 'controlled2';
-			estadoUsuario = 'acting';
-		}else if(accion=='apagado' || accion=='curado' || accion=='rescatado'){
-			estadoEvento = 'erased';
-			estadoUsuario = 'active';
-		}else if(accion=='vuelto' || accion=='dejar'){
-			estadoEvento = 'active';
-			estadoUsuario = 'active';
-		}
-
-		$.post('updateEstado.jsp',{
-			'idEvento':idEvento,
-			'nombreUsuario':nombreUsuario,
-			'estadoEvento':estadoEvento,
-			'estadoUsuario':estadoUsuario,
-			'accion':accion
-		});
-	}
-	
-	registrarHistorial(userName, idEvento, accion);
-}
-
-function cargarMenuAcciones(puntero){
-	var menu = '<div id="acciones"><form id="form_acciones" name="form_acciones" action="#"><table class="tabla_menu">';
-	var titulo = '<tr><th><label for="accion">Acciones a realizar</label></th></tr>';
-	var oculto = '<tr style="display:none"><td><input type="radio" name="accion" value="" checked="checked"/></td></tr>'; // Sin esto no funciona!!
-	var apagar = '<tr id="apagar"><td><input type="radio" name="accion" value="apagar"/>Atender emergencia</td></tr>';
-	var atender = '<tr id="atender"><td><input type="radio" name="accion" value="atender"/>Atender herido</td></tr>';
-	var evacuar = '<tr id="evacuar"><td><input type="radio" name="accion" value="evacuar"/>Evacuar residentes</td></tr>';
-	var rescatar = '<tr id="rescatar"><td><input type="radio" name="accion" value="rescatar"/>Rescatar atrapado</td></tr>';
-	var ayudar = '<tr id="ayudar"><td><input type="radio" name="accion" value="ayudar"/>Ayudar (0)</td></tr>';
-	var trasladar = '<tr id="trasladar"><td><input type="radio" name="accion" value="trasladar"/>Trasladar herido</td></tr>';
-	var evacuado = '<tr id="evacuado"><td><input type="radio" name="accion" value="evacuado"/>Fin evacuación</td></tr>';
-	var volver = '<tr id="volver"><td><input type="radio" name="accion" value="volver"/>Volver a la residencia</td></tr>';
-	var dejar = '<tr id="dejar"><td><input type="radio" name="accion" value="dejar"/>Dejar de atender</td></tr>';
-	var apagado = '<tr id="apagado"><td><input type="radio" name="accion" value="apagado"/>Fuego pagado</td></tr>';
-	var curado = '<tr id="curado"><td><input type="radio" name="accion" value="curado"/>Herido curado</td></tr>';
-	var vuelto = '<tr id="vuelto"><td><input type="radio" name="accion" value="vuelto"/>Todos de vuelta</td></tr>';
-	var rescatado = '<tr id="rescatado"><td><input type="radio" name="accion" value="rescatado"/>Atrapado rescatado</td></tr>';
-	var cierre = '</table><br/><input type="hidden" id="iden2" name="iden2" value="' + puntero.id + '"/>';
-	var boton = '<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(iden2.value,\'' + userName + '\',accion);map.closeInfoWindow();"/>';
-	
-	if(puntero.marcador == 'event'){
-		menu += titulo + oculto;
-		if(puntero.estado == 'active'){
-			menu += apagar;
-		}else if(puntero.estado == 'controlled'){
-			menu += ayudar + dejar + apagado;
-		}
-		menu += cierre + boton;
-	}else if(puntero.marcador == 'people'){
-		menu += titulo + oculto;
-		if(puntero.tipo == 'healthy'){
-			if(puntero.estado == 'active'){
-				menu += evacuar;
-			}else if(puntero.estado == 'controlled'){
-				menu += ayudar + dejar + evacuado + volver + vuelto;
-			}
-		}else if(puntero.tipo == 'trapped'){
-			if(puntero.estado == 'active'){
-				menu += rescatar;
-			}else if(puntero.estado == 'controlled'){
-				menu += ayudar + dejar + rescatado;
-			}
-		}else{
-			if(puntero.estado == 'active'){
-				menu += atender;
-			}else if(puntero.estado == 'controlled'){
-				menu += ayudar + dejar + trasladar + curado;
-			}
-		}
-		menu += cierre + boton;
-	}else{
-		menu += '</table>';
-	}
-	menu += '</form></div>';
-
-	return menu;
 }
 
 function guardar(puntero){
@@ -1418,6 +1138,44 @@ function obtiene_fecha() {
 	return (anio + '-' + mes + '-' + dia + ' ' + horas + ':' + minutos + ':' + segundos);
 }
 
+function actuar(idEvento,nombreUsuario,accionAux){
+	var accion;
+	if(accionAux == 'dejar'){
+		accion = 'dejar';
+	}else{
+		for(i=0;i<accionAux.length;i++){
+			if(accionAux[i].checked){
+				accion = accionAux[i].value;
+			}
+		}
+	}
+	var estadoEvento;
+	var estadoUsuario;
+	if(accion != ''){
+		if(accion=='apagar' || accion=='atender' || accion=='evacuar' || accion=='rescatar'){
+			estadoEvento = 'controlled';
+			estadoUsuario = 'acting';
+		}else if(accion=='ayudar' || accion=='trasladar' || accion=='evacuado' || accion=='volver'){
+			estadoEvento = 'controlled2';
+			estadoUsuario = 'acting';
+		}else if(accion=='apagado' || accion=='curado' || accion=='rescatado'){
+			estadoEvento = 'erased';
+			estadoUsuario = 'active';
+		}else if(accion=='vuelto' || accion=='dejar'){
+			estadoEvento = 'active';
+			estadoUsuario = 'active';
+		}
+		$.post('updateEstado.jsp',{
+			'idEvento':idEvento,
+			'nombreUsuario':nombreUsuario,
+			'estadoEvento':estadoEvento,
+			'estadoUsuario':estadoUsuario,
+			'accion':accion
+		});
+	}
+	registrarHistorial(userName, idEvento, accion);
+}
+
 function mostrarSanos(mostrar){
 	verSanos = mostrar;
 	//for(i=1; i<marcadores_definitivos.length; i++){
@@ -1462,10 +1220,10 @@ function registrarHistorial(usuario, idEvento, accion){
 
 function cambiarPlanta(num){
 	map.removeOverlay(resi);
-	document.getElementById('planta'+planta).style.fontWeight = 'normal';
-	document.getElementById('planta'+planta).style.textDecoration = 'none';
+	document.getElementById('planta'+plantaResidencia).style.fontWeight = 'normal';
+	document.getElementById('planta'+plantaResidencia).style.textDecoration = 'none';
 	
-	planta = num;
+	plantaResidencia = num;
 	
 	document.getElementById('planta'+num).style.fontWeight = 'bold';
 	document.getElementById('planta'+num).style.textDecoration = 'underline';
@@ -1489,6 +1247,14 @@ function cambiarPlanta(num){
 			if(marcadores_definitivos[i].tipo != 'healthy' || verSanos){
 				map.addOverlay(marcadores_definitivos[i].marker);
 			}
+		}
+	}
+}
+
+function asociarEmergencia(id, valor){
+	for(i=0; i<emergenciasAsociadas.length; i++){
+		if(emergenciasAsociadas[i][0] == id){
+			emergenciasAsociadas[i][1] = valor;
 		}
 	}
 }
