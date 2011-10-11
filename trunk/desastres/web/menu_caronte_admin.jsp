@@ -69,9 +69,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label for="size"><fmt:message key="tamanno"/>:</label></td>
+						<td><label for="tamanno"><fmt:message key="tamanno"/>:</label></td>
 						<td>
-							<select name="size" id="size">
+							<select name="tamanno" id="tamanno">
 								<option value="small" selected="selected"><fmt:message key="pequenno"/></option>
 								<option value="medium"><fmt:message key="mediano"/></option>
 								<option value="big"><fmt:message key="grande"/></option>
@@ -80,9 +80,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label for="traffic"><fmt:message key="densidadtrafico"/>:</label></td>
+						<td><label for="trafico"><fmt:message key="densidadtrafico"/>:</label></td>
 						<td>
-							<select name="traffic" id="traffic">
+							<select name="trafico" id="trafico">
 								<option value="low" selected="selected"><fmt:message key="baja"/></option>
 								<option value="medium"><fmt:message key="media"/></option>
 								<option value="high"><fmt:message key="alta"/></option>
@@ -98,13 +98,13 @@
 				<br/>
 				<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
 					iden.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,descripcion.value,
-					direccion.value,size.value,traffic.value,null,planta.value);return false;"/>
+					direccion.value,tamanno.value,trafico.value,null,planta.value);return false;"/>
 				<input type="button" id="eliminar1" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog1">
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('event',seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',size.value,traffic.value,0,planta.value);
+							descripcion.value,direccion.value,longitud.value,latitud.value,'active',tamanno.value,trafico.value,0,planta.value);
 							$('#dialog1').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>
@@ -146,11 +146,14 @@
 						</td>
 					</tr>
 				</table>
-				<p id="asociacionesEmergencias">
+				<div id="asociacionesEmergencias">
 					<span id="textoAsoc"></span>
-					<span id="checkboxAsoc"></span>
-					<span id="selectAsoc"></span>
-				</p>
+					<ul>
+						Asociado a:
+						<span id="checkboxAsoc"></span>
+					</ul>
+					<div id="selectAsoc"></div>
+				</div>
 				<table class="tabla_menu">
 					<tr>
 						<td><fmt:message key="planta"/></td>
@@ -222,6 +225,7 @@
 						</td>
 					</tr>
 				</table>
+				<input type="hidden" name="idAssigned" value="0"/>
 				<input type="hidden" name="iden" value=""/>
 				<input type="hidden" name="latitud" id="latitud2" value=""/>
 				<input type="hidden" name="longitud" id="longitud2" value=""/>
@@ -327,6 +331,6 @@
 	</div>
 	<!--aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="eventos"/>','Residentes','<fmt:message key="recursos"/>'),0,254,490);
+		initTabs('dhtmlgoodies_tabView1',Array('Emergencias','Heridos','Agentes'),0,254,490);
 	</script>
 </fmt:bundle>

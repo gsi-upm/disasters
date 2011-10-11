@@ -45,7 +45,7 @@ var centroAux = new Array();
 var puntoAux;
 
 var plantaResidencia = -1;
-var emergenciasAsociadas = new Array();
+var emergenciasAsociadas = [new Array(), new Array()];
 
 function initialize(proyecto){
 	if(GBrowserIsCompatible()){
@@ -172,15 +172,14 @@ function initialize(proyecto){
 				'tipo':'todasEmergencias'
 			}, function(data) {
 				$.each(data, function(entryIndex, entry) {
-					if(entryIndex == 0){
-						document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-						document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0" selected="selected"></option></select>';
-					}
-					document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
+					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
+						'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
+						entry['id'] +' - ' + entry['nombre'] + '</li>';
+					emergenciasAsociadas[0].push([entry['id'], false]);
+					emergenciasAsociadas[1].push([entry['id'], false]);
 				});
-				if(document.getElementById('selectAsoc').innerHTML == ''){
-					document.getElementById('textoAsoc').innerHTML = '';
-					document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar';
+				if(document.getElementById('checkboxAsoc').innerHTML == ''){
+					document.getElementById('checkboxAsoc').innerHTML = 'No hay emergencias para asociar';
 				}
 			});
 		}
@@ -697,15 +696,16 @@ function generaMarcador(evento, caracter){
 	if(caracter == DEFINITIVO){ //aqui podemos realizar modificaciones a los ya existentes
 		GEvent.addListener(marker, 'click', function(){
 			var small = evento.nombre + '<br/>' + evento.descripcion;
-			var links1 = '<br/><div id="acciones"><form id="form_acciones" name="form_acciones" action="#">' +
-				'<table id="tabla_acciones" class="tabla_menu"></table></form></div>';
+			var links1 = '<form id="form_acciones" name="form_acciones" action="#">';
 			if(nivelMsg > 1){
 				if(evento.marcador != 'resource'){
-					cargarMenuAcciones(marcadores_definitivos[evento.id]); // en mapa_xxx.js
+					links1 += cargarMenuAcciones(marcadores_definitivos[evento.id]); // en mapa_xxx.js
 				}else{
-					cargarListaActividades(marcadores_definitivos[evento.id]); // en mapa_xxx.js
+					links1 += cargarListaActividades(marcadores_definitivos[evento.id]); // en mapa_xxx.js
 				}
 			}
+			links1 += '</form>';
+			
 			/*'<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;"> Modificar </a>'
 				+ ' - ' + '<a id="acciones" href="#"onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])"> Acciones </a>'
 				+ ' - ' + '<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;"> Eliminar </a>'
@@ -852,14 +852,23 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 	}
 }
 
-function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traffic,idAssigned,planta){
+function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,trafico,idAssigned,planta){
 	var puntero = marcadores_definitivos[id];
 	var idA;
+	var accion;
 	if(idAssigned != null){
 		idA = idAssigned;
 	}else{
 		idA = puntero.idAssigned;
 	}
+
+	if(tipo != puntero.tipo &&
+		!((tipo=='slight'&&puntero.tipo=='serious') || (tipo=='serious'&&puntero.tipo=='slight'))){
+		accion = 'cambioTipo';
+	}else{
+		accion = 'modificar';
+	}
+
 	$.post('update.jsp',{
 		'id':id,
 		'marcador':puntero.marcador,
@@ -872,22 +881,28 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,size,traf
 		'longitud':puntero.longitud,
 		'direccion':direccion,
 		'estado':puntero.estado,
-		'size':size,
-		'traffic':traffic,
+		'size':tamanno,
+		'traffic':trafico,
 		'idAssigned':idA,
 		'fecha':puntero.fecha,
 		'usuario':usuario_actual,
 		'planta':planta,
 		'sintomas':puntero.sintomas,
-		'accion':'modificar'
+		'accion':accion
 	});
 
-	for(i=0; i<emergenciasAsociadas.length; i++){
-		if(emergenciasAsociadas[i][1] == false){
+	for(i=0; i<emergenciasAsociadas[0].length; i++){
+		if(emergenciasAsociadas[0][i][1] != emergenciasAsociadas[1][i][1]){
+			var accion2;
+			if(emergenciasAsociadas[0][i][1] == true){
+				accion2 = 'asociar';
+			}else{
+				accion2 = 'eliminarAsociacion';
+			}
 			$.post('update.jsp',{
 				'id_herido':id,
-				'id_emergencia':emergenciasAsociadas[i][0],
-				'accion':'eliminarAsociacion'
+				'id_emergencia':emergenciasAsociadas[0][i][0],
+				'accion':accion2
 			});
 		}
 	}
@@ -958,6 +973,16 @@ function guardar(puntero){
 	function(data){
 		$('#guardar').innerHTML = data;
 	});
+	
+	for(i=0; i<emergenciasAsociadas[0].length; i++){
+		if(emergenciasAsociadas[0][i][1] != emergenciasAsociadas[1][i][1]){
+			$.post('update.jsp',{
+				'fecha':puntero.fecha,
+				'id_emergencia':emergenciasAsociadas[0][i][0],
+				'accion':'asociar'
+			});
+		}
+	}
 
 	//2. Borrar el elemento del mapa y la matriz temporal
 	eliminar(puntero, TEMPORAL);
@@ -1140,25 +1165,24 @@ function obtiene_fecha() {
 
 function actuar(idEvento,nombreUsuario,accionAux){
 	var accion;
-	if(accionAux == 'dejar'){
-		accion = 'dejar';
-	}else{
-		for(i=0;i<accionAux.length;i++){
-			if(accionAux[i].checked){
-				accion = accionAux[i].value;
-			}
-		}
-	}
 	var estadoEvento;
 	var estadoUsuario;
+	
+	for(i=0;i<accionAux.length;i++){
+		if(accionAux[i].checked){
+			accion = accionAux[i].value;
+		}
+	}
 	if(accion != ''){
-		if(accion=='apagar' || accion=='atender' || accion=='evacuar' || accion=='rescatar'){
+		if(accion=='apagar' || accion=='controlar' || accion=='acordonar' ||
+				accion=='atender' || accion=='evacuar' || accion=='rescatar'){
 			estadoEvento = 'controlled';
 			estadoUsuario = 'acting';
 		}else if(accion=='ayudar' || accion=='trasladar' || accion=='evacuado' || accion=='volver'){
 			estadoEvento = 'controlled2';
 			estadoUsuario = 'acting';
-		}else if(accion=='apagado' || accion=='curado' || accion=='rescatado'){
+		}else if(accion=='apagado' || accion=='controlado' || accion=='acordonado' ||
+				accion=='curado' || accion=='rescatado'){
 			estadoEvento = 'erased';
 			estadoUsuario = 'active';
 		}else if(accion=='vuelto' || accion=='dejar'){
@@ -1174,6 +1198,15 @@ function actuar(idEvento,nombreUsuario,accionAux){
 		});
 	}
 	registrarHistorial(userName, idEvento, accion);
+}
+
+function detener(idEvento,idEmergencia,nombreUsuario){
+	$.post('updateEstado.jsp',{
+		'idEvento':idEvento,
+		'idEmergencia':idEmergencia,
+		'nombreUsuario':nombreUsuario,
+		'accion':'detener'
+	});
 }
 
 function mostrarSanos(mostrar){
@@ -1252,9 +1285,9 @@ function cambiarPlanta(num){
 }
 
 function asociarEmergencia(id, valor){
-	for(i=0; i<emergenciasAsociadas.length; i++){
-		if(emergenciasAsociadas[i][0] == id){
-			emergenciasAsociadas[i][1] = valor;
+	for(i=0; i<emergenciasAsociadas[0].length; i++){
+		if(emergenciasAsociadas[0][i][0] == id){
+			emergenciasAsociadas[0][i][1] = valor;
 		}
 	}
 }

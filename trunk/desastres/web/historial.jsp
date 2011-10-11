@@ -53,6 +53,15 @@
 		<sql:query var="tipos_eventos" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM tipos_eventos">
 		</sql:query>
+		<sql:query var="asociaciones_emergencias" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM asociaciones_emergencias_con_tipos_usuarios">
+		</sql:query>
+		<sql:query var="asociaciones_usuarios" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM asociaciones_usuarios_con_tipos_usuarios">
+		</sql:query>
+		<sql:query var="asociaciones_actividades" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM asociaciones_actividades_con_tipos_usuarios">
+		</sql:query>
 		<p>ASOCIACIONES_HERIDOS_EMERGENCIAS</p>
 		<table border="1">
 			<tr><th>ID</th><th>ID_HERIDO</th><th>ID_EMERGENCIA</th><th>ESTADO</th><th>FECHA</th></tr>
@@ -224,6 +233,41 @@
 					<td>${evento.id}</td>
 					<td>${evento.tipo}</td>
 					<td>${evento.descripcion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>ASOCIACIONES_EMERGENCIAS_CON_TIPO_USUARIOS</p>
+		<table border="1">
+			<tr><th>ID</th><th>ID_TIPO_USUARIO</th><th>ID_TIPO_EMERGENCIA</th><th>LOCALIZACION</th></tr>
+			<c:forEach var="asociacion" items="${asociaciones_emergencias.rows}">
+				<tr>
+					<td>${asociacion.id}</td>
+					<td>${asociacion.id_tipo_usuario}</td>
+					<td>${asociacion.id_tipo_emergencia}</td>
+					<td>${asociacion.localizacion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>ASOCIACIONES_USUARIOS_CON_TIPO_USUARIOS</p>
+		<table border="1">
+			<tr><th>ID</th><th>ID_TIPO_USUARIO</th><th>ID_TIPO_USUARIO_VER</th><th>VISUALIZAR</th></tr>
+			<c:forEach var="asociacion" items="${asociaciones_usuarios.rows}">
+				<tr>
+					<td>${asociacion.id}</td>
+					<td>${asociacion.id_tipo_usuario}</td>
+					<td>${asociacion.id_tipo_usuario_ver}</td>
+					<td>${asociacion.visualizar}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>ASOCIACIONES_ACTIVIDADES_CON_TIPO_USUARIOS</p>
+		<table border="1">
+			<tr><th>ID</th><th>ID_TIPO_USUARIO</th><th>ID_TIPO_EMERGENCIA</th></tr>
+			<c:forEach var="asociacion" items="${asociaciones_actividades.rows}">
+				<tr>
+					<td>${asociacion.id}</td>
+					<td>${asociacion.id_tipo_usuario}</td>
+					<td>${asociacion.id_tipo_actividad}</td>
 				</tr>
 			</c:forEach>
 		</table>
