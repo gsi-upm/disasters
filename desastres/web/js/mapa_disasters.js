@@ -21,6 +21,10 @@ function buildingInit(){
 	}
 }
 
+function cargarMenuAcciones(){}
+
+function cargarListaActividades(){}
+
 function cargarLateral(){}
 
 function limpiarLateral(){}

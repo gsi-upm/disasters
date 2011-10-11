@@ -6,3 +6,28 @@
 #close_messages, #open_messages{
     margin-top: 5px;
 }
+
+ul{
+	list-style-type: none;
+	margin-left: -40px;
+}
+
+ul #checkboxAsoc{
+	max-height: 93px;
+	width: 180px;
+	position: absolute;
+	overflow: auto;
+	background-color: white;
+}
+
+ul li{
+	display:none;
+}
+
+ul:hover #checkboxAsoc{
+	border: solid 1px black;
+}
+
+ul:hover li{
+	display:block;
+}

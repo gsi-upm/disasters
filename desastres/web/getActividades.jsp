@@ -65,7 +65,7 @@
 		</c:when>
 		<c:when test="${param.marcador == 'resource'}">
 			<sql:query var="acciones" dataSource="${CatastrofesServer}">
-				SELECT a.id, c.nombre, t.tipo
+				SELECT a.id_emergencia, c.nombre, t.tipo
 				FROM actividades a, tipos_actividades t, catastrofes c
 				WHERE a.id_usuario = ?
 				AND a.id_tipo_actividad = t.id
@@ -95,6 +95,7 @@
         <json:property name="descripcion" value="${accion.descripcion}"/>
         <json:property name="nombre_usuario" value="${accion.nombre_usuario}"/>
         <json:property name="nombre" value="${accion.nombre}"/>
+        <json:property name="id_emergencia" value="${accion.id_emergencia}"/>
 	</json:object> ,
 </c:forEach>
 ]

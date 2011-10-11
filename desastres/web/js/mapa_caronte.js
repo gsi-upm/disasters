@@ -19,37 +19,51 @@ function buildingInit(){
 }
 
 function cargarMenuAcciones(puntero){
-	$.getJSON('getActividades.jsp', {
-		'marcador':puntero.marcador,
-		'id':puntero.id
-	}, function(data) {
-		$.each(data, function(entryIndex, entry) {
-			document.getElementById('tabla_acciones').innerHTML += '<tr><td>' + entry['nombre_usuario'] + ' realiza la accion ' + entry['tipo'] + '</td></tr>';
-		});
+	var menu = '';
+	// igual que $.getJSON(url,data,success) pero forzamos async=false para que cargue bien el pop-up
+	$.ajax({
+		url: 'getActividades.jsp',
+		type: 'GET',
+		dataType: 'json',
+		data: {'marcador':puntero.marcador, 'id':puntero.id},
+		success: function(data){
+			$.each(data, function(entryIndex, entry){
+				if(entryIndex == 0){
+					menu += '<br/><table class="tabla_menu">';
+				}
+				menu += '<tr><td><b>' + entry['nombre_usuario'] + '</b> realiza la accion <b>' + entry['tipo'] + '</b></td></tr>';
+				if(entryIndex == data.length-1){
+					menu += '</table>';
+				}
+			});
+		},
+		async: false
 	});
-
-	$.getJSON('getActividades.jsp', {
-		'marcador':puntero.marcador,
-		'tipo': puntero.tipo,
-		'estado':puntero.estado
-	}, function(data) {
-		$.each(data, function(entryIndex, entry) {
-			if(entryIndex == 0){
-				document.getElementById('tabla_acciones').innerHTML += '' +
-					'<tr><th><label for="accion">Acciones a realizar</label></th></tr>' +
-					'<tr style="display:none"><td><input type="radio" name="accion" value="" checked="checked"/></td></tr>'; // Sin esto no funciona!!
-			}
-
-			document.getElementById('tabla_acciones').innerHTML += '<tr id="' + entry['tipo'] + '"><td><input type="radio" name="accion" value="' + entry['tipo'] +
-				'"/>' + entry['descripcion'] + '</td></tr>';
-		});
-		
-		if(document.getElementById('tabla_acciones').innerHTML != ''){
-			document.getElementById('form_acciones').innerHTML += '<br/><input type="hidden" id="iden2" name="iden2" value="' + puntero.id + '"/>' +
-					'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(iden2.value,\'' + userName + '\',accion);map.closeInfoWindow();"/>';
-		}
+	$.ajax({
+		url: 'getActividades.jsp',
+		type: 'GET',
+		dataType: 'json',
+		data: {'marcador':puntero.marcador, 'tipo':puntero.tipo, 'estado':puntero.estado},
+		success: function(data){
+			$.each(data, function(entryIndex, entry){
+				if(entryIndex == 0){
+					menu += '<br/><table class="tabla_menu">' +
+						'<tr><th><label for="accion">Acciones a realizar</label></th></tr>' +
+						'<tr style="display:none"><td><input type="radio" name="accion" value="" checked="checked"/></td></tr>'; // Sin esto no funciona!!
+				}
+				menu += '<tr id="' + entry['tipo'] + '"><td>' +
+					'<input type="radio" name="accion" value="' + entry['tipo'] + '"/>' + entry['descripcion'] +
+					'</td></tr>';
+				if(entryIndex == data.length-1){
+					menu += '<tr><td>' +
+						'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(' + puntero.id + ',\'' + userName + '\',accion);map.closeInfoWindow();"/>' +
+						'</td></tr></table>';
+				}
+			});
+		},
+		async: false
 	});
-
+	return menu;
 	/*
 	var menu = '<div id="acciones"><form id="form_acciones" name="form_acciones" action="#"><table class="tabla_menu">';
 	var titulo = '<tr><th><label for="accion">Acciones a realizar</label></th></tr>';
@@ -96,19 +110,31 @@ function cargarMenuAcciones(puntero){
 }
 
 function cargarListaActividades(evento){
-	$.getJSON('getActividades.jsp', {
-		'marcador':evento.marcador,
-		'id':evento.id
-	}, function(data) {
-		$.each(data, function(entryIndex, entry) {
-			var aux = '<tr><td>Accion ' + entry['tipo'] + ' realizada sobre ' + entry['nombre'] + '</td>';
-			if(evento.nombre == userName){
-				aux += '<td><input type="button" value="Detener" onclick="actuar(' + entry['id'] + ',\'' + evento.nombre + '\',\'dejar\');;map.closeInfoWindow()"></td>';
-			}
-			aux += '</tr>';
-			document.getElementById('tabla_acciones').innerHTML += aux;
-		});
+	var menu = '';
+	// igual que $.getJSON(url,data,success) pero async=false
+	$.ajax({
+		url: 'getActividades.jsp',
+		type: 'GET',
+		dataType: 'json',
+		data: {'marcador':evento.marcador, 'id':evento.id},
+		success: function(data) {
+			$.each(data, function(entryIndex, entry) {
+				if(entryIndex == 0){
+					menu += '</br><table class="tabla_menu">';
+				}
+				menu += '<tr><td>Accion <b>' + entry['tipo'] + '</b> realizada sobre <b>' + entry['nombre'] + '</b></td>';
+				if(evento.nombre == userName){
+					menu += '<td><input type="button" value="Detener" onclick="detener(' + evento.id + ',' + entry['id_emergencia'] + ',\'' + evento.nombre + '\');map.closeInfoWindow()"></td>';
+				}
+				menu += '</tr>';
+				if(entryIndex == data.length-1){
+					menu += '</table>';
+				}
+			});
+		},
+		async: false
 	});
+	return menu;
 }
 
 function cargarLateral(evento){
@@ -135,24 +161,19 @@ function cargarLateral(evento){
 		}
 		document.getElementById('icono_heridos').src = 'markers/' + tipo + '1.png';
 		document.getElementById('sintomas').style.display = 'block';
-		//document.getElementById('emergencia').value = evento.idAssigned;
 
-		document.getElementById('textoAsoc').innerHTML = '';
 		document.getElementById('checkboxAsoc').innerHTML = '';
-		document.getElementById('selectAsoc').innerHTML = '';
-		emergenciasAsociadas = new Array();
+		emergenciasAsociadas = [new Array(), new Array()];
 		$.getJSON('getAsociaciones.jsp', {
 			'tipo':'asociadas',
 			'iden': evento.id
 		}, function(data) {
 			$.each(data, function(entryIndex, entry) {
-				if(entryIndex == 0){
-					document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-				}
-				document.getElementById('checkboxAsoc').innerHTML += '<input type="checkbox" name="assigned' + entryIndex +
-				'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entryIndex + '.checked)" checked="checked"/>' +
-				entry['id'] +' - ' + entry['nombre'] + '<br/>';
-				emergenciasAsociadas.push([entry['id'], true]);
+				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
+					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)" checked="checked"/>' +
+					entry['id'] +' - ' + entry['nombre'] + '</li>';
+				emergenciasAsociadas[0].push([entry['id'], true]);
+				emergenciasAsociadas[1].push([entry['id'], true]);
 			});
 		});
 		$.getJSON('getAsociaciones.jsp', {
@@ -160,14 +181,14 @@ function cargarLateral(evento){
 			'iden': evento.id
 		}, function(data) {
 			$.each(data, function(entryIndex, entry){
-				if(entryIndex == 0){
-					document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-					document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0" selected="selected"></option></select>';
-				}
-				document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
+				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
+						'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
+						entry['id'] +' - ' + entry['nombre'] + '</li>';
+				emergenciasAsociadas[0].push([entry['id'], false]);
+				emergenciasAsociadas[1].push([entry['id'], false]);
 			});
-			if(document.getElementById('selectAsoc').innerHTML == ''){
-				document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar<input type="hidden" name="idAssigned" value="0"/>';
+			if(document.getElementById('checkboxAsoc').innerHTML == ''){
+				document.getElementById('checkboxAsoc').innerHTML = 'No hay emergencias para asociar<input type="hidden" name="idAssigned" value="0"/>';
 			}
 		});
 	}else if(evento.marcador == 'resource'){
@@ -186,20 +207,18 @@ function cargarLateral(evento){
 			localizacion = false;
 		}
 		// AQUI!!!
-		$.getJSON('getAsociaciones.jsp', {
+		/*$.getJSON('getAsociaciones.jsp', {
 			'tipo':'asociadas',
 			'iden': evento.id
 		}, function(data) {
 			$.each(data, function(entryIndex, entry) {
-				if(entryIndex == 0){
-					document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-				}
-				document.getElementById('checkboxAsoc').innerHTML += '<input type="checkbox" name="assigned' + entryIndex +
-				'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entryIndex + '.checked)" checked="checked"/>' +
-				entry['id'] +' - ' + entry['nombre'] + '<br/>';
-				emergenciasAsociadas.push([entry['id'], true]);
+				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entryIndex +
+					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entryIndex + '.checked)" checked="checked"/>' +
+					entry['id'] +' - ' + entry['nombre'] + '</li>';
+				emergenciasAsociadas[0].push([entry['id'], true]);
+				emergenciasAsociadas[1].push([entry['id'], true]);
 			});
-		});
+		});*/
 	}
 			
 	if(lateral != null){
@@ -225,13 +244,13 @@ function cargarLateral(evento){
 		}
 		if(evento.marcador == 'event'){
 			for(i=0; i<4; i++){
-				if(lateral.size[i].value == evento.size){
-					lateral.size[i].selected = 'selected';
+				if(lateral.tamanno[i].value == evento.size){
+					lateral.tamanno[i].selected = 'selected';
 				}
 			}
 			for(i=0; i<3; i++){
-				if(lateral.traffic[i].value == evento.traffic){
-					lateral.traffic[i].selected = 'selected';
+				if(lateral.trafico[i].value == evento.traffic){
+					lateral.trafico[i].selected = 'selected';
 				}
 			}
 		}else if(evento.marcador == 'people'){
@@ -269,23 +288,20 @@ function limpiarLateral(evento){
 		document.getElementById('eliminar2').style.display = 'none';
 		document.getElementById('sintomas').style.display = 'none';
 
-		document.getElementById('textoAsoc').innerHTML = '';
 		document.getElementById('checkboxAsoc').innerHTML = '';
-		document.getElementById('selectAsoc').innerHTML = '';
-		emergenciasAsociadas = null;
+		emergenciasAsociadas = [new Array(), new Array()];
 		$.getJSON('getAsociaciones.jsp', {
 			'tipo':'todasEmergencias'
 		}, function(data) {
 			$.each(data, function(entryIndex, entry) {
-				if(entryIndex == 0){
-					document.getElementById('textoAsoc').innerHTML = 'Asociado a:<br/>';
-					document.getElementById('selectAsoc').innerHTML = '<select name="idAssigned" id="emergencia"><option value="0"></option></select>';
-				}
-				document.getElementById('emergencia').innerHTML += '<option value="' + entry['id'] + '">' + entry['id'] +' - ' + entry['nombre'] + '</option>';
+				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
+					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
+					entry['id'] +' - ' + entry['nombre'] + '</li>';
+				emergenciasAsociadas[0].push([entry['id'], false]);
+				emergenciasAsociadas[1].push([entry['id'], false]);
 			});
-			if(document.getElementById('selectAsoc').innerHTML == ''){
-				document.getElementById('textoAsoc').innerHTML = '';
-				document.getElementById('selectAsoc').innerHTML = 'No hay emergencias para asociar<input type="hidden" name="idAssigned" value="0"/>';
+			if(document.getElementById('checkboxAsoc').innerHTML == ''){
+				document.getElementById('checkboxAsoc').innerHTML = 'No hay emergencias para asociar<input type="hidden" name="idAssigned" value="0"/>';
 			}
 		});
 	}else if(evento.marcador == 'resource'){
@@ -318,8 +334,8 @@ function limpiarLateral(evento){
 			lateral.iden.value = '';
 			lateral.planta[0].selected = 'selected';
 			if(evento.marcador == 'event'){
-				lateral.size[0].selected = 'selected';
-				lateral.traffic[0].selected = 'selected';
+				lateral.tamanno[0].selected = 'selected';
+				lateral.trafico[0].selected = 'selected';
 			}else if(evento.marcador == 'people'){
 				lateral.peso[0].selected = 'selected';
 				lateral.movilidad[0].selected = 'selected';
