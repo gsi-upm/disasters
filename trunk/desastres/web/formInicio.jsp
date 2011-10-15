@@ -35,7 +35,7 @@
 				</tr>
 				<tr><td id="passError" colspan="2" style="color:red"></td></tr>
 				<tr id="pass1">
-					<td>Contrase&ntilde;a</td>
+					<td><fmt:message key="contrasenna"/></td>
 					<td><input type="password" name="pass1"size="20"/></td>
 				</tr>
 				<tr id="pass2">

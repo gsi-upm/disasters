@@ -93,17 +93,16 @@
 				<input type="hidden" name="iden" id="iden1" value=""/>
 				<input type="hidden" name="latitud" id="latitud1" value=""/>
 				<input type="hidden" name="longitud" id="longitud1" value=""/>
-				<input type="hidden" name="cantidad" value="1"/>
 				<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;"/>
 				<br/>
 				<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
-					iden.value,seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,descripcion.value,
+					iden.value,seleccionRadio(this.form,0),1,nombre.value,info.value,descripcion.value,
 					direccion.value,tamanno.value,trafico.value,null,planta.value);return false;"/>
 				<input type="button" id="eliminar1" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog1">
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
-						<button onclick="crearCatastrofe('event',seleccionRadio(this.form,0),cantidad.value,nombre.value,info.value,
+						<button onclick="crearCatastrofe('event',seleccionRadio(this.form,0),1,nombre.value,info.value,
 							descripcion.value,direccion.value,longitud.value,latitud.value,'active',tamanno.value,trafico.value,0,planta.value);
 							$('#dialog1').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
@@ -225,22 +224,20 @@
 						</td>
 					</tr>
 				</table>
-				<input type="hidden" name="idAssigned" value="0"/>
 				<input type="hidden" name="iden" value=""/>
 				<input type="hidden" name="latitud" id="latitud2" value=""/>
 				<input type="hidden" name="longitud" id="longitud2" value=""/>
-				<input type="hidden" name="cantidad" value="1"/>
-				<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2);return false;"/>
+				<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2); return false;"/>
 				<br/>
-				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
-					iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
-					direccion.value,peso.value,movilidad.value,idAssigned.value,planta.value);return false;"/>
+				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn" style="display:none;"
+					onclick="modificar2(iden.value,seleccionRadio(this.form,2),1,nombre.value,info.value,descripcion.value,
+					direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
 				<input type="button" id="eliminar2" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog2">
 					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
 					<p class="centrado">
-						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,idAssigned.value,planta.value);
+						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),1,nombre.value,info.value,
+							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,planta.value);
 							$('#dialog2').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>
@@ -280,11 +277,11 @@
 			<div id="datos" style="display:none">
 				<table class="tabla_menu">
 					<tr>
-						<td>Usuario</td>
+						<td><fmt:message key="usuario"/></td>
 						<td id="datos-usuario"></td>
 					</tr>
 					<tr>
-						<td>Nombre</td>
+						<td><fmt:message key="nombre"/></td>
 						<td id="datos-nombre"></td>
 					</tr>
 					<tr>
@@ -315,7 +312,7 @@
 						<td><input type="number" name="longitud" size="29" value="0" max="180" min="-179.999999" step="0.000001"/></td>
 					</tr>
 					<tr>
-						<td>Direcci&oacute;n</td>
+						<td><fmt:message key="direccion"/></td>
 						<td><textarea name="direccion" cols="28" rows="2"></textarea></td>
 					</tr>
 				</table>
@@ -324,7 +321,7 @@
 				</p>
 				<p>
 					<input type="button" id="submit01" value="Comprobar" class="btn" onclick="findPos(latitud.value,longitud.value,direccion.value)"/>
-					<input type="button" id="submit02" value="Aceptar" class="btn" onclick="newPos(latitud.value,longitud.value,porDefecto.checked)"/>
+					<input type="button" id="submit02" value="<fmt:message key="aceptar"/>" class="btn" onclick="newPos(latitud.value,longitud.value,porDefecto.checked)"/>
 				</p>
 			</form>
 		</div>

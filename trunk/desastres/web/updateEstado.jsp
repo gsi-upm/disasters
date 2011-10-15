@@ -51,7 +51,8 @@
 		</c:otherwise>
 	</c:choose>
 	<c:choose>
-		<c:when test="${param.accion != 'dejar'}">
+		<c:when test="${param.accion == 'apagado' || param.accion == 'controlado' ||
+				param.accion == 'acordonado' || param.accion == 'curado' || param.accion == 'rescatado'}">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
 				SET estado = ?, modificado = <%=modif%>
@@ -61,13 +62,14 @@
 			</sql:update>
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
-				SET estado = ?, modificado = <%=modif%>
-				WHERE nombre = ? AND estado != 'erased'
-				<sql:param value="${param.estadoUsuario}"/>
+				SET estado = 'active', modificado = <%=modif%>
+				WHERE nombre = ? AND estado = 'acting'
+				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
+							       WHERE u.id = a.id_usuario AND a.estado = 'active');
 				<sql:param value="${param.nombreUsuario}"/>
 			</sql:update>
 		</c:when>
-		<c:otherwise>
+		<c:when test="${param.accion == 'dejar'}">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
 				SET estado = 'active', modificado = <%=modif%>
@@ -81,6 +83,22 @@
 				WHERE nombre = ? AND estado = 'acting'
 				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
 							       WHERE u.id = a.id_usuario AND a.estado = 'active');
+				<sql:param value="${param.nombreUsuario}"/>
+			</sql:update>
+		</c:when>
+		<c:otherwise>
+			<sql:update dataSource="${CatastrofesServer}">
+				UPDATE catastrofes
+				SET estado = ?, modificado = <%=modif%>
+				WHERE id = ?
+				<sql:param value="${param.estadoEvento}"/>
+				<sql:param value="${param.idEvento}"/>
+			</sql:update>
+			<sql:update dataSource="${CatastrofesServer}">
+				UPDATE catastrofes
+				SET estado = ?, modificado = <%=modif%>
+				WHERE nombre = ? AND estado != 'erased'
+				<sql:param value="${param.estadoUsuario}"/>
 				<sql:param value="${param.nombreUsuario}"/>
 			</sql:update>
 		</c:otherwise>

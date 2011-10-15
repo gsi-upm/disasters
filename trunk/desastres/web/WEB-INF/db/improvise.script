@@ -21,7 +21,7 @@ ALTER TABLE TIPOS_HERIDOS ALTER COLUMN ID RESTART WITH 7
 ALTER TABLE TIPOS_USUARIOS ALTER COLUMN ID RESTART WITH 12
 ALTER TABLE TIPOS_ACTIVIDADES ALTER COLUMN ID RESTART WITH 20
 ALTER TABLE TIPOS_EVENTOS ALTER COLUMN ID RESTART WITH 13
-ALTER TABLE USUARIOS ALTER COLUMN ID RESTART WITH 8
+ALTER TABLE USUARIOS ALTER COLUMN ID RESTART WITH 11
 ALTER TABLE RESOURCES ALTER COLUMN ID RESTART WITH 16
 ALTER TABLE CATASTROFES ALTER COLUMN ID RESTART WITH 5
 ALTER TABLE HISTORIAL ALTER COLUMN ID RESTART WITH 1
@@ -95,12 +95,15 @@ INSERT INTO TIPOS_EVENTOS VALUES(10,'desasociar','Desasociar herido con emergenc
 INSERT INTO TIPOS_EVENTOS VALUES(11,'modificarInfo','Modificar informacion de usuario')
 INSERT INTO TIPOS_EVENTOS VALUES(12,'nuevoUsuario','Crear nuevo usuario')
 INSERT INTO USUARIOS VALUES(1,'admin','1a1dc91c907325c69271ddf0c944bc72','administrator','Administrador','admin@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
-INSERT INTO USUARIOS VALUES(2,'user','1a1dc91c907325c69271ddf0c944bc72','administrator','Usuario','user@correo.com',40.416878E0,-3.70348E0,FALSE,'disasters')
-INSERT INTO USUARIOS VALUES(3,'agent','1a1dc91c907325c69271ddf0c944bc72','agent','Agente','agent@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
-INSERT INTO USUARIOS VALUES(4,'citizen','1a1dc91c907325c69271ddf0c944bc72','citizen','Ciudadano 1','citizen@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
-INSERT INTO USUARIOS VALUES(5,'enfermero','1a1dc91c907325c69271ddf0c944bc72','nurse','Enfermero','enfermero@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
-INSERT INTO USUARIOS VALUES(6,'celador','1a1dc91c907325c69271ddf0c944bc72','otherStaff','Celador','celador@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
-INSERT INTO USUARIOS VALUES(7,'ciudadano','1a1dc91c907325c69271ddf0c944bc72','citizen','Ciudadano 2','ciudadano@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(2,'enfermero','1a1dc91c907325c69271ddf0c944bc72','nurse','Enfermero 1','enfermero@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(3,'nurse','1a1dc91c907325c69271ddf0c944bc72','nurse','Enfermero 2','enfermero@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(4,'auxiliar','1a1dc91c907325c69271ddf0c944bc72','assistant','Auxiliar 1','auxiliar@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(5,'assistant','1a1dc91c907325c69271ddf0c944bc72','assistant','Auxiliar 2','auxiliar@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(6,'gerocultor','1a1dc91c907325c69271ddf0c944bc72','gerocultor','Gerocultor','gerocultor@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(7,'celador','1a1dc91c907325c69271ddf0c944bc72','otherStaff','Celador','celador@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(8,'ciudadano','1a1dc91c907325c69271ddf0c944bc72','citizen','Ciudadano 1','ciudadano@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(9,'citizen','1a1dc91c907325c69271ddf0c944bc72','citizen','Ciudadano 2','citizen@correo.com',38.232272E0,-1.698925E0,TRUE,'caronte')
+INSERT INTO USUARIOS VALUES(10,'user','1a1dc91c907325c69271ddf0c944bc72','administrator','Usuario','user@correo.com',40.416878E0,-3.70348E0,FALSE,'disasters')
 INSERT INTO RESOURCES VALUES(1,'police','Unit P-001','description...','info...',0.0E0,0.0E0,'','active',0)
 INSERT INTO RESOURCES VALUES(2,'police','Unit P-002','description...','info...',0.0E0,0.0E0,'','active',0)
 INSERT INTO RESOURCES VALUES(3,'police','Unit P-003','description...','info...',0.0E0,0.0E0,'','active',0)
