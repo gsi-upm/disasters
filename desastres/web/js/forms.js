@@ -1,5 +1,4 @@
 // Javascripts para los formularios
-
 function cambiaIcono(marcador, tipo, cantidad){
 	var nombre;
 	var imagen;
@@ -7,68 +6,52 @@ function cambiaIcono(marcador, tipo, cantidad){
 		if(tipo == 'fire'){
 			imagen = 'markers/fuego.png';
 			nombre = 'Incencio';
-		}
-		if(tipo == 'flood'){
+		}else if(tipo == 'flood'){
 			imagen = 'markers/agua.png';
 			nombre = 'Inundación';
-		}
-		if(tipo == 'collapse'){
+		}else if(tipo == 'collapse'){
 			imagen = 'markers/casa.png';
 			nombre = 'Derrumbamiento';
-		}
-		if(tipo == 'lostPerson'){
+		}else if(tipo == 'lostPerson'){
 			imagen = 'markers/personaPerdida.png';
 			nombre = 'Persona perdida';
-		}
-		if(tipo == 'injuredPerson'){
+		}else if(tipo == 'injuredPerson'){
 			imagen = 'markers/personaHerida.png';
 			nombre = 'Persona herida';
 		}
 		document.getElementById('icono_catastrofes').src = imagen;
 		document.getElementById('catastrofes').nombre.value = nombre;
-	}
-	if(marcador == 'resource'){
+	}else if(marcador == 'resource'){
 		if(tipo == 'police'){
 			imagen = 'markers/policia' + cantidad + '.png';
-		}
-		if(tipo == 'firemen'){
+		}else if(tipo == 'firemen'){
 			imagen = 'markers/bombero' + cantidad + '.png';
-		}
-		if(tipo == 'ambulance' || tipo == 'ambulancia'){
+		}else if(tipo == 'ambulance' || tipo == 'ambulancia'){
 			imagen = 'markers/ambulancia' + cantidad + '.png';
-		}
-		if(tipo == 'nurse'){
+		}else if(tipo == 'nurse'){
 			imagen = 'markers/enfermero' + cantidad + '.png';
-		}
-		if(tipo == 'gerocultor'){
+		}else if(tipo == 'gerocultor'){
 			imagen = 'markers/gerocultor' + cantidad + '.png';
-		}
-		if(tipo == 'assistant'){
+		}else if(tipo == 'assistant'){
 			imagen = 'markers/auxiliar' + cantidad + '.png';
-		}
-		if(tipo == 'otherStaff'){
+		}else if(tipo == 'otherStaff'){
 			imagen = 'markers/otro' + cantidad + '.png';
 		}
 		document.getElementById('icono_recursos').src = imagen;
-	}
-	if(marcador == 'people'){
+	}else if(marcador == 'people'){
 		if(tipo == 'healthy'){
 			imagen = 'markers/sano' + cantidad + '.png';
 			nombre = 'Sano';
-		}
-		if(tipo == 'slight'){
+		}else if(tipo == 'slight'){
 			imagen = 'markers/leve' + cantidad + '.png';
 			nombre = 'Leve';
-		}
-		if(tipo == 'serious'){
+		}else if(tipo == 'serious'){
 			imagen = 'markers/grave' + cantidad + '.png';
 			nombre = 'Grave';
-		}
-		if(tipo == 'dead'){
+		}else if(tipo == 'dead'){
 			imagen = 'markers/muerto' + cantidad + '.png';
 			nombre = 'Muerto';
-		}
-		if(tipo == 'trapped'){
+		}else if(tipo == 'trapped'){
 			imagen = 'markers/trapped' + cantidad + '.png';
 			nombre = 'Atrapado';
 		}
@@ -80,25 +63,21 @@ function cambiaIcono(marcador, tipo, cantidad){
 function cambiaFlecha(i, numero){
 	if(i == 0){
 		document.getElementById('validardireccion'+numero).src = 'images/iconos/confirm.png';
-	}
-	if(i == 1){
+	}else if(i == 1){
 		document.getElementById('validardireccion'+numero).src = 'images/iconos/confirm2.png';
 	}
 } 	
 	
 function validarDireccion(numero){
 	direccion = document.getElementById('direccion' + numero).value;
-	//alert (direccion);
-	
-	localizador.getLatLng(direccion,function(point) {
-		if (!point) {
-			document.getElementById('error_texto').innerHTML = 'La siguiente direccion no ha podido ser encontrada: <i>'+direccion+'</i>';
+	localizador.getLatLng(direccion, function(point){
+		if(!point){
+			document.getElementById('error_texto').innerHTML = 'La siguiente direccion no ha podido ser encontrada: <i>' +
+				direccion + '</i>';
 			$('#error').jqm().jqmShow();
-			//alert(direccion + ' not found');
 			document.getElementById('validacion'+numero).src = 'images/iconos/no.png';
-		}else {
+		}else{
 			map.setCenter(point, 15);
-			//alert(point);
 			document.getElementById('validacion' + numero).src = 'images/iconos/yes.png';
 			document.getElementById('validacion' + numero).alt = 'Direcci&oacute;n v&aacute;lida';
 			document.getElementById('latitud' + numero).value = point.lat();
@@ -112,10 +91,8 @@ function validarDireccion(numero){
 }
 
 function pinchaMapa(numero){
-	//var lat;
-	//var lng;
 	limpiar = false;
-	if (numero == 0){
+	if(numero == 0){
 		$('#modificar').jqm().jqmHide();
 	}
 	var handler = GEvent.addListener(map, 'click', function(overlay,point) {
@@ -125,11 +102,10 @@ function pinchaMapa(numero){
 			$('#dialog'+numero).jqm().jqmShow();
 		}else{
 			$('#modificar').jqm().jqmShow();
-			document.getElementById('pincha').innerHTML = 'Posicion guardada. &iquest;Otra vez?';
+			document.getElementById('pincha').innerHTML = 'Posici&oacute;n guardada. &iquest;Otra vez?';
 		}
-		//alert('Punto almacenado: '+point.lat()+', '+point.lng());
 		GEvent.removeListener(handler);
-	} );
+	});
 }
 
 function iconoAdecuado(marcador,tipo,cantidad){
@@ -138,59 +114,43 @@ function iconoAdecuado(marcador,tipo,cantidad){
 		imagen = 'markers/fuego.png'
 		if(tipo == 'fire'){
 			imagen = 'markers/fuego.png';
-		}
-		if(tipo == 'flood'){
+		}else if(tipo == 'flood'){
 			imagen = 'markers/agua.png';
-		}
-		if(tipo == 'collapse'){
+		}else if(tipo == 'collapse'){
 			imagen = 'markers/casa.png';
-		}
-		if(tipo == 'lostPerson'){
+		}else if(tipo == 'lostPerson'){
 			imagen = 'markers/personaPerdida.png';
-		}
-		if(tipo == 'injuredPerson'){
+		}else if(tipo == 'injuredPerson'){
 			imagen = 'markers/personaHerida.png';
 		}
-	}
-	if(marcador == 'resource'){
+	}else if(marcador == 'resource'){
 		imagen = 'markers/policia1.png';
 		if(tipo == 'police'){
 			imagen = 'markers/policia' + cantidad + '.png';
-		}
-		if(tipo == 'firemen'){
+		}else if(tipo == 'firemen'){
 			imagen = 'markers/bombero' + cantidad + '.png';
-		}
-		if(tipo == 'ambulance' || tipo=='ambulancia'){
+		}else if(tipo == 'ambulance' || tipo=='ambulancia'){
 			imagen = 'markers/ambulancia' + cantidad + '.png';
-		}
-		if(tipo == 'nurse'){
+		}else if(tipo == 'nurse'){
 			imagen = 'markers/enfermero' + cantidad + '.png';
-		}
-		if(tipo == 'gerocultor'){
+		}else if(tipo == 'gerocultor'){
 			imagen = 'markers/gerocultor' + cantidad + '.png';
-		}
-		if(tipo == 'assistant'){
+		}else if(tipo == 'assistant'){
 			imagen = 'markers/auxiliar' + cantidad + '.png';
-		}
-		if(tipo == 'otherStaff'){
+		}else if(tipo == 'otherStaff'){
 			imagen = 'markers/otro' + cantidad + '.png';
 		}
-	}
-	if(marcador == 'people'){
+	}else if(marcador == 'people'){
 		imagen = 'markers/leve1.png';
 		if(tipo == 'trapped'){
 			imagen = 'markers/trapped' + cantidad + '.png';
-		}
-		if(tipo == 'healthy'){
+		}else if(tipo == 'healthy'){
 			imagen = 'markers/sano' + cantidad + '.png';
-		}
-		if(tipo == 'slight'){
+		}else if(tipo == 'slight'){
 			imagen = 'markers/leve' + cantidad + '.png';
-		}
-		if(tipo == 'serious'){
+		}else if(tipo == 'serious'){
 			imagen = 'markers/grave' + cantidad + '.png';
-		}
-		if(tipo == 'dead'){
+		}else if(tipo == 'dead'){
 			imagen = 'markers/muerto' + cantidad + '.png';
 		}
 	}

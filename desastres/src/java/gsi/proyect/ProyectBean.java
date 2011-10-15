@@ -28,7 +28,7 @@ public class ProyectBean implements Serializable {
 		nivelMsg = 0;
 		
 		String roles[][] = {{"citizen","1"},{"agent","4"},{"administrator","5"},
-			{"otherStaff","3"},{"nurse","4"},{"relative","2"}};
+			{"otherStaff","3"},{"nurse","4"},{"relative","2"},{"assistant","4"},{"gerocultor","4"}};
 		for(int i=0; i<roles.length; i++){
 			relaciones.put(roles[i][0],Integer.parseInt(roles[i][1]));
 		}

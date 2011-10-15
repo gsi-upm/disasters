@@ -67,7 +67,7 @@
 			<sql:query var="acciones" dataSource="${CatastrofesServer}">
 				SELECT a.id_emergencia, c.nombre, t.tipo
 				FROM actividades a, tipos_actividades t, catastrofes c
-				WHERE a.id_usuario = ?
+				WHERE a.id_usuario = (SELECT id FROM usuarios WHERE nombre_usuario = (SELECT nombre FROM catastrofes WHERE id = ?))
 				AND a.id_tipo_actividad = t.id
 				AND a.id_emergencia = c.id
 				AND a.estado = 'active'

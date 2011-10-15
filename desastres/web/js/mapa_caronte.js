@@ -1,11 +1,3 @@
-function initialize2(){
-	if(nivelMsg > 1){
-		if(document.getElementById('opcionesMapa').verSanos.checked){
-			verSanos = true;
-		}
-	}
-}
-
 function mapInit(){
 	center = new GLatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
 	map.setCenter(center, 21);
@@ -16,6 +8,31 @@ function buildingInit(){
 	showFiremenStations();
 	showPoliceStations();
 	showGeriatricCenters();
+}
+
+function showHospitals(){
+	generateBuilding('hospital','Centro de salud', 38.228138, -1.706449); // Calasparra, Murcia
+}
+
+function showFiremenStations(){
+	generateBuilding('firemenStation','Parque de bomberos', 38.111020,-1.865018); // Caravaca de la Cruz, Murcia
+	generateBuilding('firemenStation','Parque de bomberos TEMPORAL', 38.21602,-1.72306); // TEMPORAL
+}
+
+function showPoliceStations(){
+	generateBuilding('policeStation','Ayuntamiento y Polic&iacute;a municipal', 38.231125, -1.697560); // Calasparra, Murcia
+}
+
+function showGeriatricCenters(){
+	generateBuilding('geriatricCenter','Residencia Virgen de la Esperanza', 38.232272, -1.698925); // Calasparra, Murcia
+}
+
+function initialize2(){
+	if(nivelMsg > 1){
+		if(document.getElementById('opcionesMapa').verSanos.checked){
+			verSanos = true;
+		}
+	}
 }
 
 function cargarMenuAcciones(puntero){
@@ -64,49 +81,6 @@ function cargarMenuAcciones(puntero){
 		async: false
 	});
 	return menu;
-	/*
-	var menu = '<div id="acciones"><form id="form_acciones" name="form_acciones" action="#"><table class="tabla_menu">';
-	var titulo = '<tr><th><label for="accion">Acciones a realizar</label></th></tr>';
-	var oculto = '<tr style="display:none"><td><input type="radio" name="accion" value="" checked="checked"/></td></tr>'; // Sin esto no funciona!!
-	var apagar = '<tr id="apagar"><td><input type="radio" name="accion" value="apagar"/>Atender emergencia</td></tr>';
-	var atender = '<tr id="atender"><td><input type="radio" name="accion" value="atender"/>Atender herido</td></tr>';
-	var evacuar = '<tr id="evacuar"><td><input type="radio" name="accion" value="evacuar"/>Evacuar residentes</td></tr>';
-	var rescatar = '<tr id="rescatar"><td><input type="radio" name="accion" value="rescatar"/>Rescatar atrapado</td></tr>';
-	var ayudar = '<tr id="ayudar"><td><input type="radio" name="accion" value="ayudar"/>Ayudar (0)</td></tr>';
-	var trasladar = '<tr id="trasladar"><td><input type="radio" name="accion" value="trasladar"/>Trasladar herido</td></tr>';
-	var evacuado = '<tr id="evacuado"><td><input type="radio" name="accion" value="evacuado"/>Fin evacuación</td></tr>';
-	var volver = '<tr id="volver"><td><input type="radio" name="accion" value="volver"/>Volver a la residencia</td></tr>';
-	var dejar = '<tr id="dejar"><td><input type="radio" name="accion" value="dejar"/>Dejar de atender</td></tr>';
-	var apagado = '<tr id="apagado"><td><input type="radio" name="accion" value="apagado"/>Fuego pagado</td></tr>';
-	var curado = '<tr id="curado"><td><input type="radio" name="accion" value="curado"/>Herido curado</td></tr>';
-	var vuelto = '<tr id="vuelto"><td><input type="radio" name="accion" value="vuelto"/>Todos de vuelta</td></tr>';
-	var rescatado = '<tr id="rescatado"><td><input type="radio" name="accion" value="rescatado"/>Atrapado rescatado</td></tr>';
-	var cierre = '</table><br/><input type="hidden" id="iden2" name="iden2" value="' + puntero.id + '"/>';
-	var boton = '<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(iden2.value,\'' + userName + '\',accion);map.closeInfoWindow();"/>';
-	if(puntero.marcador == 'event'){
-		menu += titulo + oculto;
-		if(puntero.estado == 'active') menu += apagar;
-		else if(puntero.estado == 'controlled') menu += ayudar + dejar + apagado;
-		menu += cierre + boton;
-	}else if(puntero.marcador == 'people'){
-		menu += titulo + oculto;
-		if(puntero.tipo == 'healthy'){
-			if(puntero.estado == 'active') menu += evacuar;
-			else if(puntero.estado == 'controlled') menu += ayudar + dejar + evacuado + volver + vuelto;
-		}else if(puntero.tipo == 'trapped'){
-			if(puntero.estado == 'active') menu += rescatar;
-			else if(puntero.estado == 'controlled') menu += ayudar + dejar + rescatado;
-		}else{
-			if(puntero.estado == 'active') menu += atender;
-			else if(puntero.estado == 'controlled') menu += ayudar + dejar + trasladar + curado;
-		}
-		menu += cierre + boton;
-	}else{
-		menu += '</table>';
-	}
-	menu += '</form></div>';
-	return menu;
-	*/
 }
 
 function cargarListaActividades(evento){
@@ -167,8 +141,11 @@ function cargarLateral(evento){
 		$.getJSON('getAsociaciones.jsp', {
 			'tipo':'asociadas',
 			'iden': evento.id
-		}, function(data) {
-			$.each(data, function(entryIndex, entry) {
+		}, function(data){
+			$.each(data, function(entryIndex, entry){
+				if(entryIndex == 0){
+					document.getElementById('checkboxAsoc').innerHTML += '&emsp;V';
+				}
 				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
 					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)" checked="checked"/>' +
 					entry['id'] +' - ' + entry['nombre'] + '</li>';
@@ -176,11 +153,15 @@ function cargarLateral(evento){
 				emergenciasAsociadas[1].push([entry['id'], true]);
 			});
 		});
+		
 		$.getJSON('getAsociaciones.jsp', {
 			'tipo':'emergencias',
 			'iden': evento.id
-		}, function(data) {
+		}, function(data){
 			$.each(data, function(entryIndex, entry){
+				if(entryIndex == 0 && document.getElementById('checkboxAsoc').innerHTML == ''){
+					document.getElementById('checkboxAsoc').innerHTML += '&emsp;V';
+				}
 				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
 						'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
 						entry['id'] +' - ' + entry['nombre'] + '</li>';
@@ -188,7 +169,7 @@ function cargarLateral(evento){
 				emergenciasAsociadas[1].push([entry['id'], false]);
 			});
 			if(document.getElementById('checkboxAsoc').innerHTML == ''){
-				document.getElementById('checkboxAsoc').innerHTML = 'No hay emergencias para asociar<input type="hidden" name="idAssigned" value="0"/>';
+				document.getElementById('checkboxAsoc').innerHTML = 'No hay emergencias para asociar';
 			}
 		});
 	}else if(evento.marcador == 'resource'){
@@ -206,19 +187,6 @@ function cargarLateral(evento){
 			centroAux = [map.getCenter(),map.getZoom()];
 			localizacion = false;
 		}
-		// AQUI!!!
-		/*$.getJSON('getAsociaciones.jsp', {
-			'tipo':'asociadas',
-			'iden': evento.id
-		}, function(data) {
-			$.each(data, function(entryIndex, entry) {
-				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entryIndex +
-					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entryIndex + '.checked)" checked="checked"/>' +
-					entry['id'] +' - ' + entry['nombre'] + '</li>';
-				emergenciasAsociadas[0].push([entry['id'], true]);
-				emergenciasAsociadas[1].push([entry['id'], true]);
-			});
-		});*/
 	}
 			
 	if(lateral != null){
@@ -287,23 +255,6 @@ function limpiarLateral(evento){
 		document.getElementById('submit20').style.display = 'none';
 		document.getElementById('eliminar2').style.display = 'none';
 		document.getElementById('sintomas').style.display = 'none';
-
-		document.getElementById('checkboxAsoc').innerHTML = '';
-		emergenciasAsociadas = [new Array(), new Array()];
-		$.getJSON('getAsociaciones.jsp', {
-			'tipo':'todasEmergencias'
-		}, function(data) {
-			$.each(data, function(entryIndex, entry) {
-				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
-					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
-					entry['id'] +' - ' + entry['nombre'] + '</li>';
-				emergenciasAsociadas[0].push([entry['id'], false]);
-				emergenciasAsociadas[1].push([entry['id'], false]);
-			});
-			if(document.getElementById('checkboxAsoc').innerHTML == ''){
-				document.getElementById('checkboxAsoc').innerHTML = 'No hay emergencias para asociar<input type="hidden" name="idAssigned" value="0"/>';
-			}
-		});
 	}else if(evento.marcador == 'resource'){
 		localizacion = document.getElementById('form-posicion').localizacion.checked;
 		document.getElementById('datos').style.display = 'none';
@@ -339,6 +290,25 @@ function limpiarLateral(evento){
 			}else if(evento.marcador == 'people'){
 				lateral.peso[0].selected = 'selected';
 				lateral.movilidad[0].selected = 'selected';
+				document.getElementById('checkboxAsoc').innerHTML = '';
+				emergenciasAsociadas = [new Array(), new Array()];
+				$.getJSON('getAsociaciones.jsp', {
+					'tipo':'todasEmergencias'
+				}, function(data) {
+					$.each(data, function(entryIndex, entry) {
+						if(entryIndex == 0){
+							document.getElementById('checkboxAsoc').innerHTML += '&emsp;V';
+						}
+						document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
+							'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
+							entry['id'] +' - ' + entry['nombre'] + '</li>';
+						emergenciasAsociadas[0].push([entry['id'], false]);
+						emergenciasAsociadas[1].push([entry['id'], false]);
+					});
+					if(document.getElementById('checkboxAsoc').innerHTML == ''){
+						document.getElementById('checkboxAsoc').innerHTML = 'No hay emergencias para asociar';
+					}
+				});
 			}
 		}
 		limpiar = true;

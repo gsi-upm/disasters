@@ -41,17 +41,13 @@
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
 			<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA_pvzu2eEg9OhdvcrhLRkgRSXZ-vMQ48x4C6FPZ72aXwxrdjUDxSASm6YS5fgxM4XDiwIpFkrYCIdUQ"></script>
-			<!-- GOOGLE MAPS v3
-				<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-				<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false&language=es&region=ES"></script>
-			-->
 			<script type="text/javascript">
 				var nivelMsg = ${proyecto.nivelMsg};
 				var userName = '${nombreUsuario}';
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
 			<script type="text/javascript" src="js/mapa_${proyecto.proyect}.js"></script>
-			<script type="text/javascript" src="js/mapa.js"></script>  <%-- mapa, marcador, forms, resourcesOnRoads, ventana_modificacion y menu_caronte_admin --%>
+			<script type="text/javascript" src="js/mapa.js"></script>
 			<script type="text/javascript" src="js/mapa2.js"></script>
 			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
@@ -104,7 +100,7 @@
 							</div>
 							<div id="Reloj24H"></div>
 						</div>
-						v.81
+						v.82
 						<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png" alt="lang:<fmt:message key="idioma"/>"
 							 onclick="document.getElementById('langSelect').style.display='inline'; document.getElementById('langInit').style.display='none';"/>
 						<span id="langSelect" style="display:none">
@@ -148,7 +144,7 @@
 								</c:if>
 
 								<c:if test="${proyecto.proyect == 'caronte'}">
-									<c:if test="${proyecto.rol == 'administrator' || proyecto.rol == 'agent' || proyecto.rol == 'nurse' || proyecto.rol == 'otherStaff'}">
+									<c:if test="${proyecto.rol != 'citizen'}">
 										<!-- if the user is in role 'administrator' or 'agent' -->
 										<c:import url="menu_caronte_admin.jsp"/>
 									</c:if>
@@ -214,17 +210,19 @@
 							</c:if>
 						</div>
 					</td>
-					<td>
-						<div id="open_messages" class="pulsable"><fmt:message key="mostrar"/></div>
-						<div id="close_messages" class="pulsable"><fmt:message key="ocultar"/></div>
-						<div id="messages">
-							<p>MENSAJES:</p>
-						</div>
-						<audio id="audio" controls="controls" style="display:none">
-							<source src="images/bad.ogg" type="audio/ogg"/>
-							<source src="images/alarm.mp3" type="audio/mpeg"/>
-						</audio>
-					</td>
+					<c:if test="${proyecto.proyect == 'caronte'}">
+						<td>
+							<div id="open_messages" class="pulsable"><fmt:message key="mostrar"/></div>
+							<div id="close_messages" class="pulsable"><fmt:message key="ocultar"/></div>
+							<div id="messages">
+								<p>MENSAJES:</p>
+							</div>
+							<audio id="audio" controls="controls" style="display:none">
+								<source src="images/bad.ogg" type="audio/ogg"/>
+								<source src="images/alarm.mp3" type="audio/mpeg"/>
+							</audio>
+						</td>
+					</c:if>
 				</tr>
 			</table>
 			<c:if test="${proyecto.proyect == 'disasters'}">

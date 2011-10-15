@@ -34,7 +34,7 @@
 					</td>
 				</tr>
 			</table>
-			<h1>Informaci&oacute;n</h1>
+			<h1><fmt:message key="informacion"/></h1>
 			<table>
 				<tr>
 					<td>Director de emergencias:</td>
@@ -45,7 +45,7 @@
 					<td>xxx metros</td>
 				</tr>
 				<tr>
-					<td>Direcci&oacute;n:</td>
+					<td><fmt:message key="direccion"/>:</td>
 					<td>Calle Molinico 7</td>
 				</tr>
 			</table>
