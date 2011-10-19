@@ -12,7 +12,7 @@
 
 <% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
 
-<c:if test="${param.nombre ne null and param.localizacion eq null}">
+<c:if test="${param.nombre != null && param.localizacion == null}">
 	<sql:update dataSource="${CatastrofesServer}">
 	    UPDATE CATASTROFES SET
 		latitud = ?, longitud = ?, modificado = <%=modif%>
@@ -23,7 +23,7 @@
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
 </c:if>
-<c:if test="${param.id ne null}">
+<c:if test="${param.id != null}">
 	<sql:update dataSource="${CatastrofesServer}">
 	    UPDATE CATASTROFES SET
 		latitud = ?, longitud = ?, modificado = <%=modif%>
@@ -33,7 +33,7 @@
 		<sql:param value="${param.id}"/>
 	</sql:update>
 </c:if>
-<c:if test="${param.porDefecto}">
+<c:if test="${param.porDefecto == true}">
 	<sql:update dataSource="${CatastrofesServer}">
 	    UPDATE USUARIOS SET
 		latitud = ?, longitud = ?
@@ -43,7 +43,7 @@
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
 </c:if>
-<c:if test="${param.localizacion ne null}">
+<c:if test="${param.localizacion != null}">
 	<sql:update dataSource="${CatastrofesServer}">
 	    UPDATE USUARIOS SET
 		localizacion = ?

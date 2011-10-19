@@ -1,5 +1,4 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
@@ -8,14 +7,14 @@
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<title><fmt:message key="acerca"/></title>
+			<title>No Javascript</title>
 			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_${proyecto.proyect}.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<script type="text/javascript" src="js/i18n.js"></script>
 			<script type="text/javascript">var idioma = '<fmt:message key="idioma"/>'</script>
 			<script type="text/javascript" src="js/hora_fecha.js"></script>
 		</head>
-		<body onload="IniciarReloj24()">
+		<body>
 			<table class="tabla_menu">
 				<tr>
 					<td>
@@ -29,25 +28,8 @@
 					</td>
 				</tr>
 			</table>
-			<h1><fmt:message key="informacion"/></h1>
-			<table>
-				<tr>
-					<td><fmt:message key="director"/>:</td>
-					<td>Nombre Apellido1 Apellido2 - 968723080</td>
-				</tr>
-				<tr>
-					<td><fmt:message key="altura"/>:</td>
-					<td>xxx metros</td>
-				</tr>
-				<tr>
-					<td><fmt:message key="direccion"/>:</td>
-					<td>Calle Molinico 7</td>
-				</tr>
-			</table>
-			<p>
-				<c:url value="index.jsp" var="volver"/>
-				<a href="${volver}"><fmt:message key="volver"/></a>
-			</p>
+			<p class="error">Esta p&aacute;gina necesita usar Javascript.</p>
+			<p class="error">Por favor, active su funcionamiento o utilice un navegador web que lo soporte</p>
 		</body>
 	</fmt:bundle>
 </html>

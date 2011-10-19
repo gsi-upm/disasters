@@ -8,7 +8,7 @@
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<title><fmt:message key="acerca"/></title>
+			<title>Error Internet Explorer</title>
 			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_${proyecto.proyect}.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<script type="text/javascript" src="js/i18n.js"></script>
@@ -29,24 +29,13 @@
 					</td>
 				</tr>
 			</table>
-			<h1><fmt:message key="informacion"/></h1>
-			<table>
-				<tr>
-					<td><fmt:message key="director"/>:</td>
-					<td>Nombre Apellido1 Apellido2 - 968723080</td>
-				</tr>
-				<tr>
-					<td><fmt:message key="altura"/>:</td>
-					<td>xxx metros</td>
-				</tr>
-				<tr>
-					<td><fmt:message key="direccion"/>:</td>
-					<td>Calle Molinico 7</td>
-				</tr>
-			</table>
-			<p>
-				<c:url value="index.jsp" var="volver"/>
-				<a href="${volver}"><fmt:message key="volver"/></a>
+			<p class="error">
+				<fmt:message key="mensajeIE"/>
+				<a href="http://www.mozilla-europe.org/firefox/">Firefox</a>,
+				<a href="http://www.google.com/chrome">Chrome</a>,
+				<a href="http://www.opera.com/browser">Opera</a>
+				<fmt:message key="o"/>
+				<a href="http://www.apple.com/safari/download">Safari</a>.
 			</p>
 		</body>
 	</fmt:bundle>

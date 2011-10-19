@@ -8,28 +8,6 @@ body{
     padding: 0px;
 }
 
-h5{
-    font-family: 'Trebuchet MS', Arial, Verdana, Helvetica;
-    font-size: 14px;
-    font-weight: normal;
-    color: #666666;
-    padding: 0px;
-    margin: 0px;
-}
-
-#fecha{
-    font-family: 'Trebuchet MS', Arial, Verdana, Helvetica;
-    font-weight: normal;
-    color: #999999;
-}
-
-#reloj{
-    right: 0px;
-    color: #999999;
-}
-
-/* FORMULARIO con TABS */
-
 form, textarea, input, form table{
     font-family: 'Trebuchet MS', Arial, Verdana, Helvetica;
     font-weight: normal;
@@ -37,13 +15,172 @@ form, textarea, input, form table{
     color: #666666;
 }
 
-input:focus, textarea:focus {
-    border: 2px solid #FFC83C;
-}
-
 form table img{
     margin-bottom: 10px;
     padding: 8px;
+}
+
+input:focus, textarea:focus{
+    border: 2px solid #ffc83c;
+}
+
+#cabecera{
+    float: left;
+}
+
+#reloj{
+    right: 0px;
+    color: #999999;
+}
+
+#Reloj24H{
+	color: #999999;
+	text-align: right;
+	font-size: 18pt;
+	font-weight: bold;
+}
+
+#left{
+    width: 260px;
+	padding-right: 3px;
+}
+
+#fila_mapa{
+	width: 100%;
+}
+
+#screen{
+    font-family: Courier, monospace;
+    font-size: 12px;
+    margin-top: 53px;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #919b9c;
+    background-color: #efefef;
+    color: #000000;
+    overflow: scroll;
+}
+
+#close_screen{
+    text-decoration: none;
+    background-color: #cccccc;
+    border: 1px #919b9c solid;
+    color: black;
+    padding: 0px 3px 0px 3px;
+    position: absolute;
+    right: 10px;
+    margin-top: 34px;
+	margin-right: -2px;
+}
+
+#signeduser {
+    font-weight: bolder;
+}
+
+#map_canvas {
+	 border: #999999 solid 1px;
+	 width: 100%;
+	 height: 517px;
+}
+
+#opcionesMapa{
+	float: right;
+}
+
+#planta0{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#planoResidencia{
+	 width: 611px;
+	 height: 487px;
+}
+
+#messages{
+    font-family: Courier, monospace;
+    font-size: 12px;
+    /*margin-top: 21px;
+    height: 508px;*/
+	width: 254px;
+	margin-left: 2px;
+    padding: 10px;
+    border: 1px solid #919b9c;
+    background-color: #efefef;
+    color: #000000;
+    overflow: auto;
+}
+
+#close_messages, #open_messages{
+    text-decoration: none;
+    background-color: #cccccc;
+    border: 1px #919b9c solid;
+    color: black;
+    padding: 0px 3px 0px 3px;
+    position: absolute;
+    right: 11px;
+    /*margin-top: 4px;*/
+	margin-right: -2px;
+}
+
+#bocadillo{
+    font-family: 'Trebuchet MS', Arial, Verdana, Helvetica;
+    font-size: 12px;
+    color: #666666;
+}
+
+#error_texto{
+    font-family: 'Trebuchet MS', Arial, Verdana, Helvetica;
+    font-size: 12px;
+    font-weight: normal;
+    color: #666666;
+}
+
+#quantity{
+    margin: 0px;
+    padding: 0px;
+}
+
+.derecha{
+	text-align: right;
+}
+
+.centrado{
+	text-align: center;
+}
+
+.pulsable:hover{
+	cursor: pointer;
+}
+
+.rojo{
+	color: red;
+}
+
+.verde{
+	color: lime;
+}
+
+.oculto{
+	display: none;
+}
+
+.tabla_menu, .tabla_body{
+	border-spacing: 0px;
+	border: 0px;
+	width: 100%;
+}
+
+.tabla_body tr{
+	vertical-align: top;
+}
+
+.tabla_menu td{
+	padding: 0px;
+}
+
+.tabla_menu .derecha{
+	vertical-align: top;
 }
 
 .rayas{
@@ -64,53 +201,42 @@ form table img{
     margin-bottom: 5px;
 }
 
+.img_menu{
+	text-align: right;
+	vertical-align: middle;
+}
+
 .botones{
     margin-top: 5px;
     margin-bottom: 0px;
     padding: 0px;
 }
 
-#quantity{
-    margin: 0px;
-    padding: 0px;
+.jqmWindow{
+    display: none;
+    position: fixed;
+    top: 12%;
+    left: 60%;
+    margin-left: -300px;
+    width: 250px;
+    background-color: #eeeeee;
+    color: #333333;
+    border: 1px solid #333333;
+    padding: 12px;
 }
 
-/* AQUI ACABA EL FORMULARIO */
-
-#left{
-    width: 260px;
+.jqmOverlay {
+	background-color: #000000;
 }
 
-#right{
-    margin-left: 0px;
+.plano_residencia{
+	 border: solid black 1px;
+	 /*margin: 50px;*/
 }
 
-#cabecera{
-    float: left;
-}
-
-#screen{
-    font-family: Courier, monospace;
-    font-size: 12px;
-    margin-top: 53px;
-    height: 150px;
-    padding: 10px;
-    border: 1px solid #919b9c;
-    background-color: #efefef;
-    color: #000000;
-    overflow: scroll;
-}
-
-#close_screen{
-    text-decoration: none;
-    background-color: #CCCCCC;
-    border: 1px #919b9c solid;
-    color: black;
-    padding: 0px 3px 0px 3px;
-    position: absolute;
-    right: 10px;
-    margin-top: 34px;
-	margin-right: -2px;
+.plano_residencia td{
+	border: solid black 1px;
+	/*padding: 10px;*/
 }
 
 .slideMenu{
@@ -126,179 +252,31 @@ form table img{
     list-style-type: none;
 }
 
-#bocadillo{
-    font-family: 'Trebuchet MS', Arial, Verdana, Helvetica;
-    font-size: 12px;
-    color: #666666;
-}
-
-#no-link{
-    color: #666666;
-}
-
-/* POP-UPS */
-
-.jqmWindow {
-    display: none;
-    position: fixed;
-    top: 12%;
-    left: 60%;
-    margin-left: -300px;
-    width: 250px;
-    background-color: #eeeeee;
-    color: #333;
-    border: 1px solid #333333;
-    padding: 12px;
-}
-
-#error_texto{
-    font-family: 'Trebuchet MS', Arial, Verdana, Helvetica;
-    font-size: 12px;
-    font-weight: normal;
-    color: #666666;
-}
-
-#signeduser {
-    font-weight: bolder;
-}
-
-.bigger {
+.bigger{
     font-size: 14px;
     font-variant: small-caps;
 }
 
-.jqmOverlay {
-	background-color: #000;
+.div_vacio{
+	height: 21px;
 }
 
-/*
- * Fixed posistioning emulation for IE6
- * Star selector used to hide definition from browsers other than IE6
- * For valid CSS, use a conditional include instead
- */
-/*
-* html .jqmWindow {
-    position: absolute;
-    top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
-}
-*/
-
-#Reloj24H {
-	color: #999999;
-	text-align: right;
-	font-size: 18pt;
-	font-weight: bold;
-}
-
-#intro {
-	margin-top:43px;
-}
-
-#map_canvas {
-	 border:#999999 solid 1px;
-	 width:100%;
-	 height:517px;
-}
-
-#fila_mapa{
-	width: 100%;
-}
-
-.centrado {
-	text-align: center;
-}
-
-.derecha {
-	text-align: right;
-}
-
-.tabla_menu {
-	border-spacing: 0;
-	border: 0px;
-	width: 100%;
-}
-
-.tabla_menu td {
-	padding: 0;
-}
-
-.tabla_menu .derecha {
-	vertical-align: top;
-}
-
-.img_menu {
-	text-align: right;
-	vertical-align: middle;
-}
-
-.plano_residencia{
-	 border: solid black 1px;
-	 /*margin: 50px;*/
-}
-
-.plano_residencia td {
-	border: solid black 1px;
-	/*padding: 10px;*/
-}
-
-.iconos_validacion {
-	margin-top: 40px;
-}
-
-.iconos_validacion a {
-	 text-decoration: none;
-}
-
-.iconos_validacion img {
-	 border: 0;
-	 width: 88px;
-	 height: 31px;
-}
-
-.error {
+.error{
 	color: red;
 }
 
-.error a {
+.error a{
 	color: maroon;
 	text-decoration: none;
 }
 
-#messages{
-    font-family: Courier, monospace;
-    font-size: 12px;
-    /*margin-top: 21px;
-    height: 508px;*/
-	width: 254px;
-	margin-left: 6px;
-    padding: 10px;
-    border: 1px solid #919b9c;
-    background-color: #efefef;
-    color: #000000;
-    overflow: auto;
-}
+/* CSS3 */
 
-#close_messages, #open_messages{
-    text-decoration: none;
-    background-color: #CCCCCC;
-    border: 1px #919b9c solid;
-    color: black;
-    padding: 0px 3px 0px 3px;
-    position: absolute;
-    right: 10px;
-    /*margin-top: 4px;*/
-	margin-right: -2px;
-}
-
-.pulsable:hover{
-	cursor: pointer;
-}
-
-:-webkit-input-placeholder {
+:-webkit-input-placeholder{
     color: silver;
 }
 
-:-moz-placeholder {
+:-moz-placeholder{
     color: silver;
 }
 
@@ -310,3 +288,15 @@ form table img{
 	padding: 5px;
     border: 1px solid #919b9c;
 }*/
+
+/*
+ * Fixed posistioning emulation for IE6
+ * Star selector used to hide definition from browsers other than IE6
+ * For valid CSS, use a conditional include instead
+ */
+/*
+* html .jqmWindow{
+    position: absolute;
+    top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
+}
+*/

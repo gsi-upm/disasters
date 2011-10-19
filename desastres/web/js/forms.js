@@ -69,7 +69,7 @@ function cambiaFlecha(i, numero){
 } 	
 	
 function validarDireccion(numero){
-	direccion = document.getElementById('direccion' + numero).value;
+	var direccion = document.getElementById('direccion' + numero).value;
 	localizador.getLatLng(direccion, function(point){
 		if(!point){
 			document.getElementById('error_texto').innerHTML = 'La siguiente direccion no ha podido ser encontrada: <i>' +
@@ -166,4 +166,14 @@ function borrarFormulario(form, numero){
 	form.latitud.value = 0;
 	form.longitud.value = 0;
 	document.getElementById('validacion' + numero).src = 'images/iconos/no.png'
+}
+
+function menuIdiomas(accion){
+	if(accion == 'abrir'){
+		document.getElementById('langSelect').style.display='inline';
+		document.getElementById('langInit').style.display='none';
+	}else if(accion == 'cerrar'){
+		document.getElementById('langSelect').style.display='none';
+		document.getElementById('langInit').style.display='inline';
+	}
 }

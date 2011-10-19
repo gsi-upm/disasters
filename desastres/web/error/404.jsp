@@ -8,7 +8,7 @@
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<title><fmt:message key="acerca"/></title>
+			<title>P&aacute;gina no encontrada</title>
 			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_${proyecto.proyect}.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<script type="text/javascript" src="js/i18n.js"></script>
@@ -29,22 +29,9 @@
 					</td>
 				</tr>
 			</table>
-			<h1><fmt:message key="informacion"/></h1>
-			<table>
-				<tr>
-					<td><fmt:message key="director"/>:</td>
-					<td>Nombre Apellido1 Apellido2 - 968723080</td>
-				</tr>
-				<tr>
-					<td><fmt:message key="altura"/>:</td>
-					<td>xxx metros</td>
-				</tr>
-				<tr>
-					<td><fmt:message key="direccion"/>:</td>
-					<td>Calle Molinico 7</td>
-				</tr>
-			</table>
-			<p>
+			<br/>
+			<h1 class="error">P&aacute;gina no encontrada</h1>
+			<p class="error">
 				<c:url value="index.jsp" var="volver"/>
 				<a href="${volver}"><fmt:message key="volver"/></a>
 			</p>

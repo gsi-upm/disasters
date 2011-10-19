@@ -66,7 +66,7 @@ function cargarMenuAcciones(puntero){
 				if(entryIndex == 0){
 					menu += '<br/><table class="tabla_menu">' +
 						'<tr><th><label for="accion">Acciones a realizar</label></th></tr>' +
-						'<tr style="display:none"><td><input type="radio" name="accion" value="" checked="checked"/></td></tr>'; // Sin esto no funciona!!
+						'<tr class="oculto"><td><input type="radio" name="accion" value="" checked="checked"/></td></tr>'; // Sin esto no funciona!!
 				}
 				menu += '<tr id="' + entry['tipo'] + '"><td>' +
 					'<input type="radio" name="accion" value="' + entry['tipo'] + '"/>' + entry['descripcion'] +
@@ -173,6 +173,7 @@ function cargarLateral(evento){
 			}
 		});
 	}else if(evento.marcador == 'resource'){
+		noActualizar = evento.id;
 		document.getElementById('listaRecursos').style.display = 'none';
 		document.getElementById('datos').style.display = 'block';
 		document.getElementById('datos-usuario').innerHTML = evento.nombre;
@@ -184,13 +185,12 @@ function cargarLateral(evento){
 			document.getElementById('form-posicion').latitud.value = evento.latitud;
 			document.getElementById('form-posicion').longitud.value = evento.longitud;
 			document.getElementById('form-posicion').direccion.value = '';
-			centroAux = [map.getCenter(),map.getZoom()];
-			localizacion = false;
+			centroAux = [map.getCenter(), map.getZoom()];
 		}
 	}
 			
 	if(lateral != null){
-		for(i=0; i<5; i++){
+		for(var i = 0; i < 5; i++){
 			if(lateral.tipo[i].value == evento.tipo){
 				lateral.tipo[i].checked = 'checked';
 				if(evento.marcador == 'event'){
@@ -205,29 +205,29 @@ function cargarLateral(evento){
 		lateral.descripcion.value = evento.descripcion;
 		lateral.direccion.value = evento.direccion;
 		lateral.iden.value = evento.id;
-		for(i=0; i<5; i++){
+		for(i = 0; i < 5; i++){
 			if(lateral.planta[i].value == evento.planta){
 				lateral.planta[i].selected = 'selected';
 			}
 		}
 		if(evento.marcador == 'event'){
-			for(i=0; i<4; i++){
+			for(i = 0; i < 4; i++){
 				if(lateral.tamanno[i].value == evento.size){
 					lateral.tamanno[i].selected = 'selected';
 				}
 			}
-			for(i=0; i<3; i++){
+			for(i = 0; i < 3; i++){
 				if(lateral.trafico[i].value == evento.traffic){
 					lateral.trafico[i].selected = 'selected';
 				}
 			}
 		}else if(evento.marcador == 'people'){
-			for(i=0; i<4; i++){
+			for(i = 0; i < 4; i++){
 				if(lateral.peso[i].value == evento.size){
 					lateral.peso[i].selected = 'selected';
 				}
 			}
-			for(i=0; i<5; i++){
+			for(i = 0; i < 5; i++){
 				if(lateral.movilidad[i].value == evento.traffic){
 					lateral.movilidad[i].selected = 'selected';
 				}
@@ -256,21 +256,11 @@ function limpiarLateral(evento){
 		document.getElementById('eliminar2').style.display = 'none';
 		document.getElementById('sintomas').style.display = 'none';
 	}else if(evento.marcador == 'resource'){
-		localizacion = document.getElementById('form-posicion').localizacion.checked;
-		document.getElementById('datos').style.display = 'none';
-		document.getElementById('listaRecursos').style.display = 'block';
-		if(evento.nombre == userName){
-			document.getElementById('form-posicion').style.display = 'none';
-			map.setCenter(centroAux[0], centroAux[1]);
-			if(puntoAux != null){
-				map.removeOverlay(puntoAux);
-				puntoAux = null;
-			}
-		}
+		noActualizar = 0;
 	}
 
 	if(lateral != null){
-		if(limpiar){
+		if(limpiar == true){
 			lateral.tipo[0].checked = 'checked';
 			if(evento.marcador == 'event'){
 				cambiaIcono('event', 'fire', 1);
@@ -295,7 +285,7 @@ function limpiarLateral(evento){
 				$.getJSON('getAsociaciones.jsp', {
 					'tipo':'todasEmergencias'
 				}, function(data) {
-					$.each(data, function(entryIndex, entry) {
+					$.each(data, function(entryIndex, entry){
 						if(entryIndex == 0){
 							document.getElementById('checkboxAsoc').innerHTML += '&emsp;V';
 						}
@@ -311,6 +301,12 @@ function limpiarLateral(evento){
 				});
 			}
 		}
-		limpiar = true;
+	}else{
+		if(limpiar == true){
+			document.getElementById('datos').style.display = 'none';
+			document.getElementById('form-posicion').style.display = 'none';
+			document.getElementById('listaRecursos').style.display = 'block';
+		}
 	}
+	limpiar = true;
 }

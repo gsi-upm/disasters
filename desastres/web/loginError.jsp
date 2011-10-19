@@ -1,5 +1,5 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <!DOCTYPE HTML>
@@ -22,14 +22,8 @@
 					</td>
 					<td align="right">
 						<div id="reloj">
-							<div id="fecha">
-								<script type="text/javascript">MostrarFechaActual()</script>
-							</div>
-							<form id="Reloj24H" action="">
-								<div>
-									<input type="text" size="8" name="digitos" value="" style="background:transparent; border:0px #999999; color:#999999; text-align:center; font-size:18pt; font-weight:bold">
-								</div>
-							</form>
+							<div id="fecha"></div>
+							<div id="Reloj24H"></div>
 						</div>
 					</td>
 				</tr>

@@ -7,14 +7,7 @@
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
 
 <% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>
-<c:set var="databaseEmpotrado">
-    <jsp:scriptlet>
-		out.print(application.getRealPath("/WEB-INF/db/improvise"));
-	</jsp:scriptlet>
-</c:set>
-
-<sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver" 
-	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+<%@ include file="../database.jspf" %>
 
 <c:choose>
 	<c:when test="${param.action eq 'id'}">

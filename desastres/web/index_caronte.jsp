@@ -25,18 +25,18 @@
 	</c:if>
 </c:if>
 
-<!DOCTYPE HTML> <%-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> --%>
-<html> <%-- <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> --%>
+<!DOCTYPE HTML>
+<html>
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
+			<!--[if lt IE 9]><meta http-equiv="refresh" content="0; URL=error/mensajeIE.jsp"/><![endif]-->
+			<noscript><meta http-equiv="refresh" content="0; URL=error/nojscript.jsp"/></noscript>
 			<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 			<title><fmt:message key="title_${proyecto.proyect}"/></title>
 			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_${proyecto.proyect}.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_${proyecto.proyect}.css"/>
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen"/>
-			<noscript><meta http-equiv="refresh" content="0; URL=nojscript.jsp"/></noscript> <%-- NO ES UN ERROR AUNQUE LO MARQUE --%>
-			<!--[if lt IE 9]><meta http-equiv="refresh" content="0; URL=mensajeIE.jsp"/><![endif]-->
 			<script type="text/javascript" src="js/i18n.js"></script>
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
@@ -82,12 +82,12 @@
 			<!-- Areas around fires -->
 			<script type="text/javascript" src="js/einsert.js"></script>
 		</head>
-			<body onload="IniciarReloj24(); initialize(); mostrarMensajes(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+		<body onload="IniciarReloj24(); initialize(); mostrarMensajes(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
 			<c:if test="${nombreUsuario != null && proyecto.proyect == 'disasters'}">
 				<c:import url="ventana_modificacion.jsp"/>
 			</c:if>
-			<table class="tabla_menu">
-				<!-- Cabecera con imagen y hora -->
+			<!-- Cabecera con imagen y hora -->
+			<table class="tabla_body">
 				<tr>
 					<td>
 						<div id="cabecera"><img src="images/<fmt:message key="header"/>_${proyecto.proyect}.gif" alt=""/></div>
@@ -95,41 +95,37 @@
 					<td class="derecha">
 						<!--reloj -->
 						<div id="reloj">
-							<div id="fecha">
-								<script type="text/javascript">MostrarFechaActual()</script>
-							</div>
+							<div id="fecha"></div>
 							<div id="Reloj24H"></div>
 						</div>
-						v.82
-						<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png" alt="lang:<fmt:message key="idioma"/>"
-							 onclick="document.getElementById('langSelect').style.display='inline'; document.getElementById('langInit').style.display='none';"/>
-						<span id="langSelect" style="display:none">
-							<img class="pulsable" src="images/close.gif" alt="cerrar"
-								  onclick="document.getElementById('langSelect').style.display='none'; document.getElementById('langInit').style.display='inline';"/>
+						v.83
+						<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
+							 alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
+						<span id="langSelect" class="oculto">
+							<img class="pulsable" src="images/close.gif" alt="<fmt:message key="cerrar"/>" onclick="menuIdiomas('cerrar')"/>
 							<c:url var="index_es" value="index.jsp"><c:param name="lang" value="es"/></c:url>
-							<a href="${index_es}"><img src="images/flags/es.png" alt="Espa&ntilde;ol" onclick="<fmt:setLocale value="es"/>"/></a>
+							<a href="${index_es}"><img src="images/flags/es.png" alt="Espa&ntilde;ol"/></a>
 							<c:url var="index_en" value="index.jsp"><c:param name="lang" value="en"/></c:url>
-							<a href="${index_en}"><img src="images/flags/en.png" alt="English" onclick="<fmt:setLocale value="en"/>"/></a>
+							<a href="${index_en}"><img src="images/flags/en.png" alt="English"/></a>
 							<c:url var="index_en_GB" value="index.jsp"><c:param name="lang" value="en_GB"/></c:url>
-							<a href="${index_en_GB}"><img src="images/flags/en_GB.png" alt="British English" onclick="<fmt:setLocale value="en_GB"/>"/></a>
+							<a href="${index_en_GB}"><img src="images/flags/en_GB.png" alt="British English"/></a>
 							<c:url var="index_fr" value="index.jsp"><c:param name="lang" value="fr"/></c:url>
-							<a href="${index_fr}"><img src="images/flags/fr.png" alt="Fran&ccedil;ais" onclick="<fmt:setLocale value="fr"/>"/></a>
+							<a href="${index_fr}"><img src="images/flags/fr.png" alt="Fran&ccedil;ais"/></a>
 							<c:url var="index_de" value="index.jsp"><c:param name="lang" value="de"/></c:url>
-							<a href="${index_de}"><img src="images/flags/de.png" alt="Deutsch" onclick="<fmt:setLocale value="de"/>"/></a>
+							<a href="${index_de}"><img src="images/flags/de.png" alt="Deutsch"/></a>
 						</span>
 						<span id="prueba"></span> <!-- SPAN DE PRUEBAS -->
 						<div>
 							<c:url value="acercaDe.jsp" var="acercaDe"/>
-							<a href="${acercaDe}">Acerca de</a>
+							<a href="${acercaDe}"><fmt:message key="acerca"/></a>
 						</div>
 					</td>
 				</tr>
 			</table>
-			<table class="tabla_menu">
-				<!-- Cuerpo de la pagina -->
-				<tr style="vertical-align:top">
-					<td>
-						<div id="left">
+			<!-- Cuerpo de la pagina -->
+			<table class="tabla_body">
+				<tr>
+					<td id="left">
 							<!-- If the user isn't autenticated, we show the login form -->
 							<c:if test="${nombreUsuario == null}">
 								<c:import url="formInicio.jsp"/>
@@ -154,10 +150,8 @@
 									</c:if>
 								</c:if>
 							</c:if>
-						</div>
 					</td>
 					<td id="fila_mapa">
-						<div id="right">
 							<c:if test="${nombreUsuario == null}">
 								<c:if test="${proyecto.proyect == 'disasters'}">
 									<!-- minitabs top-right -->
@@ -176,7 +170,7 @@
 									</div>
 								</c:if>
 								<c:if test="${proyecto.proyect == 'caronte'}">
-									<div style="height:21px"></div>
+									<div class="div_vacio"></div>
 								</c:if>
 								<div id="map_canvas"></div>
 							</c:if>
@@ -203,21 +197,20 @@
 										<c:import url="residencia_caronte.jsp"/>
 									</c:if>
 									<c:if test="${proyecto.rol == 'citizen'}">
-										<div style="height:21px"></div>
+										<div class="div_vacio"></div>
 										<div id="map_canvas"></div>
 									</c:if>
 								</c:if>
 							</c:if>
-						</div>
 					</td>
 					<c:if test="${proyecto.proyect == 'caronte'}">
-						<td>
+						<td id="right">
 							<div id="open_messages" class="pulsable"><fmt:message key="mostrar"/></div>
 							<div id="close_messages" class="pulsable"><fmt:message key="ocultar"/></div>
 							<div id="messages">
-								<p>MENSAJES:</p>
+								<p><fmt:message key="mensajes"/>:</p>
 							</div>
-							<audio id="audio" controls="controls" style="display:none">
+							<audio id="audio" class="oculto" controls="controls">
 								<source src="images/bad.ogg" type="audio/ogg"/>
 								<source src="images/alarm.mp3" type="audio/mpeg"/>
 							</audio>
@@ -231,11 +224,6 @@
 			<!-- Screen for the servlet information -->
 			<div id="close_screen"><fmt:message key="ocultar"/></div>
 			<div id="screen"></div>
-			<!--<p class="iconos_validacion">
-				<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Strict"/></a>
-				<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"/></a>
-				<a href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3.png" alt="HTML5 Powered with CSS3 / Styling"/></a>
-			</p>-->
 			<%--
 					int[] rscs = recursos.getResourcesList();
 					for (int i = 0; i < rscs.length; i++) {
