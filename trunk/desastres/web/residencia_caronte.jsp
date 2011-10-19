@@ -4,13 +4,13 @@
 
 <%@ include file="info_caronte.jsp" %>
 <fmt:bundle basename="fmt.eji8n">
-	<form action="#" id="opcionesMapa" style="float:right">
+	<form action="#" id="opcionesMapa">
 		<input type="checkbox" name="verSanos" onclick="mostrarSanos(verSanos.checked)"/> Ver personas sanas //
-		<span id="planta-2" onclick="cambiarPlanta(-2)" style="cursor:pointer">Visi&oacute;n general</span> -
-		<span id="planta-1" onclick="cambiarPlanta(-1)" style="cursor:pointer">Exterior</span> -
-		<span id="planta0" onclick="cambiarPlanta(0)" style="cursor:pointer; font-weight:bold; text-decoration:underline"><fmt:message key="planta"/> 0</span> -
-		<span id="planta1" onclick="cambiarPlanta(1)" style="cursor:pointer"><fmt:message key="planta"/> 1</span> -
-		<span id="planta2" onclick="cambiarPlanta(2)" style="cursor:pointer"><fmt:message key="planta"/> 2</span>
+		<span id="planta-2" class="pulsable" onclick="cambiarPlanta(-2)"><fmt:message key="visionGeneral"/></span> -
+		<span id="planta-1" class="pulsable" onclick="cambiarPlanta(-1)"><fmt:message key="exterior"/></span> -
+		<span id="planta0" class="pulsable" onclick="cambiarPlanta(0)"><fmt:message key="planta"/> 0</span> -
+		<span id="planta1" class="pulsable" onclick="cambiarPlanta(1)"><fmt:message key="planta"/> 1</span> -
+		<span id="planta2" class="pulsable" onclick="cambiarPlanta(2)"><fmt:message key="planta"/> 2</span>
 	</form>
 	<div id="dhtmlgoodies_tabView2">
 		<div class="dhtmlgoodies_aTab">
@@ -23,7 +23,7 @@
 			<table class="tabla_menu">
 				<tr>
 					<th rowspan="5">
-						<img id="planoResidencia" src="images/residencia/planta0.jpg" alt="Residencia" style="width:611px;height:487px"/>
+						<img id="planoResidencia" src="images/residencia/planta0.jpg" alt="Residencia"/>
 						<br/>
 						<fmt:message key="planta"/> <span id="plantaPlano">0</span>
 					</th>

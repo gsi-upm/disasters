@@ -8,14 +8,7 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<c:set var="databaseEmpotrado">
-    <jsp:scriptlet>
-		out.print(application.getRealPath("/WEB-INF/db/improvise"));
-	</jsp:scriptlet>
-</c:set>
-
-<sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver" 
-	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+<%@ include file="../database.jspf" %>
 
 <c:choose>
 	<c:when test="${param.action eq 'all'}">

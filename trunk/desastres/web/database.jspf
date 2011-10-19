@@ -1,7 +1,7 @@
 <c:set var="databaseEmpotrado">
-    <jsp:scriptlet>
-    out.print(application.getRealPath("/WEB-INF/db/improvise"));
-   </jsp:scriptlet>
+	<jsp:scriptlet>
+		out.print(application.getRealPath("/WEB-INF/db/caronte"));
+	</jsp:scriptlet>
 </c:set>
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver"
                    url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>

@@ -76,13 +76,7 @@
 	</c:otherwise>
 </c:choose>
 
-<c:set var="databaseEmpotrado">
-    <jsp:scriptlet>
-		out.print(application.getRealPath("/WEB-INF/db/improvise"));
-	</jsp:scriptlet>
-</c:set>
-<sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver" 
-	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+<%@ include file="../database.jspf" %>
 
 <c:catch var="errorUpdate">
     <sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO CATASTROFES (

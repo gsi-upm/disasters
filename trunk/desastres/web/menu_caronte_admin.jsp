@@ -60,8 +60,8 @@
 						<td><fmt:message key="planta"/></td>
 						<td>
 							<select name="planta" id="select-planta1">
-								<option value="-2" selected="selected">Visi&oacute;n general</option>
-								<option value="-1">Exterior</option>
+								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
+								<option value="-1"><fmt:message key="exterior"/></option>
 								<option value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
@@ -95,12 +95,12 @@
 				<input type="hidden" name="longitud" id="longitud1" value=""/>
 				<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;"/>
 				<br/>
-				<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn" style="display:none;" onclick="modificar2(
+				<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn oculto" onclick="modificar2(
 					iden.value,seleccionRadio(this.form,0),1,nombre.value,info.value,descripcion.value,
 					direccion.value,tamanno.value,trafico.value,null,planta.value);return false;"/>
-				<input type="button" id="eliminar1" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+				<input type="button" id="eliminar1" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog1">
-					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
+					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('event',seleccionRadio(this.form,0),1,nombre.value,info.value,
 							descripcion.value,direccion.value,longitud.value,latitud.value,'active',tamanno.value,trafico.value,0,planta.value);
@@ -148,7 +148,7 @@
 				<div id="asociacionesEmergencias">
 					<span id="textoAsoc"></span>
 					<ul>
-						Asociado a:
+						<fmt:message key="asociado"/>:
 						<span id="checkboxAsoc"></span>
 					</ul>
 					<div id="selectAsoc"></div>
@@ -158,8 +158,8 @@
 						<td><fmt:message key="planta"/></td>
 						<td>
 							<select name="planta" id="select-planta2">
-								<option value="-2" selected="selected">Visi&oacute;n general</option>
-								<option value="-1">Exterior</option>
+								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
+								<option value="-1"><fmt:message key="exterior"/></option>
 								<option value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
@@ -167,25 +167,25 @@
 						</td>
 					</tr>
 					<tr>
-						<td>Peso</td>
+						<td><fmt:message key="peso"/></td>
 						<td>
 							<select name="peso" id="peso">
-								<option value="indefinido">Indefinido</option>
-								<option value="bajo">Bajo (&lt;65kg)</option>
-								<option value="medio">Medio (65-100kg)</option>
-								<option value="alto">Alto (&gt;100kg)</option>
+								<option value="indefinido"><fmt:message key="pesoIndefinido"/></option>
+								<option value="bajo"><fmt:message key="pesoBajo"/></option>
+								<option value="medio"><fmt:message key="pesoMedio"/></option>
+								<option value="alto"><fmt:message key="pesoAlto"/></option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<td>Movilidad</td>
+						<td><fmt:message key="movilidad"/></td>
 						<td>
 							<select name="movilidad" id="movilidad">
-								<option value="indefinida">Indefinida</option>
-								<option value="normal">Normal</option>
-								<option value="reducida">Reducida</option>
-								<option value="asistida">Asistida</option>
-								<option value="inconsciente">Inconsciente</option>
+								<option value="indefinida"><fmt:message key="movIndefinida"/></option>
+								<option value="normal"><fmt:message key="movNormal"/></option>
+								<option value="reducida"><fmt:message key="movReducida"/></option>
+								<option value="asistida"><fmt:message key="movAsistida"/></option>
+								<option value="inconsciente"><fmt:message key="movInconsciente"/></option>
 							</select>
 						</td>
 					</tr>
@@ -229,12 +229,12 @@
 				<input type="hidden" name="longitud" id="longitud2" value=""/>
 				<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2); return false;"/>
 				<br/>
-				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn" style="display:none;"
+				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn oculto"
 					onclick="modificar2(iden.value,seleccionRadio(this.form,2),1,nombre.value,info.value,descripcion.value,
 					direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
-				<input type="button" id="eliminar2" value="Eliminar" class="btn" style="display:none;" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog2">
-					<p>¿Confirma añadir el marcador en el mapa?<!--<fmt:message key="puntoalmacenado"/>--></p>
+					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),1,nombre.value,info.value,
 							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,planta.value);
@@ -274,7 +274,7 @@
 					</tr>
 				</table>
 			</div>
-			<div id="datos" style="display:none">
+			<div id="datos" class="oculto">
 				<table class="tabla_menu">
 					<tr>
 						<td><fmt:message key="usuario"/></td>
@@ -285,7 +285,7 @@
 						<td id="datos-nombre"></td>
 					</tr>
 					<tr>
-						<td>Correo</td>
+						<td><fmt:message key="correo"/></td>
 						<td id="datos-correo"></td>
 					</tr>
 					<tr>
@@ -294,21 +294,21 @@
 					</tr>
 				</table>
 			</div>
-			<form id="form-posicion" action="#" style="display:none">
+			<form id="form-posicion" class="oculto" action="#">
 				<hr/>
 				<p>
 					<input type="checkbox" name="localizacion" onclick="cambiarGeolocalizacion(localizacion.checked)"/>Activar geolocalizaci&oacute;n
 				</p>
 				<table class="tabla_menu">
 					<tr>
-						<th colspan="2">Posici&oacute;n</th>
+						<th colspan="2"><fmt:message key="posicion"/></th>
 					</tr>
 					<tr>
-						<td>Latitud</td>
+						<td><fmt:message key="latitud"/></td>
 						<td><input type="number" name="latitud" size="29" value="0" max="90" min="-90" step="0.000001"/></td>
 					</tr>
 					<tr>
-						<td>Longitud</td>
+						<td><fmt:message key="longitud"/></td>
 						<td><input type="number" name="longitud" size="29" value="0" max="180" min="-179.999999" step="0.000001"/></td>
 					</tr>
 					<tr>
@@ -317,17 +317,17 @@
 					</tr>
 				</table>
 				<p>
-					<input type="checkbox" name="porDefecto">Guardar esta posici&oacute;n como la de por defecto
+					<input type="checkbox" name="porDefecto"><fmt:message key="guardarPosicion"/>
 				</p>
 				<p>
-					<input type="button" id="submit01" value="Comprobar" class="btn" onclick="findPos(latitud.value,longitud.value,direccion.value)"/>
+					<input type="button" id="submit01" value="<fmt:message key="comprobar"/>" class="btn" onclick="findPos(latitud.value,longitud.value,direccion.value)"/>
 					<input type="button" id="submit02" value="<fmt:message key="aceptar"/>" class="btn" onclick="newPos(latitud.value,longitud.value,porDefecto.checked)"/>
 				</p>
 			</form>
 		</div>
 	</div>
-	<!--aqui se cambia el tamanno y titulo de las tabs -->
+	<!-- aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1',Array('Emergencias','Heridos','Agentes'),0,254,490);
+		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="emergencias"/>','<fmt:message key="heridos"/>','<fmt:message key="agentes"/>'),0,254,490);
 	</script>
 </fmt:bundle>

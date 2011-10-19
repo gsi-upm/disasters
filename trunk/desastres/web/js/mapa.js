@@ -39,10 +39,11 @@ var longitudUser = 0;
 
 var verSanos = false;
 var limpiar = true;
-var localizacion = navigator.geolocation;
+var localizacion = navigator.geolocation!=null;
 var resi; // marcador de la imagen de la residencia
 var centroAux = new Array();
 var puntoAux;
+var noActualizar = 0;
 
 var plantaResidencia = -1;
 var emergenciasAsociadas = [new Array(), new Array()];
@@ -114,8 +115,8 @@ function initialize(){
 
 		buildingInit(); // en mapa_xxx.js
 
-		ultimamodif = '1992-01-01 00:00:01'; //(una fecha antigua para empezar)
-		//hacemos la peticion inicial del json (baja todo menos los borrados)
+		ultimamodif = '1992-01-01 00:00:01'; // (una fecha antigua para empezar)
+		// hacemos la peticion inicial del json (baja todo menos los borrados)
 		$.getJSON('leeEventos.jsp', {
 			'fecha': ultimamodif,
 			'action':'firstTime',
@@ -151,20 +152,20 @@ function initialize(){
 				$.each(data, function(entryIndex, entry){
 					latitudUser = entry['latitud'];
 					longitudUser = entry['longitud'];
-					if(localizacion){ // si el navegador soporta geolocalizacion (valor inicial)
+					if(localizacion == true){ // si el navegador soporta geolocalizacion (valor inicial)
 						localizacion = entry['localizacion']; // entonces valor por defecto del usuario
 						document.getElementById('form-posicion').localizacion.checked = localizacion;
 					}
 				});
 			});
-			
+
 			$.getJSON('getAsociaciones.jsp', {
 				'tipo':'todasEmergencias'
 			}, function(data) {
 				$.each(data, function(entryIndex, entry) {
 					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
-						'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
-						entry['id'] +' - ' + entry['nombre'] + '</li>';
+					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
+					entry['id'] +' - ' + entry['nombre'] + '</li>';
 					emergenciasAsociadas[0].push([entry['id'], false]);
 					emergenciasAsociadas[1].push([entry['id'], false]);
 				});
@@ -174,10 +175,10 @@ function initialize(){
 			});
 		}
 
-		if(localizacion){
+		if(localizacion == true){
 			navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 		}
-
+		
 		setTimeout('moveAgents()',2000);
 		setTimeout('actualizar()',tiempoInicial);
 	}
@@ -189,7 +190,7 @@ function coordenadasUsuario(pos){
 	longitudUser = -1.698925 + (2*Math.random()-1)*0.0001 // pos.coords.longitude;
 	//****************************************************************************
 	
-	if(nivelMsg==null || nivelMsg==0){
+	if(nivelMsg == null || nivelMsg == 0){
 		var icono = new GIcon();
 		icono.image = 'markers/user.png';
 		icono.iconSize = new GSize(28, 43);
@@ -201,7 +202,7 @@ function coordenadasUsuario(pos){
 		map.addOverlay(marker);
 	}
 	
-	if(userName != '' && nivelMsg > 0 && localizacion){
+	if(userName != '' && nivelMsg > 0 && localizacion == true){
 		$.post('updateLatLong.jsp',{
 			'nombre':userName,
 			'latitud':latitudUser,
@@ -210,122 +211,64 @@ function coordenadasUsuario(pos){
 	}
 }
 
-function findPos(lat, lng, dir){
-	if(dir != ''){
-		localizador.getLatLng(dir, function(point){
-			localizador.getLocations(point,function(response){
-				if(response.Status.code == 200){
-					document.getElementById('form-posicion').direccion.value = response.Placemark[0].address;
-					document.getElementById('form-posicion').longitud.value = response.Placemark[0].Point.coordinates[0];
-					document.getElementById('form-posicion').latitud.value = response.Placemark[0].Point.coordinates[1];
-					var coorAux = new GLatLng(response.Placemark[0].Point.coordinates[1],response.Placemark[0].Point.coordinates[0]);
-					puntoAux = new GMarker(coorAux);
-					map.setCenter(coorAux,14);
-					map.addOverlay(puntoAux);
-				}
-			});
-		});
-	}else{
-		localizador.getLocations(new GLatLng(lat,lng),function(response){
-			if(response.Status.code == 200){
-				document.getElementById('form-posicion').direccion.value = response.Placemark[0].address;
-				document.getElementById('form-posicion').longitud.value = response.Placemark[0].Point.coordinates[0];
-				document.getElementById('form-posicion').latitud.value = response.Placemark[0].Point.coordinates[1];
-				var coorAux = new GLatLng(response.Placemark[0].Point.coordinates[1],response.Placemark[0].Point.coordinates[0]);
-				puntoAux = new GMarker(coorAux);
-				map.setCenter(coorAux,14);
-				map.addOverlay(puntoAux);
-			}
-		});
-	}
-}
-
-function newPos(lat, lng, porDefecto){
-	if(porDefecto){
-		document.getElementById('form-posicion').porDefecto.checked = false;
-		$.post('updateLatLong.jsp',{
-			'nombre':userName,
-			'latitud':lat,
-			'longitud':lng,
-			'porDefecto':true
-		});
-	}
-	$.post('updateLatLong.jsp',{
-		'nombre':userName,
-		'latitud':lat,
-		'longitud':lng
-	});
-}
-
-function fondo(marker, b){
-	return -100000;
-}
-
-function orden(marker, b){
-	return 1;
-}
-
 function actualizar(){
-	//cada 5 segundos hacemos la peticion actualizadora de json
+	// cada 1.5 segundos hacemos la peticion actualizadora de json
 	$.getJSON('leeEventos.jsp', {
 		'fecha': ultimamodif,
 		'action':'notFirst',
 		'nivel':nivelMsg
 	}, function(data) {
-		$.each(data, function(entryIndex, entry) {
-			//el id lo asigna la base de datos
-			var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
-				entry['quantity'],entry['name'],entry['description'],entry['info'],
-				entry['latitud'],entry['longitud'],entry['address'],entry['state'],
-				entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
-				null,entry['size'],entry['traffic'],entry['idAssigned'],entry['floor'],null);
+		$.each(data, function(entryIndex, entry){
+			if(entry['id'] != noActualizar){
+				// el id lo asigna la base de datos
+				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
+					entry['quantity'],entry['name'],entry['description'],entry['info'],
+					entry['latitud'],entry['longitud'],entry['address'],entry['state'],
+					entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
+					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['floor'],null);
 
-			//pintamos los nuevos, para lo que comprobamos que no existian
-			if(marcadores_definitivos[nuevomarcador.id] == null){
-				if(nuevomarcador.estado != 'erased'){
-					nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
-					marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
-					indices[pos_indices] = nuevomarcador.id;
-					pos_indices++;
-				}
-			}
-			//actualizamos los que han sido modificados
-			else{
-				//si se ha modificado algun dato se actualiza
-				if(nuevomarcador.estado != 'erased'){
-					map.removeOverlay(marcadores_definitivos[nuevomarcador.id].marker);
-					nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
-					marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
-					cambiarPlanta(plantaResidencia);
-				}
-				//si se ha eliminado un marcador
-				else{
-					map.removeOverlay(marcadores_definitivos[nuevomarcador.id].marker);
-					marcadores_definitivos[nuevomarcador.id] = null;
-					pos_indices--;
+				// pintamos los nuevos, para lo que comprobamos que no existian
+				if(marcadores_definitivos[nuevomarcador.id] == null){
+					if(nuevomarcador.estado != 'erased'){
+						nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
+						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
+						indices[pos_indices] = nuevomarcador.id;
+						pos_indices++;
+					}
+				}else{ // actualizamos los que han sido modificados
+					// si se ha modificado algun dato se actualiza
+					if(nuevomarcador.estado != 'erased'){
+						map.removeOverlay(marcadores_definitivos[nuevomarcador.id].marker);
+						nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
+						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
+					}else{ // si se ha eliminado un marcador
+						map.removeOverlay(marcadores_definitivos[nuevomarcador.id].marker);
+						marcadores_definitivos[nuevomarcador.id] = null;
+						pos_indices--;
 
-					//eliminamos el indice de la matriz de indices sin dejar huecos
-					var id = nuevomarcador.id;
-					var index;
+						// eliminamos el indice de la matriz de indices sin dejar huecos
+						var id = nuevomarcador.id;
+						var index;
 
-					for(i=0; i<indices.length; i++){
-						index = i;
-						if(indices[i] == id){
-							break;
+						for(var i = 0; i < indices.length; i++){
+							index = i;
+							if(indices[i] == id){
+								break;
+							}
 						}
+						while(indices[index+1] != null){
+							indices[index] = indices[index+1];
+							index++;
+						}
+						indices[index] = null;
 					}
-					while(indices[index+1] != null){
-						indices[index] = indices[index+1];
-						index++;
-					}
-					indices[index] = null;
 				}
 			}
 		});
 	});
 
 	contador++;
-	if(localizacion && nivelMsg > 0 && contador >= 4){
+	if(localizacion == true && nivelMsg > 0 && contador >= 4){
 		contador = 0;
 		navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 	}
@@ -362,9 +305,9 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	icono.iconAnchor = new GPoint(25, 49);
 	icono.infoWindowAnchor = new GPoint(5, 1);
 	var opciones = {
-		icon:icono,
-		zIndexProcess:orden
-	}; //se pueden arrastrar para asociarlo
+		icon: icono,
+		zIndexProcess: orden
+	}; // se pueden arrastrar para asociarlo
 
 	var marker = new GMarker (new GLatLng(latitud,longitud), opciones);
 	if(type == 'geriatricCenter'){
@@ -381,19 +324,19 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		lineas[1] = new GPolyline([new GLatLng(esquina2[0],esquina2[1]), new GLatLng(esquina3[0],esquina3[1])], color, anchura, opacidad);
 		lineas[2] = new GPolyline([new GLatLng(esquina3[0],esquina3[1]), new GLatLng(esquina4[0],esquina4[1])], color, anchura, opacidad);
 		lineas[3] = new GPolyline([new GLatLng(esquina4[0],esquina4[1]), new GLatLng(esquina1[0],esquina1[1])], color, anchura, opacidad);
-		GEvent.addListener(marker, 'click', function() {
+		GEvent.addListener(marker, 'click', function(){
 			marker.openInfoWindowHtml('<div id="bocadillo">' + mensaje + '</div>');
-			for(i=0; i<4; i++){
+			for(var i = 0; i < 4; i++){
 				map.addOverlay(lineas[i]);
 			}
 		});
-		GEvent.addListener(marker, 'infowindowclose', function() {
-			for(i=0; i<4; i++){
+		GEvent.addListener(marker, 'infowindowclose', function(){
+			for(var i = 0; i < 4; i++){
 				map.removeOverlay(lineas[i]);
 			}
 		});
 	}else{
-		GEvent.addListener(marker, 'click', function() {
+		GEvent.addListener(marker, 'click', function(){
 			marker.openInfoWindowHtml('<div id="bocadillo">' + mensaje + '</div>');
 		});
 	}
@@ -438,7 +381,7 @@ function hideBuilding(type){
 		geriatricCenters = new Array;
 		geriatricIndex = 0;
 	}
-	for(i=0; i<matrix.length; i++){
+	for(var i = 0; i < matrix.length; i++){
 		map.removeOverlay(matrix[i]);
 	}
 }
@@ -541,7 +484,7 @@ function generaMarcador(evento, caracter){
 		opciones = {
 			icon: icono,
 			zIndexProcess: orden
-			// draggable: false //No se puede arrastrar
+		// draggable: false //No se puede arrastrar
 		}; 
 	}else if(evento.marcador == 'people'){ // es una victima
 		//MAXIMO DE VICTIMAS POR MARCADOR ES 10
@@ -583,7 +526,7 @@ function generaMarcador(evento, caracter){
 		opciones = {
 			icon: icono,
 			zIndexProcess: orden
-			// draggable: true //Se pueden arrastrar para asociarlo
+		// draggable: true //Se pueden arrastrar para asociarlo
 		}; 
 	}
 
@@ -592,9 +535,9 @@ function generaMarcador(evento, caracter){
 	// Annadimos el comportamiento
 	if(caracter == TEMPORAL){ //aqui hay que guardar los datos
 		var content = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>' +
-			'<a id="guardar" href="#" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</a>'+ ' - ' +
-			'<a id="modificar" href="#" onclick="cargarModificar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Modificar</a>'+ ' - ' +
-			'<a id="eliminar" href="#" onclick="eliminar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Eliminar</a>';
+		'<a id="guardar" href="#" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</a>'+ ' - ' +
+		'<a id="modificar" href="#" onclick="cargarModificar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Modificar</a>'+ ' - ' +
+		'<a id="eliminar" href="#" onclick="eliminar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Eliminar</a>';
 		
 		GEvent.addListener(marker, 'click', function(){
 			marker.openInfoWindowHtml('<div id="bocadillo">' + content + '</div>');
@@ -650,9 +593,9 @@ function generaMarcador(evento, caracter){
 			
 			// Temporal*****************************************************************************************
 			cancelar_asignacion(evento.id);
-			//**************************************************************************************************
+		//**************************************************************************************************
 			
-			/*marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>'+
+		/*marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>'+
 				'<a id="confirmar" href="#" onclick="map.closeInfoWindow();guardar_posicion('+evento.id+
 				','+marker.getLatLng().lat()+','+marker.getLatLng().lng()+')">Confirmar</a>'+ ' - '+
 				'<a id="cancelar" href="#" onclick="map.closeInfoWindow();">Cancelar</a></div>');*/
@@ -682,7 +625,7 @@ function generaMarcador(evento, caracter){
 		});
 	}
 
-	if((evento.planta == -2 || evento.planta == plantaResidencia) && ((evento.tipo != 'healthy') || verSanos)){
+	if((evento.planta == plantaResidencia || evento.planta == -2 || plantaResidencia == -2) && (evento.tipo != 'healthy' || verSanos == true)){
 		// (!(evento.marcador=='resource' && caracter==1)){
 		map.addOverlay(marker);
 	}
@@ -724,7 +667,34 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 
 function guardar(puntero){
 	// 1.Guardar el elemento en la base de datos
-	$.post('guardaEvento.jsp',{
+	$.ajax({
+		type: 'POST',
+		url: 'guardaEvento.jsp',
+		data: {
+			'marcador':puntero.marcador,
+			'tipo':puntero.tipo,
+			'cantidad':puntero.cantidad,
+			'nombre':puntero.nombre,
+			'descripcion':puntero.descripcion,
+			'info':puntero.info,
+			'latitud':puntero.latitud,
+			'longitud':puntero.longitud,
+			'direccion':puntero.direccion,
+			'estado':puntero.estado,
+			'size':puntero.size,
+			'traffic':puntero.traffic,
+			'idAssigned':puntero.idAssigned,
+			'fecha':puntero.fecha,
+			'usuario':puntero.nombre_usuario,
+			'planta':puntero.planta,
+			'sintomas':puntero.sintomas
+		},
+		success: function(data){
+			$('#guardar').innerHTML = data;
+		},
+		async: false
+	});
+	/*$.post('guardaEvento.jsp',{
 		'marcador':puntero.marcador,
 		'tipo':puntero.tipo,
 		'cantidad':puntero.cantidad,
@@ -744,15 +714,25 @@ function guardar(puntero){
 		'sintomas':puntero.sintomas
 	}, function(data){
 		$('#guardar').innerHTML = data;
-	});
+	});*/
 
-	for(i=0; i<emergenciasAsociadas[0].length; i++){
+	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
 		if(emergenciasAsociadas[0][i][1] == true){
-			$.post('update.jsp',{
+			$.ajax({
+				type: 'POST',
+				url: 'update.jsp',
+				data: {
+					'fecha':puntero.fecha,
+					'id_emergencia':emergenciasAsociadas[0][i][0],
+					'accion':'asociar'
+				},
+				async: false
+			});
+		/*$.post('update.jsp',{
 				'fecha':puntero.fecha,
 				'id_emergencia':emergenciasAsociadas[0][i][0],
 				'accion':'asociar'
-			});
+			});*/
 		}
 	}
 
@@ -760,15 +740,15 @@ function guardar(puntero){
 	eliminar(puntero, TEMPORAL);
 	marcadores_temporales[puntero.id] = null;
 
-	// 3.Recargar el mapa para que aparezca el elemento nuevo
-	// actualizar(); // esto adelanta el timeOut a ahora mismo
+// 3.Recargar el mapa para que aparezca el elemento nuevo
+// actualizar(); // esto adelanta el timeOut a ahora mismo
 }
 
 function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,
 	estado,size,traffic,idAssigned,planta,
 	fatigue,fever,dyspnea,nausea,headache,vomiting,abdominal_pain,weight_loss,blurred_vision,muscle_weakness){
 	// utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
-	if (caracter_temp == TEMPORAL){
+	if(caracter_temp == TEMPORAL){
 		// Actualizar la matriz temporal
 		eliminar(marcadores_temporales[id],TEMPORAL);
 		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,
@@ -851,7 +831,7 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,t
 		'accion':accion
 	});
 
-	for(i=0; i<emergenciasAsociadas[0].length; i++){
+	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
 		if(emergenciasAsociadas[0][i][1] != emergenciasAsociadas[1][i][1]){
 			var accion2;
 			if(emergenciasAsociadas[0][i][1] == true){
@@ -962,7 +942,7 @@ function eliminar(puntero,caracter){
 }
 
 function asociarEmergencia(id, valor){
-	for(i=0; i<emergenciasAsociadas[0].length; i++){
+	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
 		if(emergenciasAsociadas[0][i][0] == id){
 			emergenciasAsociadas[0][i][1] = valor;
 		}
@@ -984,21 +964,21 @@ function actuar(idEvento,nombreUsuario,accionAux){
 	var estadoEvento;
 	var estadoUsuario;
 	
-	for(i=0;i<accionAux.length;i++){
+	for(var i = 0;i < accionAux.length; i++){
 		if(accionAux[i].checked){
 			accion = accionAux[i].value;
 		}
 	}
 	if(accion != ''){
 		if(accion=='apagar' || accion=='controlar' || accion=='acordonar' ||
-				accion=='atender' || accion=='evacuar' || accion=='rescatar'){
+			accion=='atender' || accion=='evacuar' || accion=='rescatar'){
 			estadoEvento = 'controlled';
 			estadoUsuario = 'acting';
 		}else if(accion=='ayudar' || accion=='trasladar' || accion=='evacuado' || accion=='volver'){
 			estadoEvento = 'controlled2';
 			estadoUsuario = 'acting';
 		}else if(accion=='apagado' || accion=='controlado' || accion=='acordonado' ||
-				accion=='curado' || accion=='rescatado'){
+			accion=='curado' || accion=='rescatado'){
 			estadoEvento = 'erased';
 			estadoUsuario = 'active';
 		}else if(accion=='vuelto' || accion=='dejar'){
@@ -1043,16 +1023,16 @@ function cambiarPlanta(num){
 		}
 	}
 
-	for(i in marcadores_definitivos){
+	for(var i in marcadores_definitivos){
 		map.removeOverlay(marcadores_definitivos[i].marker);
 		if(num != -2){
 			if(marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2){
-				if(marcadores_definitivos[i].tipo != 'healthy' || verSanos){
+				if(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true){
 					map.addOverlay(marcadores_definitivos[i].marker);
 				}
 			}
 		}else{
-			if(marcadores_definitivos[i].tipo != 'healthy' || verSanos){
+			if(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true){
 				map.addOverlay(marcadores_definitivos[i].marker);
 			}
 		}
@@ -1066,11 +1046,63 @@ function cambiarGeolocalizacion(valor){
 	});
 }
 
+function findPos(lat,lng,dir){
+	limpiar = false;
+	if(puntoAux != null){
+		map.removeOverlay(puntoAux);
+	}
+	if(dir == ''){
+		localizar(new GLatLng(lat,lng));
+	}else{
+		localizador.getLatLng(dir,function(point){
+			localizar(point)
+			});
+	}
+}
+
+function localizar(punto){
+	localizador.getLocations(punto,function(response){
+		if(response.Status.code == 200){
+			document.getElementById('form-posicion').direccion.value = response.Placemark[0].address;
+			document.getElementById('form-posicion').longitud.value = response.Placemark[0].Point.coordinates[0];
+			document.getElementById('form-posicion').latitud.value = response.Placemark[0].Point.coordinates[1];
+			var coorAux = new GLatLng(response.Placemark[0].Point.coordinates[1],response.Placemark[0].Point.coordinates[0]);
+			puntoAux = new GMarker(coorAux);
+			map.setCenter(coorAux,14);
+			map.addOverlay(puntoAux);
+			var event = GEvent.addListener(map, 'click', function(){
+				map.removeOverlay(puntoAux);
+				puntoAux = null;
+				map.setCenter(centroAux[0], centroAux[1]);
+				GEvent.removeListener(event);
+			});
+		}
+	});
+}
+
+function newPos(lat,lng,porDefecto){
+	if(porDefecto == true){
+		document.getElementById('form-posicion').porDefecto.checked = false;
+		$.post('updateLatLong.jsp',{
+			'nombre':userName,
+			'latitud':lat,
+			'longitud':lng,
+			'porDefecto':true
+		});
+	}else{
+		$.post('updateLatLong.jsp',{
+			'nombre':userName,
+			'latitud':lat,
+			'longitud':lng
+		});
+	}	
+}
+
 function mostrarSanos(mostrar){
 	verSanos = mostrar;
-	for(i in marcadores_definitivos){
+	for(var i in marcadores_definitivos){
 		if(marcadores_definitivos[i].tipo == 'healthy'){
-			if(mostrar){
+			if(mostrar == true){
 				map.addOverlay(marcadores_definitivos[i].marker);
 			}else{
 				map.removeOverlay(marcadores_definitivos[i].marker);
@@ -1104,7 +1136,7 @@ function obtiene_fecha() {
 	var fecha_actual = new Date();
 	var dia = fecha_actual.getDate();
 	var mes = fecha_actual.getMonth() + 1;
-	var anio = fecha_actual.getFullYear();
+	var anno = fecha_actual.getFullYear();
 	var horas = fecha_actual.getHours();
 	var minutos = fecha_actual.getMinutes();
 	var segundos = fecha_actual.getSeconds();
@@ -1118,7 +1150,7 @@ function obtiene_fecha() {
 	if(milisegundos < 10) milisegundos = '00' + milisegundos;
 	else if(milisegundos < 100) milisegundos = '0' + milisegundos;
 
-	return (anio + '-' + mes + '-' + dia + ' ' + horas + ':' + minutos + ':' + segundos + '.' + milisegundos);
+	return (anno + '-' + mes + '-' + dia + ' ' + horas + ':' + minutos + ':' + segundos + '.' + milisegundos);
 }
 
 function asociar(id, marker){
@@ -1131,7 +1163,7 @@ function asociar(id, marker){
 	var id_mas_cercano;
 	var idDefinitivo;
 
-	for(i=0; indices[i]!=null; i++){
+	for(var i = 0; indices[i] != null; i++){
 		idDefinitivo = indices[i];
 		// nos quedamos solo con los eventos (catastrofes)
 		if(marcadores_definitivos[idDefinitivo].marcador != 'event'){
@@ -1187,4 +1219,12 @@ function cancelar_asignacion(id){
 	// borro la posicion actual y lo dibujo en la antigua
 	map.removeOverlay(marcadores_definitivos[id].marker);
 	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
+}
+
+function fondo(marker, b){
+	return -100000;
+}
+
+function orden(marker, b){
+	return 1;
 }
