@@ -2,7 +2,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
-<%@ include file="info_caronte.jsp" %>
 <fmt:bundle basename="fmt.eji8n">
 	<div id="dhtmlgoodies_tabView1">
 		<div class="dhtmlgoodies_aTab">
@@ -11,32 +10,32 @@
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono('event','fire');"/>
-							<fmt:message key="incendio"/> <%--(${fires.rowCount})--%>
+							<fmt:message key="incendio"/>
 						</td>
 						<td rowspan="5"><img id="icono_catastrofes" class="rayas" alt="" src="markers/fuego.png"/></td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="flood" onclick="cambiaIcono('event','flood');"/>
-							<fmt:message key="inundacion"/> <%--(${floods.rowCount})--%>
+							<fmt:message key="inundacion"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="collapse" onclick="cambiaIcono('event','collapse');"/>
-							<fmt:message key="derrumbamiento"/> <%--(${collapses.rowCount})--%>
+							<fmt:message key="derrumbamiento"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="injuredPerson" onclick="cambiaIcono('event','injuredPerson');"/>
-							<fmt:message key="personaherida"/> <%--(${injuredPeople.rowCount})--%>
+							<fmt:message key="personaherida"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="lostPerson" onclick="cambiaIcono('event','lostPerson');"/>
-							<fmt:message key="personaperdida"/> <%--(${lostPeople.rowCount})--%>
+							<fmt:message key="personaperdida"/>
 						</td>
 					</tr>
 				</table>
@@ -50,7 +49,7 @@
 						</td>
 						<td class="img_menu">
 							<img class="botones" alt="Validar direcci&oacute;n" id="validardireccion1" onclick="validarDireccion(1)"
-								 onmouseover="cambiaFlecha(0,1)" onmouseout="cambiaFlecha(1,1)" src="images/iconos/confirm2.png"/>
+								onmouseover="cambiaFlecha(0,1)" onmouseout="cambiaFlecha(1,1)" src="images/iconos/confirm2.png"/>
 						</td>
 					</tr>
 					<tr><td class="img_menu"><img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion1" src="images/iconos/no.png"/></td></tr>
@@ -69,7 +68,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label for="tamanno"><fmt:message key="tamanno"/>:</label></td>
+						<td><label for="tamanno"><fmt:message key="tamanno"/></label></td>
 						<td>
 							<select name="tamanno" id="tamanno">
 								<option value="small" selected="selected"><fmt:message key="pequenno"/></option>
@@ -80,7 +79,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label for="trafico"><fmt:message key="densidadtrafico"/>:</label></td>
+						<td><label for="trafico"><fmt:message key="densidadtrafico"/></label></td>
 						<td>
 							<select name="trafico" id="trafico">
 								<option value="low" selected="selected"><fmt:message key="baja"/></option>
@@ -116,42 +115,41 @@
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="healthy" checked="checked" onclick="cambiaIcono('people','healthy',1);"/>
-							<fmt:message key="sanos"/> <%--(${healthy.rowCount})--%>
+							<fmt:message key="sanos"/>
 						</td>
 						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/sano1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="slight" onclick="cambiaIcono('people','slight',1);"/>
-							<fmt:message key="leves"/> <%--(${slight.rowCount})--%>
+							<fmt:message key="leves"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="serious" onclick="cambiaIcono('people','serious',1);"/>
-							<fmt:message key="graves"/> <%--(${serious.rowCount})--%>
+							<fmt:message key="graves"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="dead" onclick="cambiaIcono('people','dead',1);"/>
-							<fmt:message key="muertos"/> <%--(${dead.rowCount})--%>
+							<fmt:message key="muertos"/>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="trapped" onclick="cambiaIcono('people','trapped',1);"/>
-							<fmt:message key="atrapados"/> <%--(${trapped.rowCount})--%>
+							<fmt:message key="atrapados"/>
 						</td>
 					</tr>
 				</table>
 				<div id="asociacionesEmergencias">
-					<span id="textoAsoc"></span>
+					<span style="float:left"><fmt:message key="asociado"/>:</span>
 					<ul>
-						<fmt:message key="asociado"/>:
+						<li id="textoAsoc"></li>
 						<span id="checkboxAsoc"></span>
 					</ul>
-					<div id="selectAsoc"></div>
 				</div>
 				<table class="tabla_menu">
 					<tr>
@@ -190,22 +188,14 @@
 						</td>
 					</tr>
 				</table>
+				<div id="sintomas" class="oculto">
+					<span style="float:left">S&iacute;ntomas:</span>
+					<ul>
+						<li id="textoSintomas">&thinsp;</li>
+						<span id="listaSintomas"></span>
+					</ul>
+				</div>
 				<table class="tabla_menu">
-					<tr id="sintomas">
-						<td colspan="2">
-							<!--S&iacute;ntomas:<br/>-->
-							<input type="hidden" name="fatigue"/> <!--<input type="checkbox" name="fatigue"/>Fatiga-->
-							<input type="hidden" name="fever"/> <!--<input type="checkbox" name="fever"/>Fiebre-->
-							<input type="hidden" name="dyspnea"/> <!--<input type="checkbox" name="dyspnea"/>Disnea-->
-							<input type="hidden" name="nausea"/> <!--<input type="checkbox" name="nausea"/>Nauseas-->
-							<input type="hidden" name="headache"/> <!--<input type="checkbox" name="headache"/>Dolor de cabeza-->
-							<input type="hidden" name="vomiting"/> <!--<input type="checkbox" name="vomiting"/>V&oacute;mitos-->
-							<input type="hidden" name="abdominal_pain"/> <!--<input type="checkbox" name="abdominal_pain"/>Dolor abdominal-->
-							<input type="hidden" name="weight_loss"/> <!--<input type="checkbox" name="weight_loss"/>Perdida de peso-->
-							<input type="hidden" name="blurred_vision"/> <!--<input type="checkbox" name="blurred_vision"/>Visi&oacute;n borrosa-->
-							<input type="hidden" name="muscle_weakness"/> <!--<input type="checkbox" name="muscle_weakness"/>Debilidad muscular-->
-						</td>
-					</tr>
 					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="Sano" placeholder="<fmt:message key="nombre"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1" placeholder="<fmt:message key="informacion"/>"></textarea></td></tr>
 					<tr><td colspan="2"><textarea name="descripcion" class="descripcion" rows="3" cols="1" placeholder="<fmt:message key="descripcion"/>"></textarea></td></tr>
@@ -231,7 +221,7 @@
 				<br/>
 				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn oculto"
 					onclick="modificar2(iden.value,seleccionRadio(this.form,2),1,nombre.value,info.value,descripcion.value,
-					direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
+						direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
 				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog2">
 					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
@@ -248,28 +238,28 @@
 			<div id="listaRecursos">
 				<table class="tabla_menu">
 					<tr>
-						<td><fmt:message key="enfermero"/> <%--(${nurse.rowCount})--%></td>
+						<td><fmt:message key="enfermero"/> <span id="numEnfermeros"></span></td>
 						<td><img alt="" src="markers/enfermero1.png" class="rayas"/></td>
 					</tr>
 					<tr>
-						<td><fmt:message key="gerocultor"/> <%--(${gerocultor.rowCount})--%></td>
+						<td><fmt:message key="gerocultor"/> <span id="numGerocultores"></span></td>
 						<td><img alt="" src="markers/gerocultor1.png" class="rayas"/></td>
 					</tr>
 					<tr>
-						<td><fmt:message key="auxiliar"/> <%--(${assistant.rowCount})--%></td>
+						<td><fmt:message key="auxiliar"/> <span id="numAuxiliares"></span></td>
 						<td><img alt="" src="markers/auxiliar1.png" class="rayas"/></td>
 					</tr>
 					<tr><td colspan="2"><hr/></td></tr>
 					<tr>
-						<td><fmt:message key="policia"/> <%--(${policemen.rowCount})--%></td>
+						<td><fmt:message key="policia"/> <span id="numPolicias"></span></td>
 						<td><img alt="" src="markers/policia1.png" class="rayas"/></td>
 					</tr>
 					<tr>
-						<td><fmt:message key="bomberos"/> <%--(${firemen.rowCount})--%></td>
+						<td><fmt:message key="bomberos"/> <span id="numBomberos"></span></td>
 						<td><img alt="" src="markers/bombero1.png" class="rayas"/></td>
 					</tr>
 					<tr>
-						<td><fmt:message key="ambulancia"/> <%--(${ambulance.rowCount})--%></td>
+						<td><fmt:message key="ambulancia"/> <span id="numAmbulancias"></span></td>
 						<td><img alt="" src="markers/ambulancia1.png" class="rayas"/></td>
 					</tr>
 				</table>
@@ -305,15 +295,15 @@
 					</tr>
 					<tr>
 						<td><fmt:message key="latitud"/></td>
-						<td><input type="number" name="latitud" size="29" value="0" max="90" min="-90" step="0.000001"/></td>
+						<td><input type="number" class="coordenadas" name="latitud" value="0" max="90" min="-90" step="0.000001"/></td>
 					</tr>
 					<tr>
 						<td><fmt:message key="longitud"/></td>
-						<td><input type="number" name="longitud" size="29" value="0" max="180" min="-179.999999" step="0.000001"/></td>
+						<td><input type="number" class="coordenadas" name="longitud" value="0" max="180" min="-179.999999" step="0.000001"/></td>
 					</tr>
 					<tr>
 						<td><fmt:message key="direccion"/></td>
-						<td><textarea name="direccion" cols="28" rows="2"></textarea></td>
+						<td><textarea class="dirCoordenadas" name="direccion" rows="2" cols="1"></textarea></td>
 					</tr>
 				</table>
 				<p>
@@ -328,6 +318,6 @@
 	</div>
 	<!-- aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="emergencias"/>','<fmt:message key="heridos"/>','<fmt:message key="agentes"/>'),0,254,490);
+		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="emergencias"/>','<fmt:message key="heridos"/>','<fmt:message key="agentes"/>'),0,235,490);
 	</script>
 </fmt:bundle>

@@ -2,10 +2,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
-<%@ include file="info_caronte.jsp" %>
 <fmt:bundle basename="fmt.eji8n">
 	<form action="#" id="opcionesMapa">
-		<input type="checkbox" name="verSanos" onclick="mostrarSanos(verSanos.checked)"/> Ver personas sanas //
+		<span><input type="checkbox" name="verSanos" onclick="mostrarSanos(verSanos.checked)"/> Ver personas sanas //</span>
 		<span id="planta-2" class="pulsable" onclick="cambiarPlanta(-2)"><fmt:message key="visionGeneral"/></span> -
 		<span id="planta-1" class="pulsable" onclick="cambiarPlanta(-1)"><fmt:message key="exterior"/></span> -
 		<span id="planta0" class="pulsable" onclick="cambiarPlanta(0)"><fmt:message key="planta"/> 0</span> -
@@ -28,33 +27,33 @@
 						<fmt:message key="planta"/> <span id="plantaPlano">0</span>
 					</th>
 					<td><img alt="" src="markers/fuego.png"/></td>
-					<td>(${firesResi.rowCount})</td>
-					<td><img alt="" src="markers/leve1.png"/></td>
-					<td>(${slightResi.rowCount})</td>
+					<td id="numFuegos"></td>
+					<td><img alt="" src="markers/sano1.png"/></td>
+					<td id="numSanos"></td>
 				</tr>
 				<tr>
 					<td><img alt="" src="markers/agua.png"/></td>
-					<td>(${floodsResi.rowCount})</td>
-					<td><img alt="" src="markers/grave1.png"/></td>
-					<td>(${seriousResi.rowCount})</td>
+					<td id="numInundaciones"></td>
+					<td><img alt="" src="markers/leve1.png"/></td>
+					<td id="numLeves"></td>
 				</tr>
 				<tr>
 					<td><img alt="" src="markers/casa.png"/></td>
-					<td>(${collapsesResi.rowCount})</td>
-					<td><img alt="" src="markers/muerto1.png"/></td>
-					<td>(${deadResi.rowCount})</td>
+					<td id="numDerrumbamientos"></td>
+					<td><img alt="" src="markers/grave1.png"/></td>
+					<td id="numGraves"></td>
 				</tr>
 				<tr>
 					<td><img alt="" src="markers/personaHerida.png"/></td>
-					<td>(${injuredPeopleResi.rowCount})</td>
-					<td><img alt="" src="markers/trapped1.png"/></td>
-					<td>(${trappedResi.rowCount})</td>
+					<td id="numHeridos"></td>
+					<td><img alt="" src="markers/muerto1.png"/></td>
+					<td id="numMuertos"></td>
 				</tr>
 				<tr>
 					<td><img alt="" src="markers/personaPerdida.png"/></td>
-					<td>(${lostPeopleResi.rowCount})</td>
-					<td><img alt="" src="markers/sano1.png"/></td>
-					<td>(${healthyResi.rowCount})</td>
+					<td id="numPerdidos"></td>
+					<td><img alt="" src="markers/trapped1.png"/></td>
+					<td id="numAtrapados"></td>
 				</tr>
 			</table>
 		</div>

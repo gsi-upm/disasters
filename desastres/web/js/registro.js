@@ -1,17 +1,17 @@
 function registro(){
-	borrar();
+	borrarRegistro();
 	document.getElementById('loginform').style.display = 'none';
 	document.getElementById('registro').style.display = 'block';
 }
 
 function cancelarRegistro(){
-	borrar();
+	borrarRegistro();
 	document.getElementById('loginform').style.display = 'block';
 	document.getElementById('registro').style.display = 'none';
 }
 
 function registrar(user, pass1, pass2, nombre, email){
-	limpiar();
+	limpiarRegistro();
 	if(user != '' && pass1 != '' && pass2 != '' && nombre != '' && email != ''){
 		if(pass1 == pass2){
 			$.get('/desastres/registro',{
@@ -50,7 +50,7 @@ function registrar(user, pass1, pass2, nombre, email){
 	}
 }
 
-function borrar(){
+function borrarRegistro(){
 	document.getElementById('username').value = '';
 	document.getElementById('pwd').value = '';
 	document.getElementById('registro').user.value = '';
@@ -59,10 +59,10 @@ function borrar(){
 	document.getElementById('registro').name.value = '';
 	document.getElementById('registro').email.value = '';
 	document.getElementById('regMsg').innerHTML = '';
-	limpiar();
+	limpiarRegistro();
 }
 
-function limpiar(){
+function limpiarRegistro(){
 	document.getElementById('user').style.color = 'black';
 	document.getElementById('pass1').style.color = 'black';
 	document.getElementById('pass2').style.color = 'black';

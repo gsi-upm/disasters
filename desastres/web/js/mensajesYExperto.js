@@ -6,6 +6,7 @@ function mostrarMensajes(){
 		$('#messages').slideUp();
 		$('#close_messages').slideUp();
 		$('#open_messages').slideDown();
+		setTimeout('document.getElementById(\'opcionesMapa\').style.marginRight = \'50px\'',400);
 		return false;
 	});
 
@@ -13,6 +14,7 @@ function mostrarMensajes(){
 		$('#messages').slideDown();
 		$('#close_messages').slideDown();
 		$('#open_messages').slideUp();
+		document.getElementById('opcionesMapa').style.marginRight = '0px';
 		return false;
 	});
 

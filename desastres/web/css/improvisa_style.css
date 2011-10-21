@@ -41,12 +41,18 @@ input:focus, textarea:focus{
 }
 
 #left{
-    width: 260px;
+    min-width: 235px;
 	padding-right: 3px;
 }
 
 #fila_mapa{
 	width: 100%;
+	min-width: 670px;
+}
+
+#dhtmlgoodies_tabView1{
+	height: 100%;
+	min-height: 490px;
 }
 
 #screen{
@@ -189,7 +195,12 @@ input:focus, textarea:focus{
     margin: 3px;
 }
 
-.info, .descripcion, .nombre{
+.nombre, .coordenadas{
+    width: 96%;
+    margin-top: 5px;
+}
+
+.info, .descripcion, .dirCoordenadas{
     width: 98%;
     margin-top: 5px;
 }

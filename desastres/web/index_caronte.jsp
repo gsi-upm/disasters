@@ -40,7 +40,7 @@
 			<script type="text/javascript" src="js/i18n.js"></script>
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
-			<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA_pvzu2eEg9OhdvcrhLRkgRSXZ-vMQ48x4C6FPZ72aXwxrdjUDxSASm6YS5fgxM4XDiwIpFkrYCIdUQ"></script>
+			<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhShGMulApA1qGrWH2FWs8V2HjpzbhR6R94HFuEi6_iz-WDuB-XPDkJ2rA"></script>
 			<script type="text/javascript">
 				var nivelMsg = ${proyecto.nivelMsg};
 				var userName = '${nombreUsuario}';
@@ -87,121 +87,116 @@
 				<c:import url="ventana_modificacion.jsp"/>
 			</c:if>
 			<!-- Cabecera con imagen y hora -->
-			<table class="tabla_body">
-				<tr>
-					<td>
-						<div id="cabecera"><img src="images/<fmt:message key="header"/>_${proyecto.proyect}.gif" alt=""/></div>
-					</td>
-					<td class="derecha">
-						<!--reloj -->
-						<div id="reloj">
-							<div id="fecha"></div>
-							<div id="Reloj24H"></div>
-						</div>
-						v.83
-						<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
-							 alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
-						<span id="langSelect" class="oculto">
-							<img class="pulsable" src="images/close.gif" alt="<fmt:message key="cerrar"/>" onclick="menuIdiomas('cerrar')"/>
-							<c:url var="index_es" value="index.jsp"><c:param name="lang" value="es"/></c:url>
-							<a href="${index_es}"><img src="images/flags/es.png" alt="Espa&ntilde;ol"/></a>
-							<c:url var="index_en" value="index.jsp"><c:param name="lang" value="en"/></c:url>
-							<a href="${index_en}"><img src="images/flags/en.png" alt="English"/></a>
-							<c:url var="index_en_GB" value="index.jsp"><c:param name="lang" value="en_GB"/></c:url>
-							<a href="${index_en_GB}"><img src="images/flags/en_GB.png" alt="British English"/></a>
-							<c:url var="index_fr" value="index.jsp"><c:param name="lang" value="fr"/></c:url>
-							<a href="${index_fr}"><img src="images/flags/fr.png" alt="Fran&ccedil;ais"/></a>
-							<c:url var="index_de" value="index.jsp"><c:param name="lang" value="de"/></c:url>
-							<a href="${index_de}"><img src="images/flags/de.png" alt="Deutsch"/></a>
-						</span>
-						<span id="prueba"></span> <!-- SPAN DE PRUEBAS -->
-						<div>
-							<c:url value="acercaDe.jsp" var="acercaDe"/>
-							<a href="${acercaDe}"><fmt:message key="acerca"/></a>
-						</div>
-					</td>
-				</tr>
-			</table>
+			<div>
+				<img id="cabecera" src="images/<fmt:message key="header"/>_${proyecto.proyect}.gif" alt=""/>
+				<div class="derecha">
+					<!--reloj -->
+					<div id="reloj">
+						<div id="fecha"></div>
+						<div id="Reloj24H"></div>
+					</div>
+					v.84
+					<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
+						alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
+					<div id="langSelect" class="oculto">
+						<img class="pulsable" src="images/close.gif" alt="<fmt:message key="cerrar"/>" onclick="menuIdiomas('cerrar')"/>
+						<c:url var="index_es" value="index.jsp"><c:param name="lang" value="es"/></c:url>
+						<a href="${index_es}"><img src="images/flags/es.png" alt="Espa&ntilde;ol"/></a>
+						<c:url var="index_en" value="index.jsp"><c:param name="lang" value="en"/></c:url>
+						<a href="${index_en}"><img src="images/flags/en.png" alt="English"/></a>
+						<c:url var="index_en_GB" value="index.jsp"><c:param name="lang" value="en_GB"/></c:url>
+						<a href="${index_en_GB}"><img src="images/flags/en_GB.png" alt="British English"/></a>
+						<c:url var="index_fr" value="index.jsp"><c:param name="lang" value="fr"/></c:url>
+						<a href="${index_fr}"><img src="images/flags/fr.png" alt="Fran&ccedil;ais"/></a>
+						<c:url var="index_de" value="index.jsp"><c:param name="lang" value="de"/></c:url>
+						<a href="${index_de}"><img src="images/flags/de.png" alt="Deutsch"/></a>
+					</div>
+					<span id="prueba"></span> <!-- SPAN DE PRUEBAS -->
+					<div>
+						<c:url value="acercaDe.jsp" var="acercaDe"/>
+						<a href="${acercaDe}"><fmt:message key="acerca"/></a>
+					</div>
+				</div>
+			</div>
 			<!-- Cuerpo de la pagina -->
 			<table class="tabla_body">
 				<tr>
 					<td id="left">
-							<!-- If the user isn't autenticated, we show the login form -->
-							<c:if test="${nombreUsuario == null}">
-								<c:import url="formInicio.jsp"/>
+						<!-- If the user isn't autenticated, we show the login form -->
+						<c:if test="${nombreUsuario == null}">
+							<c:import url="formInicio.jsp"/>
+						</c:if>
+						<c:if test="${nombreUsuario != null}">
+							<!-- and if the user is autenticated, we show the username and logout button -->
+							<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
+							<br/>
+							<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
+							<c:if test="${proyecto.proyect == 'disasters'}">
+								<c:import url="menu_disasters.jsp"/>
 							</c:if>
-							<c:if test="${nombreUsuario != null}">
-								<!-- and if the user is autenticated, we show the username and logout button -->
-								<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
-								<br/>
-								<a href="logout.jsp"><fmt:message key="cerrarsesion"/></a>
-								<c:if test="${proyecto.proyect == 'disasters'}">
-									<c:import url="menu_disasters.jsp"/>
+							<c:if test="${proyecto.proyect == 'caronte'}">
+								<c:if test="${proyecto.rol != 'citizen'}">
+									<!-- if the user is in role 'administrator' or 'agent' -->
+									<c:import url="menu_caronte_admin.jsp"/>
 								</c:if>
-
-								<c:if test="${proyecto.proyect == 'caronte'}">
-									<c:if test="${proyecto.rol != 'citizen'}">
-										<!-- if the user is in role 'administrator' or 'agent' -->
-										<c:import url="menu_caronte_admin.jsp"/>
-									</c:if>
-									<c:if test="${proyecto.rol == 'citizen'}">
-										<!-- if the user is in role 'citizen' -->
-										<c:import url="menu_caronte_user.jsp"/>
-									</c:if>
+								<c:if test="${proyecto.rol == 'citizen'}">
+									<!-- if the user is in role 'citizen' -->
+									<c:import url="menu_caronte_user.jsp"/>
 								</c:if>
 							</c:if>
+						</c:if>
 					</td>
 					<td id="fila_mapa">
-							<c:if test="${nombreUsuario == null}">
-								<c:if test="${proyecto.proyect == 'disasters'}">
-									<!-- minitabs top-right -->
-									<div id="minitabs">
-										<c:if test="${nombreUsuario != null}">
-											<div id="minitab3" class="minitab">
-												<img alt="ver" src="images/tab_simulator.png"/>
-											</div>
-										</c:if>
-										<div id="minitab2" class="minitab">
-											<img alt="ver" src="images/tab_building.png"/>
+						<c:if test="${nombreUsuario == null}">
+							<c:if test="${proyecto.proyect == 'disasters'}">
+								<!-- minitabs top-right -->
+								<div id="minitabs">
+									<c:if test="${nombreUsuario != null}">
+										<div id="minitab3" class="minitab">
+											<img alt="ver" src="images/tab_simulator.png"/>
 										</div>
-										<div id="minitab1" class="minitab">
-											<img alt="más info" src="images/tab_eye.png"/>
-										</div>
+									</c:if>
+									<div id="minitab2" class="minitab">
+										<img alt="ver" src="images/tab_building.png"/>
 									</div>
-								</c:if>
-								<c:if test="${proyecto.proyect == 'caronte'}">
-									<div class="div_vacio"></div>
-								</c:if>
+									<div id="minitab1" class="minitab">
+										<img alt="más info" src="images/tab_eye.png"/>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="${proyecto.proyect == 'caronte'}">
+								<div class="div_vacio"></div>
+							</c:if>
+							<div id="map_canvas"></div>
+						</c:if>
+						<c:if test="${nombreUsuario != null}">
+							<c:if test="${proyecto.proyect == 'disasters'}">
+								<!-- minitabs top-right -->
+								<div id="minitabs">
+									<c:if test="${nombreUsuario != null}">
+										<div id="minitab3" class="minitab">
+											<img alt="ver" src="images/tab_simulator.png"/>
+										</div>
+									</c:if>
+									<div id="minitab2" class="minitab">
+										<img alt="ver" src="images/tab_building.png"/>
+									</div>
+										<div id="minitab1" class="minitab">
+										<img alt="más info" src="images/tab_eye.png"/>
+									</div>
+								</div>
 								<div id="map_canvas"></div>
 							</c:if>
-							<c:if test="${nombreUsuario != null}">
-								<c:if test="${proyecto.proyect == 'disasters'}">
-									<!-- minitabs top-right -->
-									<div id="minitabs">
-										<c:if test="${nombreUsuario != null}">
-											<div id="minitab3" class="minitab">
-												<img alt="ver" src="images/tab_simulator.png"/>
-											</div>
-										</c:if>
-										<div id="minitab2" class="minitab">
-											<img alt="ver" src="images/tab_building.png"/>
-										</div>
-										<div id="minitab1" class="minitab">
-											<img alt="más info" src="images/tab_eye.png"/>
-										</div>
-									</div>
+							<c:if test="${proyecto.proyect == 'caronte'}">
+								<c:if test="${proyecto.rol != 'citizen'}">
+									<c:import url="residencia_caronte.jsp"/>
+								</c:if>
+								<c:if test="${proyecto.rol == 'citizen'}">
+									<div class="div_vacio"></div>
 									<div id="map_canvas"></div>
 								</c:if>
-								<c:if test="${proyecto.proyect == 'caronte'}">
-									<c:if test="${proyecto.rol != 'citizen'}">
-										<c:import url="residencia_caronte.jsp"/>
-									</c:if>
-									<c:if test="${proyecto.rol == 'citizen'}">
-										<div class="div_vacio"></div>
-										<div id="map_canvas"></div>
-									</c:if>
-								</c:if>
 							</c:if>
+						</c:if>
 					</td>
 					<c:if test="${proyecto.proyect == 'caronte'}">
 						<td id="right">
@@ -220,18 +215,18 @@
 			</table>
 			<c:if test="${proyecto.proyect == 'disasters'}">
 				<c:import url="minitabs_disasters.jsp"/>
+				<!-- Screen for the servlet information -->
+				<div id="close_screen"><fmt:message key="ocultar"/></div>
+				<div id="screen"></div>
 			</c:if>
-			<!-- Screen for the servlet information -->
-			<div id="close_screen"><fmt:message key="ocultar"/></div>
-			<div id="screen"></div>
 			<%--
-					int[] rscs = recursos.getResourcesList();
-					for (int i = 0; i < rscs.length; i++) {
-						String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\"/>";
-						out.println(st);
-						String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\"/>";
-						out.println(ed);
-					}
+				int[] rscs = recursos.getResourcesList();
+				for (int i = 0; i < rscs.length; i++) {
+					String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\"/>";
+					out.println(st);
+					String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\"/>";
+					out.println(ed);
+				}
 			--%>
 			<c:if test="${param.alert == true}">
 				<script type="text/javascript">
