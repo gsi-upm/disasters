@@ -15,8 +15,8 @@
 <c:catch var="errorUpdate">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
-		longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta, sintomas)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+		longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
+		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
 		<sql:param value="${param.cantidad}"/>
@@ -33,7 +33,6 @@
 		<sql:param value="${param.fecha}"/>
 		<sql:param value="${param.usuario}"/>
 		<sql:param value="${param.planta}"/>
-		<sql:param value="${param.sintomas}"/>
 	</sql:update>
 	
     <%-- Uncomment this code in order to enable Twitter service for new disasters.

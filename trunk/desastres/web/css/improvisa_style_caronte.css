@@ -1,6 +1,6 @@
 #messages{
     margin-top: 21px;
-    height: 508px; /* 380 con botones */
+    height: 508px;
 }
 
 #close_messages, #open_messages{
@@ -12,19 +12,23 @@ ul{
 	margin-left: -40px;
 }
 
-ul #checkboxAsoc{
+ul #checkboxAsoc, ul #listaSintomas{
 	max-height: 93px;
-	width: 180px;
+	width: 220px;
 	position: absolute;
 	overflow: auto;
 	background-color: white;
 }
 
 ul li{
-	display:none;
+	display: none;
 }
 
-ul:hover #checkboxAsoc{
+ul #textoAsoc, ul #textoSintomas{
+	display: block;
+}
+
+ul:hover #checkboxAsoc, ul:hover #listaSintomas{
 	border: solid 1px black;
 }
 

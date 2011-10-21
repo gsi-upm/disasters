@@ -8,7 +8,7 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %> 
+<%@ include file="database.jspf" %>
 
 <sql:query var="datos" dataSource="${CatastrofesServer}" sql="
 	SELECT latitud, longitud, localizacion

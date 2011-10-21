@@ -2,23 +2,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<c:set var="databaseEmpotrado">
-	<jsp:scriptlet>
-		out.print(application.getRealPath("/WEB-INF/db/improvise"));
-	</jsp:scriptlet>
-</c:set>
-<sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver"
-	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+<%@ include file="database.jspf" %>
 
 <!DOCTYPE HTML>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Historial</title>
+        <title>BASE DE DATOS</title>
     </head>
     <body>
 		<sql:query var="asociaciones" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM asociaciones_heridos_emergencias">
+		</sql:query>
+		<sql:query var="sintomas" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM sintomas">
 		</sql:query>
 		<sql:query var="actividades" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM actividades">
@@ -52,6 +49,9 @@
 		</sql:query>
 		<sql:query var="tipos_eventos" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM tipos_eventos">
+		</sql:query>
+		<sql:query var="tipos_sintomas" dataSource="${CatastrofesServer}"
+			sql="SELECT * FROM tipos_sintomas">
 		</sql:query>
 		<sql:query var="asociaciones_emergencias" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM asociaciones_emergencias_con_tipos_usuarios">
@@ -89,6 +89,20 @@
 				</tr>
 			</c:forEach>
 		</table>
+
+		<p>SINTOMAS</p>
+		<table border="1">
+			<tr><th>ID</th><th>ID_HERIDO</th><th>ID_SINTOMA</th><th>ESTADO</th><th>FECHA</th></tr>
+			<c:forEach var="sintoma" items="${sintomas.rows}">
+				<tr>
+					<td>${sintoma.id}</td>
+					<td>${sintoma.id_herido}</td>
+					<td>${sintoma.id_sintoma}</td>
+					<td>${sintoma.estado}</td>
+					<td>${sintoma.fecha}</td>
+				</tr>
+			</c:forEach>
+		</table>
 		<p>USUARIOS</p>
 		<table border="1">
 			<tr>
@@ -113,10 +127,9 @@
 		<p>CATASTROFES</p>
 		<table border="1">
 			<tr>
-				<th>ID</th><th>MARCADOR</th><th>TIPO</th><th>CANTIDAD</th><th>NOMBRE</th>
-				<th>DESCRIPCION</th><th>INFO</th><th>LATITUD</th><th>LONGITUD</th><th>DIRECCION</th>
-				<th>ESTADO</th><th>SIZE</th><th>TRAFFIC</th><th>FECHA</th><th>IDASSIGNED</th>
-				<th>MODIFICADO</th><th>USUARIO</th><th>PLANTA</th><th>SINTOMAS</th>
+				<th>ID</th><th>MARCADOR</th><th>TIPO</th><th>CANTIDAD</th><th>NOMBRE</th><th>DESCRIPCION</th>
+				<th>INFO</th><th>LATITUD</th><th>LONGITUD</th><th>DIRECCION</th><th>ESTADO</th><th>SIZE</th>
+				<th>TRAFFIC</th><th>FECHA</th><th>MODIFICADO</th><th>USUARIO</th><th>PLANTA</th><th>IDASSIGNED</th>
 			</tr>
 			<c:forEach var="evento" items="${eventos.rows}">
 				<tr>
@@ -134,11 +147,10 @@
 					<td>${evento.size}</td>
 					<td>${evento.traffic}</td>
 					<td>${evento.fecha}</td>
-					<td>${evento.idassigned}</td>
 					<td>${evento.modificado}</td>
 					<td>${evento.usuario}</td>
 					<td>${evento.planta}</td>
-					<td>${evento.sintomas}</td>
+					<td>${evento.idassigned}</td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -233,6 +245,17 @@
 					<td>${evento.id}</td>
 					<td>${evento.tipo}</td>
 					<td>${evento.descripcion}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<p>TIPOS_SINTOMAS</p>
+		<table border="1">
+			<tr><th>ID</th><th>TIPO</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="sintoma" items="${tipos_sintomas.rows}">
+				<tr>
+					<td>${sintoma.id}</td>
+					<td>${sintoma.tipo}</td>
+					<td>${sintoma.descripcion}</td>
 				</tr>
 			</c:forEach>
 		</table>

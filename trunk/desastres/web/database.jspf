@@ -4,4 +4,6 @@
 	</jsp:scriptlet>
 </c:set>
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver"
-                   url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+<%--<sql:setDataSource var="CatastrofesServer" driver="com.mysql.jdbc.Driver"
+	url="jdbc:mysql://localhost:3306/caronte" user="root" password=""/>--%>

@@ -17,7 +17,7 @@
 		UPDATE catastrofes SET
 		marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?,
 		latitud = ?, longitud = ?, direccion = ?, estado = ?, size = ?, traffic = ?,
-		fecha = ?, usuario = ?, planta = ?, sintomas = ?, modificado = <%=modif%>
+		fecha = ?, usuario = ?, planta = ?, modificado = <%=modif%>
 		WHERE id = ?
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
@@ -34,7 +34,6 @@
 		<sql:param value="${param.fecha}"/>
 		<sql:param value="${param.usuario}"/>
 		<sql:param value="${param.planta}"/>
-		<sql:param value="${param.sintomas}"/>
 		<sql:param value="${param.id}"/>
 	</sql:update>
 </c:if>
@@ -56,6 +55,13 @@
 				AND estado != 'erased'
 				<sql:param value="${param.id}"/>
 			</sql:update>
+			<%--<sql:update dataSource="${CatastrofesServer}">
+				UPDATE sintomas
+				SET estado = 'erased'
+				WHERE id_herido = ?
+				AND estado != 'erased'
+				<sql:param value="${param.id}"/>
+			</sql:update>--%>
 		</c:if>
 		<c:if test="${param.marcador == 'event'}">
 			<sql:update dataSource="${CatastrofesServer}">
@@ -129,5 +135,36 @@
 			                   WHERE u.id = a.id_usuario AND estado = 'active')
 		</sql:update>
 	</c:when>
+	<%--<c:when test="${param.accion == 'annadirSintoma'}">
+		<c:if test="${param.fecha == null}">
+			<sql:update dataSource="${CatastrofesServer}">
+				INSERT INTO sintomas(id_herido,id_sintoma,estado)
+				VALUES(?,(SELECT id FROM tipos_sintomas WHERE tipo = ?),'active')
+				<sql:param value="${param.id_herido}"/>
+				<sql:param value="${param.tipo_sintoma}"/>
+			</sql:update>
+		</c:if>
+		<c:if test="${param.fecha != null}">
+			<sql:update dataSource="${CatastrofesServer}">
+				INSERT INTO sintomas(id_herido, id_sintoma, estado)
+				VALUES(SELECT id FROM catastrofes WHERE fecha = ?,
+				      (SELECT id FROM tipos_sintomas WHERE tipo = ?),
+					  'active')
+				<sql:param value="${param.fecha}"/>
+				<sql:param value="${param.tipo_sintoma}"/>
+			</sql:update>
+		</c:if>
+	</c:when>
+	<c:when test="${param.accion == 'eliminarSintoma'}">
+		<sql:update dataSource="${CatastrofesServer}">
+			UPDATE sintomas
+			SET estado = 'erased'
+			WHERE id_herido = ?
+			AND id_sintoma = (SELECT id FROM tipos_sintomas WHERE tipo = ?)
+			AND estado != 'erased'
+			<sql:param value="${param.id_herido}"/>
+			<sql:param value="${param.tipo_sintoma}"/>
+		</sql:update>
+	</c:when>--%>
 </c:choose>
 ok

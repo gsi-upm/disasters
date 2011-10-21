@@ -3,7 +3,6 @@
 <%@ page import="java.sql.*" %>
 <%--@ page import="catastrofes.*" --%>
 
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
@@ -258,7 +257,7 @@
 	<c:when test="${param.action eq 'person'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
 				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado, sintomas
+				   direccion, estado, size, traffic, idAssigned, fecha, modificado
 				   FROM catastrofes
 				   WHERE id = ?
 				   AND marcador = 'people'
@@ -391,7 +390,6 @@
 				<json:property name="idAssigned" value="${evento.idAssigned}"/>
 				<json:property name="date" value="${evento.fecha}"/>
 				<json:property name="modified" value="${evento.modificado}"/>
-				<json:property name="sintomas" value="${evento.sintomas}"/>
 				<json:property name="user_name" value="${evento.nombre_usuario}"/>
 				<json:property name="user_type" value="${evento.tipo_usuario}"/>
 				<json:property name="real_name" value="${evento.nombre_real}"/>
