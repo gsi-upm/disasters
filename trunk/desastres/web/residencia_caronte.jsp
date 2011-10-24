@@ -4,7 +4,7 @@
 
 <fmt:bundle basename="fmt.eji8n">
 	<form action="#" id="opcionesMapa">
-		<span><input type="checkbox" name="verSanos" onclick="mostrarSanos(verSanos.checked)"/> Ver personas sanas //</span>
+		<span><input type="checkbox" name="verSanos" onclick="mostrarSanos(verSanos.checked)"/> <fmt:message key="verSanos"/> //</span>
 		<span id="planta-2" class="pulsable" onclick="cambiarPlanta(-2)"><fmt:message key="visionGeneral"/></span> -
 		<span id="planta-1" class="pulsable" onclick="cambiarPlanta(-1)"><fmt:message key="exterior"/></span> -
 		<span id="planta0" class="pulsable" onclick="cambiarPlanta(0)"><fmt:message key="planta"/> 0</span> -

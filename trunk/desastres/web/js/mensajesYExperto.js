@@ -18,25 +18,45 @@ function mostrarMensajes(){
 		return false;
 	});
 
-	mostrarMensajes2(-1);
+	var msgs = document.getElementById('messages');
+	var id = 0;
+	$.getJSON('getpost/getMensajes.jsp',{
+		'nivel':nivelMsg,
+		'action':'firstTime'
+	}, function(data){
+		var tamanno = data.length;
+		$.each(data, function(entryIndex, entry){
+			msgs.innerHTML += '<p>(' + entry['fecha'].split(' ')[1].split('.')[0] + ') ' + entry['mensaje'] + '</p>';
+			if(entryIndex == tamanno-1){
+				id = entry['id'];
+				msgs.innerHTML += '<hr/>';
+			}
+		});
+		if(tamanno > 0){
+			msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
+			document.getElementById('audio').play();
+		}
+		setTimeout('mostrarMensajes2(' + id + ')',2000);
+	});
 }
 
 function mostrarMensajes2(index){
 	var msgs = document.getElementById('messages');
 	var id = index;
-	$.get('/desastres/messages',{
+	$.getJSON('getpost/getMensajes.jsp',{
 		'nivel':nivelMsg,
-		'index':index
-	}, function(data) {
-		//$('#messages').html(data);
-		var data2 = data.split('<span>');
-		if(data2[1] != null){
-			id = data2[1].split('</span>',1);
-			msgs.innerHTML += data2[0];
-			if(id > 0) document.getElementById('audio').play();
+		'id':id,
+		'action':'notFirst'
+	}, function(data){
+		var tamanno = data.length;
+		id += tamanno;
+		$.each(data, function(entryIndex, entry){
+			msgs.innerHTML += '<p>(' + entry['fecha'].split(' ')[1].split('.')[0] + ') ' + entry['mensaje'] + '</p>';
+		});
+		if(tamanno > 0){
+			msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
+			document.getElementById('audio').play();
 		}
-
-		msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
 		setTimeout('mostrarMensajes2(' + id + ')',2000);
 	});
 }

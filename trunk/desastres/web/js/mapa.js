@@ -1,53 +1,47 @@
 var map;
-var center;
 var localizador;
-var marcadores_definitivos;
-var marcadores_temporales;
-var indices;
-var ultimamodif;
-var timeout;
-
-var hospitals;
-var hospIndex = 0;
-var firemenStations;
-var fireIndex = 0;
-var policeStations;
-var policeIndex = 0;
-var geriatricCenters;
-var geriatricIndex = 0;
-
-var pos_def;
-var pos_temp;
-var pos_indices;
-var puntero_temp;
-var caracter_temp;
-
-var TEMPORAL = 0;
-var DEFINITIVO = 1;
-
-var ANONYMOUS = 1;
-var usuario_actual;
-var usuario_actual_tipo;
 
 var tiempoActualizacion = 2000;
 var tiempoInicial = tiempoActualizacion;
 var contador = 0;
 
+var ultimamodif = '1992-01-01 00:00:01'; // una fecha antigua para empezar
+var marcadores_definitivos = new Array();
+var marcadores_temporales = new Array();
+var indices = new Array();
+var pos_def = 0;
+var pos_temp = 0;
+var pos_indices = 0;
+
+var puntero_temp;
+var caracter_temp;
+var TEMPORAL = 0;
+var DEFINITIVO = 1;
+
+var ANONYMOUS = 1;
 // var userName = null;
-var latitudUser = 0;
-var longitudUser = 0;
+var usuario_actual;
+// var usuario_actual_tipo;
 
-var verSanos = false;
-var limpiar = true;
+var hospitals = new Array();
+var policeStations = new Array();
+var firemenStations = new Array();
+var geriatricCenters = new Array();
+var hospIndex = 0;
+var policeIndex = 0;
+var fireIndex = 0;
+var geriatricIndex = 0;
+
 var localizacion = (navigator.geolocation != null);
-var resi; // marcador de la imagen de la residencia
-var centroAux = new Array();
-var puntoAux;
-var noActualizar = 0;
-
+var residencia; // marcador de la imagen de la residencia
 var plantaResidencia = -1;
 var emergenciasAsociadas = [new Array(), new Array()];
 var sintomas = [new Array(), new Array()];
+var verSanos = false;
+var limpiar = true;
+var noActualizar = 0;
+var centroAux = new Array();
+var puntoAux;
 
 function initialize(){
 	if(GBrowserIsCompatible()){
@@ -57,68 +51,15 @@ function initialize(){
 
 		// empezamos con un usuario anonimo, permitir registrarse mas tarde
 		usuario_actual = ANONYMOUS;
-		usuario_actual_tipo = 'citizen';
+		// usuario_actual_tipo = 'citizen';
 		map.addControl(new GLargeMapControl()); // controles completos
 		map.addControl(new GScaleControl ());   // escala
 		map.addControl(new GMapTypeControl());  // mapa, foto, hibrido
 
-		GEvent.addListener(map, 'zoomend', function(oldZoom, newZoom){
-			map.removeOverlay(resi);
-			var tipoMapa = map.getCurrentMapType().getName();
-			switch(newZoom){
-				case 21:
-					resi.getIcon().iconSize = new GSize(733, 585);
-					resi.getIcon().iconAnchor = new GPoint(367, 305);
-					break;
-				case 20:
-					resi.getIcon().iconSize = new GSize(367, 293);
-					resi.getIcon().iconAnchor = new GPoint(183, 155);
-					break;
-				default:
-					cambiarPlanta(-2);
-			}
-			if(newZoom >= 20 && tipoMapa == 'Mapa' && plantaResidencia >= 0){
-				map.addOverlay(resi);
-			}
-		});
-
-		GEvent.addListener(map, 'maptypechanged', function(){
-			map.removeOverlay(resi);
-			var tipoMapa = map.getCurrentMapType().getName();
-			if(map.getZoom() >= 20 && tipoMapa == 'Mapa' && plantaResidencia >= 0){
-				map.addOverlay(resi);
-			}
-		});
-
-		var icono = new GIcon();
-		icono.image = 'images/residencia/planta0.png';
-		icono.iconSize = new GSize(733, 585);
-		icono.iconAnchor = new GPoint(367, 305);
-		var opciones = {
-			icon:icono,
-			clickable:false,
-			zIndexProcess:fondo
-		};
-		resi = new GMarker(new GLatLng(38.232272,-1.698925), opciones);
-
-		// inicializamos los arrays
-		marcadores_definitivos = new Array();
-		pos_def = 0;
-		marcadores_temporales = new Array();
-		pos_temp = 0;
-		hospitals = new Array();
-		policeStations = new Array();
-		firemenStations = new Array();
-		geriatricCenters = new Array();
-
-		indices = new Array();
-		pos_indices = 0;
-
 		buildingInit(); // en mapa_xxx.js
 
-		ultimamodif = '1992-01-01 00:00:01'; // (una fecha antigua para empezar)
 		// hacemos la peticion inicial del json (baja todo menos los borrados)
-		$.getJSON('leeEventos.jsp', {
+		$.getJSON('getpost/leeEventos.jsp', {
 			'fecha': ultimamodif,
 			'action':'firstTime',
 			'nivel':nivelMsg
@@ -129,7 +70,6 @@ function initialize(){
 					entry['latitud'],entry['longitud'],entry['address'],entry['state'],
 					entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
 					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['floor'],null);
-
 				nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 				marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 				indices[pos_indices] = nuevomarcador.id;
@@ -142,26 +82,61 @@ function initialize(){
 		
 		if(userName != ''){
 			plantaResidencia = 0;
-			map.addOverlay(resi);
+			var icono = new GIcon();
+			icono.image = 'images/residencia/planta'+ plantaResidencia + '.png';
+			icono.iconSize = new GSize(733, 585);
+			icono.iconAnchor = new GPoint(367, 305);
+			var opciones = {
+				icon:icono,
+				clickable:false,
+				zIndexProcess:fondo
+			};
+			residencia = new GMarker(new GLatLng(38.232272,-1.698925), opciones);
 
-			if(localizacion == null){
+			GEvent.addListener(map, 'zoomend', function(oldZoom, newZoom){
+				map.removeOverlay(residencia);
+				var tipoMapa = map.getCurrentMapType().getName();
+				switch(newZoom){
+					case 21:
+						residencia.getIcon().iconSize = new GSize(733, 585);
+						residencia.getIcon().iconAnchor = new GPoint(367, 305);
+						break;
+					case 20:
+						residencia.getIcon().iconSize = new GSize(367, 293);
+						residencia.getIcon().iconAnchor = new GPoint(183, 155);
+						break;
+					default:
+						cambiarPlanta(-2);
+				}
+				if(newZoom >= 20 && tipoMapa == 'Mapa' && plantaResidencia >= 0){
+					map.addOverlay(residencia);
+				}
+			});
+
+			GEvent.addListener(map, 'maptypechanged', function(){
+				map.removeOverlay(residencia);
+				var tipoMapa = map.getCurrentMapType().getName();
+				if(map.getZoom() >= 20 && tipoMapa == 'Mapa' && plantaResidencia >= 0){
+					map.addOverlay(residencia);
+				}
+			});
+
+			map.addOverlay(residencia);
+
+			if(localizacion == true){ // si el navegador soporta geolocalizacion (valor inicial)
+				$.getJSON('getpost/getLatLong.jsp',{
+					'nombre':userName
+				}, function(data){
+					$.each(data, function(entryIndex, entry){
+							localizacion = entry['localizacion']; // entonces valor por defecto del usuario
+							document.getElementById('form-posicion').localizacion.checked = localizacion;
+					});
+				});
+			}else{
 				document.getElementById('form-posicion').localizacion.style.display = 'none';
 			}
 
-			$.getJSON('getLatLong.jsp',{
-				'nombre':userName
-			}, function(data){
-				$.each(data, function(entryIndex, entry){
-					latitudUser = entry['latitud'];
-					longitudUser = entry['longitud'];
-					if(localizacion == true){ // si el navegador soporta geolocalizacion (valor inicial)
-						localizacion = entry['localizacion']; // entonces valor por defecto del usuario
-						document.getElementById('form-posicion').localizacion.checked = localizacion;
-					}
-				});
-			});
-
-			$.getJSON('getAsociaciones.jsp', {
+			$.getJSON('getpost/getAsociaciones.jsp', {
 				'tipo':'todasEmergencias'
 			}, function(data) {
 				$.each(data, function(entryIndex, entry) {
@@ -183,15 +158,15 @@ function initialize(){
 			navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 		}
 		
-		setTimeout('moveAgents()',2000);
+		// setTimeout('moveAgents()',2000);
 		setTimeout('actualizar()',tiempoInicial);
 	}
 }
 
 function coordenadasUsuario(pos){
 	// PRUEBAAA!!! ***************************************************************
-	latitudUser = 38.232272 + (2*Math.random()-1)*0.0001 // pos.coords.latitude;
-	longitudUser = -1.698925 + (2*Math.random()-1)*0.0001 // pos.coords.longitude;
+	var latitud = 38.232272 + (2*Math.random()-1)*0.0001 // pos.coords.latitude;
+	var longitud = -1.698925 + (2*Math.random()-1)*0.0001 // pos.coords.longitude;
 	//****************************************************************************
 	
 	if(nivelMsg == null || nivelMsg == 0){
@@ -202,34 +177,35 @@ function coordenadasUsuario(pos){
 		var opciones = {
 			icon:icono
 		};
-		var marker = new GMarker(new GLatLng(latitudUser,longitudUser), opciones);
+		var marker = new GMarker(new GLatLng(latitud,longitud), opciones);
 		map.addOverlay(marker);
 	}
 	
 	if(userName != '' && nivelMsg > 0 && localizacion == true){
-		$.post('updateLatLong.jsp',{
+		$.post('getpost/updateLatLong.jsp',{
 			'nombre':userName,
-			'latitud':latitudUser,
-			'longitud':longitudUser
+			'latitud':latitud,
+			'longitud':longitud
 		});
 	}
 }
 
 function numeroMarcadores(planta){
 	if(activeTabIndex['dhtmlgoodies_tabView1'] == 2){
-		$.getJSON('info_caronte.jsp',{
+		$.getJSON('getpost/info_caronte.jsp',{
 			'marcadores':'lateral'
 		}, function(data){
 			document.getElementById('numEnfermeros').innerHTML = '(' + data[0].nurse + ')';
 			document.getElementById('numGerocultores').innerHTML = '(' + data[0].gerocultor + ')';
 			document.getElementById('numAuxiliares').innerHTML = '(' + data[0].assistant + ')';
+			document.getElementById('numOtros').innerHTML = '(' + data[0].otherStaff + ')';
 			document.getElementById('numPolicias').innerHTML = '(' + data[0].police + ')';
 			document.getElementById('numBomberos').innerHTML = '(' + data[0].firemen + ')';
 			document.getElementById('numAmbulancias').innerHTML = '(' + data[0].ambulance + ')';
 		});
 	}
 	if(activeTabIndex['dhtmlgoodies_tabView2'] == 1){
-		$.getJSON('info_caronte.jsp',{
+		$.getJSON('getpost/info_caronte.jsp',{
 			'marcadores':'plano',
 			'planta':planta
 		}, function(data){
@@ -249,7 +225,7 @@ function numeroMarcadores(planta){
 
 function actualizar(){
 	// cada 2 segundos hacemos la peticion actualizadora de json
-	$.getJSON('leeEventos.jsp', {
+	$.getJSON('getpost/leeEventos.jsp', {
 		'fecha': ultimamodif,
 		'action':'notFirst',
 		'nivel':nivelMsg
@@ -314,7 +290,7 @@ function actualizar(){
 	}
 
 	ultimamodif = obtiene_fecha();
-	timeout = setTimeout('actualizar()', tiempoActualizacion);
+	setTimeout('actualizar()', tiempoActualizacion);
 }
 
 function generateBuilding(type, mensaje, latitud, longitud){
@@ -510,7 +486,7 @@ function generaMarcador(evento, caracter){
 			icono.image = 'markers/policia' + active + '.png';
 		}else if(evento.tipo == 'firemen'){ // es un bombero
 			icono.image = 'markers/bombero' + active + '.png';
-		}else if(evento.tipo == 'ambulance' || evento.tipo=='ambulancia'){ //es una ambulancia
+		}else if(evento.tipo == 'ambulance' || evento.tipo == 'ambulancia'){ // es una ambulancia
 			icono.image = 'markers/ambulancia' + active + '.png';
 		}else if(evento.tipo == 'nurse'){ // es un enfermero
 			icono.image = 'markers/enfermero' + active + '.png';
@@ -673,8 +649,9 @@ function generaMarcador(evento, caracter){
 }
 
 function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,planta){
+	var fecha = obtiene_fecha();
 	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,
-		descripcion,info,latitud,longitud,direccion,estado,obtiene_fecha(),obtiene_fecha(),
+		descripcion,info,latitud,longitud,direccion,estado,fecha,fecha,
 		usuario_actual,usuario_actual_tipo,null,size,traffic,idAssigned,planta);
 
 	if(marcador == 'event'){
@@ -693,14 +670,16 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	nuevomarcador.marker = generaMarcador(nuevomarcador, TEMPORAL);
 
 	guardar(nuevomarcador);
-	registrarHistorial(userName, 0, 'creada');
+	registrarHistorial(userName, marcador, tipo, fecha, 'crear');
 }
 
 function guardar(puntero){
+	eliminar(puntero, TEMPORAL);
+
 	// 1.Guardar el elemento en la base de datos
 	$.ajax({
 		type: 'POST',
-		url: 'guardaEvento.jsp',
+		url: 'getpost/guardaEvento.jsp',
 		data: {
 			'marcador':puntero.marcador,
 			'tipo':puntero.tipo,
@@ -729,7 +708,7 @@ function guardar(puntero){
 		if(emergenciasAsociadas[0][i][1] == true){
 			$.ajax({
 				type: 'POST',
-				url: 'update.jsp',
+				url: 'getpost/update.jsp',
 				data: {
 					'fecha':puntero.fecha,
 					'id_emergencia':emergenciasAsociadas[0][i][0],
@@ -743,7 +722,7 @@ function guardar(puntero){
 		if(sintomas[0][i][1] == true){
 			$.ajax({
 				type: 'POST',
-				url: 'update.jsp',
+				url: 'getpost/update.jsp',
 				data: {
 					'fecha':puntero.fecha,
 					'tipo_sintoma':sintomas[0][i][0],
@@ -755,11 +734,15 @@ function guardar(puntero){
 	}*/
 
 	// 2.Borrar el elemento del mapa y la matriz temporal
-	eliminar(puntero, TEMPORAL);
 	marcadores_temporales[puntero.id] = null;
 
-// 3.Recargar el mapa para que aparezca el elemento nuevo
-// actualizar(); // esto adelanta el timeOut a ahora mismo
+	// 3.Recargar el mapa para que aparezca el elemento nuevo
+	// actualizar(); // esto adelanta el timeOut a ahora mismo
+
+	$.post('getpost/escribirMensaje.jsp', {
+		mensaje:'Emergencia ' + puntero.nombre + ' en la planta ' + puntero.planta,
+		nivel:'1'
+	});
 }
 
 function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,
@@ -772,7 +755,7 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 			direccion,longitud,latitud,estado,size,traffic,idAssigned,planta);
 	}else if(caracter_temp == DEFINITIVO){
 		// hay que hacer un update a la base de datos
-		$.post('update.jsp',{
+		$.post('getpost/update.jsp',{
 			'id':id,
 			'marcador':puntero_temp.marcador,
 			'tipo':puntero_temp.tipo,
@@ -793,6 +776,11 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 			'accion':'modificar'
 		});
 	}
+
+	$.post('getpost/escribirMensaje.jsp', {
+		mensaje:'Emergencia ' + nombre + ' modificada',
+		nivel:'1'
+	});
 }
 
 function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,trafico,idAssigned,planta){
@@ -812,7 +800,7 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,t
 		accion = 'modificar';
 	}
 
-	$.post('update.jsp',{
+	$.post('getpost/update.jsp',{
 		'id':id,
 		'marcador':puntero.marcador,
 		'tipo':tipo,
@@ -841,7 +829,7 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,t
 			}else{
 				accion2 = 'eliminarAsociacion';
 			}
-			$.post('update.jsp',{
+			$.post('getpost/update.jsp',{
 				'id_herido':id,
 				'id_emergencia':emergenciasAsociadas[0][i][0],
 				'accion':accion2
@@ -857,15 +845,18 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,t
 			}else{
 				accion3 = 'eliminarSintoma';
 			}
-			$.post('update.jsp',{
+			$.post('getpost/update.jsp',{
 				'id_herido':id,
 				'tipo_sintoma':sintomas[0][i][0],
 				'accion':accion3
 			});
 		}
 	}*/
-
-	registrarHistorial(userName, id, 'modif');
+	$.post('getpost/escribirMensaje.jsp', {
+		mensaje:'Emergencia ' + puntero.nombre + ' modificada',
+		nivel:'1'
+	});
+	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 }
 
 function eliminar(puntero,caracter){
@@ -874,7 +865,7 @@ function eliminar(puntero,caracter){
 	}else if(caracter == DEFINITIVO){
 		// hay que hacer un update
 		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
-			$.post('update.jsp',{
+			$.post('getpost/update.jsp',{
 				'id':puntero.id,
 				'marcador':puntero.marcador,
 				'tipo':'healthy',
@@ -894,9 +885,13 @@ function eliminar(puntero,caracter){
 				'planta':puntero.planta,
 				'accion':'eliminar'
 			});
-			registrarHistorial(userName, puntero.id, 'modif');
+			$.post('getpost/escribirMensaje.jsp', {
+				mensaje:'Emergencia ' + puntero.nombre + ' modificada',
+				nivel:'1'
+			});
+			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
 		}else{
-			$.post('update.jsp',{
+			$.post('getpost/update.jsp',{
 				'id':puntero.id,
 				'marcador':puntero.marcador,
 				'tipo':puntero.tipo,
@@ -916,7 +911,11 @@ function eliminar(puntero,caracter){
 				'planta':puntero.planta,
 				'accion':'eliminar'
 			});
-			registrarHistorial(userName, puntero.id, 'eliminar');
+			$.post('getpost/escribirMensaje.jsp', {
+				mensaje:'Emergencia ' + puntero.nombre + ' eliminada',
+				nivel:'1'
+			});
+			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
 		}
 	}
 }
@@ -938,13 +937,14 @@ function annadirSintoma(tipo, valor){
 }
 
 function guardar_posicion(id, lat, lng){
-	marcadores_definitivos[id].marker.setLatLng(new GLatLng(lat, lng));
-	$.post('updateLatLong.jsp',{
+	var marcador = marcadores_definitivos[id];
+	marcador.marker.setLatLng(new GLatLng(lat, lng));
+	$.post('getpost/updateLatLong.jsp',{
 		'id':id,
 		'latitud':lat,
 		'longitud':lng
 	});
-	registrarHistorial(userName, id, 'mover');
+	registrarHistorial(userName, marcador.marcador, marcador.tipo, id, 'mover');
 }
 
 function actuar(idEvento,nombreUsuario,accionAux){
@@ -973,7 +973,7 @@ function actuar(idEvento,nombreUsuario,accionAux){
 			estadoEvento = 'active';
 			estadoUsuario = 'active';
 		}
-		$.post('updateEstado.jsp',{
+		$.post('getpost/updateEstado.jsp',{
 			'idEvento':idEvento,
 			'nombreUsuario':nombreUsuario,
 			'estadoEvento':estadoEvento,
@@ -981,11 +981,12 @@ function actuar(idEvento,nombreUsuario,accionAux){
 			'accion':accion
 		});
 	}
-	registrarHistorial(userName, idEvento, accion);
+	var marcador = marcadores_definitivos[idEvento];
+	registrarHistorial(userName, marcador.marcador, marcador.tipo, idEvento, accion);
 }
 
 function detener(idEvento,idEmergencia,nombreUsuario){
-	$.post('updateEstado.jsp',{
+	$.post('getpost/updateEstado.jsp',{
 		'idEvento':idEvento,
 		'idEmergencia':idEmergencia,
 		'nombreUsuario':nombreUsuario,
@@ -994,7 +995,7 @@ function detener(idEvento,idEmergencia,nombreUsuario){
 }
 
 function cambiarPlanta(num){
-	map.removeOverlay(resi);
+	map.removeOverlay(residencia);
 	document.getElementById('planta' + plantaResidencia).style.fontWeight = 'normal';
 	document.getElementById('planta' + plantaResidencia).style.textDecoration = 'none';
 
@@ -1005,9 +1006,9 @@ function cambiarPlanta(num){
 	if(num >= 0){
 		document.getElementById('planoResidencia').src = 'images/residencia/planta' + num + '.jpg';
 		document.getElementById('plantaPlano').innerHTML = num;
-		resi.getIcon().image = 'images/residencia/planta' + num + '.png';
+		residencia.getIcon().image = 'images/residencia/planta' + num + '.png';
 		if(map.getZoom() >= 20 && map.getCurrentMapType().getName() == 'Mapa'){
-			map.addOverlay(resi);
+			map.addOverlay(residencia);
 		}
 	}
 
@@ -1031,7 +1032,7 @@ function cambiarPlanta(num){
 
 function cambiarGeolocalizacion(valor){
 	localizacion = valor;
-	$.post('updateLatLong.jsp',{
+	$.post('getpost/updateLatLong.jsp',{
 		'nombre':userName,
 		'localizacion':valor
 	});
@@ -1075,14 +1076,14 @@ function localizar(punto){
 function newPos(lat,lng,porDefecto){
 	if(porDefecto == true){
 		document.getElementById('form-posicion').porDefecto.checked = false;
-		$.post('updateLatLong.jsp',{
+		$.post('getpost/updateLatLong.jsp',{
 			'nombre':userName,
 			'latitud':lat,
 			'longitud':lng,
 			'porDefecto':true
 		});
 	}else{
-		$.post('updateLatLong.jsp',{
+		$.post('getpost/updateLatLong.jsp',{
 			'nombre':userName,
 			'latitud':lat,
 			'longitud':lng
@@ -1103,23 +1104,27 @@ function mostrarSanos(mostrar){
 	}
 }
 
-function registrarHistorial(usuario, idEvento, accion){
+function registrarHistorial(usuario, marcador, tipo, idEmergencia, accion){
 	var evento;
-	if(idEvento == 0){
+	if(accion == 'crear'){
 		evento = 'Evento creado por el usuario ' + usuario;
-	}else if(accion == 'modif'){
-		evento = 'Emergencia ' + idEvento + ' modificada por ' + usuario;
+	}else if(accion == 'modificar'){
+		evento = 'Emergencia ' + idEmergencia + ' modificada por ' + usuario;
 	}else if(accion == 'eliminar'){
-		evento = 'Emergencia ' + idEvento + ' eliminada por ' + usuario;
+		evento = 'Emergencia ' + idEmergencia + ' eliminada por ' + usuario;
 	}else if(accion == 'mover'){
-		evento = 'Emergencia ' + idEvento + ' cambiada de sitio por ' + usuario;
+		evento = 'Emergencia ' + idEmergencia + ' cambiada de sitio por ' + usuario;
 	}else{
-		evento = 'El usuario ' + usuario + ' ha actuado sobre ' + idEvento + ' - ' + accion;
+		evento = 'El usuario ' + usuario + ' ha actuado sobre ' + idEmergencia + ' - ' + accion;
 	}
 
-	$.post('registrarHistorial.jsp',{
+	$.post('getpost/registrarHistorial.jsp',{
 		'usuario':usuario,
-		'evento':evento
+		'marcador':marcador,
+		'tipo':tipo,
+		'idEmergencia':idEmergencia,
+		'evento':evento,
+		'accion':accion
 	});
 }
 

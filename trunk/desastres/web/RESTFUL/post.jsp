@@ -1,17 +1,15 @@
-<%@page contentType="text/html"%>
-<%@page pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
-<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%@ include file="../database.jspf" %>
+<%@ include file="database.jspf" %>
 
 <c:catch var="errorUpdate">
-    <sql:update dataSource="${CatastrofesServer}" sql="INSERT INTO CATASTROFES (
-				marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
-				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)">
+    <sql:update dataSource="${CatastrofesServer}">
+		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
+			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
+		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 		<sql:param value="${param.item}"/>
 		<sql:param value="${param.type}"/>
 		<sql:param value="${param.quantity}"/>

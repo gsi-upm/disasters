@@ -1,9 +1,5 @@
-<%@ page contentType="text/html"%>
-<%@ page pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.util.Date" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page isELIgnored = "false" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
@@ -16,8 +12,8 @@
 			<sql:query var="acciones" dataSource="${CatastrofesServer}">
 				SELECT id, tipo, descripcion
 				FROM tipos_actividades
-				WHERE estado_emergencia=?
-				AND (tipo_emergencia='' OR tipo_emergencia=? OR tipo_emergencia=?)
+				WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo = ?)
+				AND (tipo_emergencia = '' OR tipo_emergencia = ? OR tipo_emergencia = ?)
 				<sql:param value="${param.estado}"/>
 				<sql:param value="${param.tipo}"/>
 				<sql:param value="${param.marcador}"/>
@@ -29,8 +25,8 @@
 					<sql:query var="acciones" dataSource="${CatastrofesServer}">
 						SELECT id, tipo, descripcion
 						FROM tipos_actividades
-						WHERE estado_emergencia=?
-						AND (tipo_emergencia='' OR tipo_emergencia=?)
+						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo = ?)
+						AND (tipo_emergencia = '' OR tipo_emergencia = ?)
 						<sql:param value="${param.estado}"/>
 						<sql:param value="${param.tipo}"/>
 					</sql:query>
@@ -39,8 +35,8 @@
 					<sql:query var="acciones" dataSource="${CatastrofesServer}">
 						SELECT id, tipo, descripcion
 						FROM tipos_actividades
-						WHERE estado_emergencia=?
-						AND (tipo_emergencia='' OR tipo_emergencia=?)
+						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo = ?)
+						AND (tipo_emergencia = '' OR tipo_emergencia = ?)
 						<sql:param value="${param.estado}"/>
 						<sql:param value="${param.marcador}"/>
 					</sql:query>
@@ -59,7 +55,7 @@
 				WHERE a.id_emergencia = ?
 				AND a.id_tipo_actividad = t.id
 				AND a.id_usuario = u.id
-				AND a.estado = 'active'
+				AND a.estado = (SELECT id FROM tipos_estados WHERE tipo = 'active')
 				<sql:param value="${param.id}"/>
 			</sql:query>
 		</c:when>
@@ -70,7 +66,7 @@
 				WHERE a.id_usuario = (SELECT id FROM usuarios WHERE nombre_usuario = (SELECT nombre FROM catastrofes WHERE id = ?))
 				AND a.id_tipo_actividad = t.id
 				AND a.id_emergencia = c.id
-				AND a.estado = 'active'
+				AND a.estado = (SELECT id FROM tipos_estados WHERE tipo = 'active')
 				<sql:param value="${param.id}"/>
 			</sql:query>
 		</c:when>

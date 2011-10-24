@@ -99,7 +99,7 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 			if(usuario.length() == 1) {
 				autenticado = true;
 				String date = new Timestamp(new Date().getTime()).toString();
-				String tipoUsuario = usuario.getJSONObject(0).getString("user_type");
+				String tipoUsuario = usuario.getJSONObject(0).getString("type");
 				String latitud = usuario.getJSONObject(0).getString("latitud");
 				String longitud = usuario.getJSONObject(0).getString("longitud");
 				String descripcion = usuario.getJSONObject(0).getString("real_name");
@@ -109,10 +109,10 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 						"&quantity=1&latitud=" + latitud + "&longitud=" + longitud + "&idAssigned=0&floor=-2");
 			}
 		} catch (Exception ex) {
-			System.out.println("Excepcion en TrivialSecurityRealm.booleanAuthenticate(): " + ex);
-		}
-	   return autenticado;
-   }
+			System.out.println("Excepcion: " + ex);
+		}	
+		return autenticado;
+	}
 
 	private String MD5(String valor){
 		String hash = "";
