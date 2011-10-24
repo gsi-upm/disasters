@@ -1,350 +1,271 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page language = "java"  %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page language = "java" %>
 <%@ page import="java.sql.*" %>
-<%--@ page import="catastrofes.*" --%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="../database.jspf" %>
+<%@ include file="database.jspf" %>
 
 <c:choose>
-	<c:when test="${param.action eq 'all'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'all'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'events'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND marcador = 'event'
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'events'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND marcador = 'event'
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'eventsModified'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND marcador = 'event'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'eventsModified'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND marcador = 'event'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'resources'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND marcador = 'resource'
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'resources'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND marcador = 'resource'
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'resourcesModified'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND marcador = 'resource'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'resourcesModified'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND marcador = 'resource'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'people'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND marcador = 'people'
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'people'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND marcador = 'people'
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'peopleModified'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND marcador = 'people'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'peopleModified'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND marcador = 'people'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'id'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE id = ?
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'id'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado, size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE id = ?
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.id}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'item'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE marcador =  ?
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'item'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE marcador = ?
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.item}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'type'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE tipo =  ?
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'type'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE tipo = ?
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.type}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'year'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE fecha > ?
-				   AND estado != 'erased'
-				   AND modificado < ?
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'year'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE fecha > ?
+			AND estado != 'erased'
+			AND modificado < ?
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'eventsByYear'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND fecha < ?
-				   AND marcador = 'event'
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'eventsByYear'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND fecha < ?
+			AND marcador = 'event'
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'peopleByYear'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND fecha < ?
-				   AND marcador = 'people'
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'peopleByYear'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND fecha < ?
+			AND marcador = 'people'
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'resourcesByYear'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE modificado > ?
-				   AND fecha < ?
-				   AND marcador = 'resource'
-				   AND estado != 'erased'
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'resourcesByYear'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE modificado > ?
+			AND fecha < ?
+			AND marcador = 'resource'
+			AND estado != 'erased'
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'associated'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
-				   FROM catastrofes, usuarios
-				   WHERE tipo = ?
-				   AND estado != 'erased'
-				   AND idAssigned = ?
-				   AND catastrofes.usuario=usuarios.id;">
+	<c:when test="${param.action == 'associated'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
+				direccion, estado,size, traffic, idAssigned, fecha, modificado, nombre_usuario, tipo_usuario
+			FROM catastrofes, usuarios
+			WHERE tipo = ?
+			AND estado != 'erased'
+			AND idAssigned = ?
+			AND catastrofes.usuario = usuarios.id
 			<sql:param value="${param.type}"/>
 			<sql:param value="${param.id}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${param.action eq 'free'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, tipo, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, idAssigned
-				   FROM resources
-				   WHERE estado != 'erased';">
+	<c:when test="${param.action == 'free'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM resources
+			WHERE estado != 'erased'
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'users'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
-				   WHERE marcador = 'resource'
-				   AND estado != 'erased';">
+	<c:when test="${param.action == 'users'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM catastrofes
+			WHERE marcador = 'resource' AND estado != 'erased'
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'usersModified'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
-				   WHERE marcador = 'resource'
-				   AND modificado > ?;">
+	<c:when test="${param.action == 'usersModified'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM catastrofes WHERE marcador = 'resource' AND modificado > ?
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'healthy'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
-				   WHERE marcador = 'people'
-				   AND tipo = 'healthy'
-				   AND estado != 'erased';">
+	<c:when test="${param.action == 'healthy'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM catastrofes
+			WHERE marcador = 'people' AND tipo = 'healthy' AND estado != 'erased'
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'unhealthy'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
-				   WHERE marcador = 'people'
-				   AND tipo != 'healthy'
-				   AND estado != 'erased';">
+	<c:when test="${param.action == 'unhealthy'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM catastrofes
+			WHERE marcador = 'people' AND tipo != 'healthy' AND estado != 'erased'
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'slight'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
-				   WHERE marcador = 'people'
-				   AND tipo = 'slight'
-				   AND estado != 'erased';">
+	<c:when test="${param.action == 'slight'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM catastrofes
+			WHERE marcador = 'people' AND tipo = 'slight' AND estado != 'erased'
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'person'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-				   direccion, estado, size, traffic, idAssigned, fecha, modificado
-				   FROM catastrofes
-				   WHERE id = ?
-				   AND marcador = 'people'
-				   AND estado != 'erased';">
+	<c:when test="${param.action == 'person'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM catastrofes
+			WHERE id = ? AND marcador = 'people' AND estado != 'erased'
 			<sql:param value="${param.id}"/>
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'proyects'}">
-		<sql:query var="proyectos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, proyecto
-				   FROM proyectos;">
-		</sql:query>
-	</c:when>
-
-	<c:when test="${param.action eq 'user'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT * FROM usuarios
-				   WHERE nombre_usuario = ?
-				   AND password = ?;">
+	
+	<c:when test="${param.action == 'user'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM usuarios u, tipos_usuarios t
+			WHERE u.nombre_usuario = ?
+			AND u.password = ?
+			AND u.tipo_usuario = t.id
 			<sql:param value="${param.nombre_usuario}"/>
 			<sql:param value="${param.password}"/>
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'userRole'}">
-		<sql:query var="eventos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, nombre_usuario, tipo_usuario
-				   FROM usuarios
-				   WHERE nombre_usuario = ?;">
+	<c:when test="${param.action == 'userRole'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT * FROM usuarios
+			WHERE nombre_usuario = ?
 			<sql:param value="${param.nombre_usuario}"/>
 		</sql:query>
 	</c:when>
-
-	<c:when test="${param.action eq 'userProyect'}">
-		<sql:query var="proyectos" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, nombre_usuario, tipo_usuario, proyecto
-				   FROM usuarios
-				   WHERE nombre_usuario = ?;">
+	<c:when test="${param.action == 'proyects'}">
+		<sql:query var="proyectos" dataSource="${CatastrofesServer}">
+			SELECT * FROM proyectos
+		</sql:query>
+	</c:when>
+	<c:when test="${param.action == 'userProyect'}">
+		<sql:query var="proyectos" dataSource="${CatastrofesServer}">
+			SELECT * FROM usuarios u, tipos_usuarios t
+			WHERE u.nombre_usuario = ?
+			AND u.tipo_usuario = t.id
 			<sql:param value="${param.nombre_usuario}"/>
-		</sql:query>
-	</c:when>
-
-	<c:when test="${param.action eq 'messages'}">
-		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, mensaje, nivel, fecha
-				   FROM mensajes
-				   WHERE nivel <= ?;">
-			<sql:param value="${param.nivel}"/>
-		</sql:query>
-	</c:when>
-
-	<c:when test="${param.action eq 'messagesDate'}">
-		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, mensaje, nivel, fecha
-				   FROM mensajes
-				   WHERE nivel <= ?
-				   AND fecha > ?;">
-			<sql:param value="${param.nivel}"/>
-			<sql:param value="${param.fecha}"/>
-		</sql:query>
-	</c:when>
-
-	<c:when test="${(param.action eq 'messagesId') and (param.index ne -1)}">
-		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
-				   SELECT id, mensaje, nivel, fecha
-				   FROM mensajes
-				   WHERE nivel <= ?
-				   AND id > ?;">
-			<sql:param value="${param.nivel}"/>
-			<sql:param value="${param.index}"/>
-		</sql:query>
-	</c:when>
-
-	<c:when test="${(param.action eq 'messagesId') and (param.index eq -1)}">
-		<sql:query var="mensajes" dataSource="${CatastrofesServer}" sql="
-				   SELECT TOP 1 id, mensaje, nivel, fecha
-				   FROM mensajes
-				   WHERE nivel <= ?
-				   ORDER BY id DESC;">
-			<sql:param value="${param.nivel}"/>
 		</sql:query>
 	</c:when>
 </c:choose>
-
 <c:choose>     
-    <c:when test="${param.mode eq 'xml'}">     
+    <c:when test="${param.mode == 'xml'}">
 		<disasters>
 			<c:forEach var="evento" items="${eventos.rows}">
 				<disaster>
@@ -399,15 +320,7 @@
 		<c:forEach var="proyecto" items="${proyectos.rows}">
 			<json:object name="temporal">
 				<json:property name="proyect" value="${proyecto.proyecto}"/>
-				<json:property name="rol" value="${proyecto.tipo_usuario}"/>
-			</json:object> ,
-		</c:forEach>
-		<c:forEach var="mensaje" items="${mensajes.rows}">
-			<json:object name="temporal">
-				<json:property name="id" value="${mensaje.id}"/>
-				<json:property name="mensaje" value="${mensaje.mensaje}"/>
-				<json:property name="nivel" value="${mensaje.nivel}"/>
-				<json:property name="fecha" value="${mensaje.fecha}"/>
+				<json:property name="rol" value="${proyecto.tipo}"/>
 			</json:object> ,
 		</c:forEach>
 		]

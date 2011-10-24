@@ -55,6 +55,10 @@ input:focus, textarea:focus{
 	min-height: 490px;
 }
 
+#dhtmlgoodies_tabView2{
+	margin-right: -2px;
+}
+
 #screen{
     font-family: Courier, monospace;
     font-size: 12px;
@@ -109,7 +113,7 @@ input:focus, textarea:focus{
     /*margin-top: 21px;
     height: 508px;*/
 	width: 254px;
-	margin-left: 2px;
+	margin-left: 4px;
     padding: 10px;
     border: 1px solid #919b9c;
     background-color: #efefef;
@@ -179,6 +183,10 @@ input:focus, textarea:focus{
 
 .tabla_body tr{
 	vertical-align: top;
+}
+
+.tabla_menu tr{
+	vertical-align: middle;
 }
 
 .tabla_menu td{

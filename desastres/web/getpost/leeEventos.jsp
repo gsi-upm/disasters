@@ -1,13 +1,10 @@
 <%@ page contentType="application/json" pageEncoding="UTF-8"%>
-<%@ page language = "java" %>
-<%@ page import="java.sql.*" %>
 <%@ page isELIgnored = "false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <%@ include file="database.jspf" %>
-<% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>
 
 <c:choose>
 	<c:when test="${(param.action eq 'firstTime') and (param.nivel gt 0)}">
@@ -15,7 +12,6 @@
 			SELECT * FROM catastrofes
 			WHERE modificado > ?
 			AND estado != 'erased'
-			AND tipo != 'user'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -25,7 +21,6 @@
 			WHERE modificado > ?
 			AND marcador != 'people'
 			AND estado != 'erased'
-			AND tipo != 'user'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -33,7 +28,6 @@
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
 			SELECT * FROM catastrofes
 			WHERE modificado > ?
-			AND tipo != 'user'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -42,7 +36,6 @@
 			SELECT * FROM catastrofes
 			WHERE modificado > ?
 			AND marcador != 'people'
-			AND tipo != 'user'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>

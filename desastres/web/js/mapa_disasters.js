@@ -1,5 +1,5 @@
 function mapInit(){
-	center = new GLatLng(40.416878,-3.703480); // La puerta del sol de Madrid
+	var center = new GLatLng(40.416878,-3.703480); // La puerta del sol de Madrid
 	map.setCenter(center, 11);
 }
 

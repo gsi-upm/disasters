@@ -45,7 +45,7 @@ $(document).ready(function() {
 
 	$('#minitab1').toggle(
 		function() {
-			$.get('info_disasters.jsp', {}, function(data) {
+			$.get('getpost/info_disasters.jsp', {}, function(data) {
 				$('#console').html(data);
 			});
 			$('#console').slideDown();

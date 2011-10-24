@@ -92,6 +92,9 @@
 	<sql:query var="assistant" dataSource="${CatastrofesServer}">
 		SELECT * FROM catastrofes WHERE tipo = 'assistant' AND estado != 'erased'
 	</sql:query>
+	<sql:query var="otherStaff" dataSource="${CatastrofesServer}">
+		SELECT * FROM catastrofes WHERE tipo = 'otherStaff' AND estado != 'erased'
+	</sql:query>
 	<sql:query var="police" dataSource="${CatastrofesServer}">
 		SELECT * FROM catastrofes WHERE tipo = 'police' AND estado != 'erased'
 	</sql:query>
@@ -117,6 +120,7 @@
 	<json:property name="nurse" value="${nurse.rowCount}"/>
 	<json:property name="gerocultor" value="${gerocultor.rowCount}"/>
 	<json:property name="assistant" value="${assistant.rowCount}"/>
+	<json:property name="otherStaff" value="${otherStaff.rowCount}"/>
 	<json:property name="police" value="${police.rowCount}"/>
 	<json:property name="firemen" value="${firemen.rowCount}"/>
 	<json:property name="ambulance" value="${ambulance.rowCount}"/>

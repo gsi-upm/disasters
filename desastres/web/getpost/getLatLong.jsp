@@ -1,19 +1,15 @@
-<%@ page contentType="text/html"%>
-<%@ page pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.util.Date" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page isELIgnored = "false" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <%@ include file="database.jspf" %>
 
-<sql:query var="datos" dataSource="${CatastrofesServer}" sql="
+<sql:query var="datos" dataSource="${CatastrofesServer}">
 	SELECT latitud, longitud, localizacion
 	FROM usuarios
-	WHERE nombre_usuario = ?;">
+	WHERE nombre_usuario = ?
 	<sql:param value="${param.nombre}"/>
 </sql:query>
 [

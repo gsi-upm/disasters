@@ -249,6 +249,10 @@
 						<td><fmt:message key="auxiliar"/> <span id="numAuxiliares"></span></td>
 						<td><img alt="" src="markers/auxiliar1.png" class="rayas"/></td>
 					</tr>
+					<tr>
+						<td><fmt:message key="otroPersonal"/> <span id="numOtros"></span></td>
+						<td><img alt="" src="markers/otro1.png" class="rayas"/></td>
+					</tr>
 					<tr><td colspan="2"><hr/></td></tr>
 					<tr>
 						<td><fmt:message key="policia"/> <span id="numPolicias"></span></td>

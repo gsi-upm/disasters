@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="getpost/database.jspf" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -26,7 +26,7 @@
 		<sql:query var="eventos" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM catastrofes">
 		</sql:query>
-        <sql:query var="entradas" dataSource="${CatastrofesServer}"
+        <sql:query var="historial" dataSource="${CatastrofesServer}"
 			sql="SELECT * FROM historial">
 		</sql:query>
 		<sql:query var="mensajes" dataSource="${CatastrofesServer}"
@@ -89,7 +89,6 @@
 				</tr>
 			</c:forEach>
 		</table>
-
 		<p>SINTOMAS</p>
 		<table border="1">
 			<tr><th>ID</th><th>ID_HERIDO</th><th>ID_SINTOMA</th><th>ESTADO</th><th>FECHA</th></tr>
@@ -156,11 +155,14 @@
 		</table>
 		<p>HISTORIAL</p>
 		<table border="1">
-			<tr><th>ID</th><th>USUARIO</th><th>EVENTO</th><th>FECHA</th></tr>
-			<c:forEach var="fila" items="${entradas.rows}">
+			<tr><th>ID</th><th>ID_USUARIO</th><th>TIPO</th><th>ID_TIPO</th><th>ID_EMERGENCIA</th><th>EVENTO</th><th>FECHA</th></tr>
+			<c:forEach var="fila" items="${historial.rows}">
 				<tr>
 					<td>${fila.id}</td>
-					<td>${fila.usuario}</td>
+					<td>${fila.id_usuario}</td>
+					<td>${fila.tipo}</td>
+					<td>${fila.id_tipo}</td>
+					<td>${fila.id_emergencia}</td>
 					<td>${fila.evento}</td>
 					<td>${fila.fecha}</td>
 				</tr>
@@ -171,10 +173,10 @@
 			<tr><th>ID</th><th>MENSAJE</th><th>NIVEL</th><th>FECHA</th></tr>
 			<c:forEach var="mensaje" items="${mensajes.rows}">
 				<tr>
-					<td>${fila.id}</td>
-					<td>${fila.mensaje}</td>
-					<td>${fila.nivel}</td>
-					<td>${fila.fecha}</td>
+					<td>${mensaje.id}</td>
+					<td>${mensaje.mensaje}</td>
+					<td>${mensaje.nivel}</td>
+					<td>${mensaje.fecha}</td>
 				</tr>
 			</c:forEach>
 		</table>

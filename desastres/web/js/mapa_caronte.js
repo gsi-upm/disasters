@@ -1,5 +1,5 @@
 function mapInit(){
-	center = new GLatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
+	var center = new GLatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
 	map.setCenter(center, 21);
 }
 
@@ -39,7 +39,7 @@ function cargarMenuAcciones(puntero){
 	var menu = '';
 	// igual que $.getJSON(url,data,success) pero forzamos async=false para que cargue bien el pop-up
 	$.ajax({
-		url: 'getActividades.jsp',
+		url: 'getpost/getActividades.jsp',
 		type: 'GET',
 		dataType: 'json',
 		data: {'marcador':puntero.marcador, 'id':puntero.id},
@@ -57,7 +57,7 @@ function cargarMenuAcciones(puntero){
 		async: false
 	});
 	$.ajax({
-		url: 'getActividades.jsp',
+		url: 'getpost/getActividades.jsp',
 		type: 'GET',
 		dataType: 'json',
 		data: {'marcador':puntero.marcador, 'tipo':puntero.tipo, 'estado':puntero.estado},
@@ -87,7 +87,7 @@ function cargarListaActividades(evento){
 	var menu = '';
 	// igual que $.getJSON(url,data,success) pero async=false
 	$.ajax({
-		url: 'getActividades.jsp',
+		url: 'getpost/getActividades.jsp',
 		type: 'GET',
 		dataType: 'json',
 		data: {'marcador':evento.marcador, 'id':evento.id},
@@ -141,7 +141,7 @@ function cargarLateral(evento){
 		//document.getElementById('listaSintomas').innerHTML = '';
 		//sintomas = [new Array(), new Array()];
 		$.ajax({
-			url: 'getAsociaciones.jsp',
+			url: 'getpost/getAsociaciones.jsp',
 			type: 'GET',
 			dataType: 'json',
 			data: {'tipo':'asociadas', 'iden': evento.id},
@@ -157,7 +157,7 @@ function cargarLateral(evento){
 			async: false
 		});
 		$.ajax({
-			url: 'getAsociaciones.jsp',
+			url: 'getpost/getAsociaciones.jsp',
 			type: 'GET',
 			dataType: 'json',
 			data: {'tipo':'emergencias', 'iden': evento.id},
@@ -178,7 +178,7 @@ function cargarLateral(evento){
 			async: false
 		});
 		/*$.ajax({
-			url: 'getSintomas.jsp',
+			url: 'getpost/getSintomas.jsp',
 			type: 'GET',
 			dataType: 'json',
 			data: {'tipo':'sintomasSI', 'iden': evento.id},
@@ -194,7 +194,7 @@ function cargarLateral(evento){
 			async: false
 		});
 		$.ajax({
-			url: 'getSintomas.jsp',
+			url: 'getpost/getSintomas.jsp',
 			type: 'GET',
 			dataType: 'json',
 			data: {'tipo':'sintomasNO', 'iden': evento.id},
@@ -321,7 +321,7 @@ function limpiarLateral(marcador){
 				//document.getElementById('listaSintomas').innerHTML = '';
 				//sintomas = [new Array(), new Array()];
 				$.ajax({
-					url: 'getAsociaciones.jsp',
+					url: 'getpost/getAsociaciones.jsp',
 					type: 'GET',
 					dataType: 'json',
 					data: {'tipo':'todasEmergencias'},
@@ -342,7 +342,7 @@ function limpiarLateral(marcador){
 					async: false
 				});
 				/*$.ajax({
-					url: 'getSintomas.jsp',
+					url: 'getpost/getSintomas.jsp',
 					type: 'GET',
 					dataType: 'json',
 					data: {'tipo':'todosSintomas'},

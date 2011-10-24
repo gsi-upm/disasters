@@ -1,23 +1,19 @@
-<%@ page contentType="text/html"%>
-<%@ page pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.util.Date" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ page isELIgnored = "false" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <%@ include file="database.jspf" %>
-
-<% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>  
+<% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'";%>  
 
 <c:if test="${param.nombre != null && param.localizacion == null}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE CATASTROFES SET
-		latitud = ?, longitud = ?, modificado = <%=modif%>
+	    UPDATE catastrofes
+		SET latitud = ?, longitud = ?, modificado = <%=modif%>
 	    WHERE nombre = ?
-		AND estado != 'erased';
+		AND estado != 'erased'
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.nombre}"/>
@@ -25,9 +21,9 @@
 </c:if>
 <c:if test="${param.id != null}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE CATASTROFES SET
-		latitud = ?, longitud = ?, modificado = <%=modif%>
-	    WHERE id = ?;
+	    UPDATE catastrofes
+		SET latitud = ?, longitud = ?, modificado = <%=modif%>
+	    WHERE id = ?
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.id}"/>
@@ -35,9 +31,9 @@
 </c:if>
 <c:if test="${param.porDefecto == true}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE USUARIOS SET
-		latitud = ?, longitud = ?
-	    WHERE nombre_usuario = ?;
+	    UPDATE usuarios
+		SET latitud = ?, longitud = ?
+	    WHERE nombre_usuario = ?
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.nombre}"/>
@@ -45,9 +41,9 @@
 </c:if>
 <c:if test="${param.localizacion != null}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE USUARIOS SET
-		localizacion = ?
-	    WHERE nombre_usuario = ?;
+	    UPDATE usuarios
+		SET localizacion = ?
+	    WHERE nombre_usuario = ?
 		<sql:param value="${param.localizacion}"/>
 		<sql:param value="${param.nombre}"/>
 	</sql:update>

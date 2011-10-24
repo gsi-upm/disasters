@@ -557,6 +557,17 @@ public class DisasterApplication extends Application {
 			}
 		};
 
+		// Introducir mensaje
+		Restlet message = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String valor = (String) request.getAttributes().get("valor");
+				String nivel = (String) request.getAttributes().get("nivel");
+				String redirector = URL_BASE + "put.jsp?action=message&mensaje=" + valor + "&nivel=" + nivel;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
 		// Get all the proyects
 		Restlet proyects = new Restlet(getContext()) {
 			@Override
@@ -593,59 +604,6 @@ public class DisasterApplication extends Application {
 			public void handle(Request request, Response response) {
 				String user_name = (String) request.getAttributes().get("nombre_usuario");
 				String redirector = URL_BASE + "get.jsp?action=userProyect&nombre_usuario=" + user_name;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		// DELETE user
-		Restlet delUser = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String nombre = (String) request.getAttributes().get("nombre");
-				String redirector = URL_BASE + "delete.jsp?action=user&nombre=" + nombre;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		// Introducir mensaje
-		Restlet message = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String valor = (String) request.getAttributes().get("valor");
-				String nivel = (String) request.getAttributes().get("nivel");
-				String redirector = URL_BASE + "put.jsp?action=message&mensaje=" + valor + "&nivel=" + nivel;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		// Leer mensajes
-		Restlet messages = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String nivel = (String) request.getAttributes().get("nivel");
-				String redirector = URL_BASE + "get.jsp?action=messages&nivel=" + nivel; //&fecha=" + fecha;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		// Leer mensajes desde una fecha
-		Restlet messagesDate = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String nivel = (String) request.getAttributes().get("nivel");
-				String fecha = (String) request.getAttributes().get("fecha");
-				String redirector = URL_BASE + "get.jsp?action=messagesDate&nivel=" + nivel + "&fecha=" + fecha;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		// Leer mensajes desde un id
-		Restlet messagesId = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String nivel = (String) request.getAttributes().get("nivel");
-				String index = (String) request.getAttributes().get("index");
-				String redirector = URL_BASE + "get.jsp?action=messagesId&nivel=" + nivel + "&index=" + index;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -730,18 +688,12 @@ public class DisasterApplication extends Application {
 		router.attach("/healthy/id/{id}", updateHealthy);
 		router.attach("/person/{id}", person);
 
+		router.attach("/message/{valor}/{nivel}", message);
+
 		router.attach("/proyects", proyects);
 		router.attach("/user/{nombre_usuario}/{password}", user);
 		router.attach("/userRole/{nombre_usuario}", userRole);
 		router.attach("/userProyect/{nombre_usuario}", userProyect);
-
-		router.attach("/delete/user/{nombre}", delUser);
-
-		router.attach("/message/{valor}/{nivel}", message);
-		router.attach("/messages/{nivel}", messages);
-		router.attach("/messages/{nivel}/date/{fecha}", messagesDate);
-		router.attach("/messages/{nivel}/id/{index}", messagesId);
-
 		router.attach("/registrar/{user}/{pass}/{nombre}/{email}", registrar);
 
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);

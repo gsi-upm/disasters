@@ -1,22 +1,17 @@
-<%@ page contentType="text/html"%>
-<%@ page pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.util.Date" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ page isELIgnored = "false" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
-<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%@ include file="database.jspf" %>
-
-<% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'";%>
+<% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'";%>
 
 <c:if test="${param.accion != 'detener'}">
 	<%-- Pone como borrado la asociacion anterior... --%>
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE actividades
-		SET estado = 'erased'
+		SET estado = (SELECT id FROM tipos_estados WHERE tipo = 'erased')
 		WHERE id_usuario = (SELECT id FROM usuarios WHERE nombre_usuario = ?)
 		AND id_emergencia = ?
 		<sql:param value="${param.nombreUsuario}"/>
@@ -31,7 +26,7 @@
 				VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
 					   ?,
 				       (SELECT id FROM tipos_actividades WHERE tipo = ?),
-					   'erased')
+					   (SELECT id FROM tipos_estados WHERE tipo = 'erased'))
 				<sql:param value="${param.nombreUsuario}"/>
 				<sql:param value="${param.idEvento}"/>
 				<sql:param value="${param.accion}"/>
@@ -43,7 +38,7 @@
 				VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
 					   ?,
 				       (SELECT id FROM tipos_actividades WHERE tipo = ?),
-					   'active')
+					   (SELECT id FROM tipos_estados WHERE tipo = 'active'))
 				<sql:param value="${param.nombreUsuario}"/>
 				<sql:param value="${param.idEvento}"/>
 				<sql:param value="${param.accion}"/>
@@ -65,7 +60,8 @@
 				SET estado = 'active', modificado = <%=modif%>
 				WHERE nombre = ? AND estado = 'acting'
 				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-							       WHERE u.id = a.id_usuario AND a.estado = 'active');
+							       WHERE u.id = a.id_usuario
+								   AND a.estado = (SELECT id FROM tipos_estados WHERE tipo = 'active');
 				<sql:param value="${param.nombreUsuario}"/>
 			</sql:update>
 		</c:when>
@@ -74,15 +70,17 @@
 				UPDATE catastrofes
 				SET estado = 'active', modificado = <%=modif%>
 				WHERE id = ?
-				AND id NOT IN (SELECT DISTINCT id_emergencia FROM actividades WHERE estado = 'active');
+				AND id NOT IN (SELECT DISTINCT id_emergencia FROM actividades
+				               WHERE estado = (SELECT id FROM tipos_estados WHERE tipo = 'active'));
 				<sql:param value="${param.idEvento}"/>
 			</sql:update>
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
 				SET estado = 'active', modificado = <%=modif%>
-				WHERE nombre = ? AND estado = 'acting'
+				WHERE nombre = ? AND estado = (SELECT id FROM tipos_estados WHERE tipo = 'acting')
 				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-							       WHERE u.id = a.id_usuario AND a.estado = 'active');
+							       WHERE u.id = a.id_usuario
+								   AND a.estado = (SELECT id FROM tipos_estados WHERE tipo = 'active'));
 				<sql:param value="${param.nombreUsuario}"/>
 			</sql:update>
 		</c:when>
@@ -115,7 +113,7 @@
 <c:if test="${param.accion == 'detener'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE actividades
-		SET estado = 'erased'
+		SET estado = (SELECT id FROM tipos_estados WHERE tipo = 'erased')
 		WHERE id_emergencia = ?
 		AND id_usuario = (SELECT id FROM usuarios WHERE nombre_usuario = ?)
 		<sql:param value="${param.idEmergencia}"/>
@@ -125,7 +123,8 @@
 		UPDATE catastrofes
 		SET estado = 'active', modificado = <%=modif%>
 		WHERE id = ?
-		AND id NOT IN (SELECT DISTINCT id_emergencia FROM actividades WHERE estado = 'active')
+		AND id NOT IN (SELECT DISTINCT id_emergencia FROM actividades
+		               WHERE estado = (SELECT id FROM tipos_estados WHERE tipo = 'active'))
 		<sql:param value="${param.idEmergencia}"/>
 	</sql:update>
 	<sql:update dataSource="${CatastrofesServer}">
@@ -133,7 +132,8 @@
 		SET estado = 'active', modificado = <%=modif%>
 		WHERE id = ?
 		AND (SELECT id FROM usuarios WHERE nombre_usuario = ?)
-		NOT IN (SELECT DISTINCT id_usuario FROM actividades WHERE estado = 'active')
+		NOT IN (SELECT DISTINCT id_usuario FROM actividades
+		        WHERE estado = (SELECT id FROM tipos_estados WHERE tipo = 'active'))
 		<sql:param value="${param.idEvento}"/>
 		<sql:param value="${param.nombreUsuario}"/>
 	</sql:update>
