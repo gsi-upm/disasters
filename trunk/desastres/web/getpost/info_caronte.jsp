@@ -84,25 +84,25 @@
 </c:if>
 <c:if test="${param.marcadores == 'lateral'}">
 	<sql:query var="nurse" dataSource="${CatastrofesServer}">
-		SELECT * FROM catastrofes WHERE tipo = 'nurse' AND estado != 'erased'
+		SELECT * FROM catastrofes WHERE tipo = 'nurse' AND estado != 'erased';
 	</sql:query>
 	<sql:query var="gerocultor" dataSource="${CatastrofesServer}">
-		SELECT * FROM catastrofes WHERE tipo = 'gerocultor' AND estado != 'erased'
+		SELECT * FROM catastrofes WHERE tipo = 'gerocultor' AND estado != 'erased';
 	</sql:query>
 	<sql:query var="assistant" dataSource="${CatastrofesServer}">
-		SELECT * FROM catastrofes WHERE tipo = 'assistant' AND estado != 'erased'
+		SELECT * FROM catastrofes WHERE tipo = 'assistant' AND estado != 'erased';
 	</sql:query>
 	<sql:query var="otherStaff" dataSource="${CatastrofesServer}">
-		SELECT * FROM catastrofes WHERE tipo = 'otherStaff' AND estado != 'erased'
+		SELECT * FROM catastrofes WHERE tipo = 'otherStaff' AND estado != 'erased';
 	</sql:query>
 	<sql:query var="police" dataSource="${CatastrofesServer}">
-		SELECT * FROM catastrofes WHERE tipo = 'police' AND estado != 'erased'
+		SELECT * FROM catastrofes WHERE tipo = 'police' AND estado != 'erased';
 	</sql:query>
 	<sql:query var="firemen" dataSource="${CatastrofesServer}">
-		SELECT * FROM catastrofes WHERE tipo = 'firemen' AND estado != 'erased'
+		SELECT * FROM catastrofes WHERE tipo = 'firemen' AND estado != 'erased';
 	</sql:query>
 	<sql:query var="ambulance" dataSource="${CatastrofesServer}">
-		SELECT * FROM catastrofes WHERE tipo = 'ambulance' AND estado != 'erased'
+		SELECT * FROM catastrofes WHERE tipo = 'ambulance' AND estado != 'erased';
 	</sql:query>
 </c:if>
 [

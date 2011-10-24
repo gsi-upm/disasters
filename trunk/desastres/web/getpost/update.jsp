@@ -104,8 +104,8 @@
 		<c:if test="${param.fecha != null}">
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO asociaciones_heridos_emergencias(id_herido, id_emergencia, estado)
-				VALUES(SELECT id FROM catastrofes WHERE fecha = ?, ?,
-					   SELECT id FROM tipos_estados WHERE tipo = 'active')
+				VALUES((SELECT id FROM catastrofes WHERE fecha = ?), ?,
+					   (SELECT id FROM tipos_estados WHERE tipo = 'active'))
 				<sql:param value="${param.fecha}"/>
 				<sql:param value="${param.id_emergencia}"/>
 			</sql:update>
@@ -115,13 +115,13 @@
 		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE actividades
 			SET estado = (SELECT id FROM tipos_estados WHERE tipo = 'erased')
-			WHERE id_emergencia = ?
+			WHERE id_emergencia = ?;
 			<sql:param value="${param.id}"/>
 		</sql:update>
 		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE catastrofes
 			SET estado = 'active'
-			WHERE id = ?
+			WHERE id = ?;
 			<sql:param value="${param.id}"/>
 		</sql:update>
 		<sql:update dataSource="${CatastrofesServer}">
@@ -137,7 +137,8 @@
 		<c:if test="${param.fecha == null}">
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO sintomas(id_herido,id_sintoma,estado)
-				VALUES(?,(SELECT id FROM tipos_sintomas WHERE tipo = ?),(SELECT id FROM tipos_estados WHERE tipo = 'active'))
+				VALUES(?,(SELECT id FROM tipos_sintomas WHERE tipo = ?),
+				       (SELECT id FROM tipos_estados WHERE tipo = 'active'))
 				<sql:param value="${param.id_herido}"/>
 				<sql:param value="${param.tipo_sintoma}"/>
 			</sql:update>
@@ -145,9 +146,9 @@
 		<c:if test="${param.fecha != null}">
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO sintomas(id_herido, id_sintoma, estado)
-				VALUES(SELECT id FROM catastrofes WHERE fecha = ?,
-				      (SELECT id FROM tipos_sintomas WHERE tipo = ?),
-					  (SELECT id FROM tipos_estados WHERE tipo = 'active'))
+				VALUES((SELECT id FROM catastrofes WHERE fecha = ?),
+				       (SELECT id FROM tipos_sintomas WHERE tipo = ?),
+					   (SELECT id FROM tipos_estados WHERE tipo = 'active'))
 				<sql:param value="${param.fecha}"/>
 				<sql:param value="${param.tipo_sintoma}"/>
 			</sql:update>
