@@ -578,7 +578,8 @@ exists or setup the property manually. For example like this:
             <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.caronte.web}" includes="${includes}">
             </fileset>
         </copy>
-    	<copy file="${index.jsp.file}" tofile="${build.web.dir}/index.jsp"/>    		   	
+    	<copy file="${index.jsp.file}" tofile="${build.web.dir}/index.jsp"/>
+    	<copy file="${web.xml.file}" tofile="${build.web.dir}/WEB-INF/web.xml"/>
     	<echo message="files from directory ${web.docbase.dir} copied to ${build.web.dir}"/>
         <!--<copy todir="${build.web.dir}/WEB-INF">
             <fileset dir="${webinf.dir}" excludes="${build.web.excludes}">            	
@@ -704,6 +705,7 @@ exists or setup the property manually. For example like this:
 	    	</fileset>
 	    </copy>
 		<copy file="${index.jsp.file.disasters}" tofile="${build.web.dir.disasters}/index.jsp"/>
+		<copy file="${web.xml.file.disasters}" tofile="${build.web.dir.disasters}/WEB-INF/web.xml"/>
 	   	<echo message="files from directory ${web.docbase.dir} copied to ${build.web.dir.disasters}"/>
 	    </target>
 	    <target depends="init, deps-jar, -pre-pre-compile-disasters, -pre-compile-disasters, -copy-manifest-disasters, -copy-persistence-xml-disasters, -copy-webdir-disasters" 
