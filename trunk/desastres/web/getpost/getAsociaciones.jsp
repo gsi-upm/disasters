@@ -12,7 +12,7 @@
 			SELECT id, nombre
 			FROM catastrofes
 			WHERE marcador = 'event'
-			AND estado != 'erased'
+			AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 		</sql:query>
 	</c:when>
 	<c:when test="${param.tipo eq 'emergencias'}">
@@ -20,11 +20,11 @@
 			SELECT id, nombre
 			FROM catastrofes
 			WHERE marcador = 'event'
-			AND estado != 'erased'
+			AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 			AND id NOT IN (SELECT DISTINCT id_emergencia
 					       FROM asociaciones_heridos_emergencias a
 						   WHERE id_herido = ?
-						   AND a.estado != (SELECT id FROM tipos_estados WHERE tipo = 'erased'))
+						   AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>
@@ -34,8 +34,8 @@
 			FROM catastrofes c, asociaciones_heridos_emergencias a
 			WHERE c.id = a.id_emergencia
 			AND a.id_herido = ?
-			AND c.estado != 'erased'
-			AND a.estado != (SELECT id FROM tipos_estados WHERE tipo = 'erased')
+			AND c.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+			AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>

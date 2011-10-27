@@ -18,11 +18,6 @@ var caracter_temp;
 var TEMPORAL = 0;
 var DEFINITIVO = 1;
 
-var ANONYMOUS = 1;
-// var userName = null;
-var usuario_actual;
-// var usuario_actual_tipo;
-
 var hospitals = new Array();
 var policeStations = new Array();
 var firemenStations = new Array();
@@ -48,10 +43,7 @@ function initialize(){
 		map = new GMap2(document.getElementById('map_canvas'));
 		localizador = new GClientGeocoder();
 		mapInit(); // en mapa_xxx.js
-
-		// empezamos con un usuario anonimo, permitir registrarse mas tarde
-		usuario_actual = ANONYMOUS;
-		// usuario_actual_tipo = 'citizen';
+		
 		map.addControl(new GLargeMapControl()); // controles completos
 		map.addControl(new GScaleControl ());   // escala
 		map.addControl(new GMapTypeControl());  // mapa, foto, hibrido
@@ -66,10 +58,9 @@ function initialize(){
 		}, function(data) {
 			$.each(data, function(entryIndex, entry){
 				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
-					entry['quantity'],entry['name'],entry['description'],entry['info'],
-					entry['latitud'],entry['longitud'],entry['address'],entry['state'],
-					entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
-					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['floor'],null);
+					entry['quantity'],entry['name'],entry['description'],entry['info'],entry['latitud'],
+					entry['longitud'],entry['address'],entry['state'],entry['date'], entry['modified'],
+					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['user'],entry['floor']);
 				nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 				marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 				indices[pos_indices] = nuevomarcador.id;
@@ -234,10 +225,9 @@ function actualizar(){
 			if(entry['id'] != noActualizar){
 				// el id lo asigna la base de datos
 				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
-					entry['quantity'],entry['name'],entry['description'],entry['info'],
-					entry['latitud'],entry['longitud'],entry['address'],entry['state'],
-					entry['date'], entry['modified'],entry['user_name'],entry['user_type'],
-					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['floor'],null);
+					entry['quantity'],entry['name'],entry['description'],entry['info'],entry['latitud'],
+					entry['longitud'],entry['address'],entry['state'],entry['date'], entry['modified'],
+					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['user'],entry['floor']);
 
 				// pintamos los nuevos, para lo que comprobamos que no existian
 				if(marcadores_definitivos[nuevomarcador.id] == null){
@@ -650,9 +640,8 @@ function generaMarcador(evento, caracter){
 
 function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,planta){
 	var fecha = obtiene_fecha();
-	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,
-		descripcion,info,latitud,longitud,direccion,estado,fecha,fecha,
-		usuario_actual,usuario_actual_tipo,null,size,traffic,idAssigned,planta);
+	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,descripcion,info,
+		latitud,longitud,direccion,estado,fecha,fecha,null,size,traffic,idAssigned,usuario_actual,planta);
 
 	if(marcador == 'event'){
 		nuevomarcador.size = size;
@@ -670,6 +659,7 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	nuevomarcador.marker = generaMarcador(nuevomarcador, TEMPORAL);
 
 	guardar(nuevomarcador);
+	escribirMensaje(nombre, planta, 'crear', 1);
 	registrarHistorial(userName, marcador, tipo, fecha, 'crear');
 }
 
@@ -695,7 +685,7 @@ function guardar(puntero){
 			'traffic':puntero.traffic,
 			'idAssigned':puntero.idAssigned,
 			'fecha':puntero.fecha,
-			'usuario':puntero.nombre_usuario,
+			'usuario':puntero.usuario,
 			'planta':puntero.planta
 		},
 		success: function(data){
@@ -738,15 +728,10 @@ function guardar(puntero){
 
 	// 3.Recargar el mapa para que aparezca el elemento nuevo
 	// actualizar(); // esto adelanta el timeOut a ahora mismo
-
-	$.post('getpost/escribirMensaje.jsp', {
-		mensaje:'Emergencia ' + puntero.nombre + ' en la planta ' + puntero.planta,
-		nivel:'1'
-	});
 }
 
-function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitud,
-	estado,size,traffic,idAssigned,planta){
+function modificar(id, cantidad, nombre, info, descripcion, direccion, longitud, latitud,
+	estado, size, traffic, idAssigned, planta){
 	// utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if(caracter_temp == TEMPORAL){
 		// Actualizar la matriz temporal
@@ -776,14 +761,9 @@ function modificar(id,cantidad,nombre,info,descripcion,direccion,longitud,latitu
 			'accion':'modificar'
 		});
 	}
-
-	$.post('getpost/escribirMensaje.jsp', {
-		mensaje:'Emergencia ' + nombre + ' modificada',
-		nivel:'1'
-	});
 }
 
-function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,trafico,idAssigned,planta){
+function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, tamanno, trafico, idAssigned, planta){
 	var puntero = marcadores_definitivos[id];
 	var idA;
 	var accion;
@@ -794,7 +774,8 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,t
 	}
 
 	if(tipo != puntero.tipo &&
-		!((tipo=='slight'&&puntero.tipo=='serious') || (tipo=='serious'&&puntero.tipo=='slight'))){
+			((tipo == 'slight' && puntero.tipo == 'serious') ||
+			(tipo == 'serious' && puntero.tipo == 'slight')) == false){
 		accion = 'cambioTipo';
 	}else{
 		accion = 'modificar';
@@ -852,10 +833,7 @@ function modificar2(id,tipo,cantidad,nombre,info,descripcion,direccion,tamanno,t
 			});
 		}
 	}*/
-	$.post('getpost/escribirMensaje.jsp', {
-		mensaje:'Emergencia ' + puntero.nombre + ' modificada',
-		nivel:'1'
-	});
+	escribirMensaje(puntero.nombre, puntero.planta, 'modificar', 1);
 	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 }
 
@@ -885,10 +863,7 @@ function eliminar(puntero,caracter){
 				'planta':puntero.planta,
 				'accion':'eliminar'
 			});
-			$.post('getpost/escribirMensaje.jsp', {
-				mensaje:'Emergencia ' + puntero.nombre + ' modificada',
-				nivel:'1'
-			});
+			escribirMensaje(puntero.nombre, puntero.planta, 'eliminar', 1);
 			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
 		}else{
 			$.post('getpost/update.jsp',{
@@ -911,10 +886,7 @@ function eliminar(puntero,caracter){
 				'planta':puntero.planta,
 				'accion':'eliminar'
 			});
-			$.post('getpost/escribirMensaje.jsp', {
-				mensaje:'Emergencia ' + puntero.nombre + ' eliminada',
-				nivel:'1'
-			});
+			escribirMensaje(puntero.nombre, puntero.planta, 'eliminar', 1);
 			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
 		}
 	}
@@ -1104,6 +1076,27 @@ function mostrarSanos(mostrar){
 	}
 }
 
+function escribirMensaje(nombre, planta, accion, nivel){
+	var mensaje;
+	if(accion == 'crear'){
+		mensaje = 'Nueva emergencia ' + nombre;
+		if(planta >= 0){
+			mensaje += ' en la planta ' + planta;
+		}else if(planta == -1){
+			mensaje += ' en el exterior';
+		}
+	}else if(accion == 'modificar'){
+		mensaje = 'Emergencia ' + nombre + ' modificada';
+	}else if(accion == 'eliminar'){
+		mensaje = 'Emergencia ' + nombre + ' eliminada';
+	}
+	$.post('getpost/escribirMensaje.jsp', {
+		'creador':usuario_actual,
+		'mensaje':mensaje,
+		'nivel':nivel
+	});
+}
+
 function registrarHistorial(usuario, marcador, tipo, idEmergencia, accion){
 	var evento;
 	if(accion == 'crear'){
@@ -1148,74 +1141,6 @@ function obtiene_fecha() {
 	else if(milisegundos < 100) milisegundos = '0' + milisegundos;
 
 	return (anno + '-' + mes + '-' + dia + ' ' + horas + ':' + minutos + ':' + segundos + '.' + milisegundos);
-}
-
-function asociar(id, marker){
-	// 1.hallar el punto del marcador pasado
-	var latitud1 = marker.getLatLng().lat(); // = marcadores_definitivos[id].marker.lat();
-	var longitud1 = marker.getLatLng().lng(); // = marcadores_definitivos[id].marker.lng();
-
-	// 2.hallar la distancia a cada catastrofe de la matriz definitiva
-	var diferencia = 999999999999;
-	var id_mas_cercano;
-	var idDefinitivo;
-
-	for(var i = 0; indices[i] != null; i++){
-		idDefinitivo = indices[i];
-		// nos quedamos solo con los eventos (catastrofes)
-		if(marcadores_definitivos[idDefinitivo].marcador != 'event'){
-			continue;
-		}
-		var latitud2 = marcadores_definitivos[idDefinitivo].latitud;
-		var longitud2 = marcadores_definitivos[idDefinitivo].longitud;
-		var dif_lat = Math.pow(latitud1 - latitud2, 2);
-		var dif_long = Math.pow(longitud1 - longitud2, 2);
-		var distancia = Math.sqrt(dif_lat + dif_long);
-		if(distancia < diferencia){
-			diferencia = distancia;
-			id_mas_cercano = idDefinitivo;
-		}
-	}
-
-	// 3.Devolver el id de la catastrofe mas cercana o hacer el post directamente
-	return id_mas_cercano;
-}
-
-function guardar_asociacion(idEvento, idRecurso){
-	// Hallar la nueva posicion del recurso en funcion del tipo
-	var evento = marcadores_definitivos[idEvento];
-	var recurso = marcadores_definitivos[idRecurso];
-	var latitud = evento.latitud;
-	var longitud = evento.longitud;
-	var nueva_latitud = recurso.latitud;
-	var nueva_longitud = recurso.longitud;
-
-	// Hallar las nuevas distancias
-	/*
-	if(recurso.tipo=='police'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.000025;}
-	if(recurso.tipo=='nurse'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='gerocultor'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='assistant'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='firemen'){nueva_latitud=latitud+0.000025;nueva_longitud=longitud-0.00005;}
-	if(recurso.tipo=='ambulance'||recurso.tipo=='ambulancia'){nueva_latitud=latitud+0.000025;nueva_longitud=longitud+0.00005;}
-	if(recurso.tipo=='trapped'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.0001;}
-	if(recurso.tipo=='healthy'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.0001;}
-	if(recurso.tipo=='slight'){nueva_latitud=latitud+0.0001;nueva_longitud=longitud-0.00005;}
-	if(recurso.tipo=='serious'){nueva_latitud=latitud+0.0001;nueva_longitud=longitud+0.00005;}
-	if(recurso.tipo=='dead'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.0001;}
-	*/
-
-	// actualizar las modificaciones con el metodo modificar
-	caracter_temp = DEFINITIVO;
-	puntero_temp = recurso;
-	modificar(idRecurso, recurso.cantidad, recurso.nombre, 'Asociado a ' + evento.nombre + '. ' + recurso.info,
-		recurso.descripcion, evento.direccion, nueva_longitud, nueva_latitud, recurso.estado, recurso.size, recurso.traffic, idEvento);
-}
-
-function cancelar_asignacion(id){
-	// borro la posicion actual y lo dibujo en la antigua
-	map.removeOverlay(marcadores_definitivos[id].marker);
-	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
 }
 
 function fondo(marker, b){

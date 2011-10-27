@@ -568,32 +568,13 @@ public class DisasterApplication extends Application {
 			}
 		};
 
-		// Get all the proyects
-		Restlet proyects = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String redirector = URL_BASE + "get.jsp?action=proyects";
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
 		// Get the user
 		Restlet user = new Restlet(getContext()) {
 			@Override
 			public void handle(Request request, Response response) {
 				String user_name = (String) request.getAttributes().get("nombre_usuario");
 				String user_pass = (String) request.getAttributes().get("password");
-				String redirector = URL_BASE + "get.jsp?action=user&nombre_usuario="+ user_name + "&password=" + user_pass;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		// Get the user role
-		Restlet userRole = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String user_name = (String) request.getAttributes().get("nombre_usuario");
-				String redirector = URL_BASE + "get.jsp?action=userRole&nombre_usuario=" + user_name;
+				String redirector = URL_BASE + "temporal.jsp?action=user&nombre_usuario="+ user_name + "&password=" + user_pass;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -603,7 +584,17 @@ public class DisasterApplication extends Application {
 			@Override
 			public void handle(Request request, Response response) {
 				String user_name = (String) request.getAttributes().get("nombre_usuario");
-				String redirector = URL_BASE + "get.jsp?action=userProyect&nombre_usuario=" + user_name;
+				String redirector = URL_BASE + "temporal.jsp?action=userProyect&nombre_usuario=" + user_name;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		// Get the user role
+		Restlet userRole = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String user_name = (String) request.getAttributes().get("nombre_usuario");
+				String redirector = URL_BASE + "temporal.jsp?action=userRole&nombre_usuario=" + user_name;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -615,8 +606,23 @@ public class DisasterApplication extends Application {
 				String pass = (String) request.getAttributes().get("pass");
 				String nombre = (String) request.getAttributes().get("nombre");
 				String email = (String) request.getAttributes().get("email");
-				String redirector = URL_BASE + "put.jsp?action=registrar&user=" + user + "&pass=" + pass +
-						"&nombre=" + nombre + "&email=" + email;
+				String redirector = URL_BASE + "temporal.jsp?action=registrar&user=" + user + "&pass=" + pass +
+					"&nombre=" + nombre + "&email=" + email;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+
+		Restlet insertar = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String type = (String) request.getAttributes().get("type");
+				String name = (String) request.getAttributes().get("name");
+				String description = (String) request.getAttributes().get("description");
+				String info = (String) request.getAttributes().get("info");
+				String latitud = (String) request.getAttributes().get("latitud");
+				String longitud = (String) request.getAttributes().get("longitud");
+				String redirector = URL_BASE + "temporal.jsp?action=insertar&type=" + type + "&name=" + name +
+					"&description=" + description + "&info=" + info + "&latitud=" + latitud + "&longitud=" + longitud;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -690,11 +696,11 @@ public class DisasterApplication extends Application {
 
 		router.attach("/message/{valor}/{nivel}", message);
 
-		router.attach("/proyects", proyects);
 		router.attach("/user/{nombre_usuario}/{password}", user);
-		router.attach("/userRole/{nombre_usuario}", userRole);
 		router.attach("/userProyect/{nombre_usuario}", userProyect);
+		router.attach("/userRole/{nombre_usuario}", userRole);
 		router.attach("/registrar/{user}/{pass}/{nombre}/{email}", registrar);
+		router.attach("/insertar/{type}/{name}/{description}/{info}/{latitud}/{longitud}", insertar);
 
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);
 		//router.attachDefault(inicial);

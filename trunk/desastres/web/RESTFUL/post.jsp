@@ -1,5 +1,4 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
@@ -9,7 +8,9 @@
     <sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
 			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,
+		       (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
+			   ?, ?, ?, ?, ?, ?)
 		<sql:param value="${param.item}"/>
 		<sql:param value="${param.type}"/>
 		<sql:param value="${param.quantity}"/>

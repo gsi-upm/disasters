@@ -9,7 +9,7 @@
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
 			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
-		VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+		VALUES(?,?,?,?,?,?,?,?,?,(SELECT id FROM tipos_estados WHERE tipo_estado = ?),?,?,?,?,?,?)
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
 		<sql:param value="${param.cantidad}"/>

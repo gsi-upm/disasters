@@ -4,6 +4,7 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%@ include file="database.jspf" %>
+
 <c:if test="${param.accion != 'crear'}">
 	<c:if test="${param.marcador == 'event'}">
 		<sql:update dataSource="${CatastrofesServer}">

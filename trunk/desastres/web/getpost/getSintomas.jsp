@@ -4,7 +4,8 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %> 
+<%@ include file="database.jspf" %>
+
 <c:choose>
 	<c:when test="${param.tipo eq 'todosSintomas'}">
 		<sql:query var="sintomas" dataSource="${CatastrofesServer}">
@@ -16,7 +17,7 @@
 			SELECT * FROM tipos_sintomas
 			WHERE id NOT IN (SELECT DISTINCT id_sintoma FROM sintomas
 			                 WHERE id_herido = ?
-							 AND estado != (SELECT id FROM tipos_estados WHERE tipo = 'erased'))
+							 AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>
@@ -26,7 +27,7 @@
 			FROM sintomas s, tipos_sintomas t
 			WHERE t.id = s.id_sintoma
 			AND s.id_herido = ?
-			AND s.estado != (SELECT id FROM tipos_estados WHERE tipo = 'erased')
+			AND s.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>

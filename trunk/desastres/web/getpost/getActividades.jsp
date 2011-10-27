@@ -12,7 +12,7 @@
 			<sql:query var="acciones" dataSource="${CatastrofesServer}">
 				SELECT id, tipo, descripcion
 				FROM tipos_actividades
-				WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo = ?)
+				WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo_estado = ?)
 				AND (tipo_emergencia = '' OR tipo_emergencia = ? OR tipo_emergencia = ?)
 				<sql:param value="${param.estado}"/>
 				<sql:param value="${param.tipo}"/>
@@ -25,7 +25,7 @@
 					<sql:query var="acciones" dataSource="${CatastrofesServer}">
 						SELECT id, tipo, descripcion
 						FROM tipos_actividades
-						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo = ?)
+						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo_estado = ?)
 						AND (tipo_emergencia = '' OR tipo_emergencia = ?)
 						<sql:param value="${param.estado}"/>
 						<sql:param value="${param.tipo}"/>
@@ -35,7 +35,7 @@
 					<sql:query var="acciones" dataSource="${CatastrofesServer}">
 						SELECT id, tipo, descripcion
 						FROM tipos_actividades
-						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo = ?)
+						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo_estado = ?)
 						AND (tipo_emergencia = '' OR tipo_emergencia = ?)
 						<sql:param value="${param.estado}"/>
 						<sql:param value="${param.marcador}"/>
@@ -55,7 +55,7 @@
 				WHERE a.id_emergencia = ?
 				AND a.id_tipo_actividad = t.id
 				AND a.id_usuario = u.id
-				AND a.estado = (SELECT id FROM tipos_estados WHERE tipo = 'active')
+				AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
 				<sql:param value="${param.id}"/>
 			</sql:query>
 		</c:when>
@@ -66,7 +66,7 @@
 				WHERE a.id_usuario = (SELECT id FROM usuarios WHERE nombre_usuario = (SELECT nombre FROM catastrofes WHERE id = ?))
 				AND a.id_tipo_actividad = t.id
 				AND a.id_emergencia = c.id
-				AND a.estado = (SELECT id FROM tipos_estados WHERE tipo = 'active')
+				AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
 				<sql:param value="${param.id}"/>
 			</sql:query>
 		</c:when>
