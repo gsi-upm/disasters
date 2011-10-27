@@ -5,7 +5,7 @@
 <%@ include file="database.jspf" %>
 
 <c:catch var="errorUpdate">
-    <sql:update dataSource="${CatastrofesServer}">
+	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
 			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
 		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,

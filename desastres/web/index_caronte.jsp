@@ -27,7 +27,7 @@
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
 			<script type="text/javascript"
-				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhShGMulApA1qGrWH2FWs8V2HjpzbhR6R94HFuEi6_iz-WDuB-XPDkJ2rA">
+				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhQel9MQybMe66MKP3JO4yeJZZpmpBRzTAem65aDN5SbzD0WHx5UGyq72Q">
 			</script>
 			<script type="text/javascript">
 				var nivelMsg = ${proyecto.nivelMsg};

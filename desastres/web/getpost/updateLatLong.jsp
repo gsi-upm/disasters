@@ -10,9 +10,9 @@
 
 <c:if test="${param.nombre != null && param.localizacion == null}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE catastrofes
+		UPDATE catastrofes
 		SET latitud = ?, longitud = ?, modificado = <%=modif%>
-	    WHERE nombre = ?
+		WHERE nombre = ?
 		AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
@@ -21,9 +21,9 @@
 </c:if>
 <c:if test="${param.id != null}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE catastrofes
+		UPDATE catastrofes
 		SET latitud = ?, longitud = ?, modificado = <%=modif%>
-	    WHERE id = ?
+		WHERE id = ?
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.id}"/>
@@ -31,9 +31,9 @@
 </c:if>
 <c:if test="${param.porDefecto == true}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE usuarios
+		UPDATE usuarios
 		SET latitud = ?, longitud = ?
-	    WHERE nombre_usuario = ?
+		WHERE nombre_usuario = ?
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.nombre}"/>
@@ -41,9 +41,9 @@
 </c:if>
 <c:if test="${param.localizacion != null}">
 	<sql:update dataSource="${CatastrofesServer}">
-	    UPDATE usuarios
+		UPDATE usuarios
 		SET localizacion = ?
-	    WHERE nombre_usuario = ?
+		WHERE nombre_usuario = ?
 		<sql:param value="${param.localizacion}"/>
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
