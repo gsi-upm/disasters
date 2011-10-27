@@ -42,9 +42,9 @@
 </c:choose>
 [
 <c:forEach var="emergencia" items="${emergencias.rows}">
-    <json:object name="temp">
-        <json:property name="id" value="${emergencia.id}"/>
-        <json:property name="nombre" value="${emergencia.nombre}"/>
+	<json:object name="temp">
+		<json:property name="id" value="${emergencia.id}"/>
+		<json:property name="nombre" value="${emergencia.nombre}"/>
 	</json:object> ,
 </c:forEach>
 ]

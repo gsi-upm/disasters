@@ -14,9 +14,9 @@
 </sql:query>
 [
 <c:forEach var="dato" items="${datos.rows}">
-    <json:object name="temp">
-        <json:property name="latitud" value="${dato.latitud}"/>
-        <json:property name="longitud" value="${dato.longitud}"/>
+	<json:object name="temp">
+		<json:property name="latitud" value="${dato.latitud}"/>
+		<json:property name="longitud" value="${dato.longitud}"/>
 		<json:property name="localizacion" value="${dato.localizacion}"/>
 	</json:object> ,
 </c:forEach>

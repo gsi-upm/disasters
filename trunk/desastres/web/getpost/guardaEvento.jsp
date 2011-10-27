@@ -1,15 +1,17 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page isELIgnored = "false" %>
+<%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%@ include file="database.jspf" %>
+<% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 
 <c:catch var="errorUpdate">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
 			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
-		VALUES(?,?,?,?,?,?,?,?,?,(SELECT id FROM tipos_estados WHERE tipo_estado = ?),?,?,?,?,?,?)
+		VALUES(?,?,?,?,?,?,?,?,?,(SELECT id FROM tipos_estados WHERE tipo_estado = ?),?,?,?,<%=modif%>,?,?)
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
 		<sql:param value="${param.cantidad}"/>
@@ -23,14 +25,13 @@
 		<sql:param value="${param.size}"/>
 		<sql:param value="${param.traffic}"/>
 		<sql:param value="${param.idAssigned}"/>
-		<sql:param value="${param.fecha}"/>
 		<sql:param value="${param.usuario}"/>
 		<sql:param value="${param.planta}"/>
 	</sql:update>
 	
-    <%-- Uncomment this code in order to enable Twitter service for new disasters.
-    DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR --%>
-    <%--
+	<%-- Uncomment this code in order to enable Twitter service for new disasters.
+	DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR --%>
+	<%--
 		Twitter twitt = new Twitter("your_username_here","your_password_here");
 		StreetLocator st = new StreetLocator();
 		double lat = Double.parseDouble(request.getParameter("latitud"));
@@ -46,6 +47,6 @@
 		    msg = msg.substring(0, 134) +"(...)";
 		}
 		twitt.updateStatus(msg);
-    --%>
+	--%>
 </c:catch>
 ok

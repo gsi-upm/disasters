@@ -268,6 +268,8 @@ function actualizar(){
 			}
 		});
 	});
+	
+	ultimamodif = obtiene_fecha();
 
 	if(userName != ''){
 		numeroMarcadores(plantaResidencia);
@@ -279,7 +281,6 @@ function actualizar(){
 		navigator.geolocation.getCurrentPosition(coordenadasUsuario);
 	}
 
-	ultimamodif = obtiene_fecha();
 	setTimeout('actualizar()', tiempoActualizacion);
 }
 
@@ -684,7 +685,6 @@ function guardar(puntero){
 			'size':puntero.size,
 			'traffic':puntero.traffic,
 			'idAssigned':puntero.idAssigned,
-			'fecha':puntero.fecha,
 			'usuario':puntero.usuario,
 			'planta':puntero.planta
 		},
@@ -986,16 +986,9 @@ function cambiarPlanta(num){
 
 	for(var i in marcadores_definitivos){
 		map.removeOverlay(marcadores_definitivos[i].marker);
-		if(num != -2){
-			if(marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2){
-				if(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true){
-					map.addOverlay(marcadores_definitivos[i].marker);
-				}
-			}
-		}else{
-			if(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true){
-				map.addOverlay(marcadores_definitivos[i].marker);
-			}
+		if((num == -2 || marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2) &&
+				(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true)){
+			map.addOverlay(marcadores_definitivos[i].marker);
 		}
 	}
 
@@ -1067,7 +1060,7 @@ function mostrarSanos(mostrar){
 	verSanos = mostrar;
 	for(var i in marcadores_definitivos){
 		if(marcadores_definitivos[i].tipo == 'healthy'){
-			if(mostrar == true){
+			if(mostrar == true && (marcadores_definitivos[i].planta == plantaResidencia || marcadores_definitivos[i].planta == -2 || plantaResidencia == -2)){
 				map.addOverlay(marcadores_definitivos[i].marker);
 			}else{
 				map.removeOverlay(marcadores_definitivos[i].marker);
@@ -1122,6 +1115,19 @@ function registrarHistorial(usuario, marcador, tipo, idEmergencia, accion){
 }
 
 function obtiene_fecha() {
+	var hora;
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: 'getpost/getHora.jsp',
+		success: function(data){
+			hora = data.hora;
+		},
+		async: false
+	});
+	return hora;
+	
+	/*
 	// llega a algo como esto: 1992-01-01 00:00:01 , necesario para MySql a partir de la fecha actual
 	var fecha_actual = new Date();
 	var dia = fecha_actual.getDate();
@@ -1141,6 +1147,7 @@ function obtiene_fecha() {
 	else if(milisegundos < 100) milisegundos = '0' + milisegundos;
 
 	return (anno + '-' + mes + '-' + dia + ' ' + horas + ':' + minutos + ':' + segundos + '.' + milisegundos);
+	*/
 }
 
 function fondo(marker, b){

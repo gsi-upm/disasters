@@ -34,10 +34,10 @@
 </c:choose>
 [
 <c:forEach var="sintoma" items="${sintomas.rows}">
-    <json:object name="temp">
-        <json:property name="id" value="${sintoma.id}"/>
-        <json:property name="tipo" value="${sintoma.tipo}"/>
-        <json:property name="descripcion" value="${sintoma.descripcion}"/>
+	<json:object name="temp">
+		<json:property name="id" value="${sintoma.id}"/>
+		<json:property name="tipo" value="${sintoma.tipo}"/>
+		<json:property name="descripcion" value="${sintoma.descripcion}"/>
 	</json:object> ,
 </c:forEach>
 ]

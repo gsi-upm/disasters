@@ -85,13 +85,13 @@
 
 [
 <c:forEach var="accion" items="${acciones.rows}">
-    <json:object name="temp">
-        <json:property name="id" value="${accion.id}"/>
-        <json:property name="tipo" value="${accion.tipo}"/>
-        <json:property name="descripcion" value="${accion.descripcion}"/>
-        <json:property name="nombre_usuario" value="${accion.nombre_usuario}"/>
-        <json:property name="nombre" value="${accion.nombre}"/>
-        <json:property name="id_emergencia" value="${accion.id_emergencia}"/>
+	<json:object name="temp">
+		<json:property name="id" value="${accion.id}"/>
+		<json:property name="tipo" value="${accion.tipo}"/>
+		<json:property name="descripcion" value="${accion.descripcion}"/>
+		<json:property name="nombre_usuario" value="${accion.nombre_usuario}"/>
+		<json:property name="nombre" value="${accion.nombre}"/>
+		<json:property name="id_emergencia" value="${accion.id_emergencia}"/>
 	</json:object> ,
 </c:forEach>
 ]
