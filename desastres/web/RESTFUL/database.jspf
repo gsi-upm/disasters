@@ -1,9 +1,15 @@
+<%
+	String proyect = getServletContext().getInitParameter("proyect");
+	if(proyect.equals("disasters")){
+		proyect = "improvise";
+	}
+%>
 <c:set var="databaseEmpotrado">
 	<jsp:scriptlet>
-		out.print(application.getRealPath("/WEB-INF/db/caronte"));
+		out.print(application.getRealPath("/WEB-INF/db/" + proyect));
 	</jsp:scriptlet>
 </c:set>
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver"
 	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
 <%--<sql:setDataSource var="CatastrofesServer" driver="com.mysql.jdbc.Driver"
-	url="jdbc:mysql://localhost:3306/caronte" user="root" password=""/>--%>
+	url="jdbc:mysql://localhost:3306/<%=proyect%>" user="root" password=""/>--%>

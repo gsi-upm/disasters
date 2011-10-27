@@ -104,9 +104,8 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 				String longitud = usuario.getJSONObject(0).getString("longitud");
 				String descripcion = usuario.getJSONObject(0).getString("real_name");
 				String informacion = usuario.getJSONObject(0).getString("email");
-				Connection.connect("http://localhost:8080/desastres/rest/post/type=" + tipoUsuario +
-						"&name=" + username + "&description=" + descripcion + "&info=" + informacion +
-						"&quantity=1&latitud=" + latitud + "&longitud=" + longitud + "&idAssigned=0&floor=-2");
+				Connection.connect("http://localhost:8080/desastres/rest/insertar/" + tipoUsuario +
+					"/" + username + "/" + descripcion + "/" + informacion + "/" + latitud + "/" + longitud);
 			}
 		} catch (Exception ex) {
 			System.out.println("Excepcion: " + ex);

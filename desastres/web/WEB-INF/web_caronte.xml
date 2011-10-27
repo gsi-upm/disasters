@@ -42,18 +42,6 @@
     </servlet-mapping>
     <!-- Simulator -->
     <servlet>
-        <servlet-name>SimulatorServlet</servlet-name>
-        <servlet-class>simulator.SimulatorServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ProyectServlet</servlet-name>
-        <servlet-class>gsi.proyect.ProyectServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ProyectServlet</servlet-name>
-        <url-pattern>/proyect</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>RegistroServlet</servlet-name>
         <servlet-class>gsi.proyect.RegistroServlet</servlet-class>
     </servlet>

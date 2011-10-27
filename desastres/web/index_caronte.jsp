@@ -1,27 +1,14 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page language="java" %>
-<%@ page isELIgnored="false" %>
+<%@ page isELIgnored="false" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%--<jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>--%>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
-<c:set var="nombreUsuario" value="<%= request.getRemoteUser() %>"/>
+<jsp:setProperty name="proyecto" property="nombreUsuario" value="<%= request.getRemoteUser() %>"/>
 
 <c:if test="${param.lang != null}">
 	<fmt:setLocale value="${param.lang}" scope="session"/>
-</c:if>
-
-<c:if test="${nombreUsuario != null}">
-	<c:if test="${param.proyect == null}">
-		<c:redirect url="/proyect?user=${nombreUsuario}"/>
-	</c:if>
-	<c:if test="${param.proyect != null}"> <%-- and param.alert == null --%>
-		<jsp:setProperty name="proyecto" property="proyect" value="${param.proyect}"/>
-	</c:if>
-	<c:if test="${param.rol != null}">
-		<jsp:setProperty name="proyecto" property="rol" value="${param.rol}"/>
-	</c:if>
 </c:if>
 
 <!DOCTYPE HTML>
@@ -44,13 +31,13 @@
 			</script>
 			<script type="text/javascript">
 				var nivelMsg = ${proyecto.nivelMsg};
-				var userName = '${nombreUsuario}';
+				var userName = '${proyecto.nombreUsuario}';
+				var usuario_actual = ${proyecto.id};
 				var usuario_actual_tipo = '${proyecto.rol}';
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
 			<script type="text/javascript" src="js/mapa_caronte.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>
-			<script type="text/javascript" src="js/mapa2.js"></script>
 			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->
@@ -94,15 +81,15 @@
 				<tr>
 					<td id="left">
 						<!-- If the user isn't autenticated, we show the login form -->
-						<c:if test="${nombreUsuario == null}">
+						<c:if test="${proyecto.nombreUsuario == null}">
 							<c:import url="formInicio.jsp"/>
 						</c:if>
-						<c:if test="${nombreUsuario != null}">
+						<c:if test="${proyecto.nombreUsuario != null}">
 							<!-- and if the user is autenticated, we show the username and logout button -->
-							<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
+							<fmt:message key="eres"/> <span id="signeduser">${proyecto.nombreUsuario}</span>
 							<br/>
 							<c:url var="logout" value="logout.jsp"/>
-							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${nombreUsuario}'})">
+							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${proyecto.nombreUsuario}'})">
 								<fmt:message key="cerrarsesion"/>
 							</a>
 							<c:if test="${proyecto.rol != 'citizen'}">
@@ -116,11 +103,11 @@
 						</c:if>
 					</td>
 					<td id="fila_mapa">
-						<c:if test="${nombreUsuario == null}">
+						<c:if test="${proyecto.nombreUsuario == null}">
 							<div class="div_vacio"></div>
 							<div id="map_canvas"></div>
 						</c:if>
-						<c:if test="${nombreUsuario != null}">
+						<c:if test="${proyecto.nombreUsuario != null}">
 							<c:if test="${proyecto.rol != 'citizen'}">
 								<c:import url="residencia_caronte.jsp"/>
 							</c:if>

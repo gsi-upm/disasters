@@ -7,35 +7,47 @@
 <%@ include file="database.jspf" %>
 
 <c:choose>
-	<c:when test="${(param.action eq 'firstTime') and (param.nivel gt 0)}">
+	<c:when test="${param.action == 'firstTime' && param.nivel gt 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT * FROM catastrofes
-			WHERE modificado > ?
-			AND estado != 'erased'
+			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
+				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.planta,
+				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			WHERE c.modificado > ?
+			AND c.estado = t.id
+			AND t.tipo_estado != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${(param.action eq 'firstTime') and (param.nivel eq 0)}">
+	<c:when test="${param.action == 'firstTime' && param.nivel == 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT * FROM catastrofes
-			WHERE modificado > ?
-			AND marcador != 'people'
-			AND estado != 'erased'
+			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
+				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.planta,
+				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			WHERE c.modificado > ?
+			AND c.marcador != 'people'
+			AND c.estado = t.id
+			AND t.tipo_estado != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${(param.action eq 'notFirst') and (param.nivel gt 0)}">
+	<c:when test="${param.action == 'notFirst' && param.nivel gt 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT * FROM catastrofes
-			WHERE modificado > ?
+			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
+				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.planta,
+				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			WHERE c.modificado > ?
+			AND c.estado = t.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
-	<c:when test="${(param.action eq 'notFirst') and (param.nivel eq 0)}">
+	<c:when test="${param.action == 'notFirst' && param.nivel == 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT * FROM catastrofes
-			WHERE modificado > ?
-			AND marcador != 'people'
+			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
+				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.usuario,c.planta,
+				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			WHERE c.modificado > ?
+			AND c.marcador != 'people'
+			AND c.estado = t.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -56,15 +68,14 @@
 		<json:property name="latitud" value="${evento.latitud}"/>
 		<json:property name="longitud" value="${evento.longitud}"/>
 		<json:property name="address" value="${evento.direccion}"/>
-		<json:property name="state" value="${evento.estado}"/>
+		<json:property name="state" value="${evento.tipo_estado}"/>
 		<json:property name="size" value="${evento.size}"/>
 		<json:property name="traffic" value="${evento.traffic}"/>
 		<json:property name="idAssigned" value="${evento.idAssigned}"/>
+		<json:property name="user" value="${evento.usuario}"/>
 		<json:property name="floor" value="${evento.planta}"/>
 		<json:property name="date" value="${evento.fecha}"/>
 		<json:property name="modified" value="${evento.modificado}"/>
-		<json:property name="user_name" value="${evento.nombre_usuario}"/>
-		<json:property name="user_type" value="${evento.tipo_usuario}"/>
 	</json:object> ,
 </c:forEach>
 ]

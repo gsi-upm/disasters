@@ -1,14 +1,13 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.util.Date" %>
+<%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <%@ include file="database.jspf" %>
-<% String modif = "'" + new Timestamp(new java.util.Date().getTime()).toString() + "'"; %>
+<% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 
 <c:choose>
-	<c:when test="${param.action eq 'info'}">
+	<c:when test="${param.action == 'info'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -19,18 +18,18 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'state'}">
+	<c:when test="${param.action == 'state'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
-				SET estado = ?, modificado = <%=modif%>
+				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = ?), modificado = <%=modif%>
 				WHERE id = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'latitud'}">
+	<c:when test="${param.action == 'latitud'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -41,7 +40,7 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'longitud'}">
+	<c:when test="${param.action == 'longitud'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -52,7 +51,7 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'latlong'}">
+	<c:when test="${param.action == 'latlong'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -64,7 +63,7 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'quantity'}">
+	<c:when test="${param.action == 'quantity'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -75,7 +74,7 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'traffic'}">
+	<c:when test="${param.action == 'traffic'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -86,7 +85,7 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'size'}">
+	<c:when test="${param.action == 'size'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -97,7 +96,7 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'idAssigned'}">
+	<c:when test="${param.action == 'idAssigned'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
 				UPDATE catastrofes
@@ -108,7 +107,7 @@
 			</sql:update>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'add'}">
+	<c:when test="${param.action == 'add'}">
 		<c:catch var="errorInsert">
 			<sql:query var="eventos" dataSource="${CatastrofesServer}">
 				SELECT cantidad FROM catastrofes WHERE id = ?
@@ -125,7 +124,7 @@
 			</c:forEach>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'remove'}">
+	<c:when test="${param.action == 'remove'}">
 		<c:catch var="errorInsert">
 			<sql:query var="eventos" dataSource="${CatastrofesServer}">
 				SELECT cantidad FROM catastrofes WHERE id = ?
@@ -142,26 +141,13 @@
 			</c:forEach>
 		</c:catch>
 	</c:when>
-	<c:when test="${param.action eq 'message'}">
+	<c:when test="${param.action == 'message'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO mensajes(mensaje, nivel, fecha)
-				VALUES(?,?,<%=modif%>)
+				INSERT INTO mensajes(creador, mensaje, nivel, fecha)
+				VALUES(1, ?, ?, <%=modif%>)
 				<sql:param value="${param.mensaje}"/>
 				<sql:param value="${param.nivel}"/>
-			</sql:update>
-		</c:catch>
-	</c:when>
-	<c:when test="${param.action eq 'registrar'}">
-		<c:catch var="errorInsert">
-			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO usuarios(nombre_usuario, password, tipo_usuario, nombre_real,
-					correo, latitud, longitud, localizacion, proyecto)
-				VALUES(?, ?, 11, ?, ?, 0.0, 0.0, FALSE, 'caronte')
-				<sql:param value="${param.user}"/>
-				<sql:param value="${param.pass}"/>
-				<sql:param value="${param.nombre}"/>
-				<sql:param value="${param.email}"/>
 			</sql:update>
 		</c:catch>
 	</c:when>

@@ -1,27 +1,14 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page language="java" %>
-<%@ page isELIgnored="false" %>
+<%@ page isELIgnored="false" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%--<jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>--%>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
-<c:set var="nombreUsuario" value="<%= request.getRemoteUser() %>"/>
+<jsp:setProperty name="proyecto" property="nombreUsuario" value="<%= request.getRemoteUser() %>"/>
 
 <c:if test="${param.lang != null}">
 	<fmt:setLocale value="${param.lang}" scope="session"/>
-</c:if>
-
-<c:if test="${nombreUsuario != null}">
-	<c:if test="${param.proyect == null}">
-		<c:redirect url="/proyect?user=${nombreUsuario}"/>
-	</c:if>
-	<c:if test="${param.proyect != null}"> <%-- and param.alert == null --%>
-		<jsp:setProperty name="proyecto" property="proyect" value="${param.proyect}"/>
-	</c:if>
-	<c:if test="${param.rol != null}">
-		<jsp:setProperty name="proyecto" property="rol" value="${param.rol}"/>
-	</c:if>
 </c:if>
 
 <!DOCTYPE HTML>
@@ -39,16 +26,18 @@
 			<script type="text/javascript" src="js/i18n.js"></script>
 			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
-			<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhShGMulApA1qGrWH2FWs8V2HjpzbhR6R94HFuEi6_iz-WDuB-XPDkJ2rA"></script>
+			<script type="text/javascript"
+				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhShGMulApA1qGrWH2FWs8V2HjpzbhR6R94HFuEi6_iz-WDuB-XPDkJ2rA">
+			</script>
 			<script type="text/javascript">
 				var nivelMsg = ${proyecto.nivelMsg};
-				var userName = '${nombreUsuario}';
+				var userName = '${proyecto.nombreUsuario}';
+				var usuario_actual = ${proyecto.id};
 				var usuario_actual_tipo = '${proyecto.rol}';
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
 			<script type="text/javascript" src="js/mapa_disasters.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>
-			<script type="text/javascript" src="js/mapa2.js"></script>
 			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->
@@ -82,7 +71,7 @@
 			<!-- Areas around fires -->
 			<script type="text/javascript" src="js/einsert.js"></script>
 		</head>
-		<body onload="IniciarReloj24(); initialize(); mostrarMensajes(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
 			<c:import url="ventana_modificacion.jsp"/>
 			<!-- Cabecera con imagen y hora -->
 			<div>
@@ -121,25 +110,25 @@
 				<tr>
 					<td id="left">
 						<!-- If the user isn't autenticated, we show the login form -->
-						<c:if test="${nombreUsuario == null}">
+						<c:if test="${proyecto.nombreUsuario == null}">
 							<c:import url="formInicio.jsp"/>
 						</c:if>
-						<c:if test="${nombreUsuario != null}">
+						<c:if test="${proyecto.nombreUsuario != null}">
 							<!-- and if the user is autenticated, we show the username and logout button -->
-							<fmt:message key="eres"/> <span id="signeduser">${nombreUsuario}</span>
+							<fmt:message key="eres"/> <span id="signeduser">${proyecto.nombreUsuario}</span>
 							<br/>
 							<c:url var="logout" value="logout.jsp"/>
-							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${nombreUsuario}'})">
+							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${proyecto.nombreUsuario}'})">
 								<fmt:message key="cerrarsesion"/>
 							</a>
 							<c:import url="menu_disasters.jsp"/>
 						</c:if>
 					</td>
 					<td id="fila_mapa">
-						<c:if test="${nombreUsuario == null}">
+						<c:if test="${proyecto.nombreUsuario == null}">
 							<!-- minitabs top-right -->
 							<div id="minitabs">
-								<c:if test="${nombreUsuario != null}">
+								<c:if test="${proyecto.nombreUsuario != null}">
 									<div id="minitab3" class="minitab">
 										<img alt="ver" src="images/tab_simulator.png"/>
 									</div>
@@ -153,10 +142,10 @@
 							</div>
 							<div id="map_canvas"></div>
 						</c:if>
-						<c:if test="${nombreUsuario != null}">
+						<c:if test="${proyecto.nombreUsuario != null}">
 							<!-- minitabs top-right -->
 							<div id="minitabs">
-								<c:if test="${nombreUsuario != null}">
+								<c:if test="${proyecto.nombreUsuario != null}">
 									<div id="minitab3" class="minitab">
 										<img alt="ver" src="images/tab_simulator.png"/>
 									</div>
@@ -171,27 +160,13 @@
 							<div id="map_canvas"></div>
 						</c:if>
 					</td>
-					<c:if test="${proyecto.proyect == 'caronte'}">
-						<td id="right">
-							<div id="open_messages" class="pulsable"><fmt:message key="mostrar"/></div>
-							<div id="close_messages" class="pulsable"><fmt:message key="ocultar"/></div>
-							<div id="messages">
-								<p><fmt:message key="mensajes"/>:</p>
-							</div>
-							<audio id="audio" class="oculto" controls="controls">
-								<source src="images/bad.ogg" type="audio/ogg"/>
-								<source src="images/alarm.mp3" type="audio/mpeg"/>
-							</audio>
-						</td>
-					</c:if>
 				</tr>
 			</table>
-			<c:if test="${proyecto.proyect == 'disasters'}">
-				<c:import url="minitabs_disasters.jsp"/>
-				<!-- Screen for the servlet information -->
-				<div id="close_screen"><fmt:message key="ocultar"/></div>
-				<div id="screen"></div>
-			</c:if>
+			<c:import url="minitabs_disasters.jsp"/>
+			<!-- Screen for the servlet information -->
+			<div id="close_screen"><fmt:message key="ocultar"/></div>
+			<div id="screen"></div>
+
 			<%--
 				int[] rscs = recursos.getResourcesList();
 				for (int i = 0; i < rscs.length; i++) {
@@ -201,9 +176,10 @@
 					out.println(ed);
 				}
 			--%>
+			
 			<c:if test="${param.alert == true}">
 				<script type="text/javascript">
-					window.alert('Fin de la simulacion')
+					window.alert('Fin de la simulaci&oacute;n');
 				</script>
 			</c:if>
 		</body>

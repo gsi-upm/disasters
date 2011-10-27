@@ -1,16 +1,11 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
-
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
-<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <!DOCTYPE HTML>
 <html>   
 	<head>
 		<script type="text/javascript" src="../js/jquery.js"></script>
-		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA_pvzu2eEg9OhdvcrhLRkgRSNlkQ0Xctn_2Rk5IICoY4QgDEp3hTh3tolDUaPK2qFjuPWKczd1flPEw" type="text/javascript"></script>
-
+		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhShGMulApA1qGrWH2FWs8V2HjpzbhR6R94HFuEi6_iz-WDuB-XPDkJ2rA" type="text/javascript"></script>
 		<script type="text/javascript">
 			//Conversion of the possible null value of quantity and idAssigned to integer
 			var quantity;

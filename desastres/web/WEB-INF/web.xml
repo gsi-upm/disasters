@@ -10,7 +10,7 @@
     </context-param>
     <context-param>
         <param-name>proyect</param-name>
-        <param-value>disasters</param-value>
+        <param-value>disasters o caronte</param-value>
     </context-param>
     <!-- Restlet adapter -->
     <servlet>
@@ -64,14 +64,6 @@
     <servlet-mapping>
         <servlet-name>RunSimulation</servlet-name>
         <url-pattern>/RunSimulation</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>ProyectServlet</servlet-name>
-        <servlet-class>gsi.proyect.ProyectServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ProyectServlet</servlet-name>
-        <url-pattern>/proyect</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>RegistroServlet</servlet-name>

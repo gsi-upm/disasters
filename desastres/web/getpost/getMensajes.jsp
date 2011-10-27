@@ -1,6 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ page isELIgnored = "false" %>
+<%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
@@ -28,6 +28,7 @@
 <c:forEach var="mensaje" items="${mensajes.rows}">
     <json:object name="temp">
 		<json:property name="id" value="${mensaje.id}"/>
+		<json:property name="creador" value="${mensaje.creador}"/>
 		<json:property name="mensaje" value="${mensaje.mensaje}"/>
 		<json:property name="nivel" value="${mensaje.nivel}"/>
 		<json:property name="fecha" value="${mensaje.fecha}"/>
