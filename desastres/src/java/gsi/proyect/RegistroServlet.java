@@ -1,21 +1,19 @@
 package gsi.proyect;
 
-import jadex.desastres.Connection;
-import jadex.desastres.Environment;
-import java.io.IOException;
-import java.io.PrintWriter;
+import gsi.rest.Connection;
+import java.io.*;
 import java.security.MessageDigest;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import org.json.me.*;
 
 /**
  *
  * @author Juan Luis Molina
  */
-public class RegistroServlet extends HttpServlet {
+public class RegistroServlet extends HttpServlet{
+
+	private static final String URL = "http://localhost:8080/desastres/rest/";
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -24,7 +22,7 @@ public class RegistroServlet extends HttpServlet {
 	 * @throws ServletException if a servlet-specific error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		try {
@@ -34,11 +32,11 @@ public class RegistroServlet extends HttpServlet {
 			String email = request.getParameter("email");
 			String contra = MD5(contraAux);
 
-			String rolAux = Connection.connect(Environment.URL + "userRole/" + usuario);
+			String rolAux = Connection.connect(URL + "userRole/" + usuario);
 			JSONArray rol = new JSONArray(rolAux);
 
 			if(rol.length() == 0){
-				String registro = Connection.connect(Environment.URL + "registrar/" + usuario + "/" + contra + "/" + nombre + "/" + email);
+				String registro = Connection.connect(URL + "registrar/" + usuario + "/" + contra + "/" + nombre + "/" + email);
 				out.print("ok");
 			}else{
 				out.print("no");

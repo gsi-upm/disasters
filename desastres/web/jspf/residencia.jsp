@@ -16,9 +16,6 @@
 			<div id="map_canvas"></div>
 		</div>
 		<div class="dhtmlgoodies_aTab">
-			<!-- Tabla de ejemplo hasta introducir imagenes -->
-			<script type="text/javascript">
-			</script>
 			<table class="tabla_menu">
 				<tr>
 					<th rowspan="5">

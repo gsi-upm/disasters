@@ -1,34 +1,67 @@
 function mapInit(){
-	var center = new GLatLng(40.416878,-3.703480); // La puerta del sol de Madrid
-	map.setCenter(center, 11);
+	var center = new GLatLng(40.416878, -3.703480); // La puerta del sol de Madrid
+	var zoom = 11;
+	return {'center':center, 'zoom':zoom};
 }
+
+function initialize2(){}
+
+function actualizar2(){}
 
 function buildingInit(){
 	var formBuild = document.getElementById('buildings');
 	if(formBuild.hospital.checked){
-		showHospitals(); // para mostrar los edificios
+		showBuilding('hospital'); // para mostrar los edificios
 	}
 	if(formBuild.firemenStation.checked){
-		showFiremenStations();
+		showBuilding('fireStation');
 	}
 	if(formBuild.policeStation.checked){
-		showPoliceStations();
+		showBuilding('policeStation');
 	}
 }
 
-function showHospitals(){
-	generateBuilding('hospital','Hospital Gregorio Marañon', 40.418702, -3.670573);
+function showBuilding(type){
+	if(type == 'hospital'){
+		generateBuilding('hospital','Hospital Gregorio Marañon', 40.418702, -3.670573);
+	}else if(type == 'fireStation'){
+		generateBuilding('firemenStation','Parque de Bomberos', 40.414691, -3.706996);
+	}else if(type == 'policeStation'){
+		generateBuilding('policeStation','Comisar&iacute;a central', 40.421565, -3.710095);
+	}
 }
 
-function showFiremenStations(){
-	generateBuilding('firemenStation','Parque de Bomberos', 40.414691, -3.706996);
+function hideBuilding(type){
+	var matrix;
+	if(type == 'hospital'){
+		matrix = hospitals;
+		hospitals = new Array;
+		hospIndex = 0;
+	}else if(type == 'policeStation'){
+		matrix = policeStations;
+		policeStations = new Array;
+		policeIndex = 0;
+	}else if(type == 'firemenStation'){
+		matrix = firemenStations;
+		firemenStations = new Array;
+		fireIndex = 0;
+	}else if(type == 'geriatricCenter'){
+		matrix = geriatricCenters;
+		geriatricCenters = new Array;
+		geriatricIndex = 0;
+	}
+	for(var i = 0; i < matrix.length; i++){
+		map.removeOverlay(matrix[i]);
+	}
 }
 
-function showPoliceStations(){
-	generateBuilding('policeStation','Comisar&iacute;a central', 40.421565, -3.710095);
+function visualize(selected, type){
+	if(selected == true){
+		showBuilding(type);
+	}else{
+		hideBuilding(type);
+	}
 }
-
-function initialize2(){}
 
 function cargarMenuAcciones(){}
 
@@ -145,41 +178,4 @@ function asociar(id, marker){
 
 	// 3.Devolver el id de la catastrofe mas cercana o hacer el post directamente
 	return id_mas_cercano;
-}
-
-function guardar_asociacion(idEvento, idRecurso){
-	// Hallar la nueva posicion del recurso en funcion del tipo
-	var evento = marcadores_definitivos[idEvento];
-	var recurso = marcadores_definitivos[idRecurso];
-	var latitud = evento.latitud;
-	var longitud = evento.longitud;
-	var nueva_latitud = recurso.latitud;
-	var nueva_longitud = recurso.longitud;
-
-	// Hallar las nuevas distancias
-	/*
-	if(recurso.tipo=='police'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.000025;}
-	if(recurso.tipo=='nurse'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='gerocultor'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='assistant'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='firemen'){nueva_latitud=latitud+0.000025;nueva_longitud=longitud-0.00005;}
-	if(recurso.tipo=='ambulance'||recurso.tipo=='ambulancia'){nueva_latitud=latitud+0.000025;nueva_longitud=longitud+0.00005;}
-	if(recurso.tipo=='trapped'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.0001;}
-	if(recurso.tipo=='healthy'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.0001;}
-	if(recurso.tipo=='slight'){nueva_latitud=latitud+0.0001;nueva_longitud=longitud-0.00005;}
-	if(recurso.tipo=='serious'){nueva_latitud=latitud+0.0001;nueva_longitud=longitud+0.00005;}
-	if(recurso.tipo=='dead'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.0001;}
-	*/
-
-	// actualizar las modificaciones con el metodo modificar
-	caracter_temp = DEFINITIVO;
-	puntero_temp = recurso;
-	modificar(idRecurso, recurso.cantidad, recurso.nombre, 'Asociado a ' + evento.nombre + '. ' + recurso.info,
-		recurso.descripcion, evento.direccion, nueva_longitud, nueva_latitud, recurso.estado, recurso.size, recurso.traffic, idEvento);
-}
-
-function cancelar_asignacion(id){
-	// borro la posicion actual y lo dibujo en la antigua
-	map.removeOverlay(marcadores_definitivos[id].marker);
-	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
 }

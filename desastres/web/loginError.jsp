@@ -1,5 +1,5 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <% String proyecto = getServletContext().getInitParameter("proyect"); %>
@@ -9,7 +9,7 @@
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
 			<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-			<title><fmt:message key="title_<%=proyecto%>"/> - Acceso denegado</title>
+			<title>Login error - Acceso denegado</title>
 			<link type="image/x-icon" rel="shotcut icon" href="images/favicon_<%=proyecto%>.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<script type="text/javascript" src="js/i18n.js"></script>
@@ -18,7 +18,7 @@
 		</head>
 		<body onload="IniciarReloj24()">
 			<div>
-				<c:import url="cabecera.jsp"/>
+				<c:import url="jspf/cabecera.jsp"/>
 			</div>
 			<div>
 				<h2>Acceso denegado</h2>

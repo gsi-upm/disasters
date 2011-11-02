@@ -5,7 +5,7 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 
 <c:choose>
 	<c:when test="${param.action != 'insertar' && param.action != 'registrar'}">
@@ -56,9 +56,9 @@
 		<c:forEach var="proyecto" items="${proyectos.rows}">
 			<json:object name="temporal">
 				<json:property name="id" value="${proyecto.id}"/>
-				<json:property name="proyect" value="${proyecto.proyecto}"/>
 				<json:property name="rol" value="${proyecto.tipo}"/>
 				<json:property name="level" value="${proyecto.nivel}"/>
+				<json:property name="proyect" value="${proyecto.proyect}"/>
 			</json:object> ,
 		</c:forEach>
 		]
@@ -68,7 +68,8 @@
 		<sql:update dataSource="${CatastrofesServer}">
 			INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
 				longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
-			VALUES('resource', ?, 1, ?, ?, ?, ?, ?, '', 1, '', '', 0, <%=modif%>, 1, -2)
+			VALUES(3, (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
+				1, ?, ?, ?, ?, ?, '', 1, '', '', 0, <%=modif%>, 1, -2)
 			<sql:param value="${param.type}"/>
 			<sql:param value="${param.name}"/>
 			<sql:param value="${param.description}"/>

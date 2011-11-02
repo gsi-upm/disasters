@@ -8,7 +8,6 @@ $().ready(function() {
 $(document).ready(function() {
 	$('#screen').hide();
 	$('#close_screen').hide();
-	$('#open_messages').hide();
 	$('#console').hide();
 	$('#visualize').hide();
 	$('#showSimOptions').hide();

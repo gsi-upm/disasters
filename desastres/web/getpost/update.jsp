@@ -4,15 +4,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 
 <% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 
 <c:if test="${param.accion == 'modificar' || param.accion == 'cambioTipo' || param.accion == 'eliminar'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
-		SET marcador = ?, tipo = ?, cantidad = ?, nombre = ?, descripcion = ?, info = ?, latitud = ?,
-			longitud = ?, direccion = ?, estado = (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
+		SET marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
+			tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
+			cantidad = ?, nombre = ?, descripcion = ?, info = ?, latitud = ?, longitud = ?,
+			direccion = ?, estado = (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
 			size = ?, traffic = ?, fecha = ?, usuario = ?, planta = ?, modificado = <%=modif%>
 		WHERE id = ?
 		<sql:param value="${param.marcador}"/>
@@ -76,7 +78,7 @@
 		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE catastrofes
 			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
-			WHERE marcador = 'resource'
+			WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
 			AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
 			                   WHERE u.id = a.id_usuario
 							   AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
@@ -128,7 +130,7 @@
 		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE catastrofes
 			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
-			WHERE marcador = 'resource'
+			WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
 			AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
 			                   WHERE u.id = a.id_usuario
 							   AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))

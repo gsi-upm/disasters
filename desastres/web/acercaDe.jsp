@@ -16,7 +16,7 @@
 		</head>
 		<body onload="IniciarReloj24()">
 			<div>
-				<c:import url="cabecera.jsp"/>
+				<c:import url="jspf/cabecera.jsp"/>
 			</div>
 			<h1><fmt:message key="informacion"/></h1>
 			<table>

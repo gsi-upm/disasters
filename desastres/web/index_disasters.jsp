@@ -15,10 +15,10 @@
 <html>
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
-			<!--[if lt IE 9]><meta http-equiv="refresh" content="0; URL=error/mensajeIE.jsp"/><![endif]-->
-			<noscript><meta http-equiv="refresh" content="0; URL=error/nojscript.jsp"/></noscript>
+			<!--[if lt IE 9]><meta http-equiv="refresh" content="0; URL=mensajeIE.jsp"/><![endif]-->
+			<noscript><meta http-equiv="refresh" content="0; URL=nojscript.jsp"/></noscript>
 			<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-			<title><fmt:message key="title_disasters"/></title>
+			<title><fmt:message key="title"/></title>
 			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_disasters.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_disasters.css"/>
@@ -38,7 +38,7 @@
 			</script>
 			<script type="text/javascript" src="js/mapa_disasters.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>
-			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
+			<script type="text/javascript" src="js/experto.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->
 			<script type="text/javascript" src="js/marcador.js"></script>
@@ -48,13 +48,10 @@
 			<script type="text/javascript" src="js/tab-view.js"></script>
 			<script type="text/javascript" src="js/forms.js"></script>
 			<!-- jqModal Dependencies -->
-			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/jqModal.js"></script>
 			<!-- Optional Javascript for Drag'n'Resize -->
 			<script type="text/javascript" src="js/jqDnR.js"></script>
 			<script type="text/javascript" src="js/dimensions.js"></script>
-			<!-- Necesario para los radio en los formularios -->
-			<script type="text/javascript" src="js/seleccionRadio.js"></script>
 			<!-- Necesario para los pop-ups -->
 			<script type="text/javascript" src="js/popUps.js"></script>
 			<!-- jQuery -->
@@ -72,46 +69,18 @@
 			<script type="text/javascript" src="js/einsert.js"></script>
 		</head>
 		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
-			<c:import url="ventana_modificacion.jsp"/>
-			<!-- Cabecera con imagen y hora -->
-			<div>
-				<img id="cabecera" src="images/<fmt:message key="header"/>_disasters.gif" alt=""/>
-				<div class="derecha">
-					<!-- reloj -->
-					<div id="reloj">
-						<div id="fecha"></div>
-						<div id="Reloj24H"></div>
-					</div>
-					v.85
-					<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
-						alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
-					<div id="langSelect" class="oculto">
-						<img class="pulsable" src="images/close.gif" alt="<fmt:message key="cerrar"/>" onclick="menuIdiomas('cerrar')"/>
-						<c:url var="index_es" value="index.jsp"><c:param name="lang" value="es"/></c:url>
-						<a href="${index_es}"><img src="images/flags/es.png" alt="Espa&ntilde;ol"/></a>
-						<c:url var="index_en" value="index.jsp"><c:param name="lang" value="en"/></c:url>
-						<a href="${index_en}"><img src="images/flags/en.png" alt="English"/></a>
-						<c:url var="index_en_GB" value="index.jsp"><c:param name="lang" value="en_GB"/></c:url>
-						<a href="${index_en_GB}"><img src="images/flags/en_GB.png" alt="British English"/></a>
-						<c:url var="index_fr" value="index.jsp"><c:param name="lang" value="fr"/></c:url>
-						<a href="${index_fr}"><img src="images/flags/fr.png" alt="Fran&ccedil;ais"/></a>
-						<c:url var="index_de" value="index.jsp"><c:param name="lang" value="de"/></c:url>
-						<a href="${index_de}"><img src="images/flags/de.png" alt="Deutsch"/></a>
-					</div>
-					<span id="prueba"></span> <!-- SPAN DE PRUEBAS -->
-					<div>
-						<c:url value="acercaDe.jsp" var="acercaDe"/>
-						<a href="${acercaDe}"><fmt:message key="acerca"/></a>
-					</div>
-				</div>
-			</div>
-			<!-- Cuerpo de la pagina -->
+			<c:import url="jspf/ventana_modificacion.jsp"/>
 			<table class="tabla_body">
+				<!-- Cabecera con imagen y hora -->
+				<tr>
+					<td colspan="2"><c:import url="jspf/cabecera.jsp"/></td>
+				</tr>
+				<!-- Cuerpo de la pagina -->
 				<tr>
 					<td id="left">
 						<!-- If the user isn't autenticated, we show the login form -->
 						<c:if test="${proyecto.nombreUsuario == null}">
-							<c:import url="formInicio.jsp"/>
+							<c:import url="jspf/formInicio.jsp"/>
 						</c:if>
 						<c:if test="${proyecto.nombreUsuario != null}">
 							<!-- and if the user is autenticated, we show the username and logout button -->
@@ -121,7 +90,7 @@
 							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${proyecto.nombreUsuario}'})">
 								<fmt:message key="cerrarsesion"/>
 							</a>
-							<c:import url="menu_disasters.jsp"/>
+							<c:import url="jspf/menu_disasters.jsp"/>
 						</c:if>
 					</td>
 					<td id="fila_mapa">
@@ -159,14 +128,17 @@
 							</div>
 							<div id="map_canvas"></div>
 						</c:if>
+						<c:import url="jspf/minitabs_disasters.jsp"/>
+					</td>
+				</tr>
+				<!-- Screen for the servlet information -->
+				<tr>
+					<td colspan="2">
+						<div id="close_screen"><fmt:message key="ocultar"/></div>
+						<div id="screen"></div>
 					</td>
 				</tr>
 			</table>
-			<c:import url="minitabs_disasters.jsp"/>
-			<!-- Screen for the servlet information -->
-			<div id="close_screen"><fmt:message key="ocultar"/></div>
-			<div id="screen"></div>
-
 			<%--
 				int[] rscs = recursos.getResourcesList();
 				for (int i = 0; i < rscs.length; i++) {

@@ -6,39 +6,49 @@
 	<div id="dhtmlgoodies_tabView1">
 		<div class="dhtmlgoodies_aTab">
 			<form id="catastrofes" action="#">
-				<table class="tabla_menu">
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono('event','fire');"/>
-							<fmt:message key="incendio"/>
-						</td>
-						<td rowspan="5"><img id="icono_catastrofes" class="rayas" alt="" src="markers/fuego.png"/></td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="flood" onclick="cambiaIcono('event','flood');"/>
-							<fmt:message key="inundacion"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="collapse" onclick="cambiaIcono('event','collapse');"/>
-							<fmt:message key="derrumbamiento"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="injuredPerson" onclick="cambiaIcono('event','injuredPerson');"/>
-							<fmt:message key="personaherida"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="lostPerson" onclick="cambiaIcono('event','lostPerson');"/>
-							<fmt:message key="personaperdida"/>
-						</td>
-					</tr>
-				</table>
+				<div id="radio_catastrofes">
+					<table class="tabla_menu">
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono('event','fire');"/>
+								<fmt:message key="incendio"/>
+							</td>
+							<td rowspan="5"><img id="icono_catastrofes" class="rayas" alt="" src="markers/fuego.png"/></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="flood" onclick="cambiaIcono('event','flood');"/>
+								<fmt:message key="inundacion"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="collapse" onclick="cambiaIcono('event','collapse');"/>
+								<fmt:message key="derrumbamiento"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="injuredPerson" onclick="cambiaIcono('event','injuredPerson');"/>
+								<fmt:message key="personaherida"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="lostPerson" onclick="cambiaIcono('event','lostPerson');"/>
+								<fmt:message key="personaperdida"/>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="radio_catastrofes_2" style="display:none">
+					<table class="tabla_menu">
+						<tr>
+							<td id="tipo_catastrofes_2"></td>
+							<td><img id="icono_catastrofes_2" class="rayas" alt="" src="markers/fuego.png"/></td>
+						</tr>
+					</table>
+				</div>
 				<table class="tabla_menu">
 					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="Incendio" placeholder="<fmt:message key="nombre"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1" placeholder="<fmt:message key="informacion"/>"></textarea></td></tr>
@@ -114,7 +124,7 @@
 				<table class="tabla_menu">
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="healthy" checked="checked" onclick="cambiaIcono('people','healthy',1);"/>
+							<input type="radio" name="tipo" value="healthy" checked="checked" onclick="cambiaIcono('people','healthy',cantidad.value);"/>
 							<fmt:message key="sanos"/>
 						</td>
 						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/sano1.png" class="rayas"/></td>
@@ -196,6 +206,23 @@
 					</ul>
 				</div>
 				<table class="tabla_menu">
+					<tr id="cantidad">
+						<td colspan="2">
+							<label for="cantidad"><fmt:message key="numeropersonas"/>:</label>
+							<select name="cantidad" onchange="cambiaIcono('people',seleccionRadio(this.form,2),cantidad.value);">
+								<option value="1" selected="selected">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+							</select>
+						</td>
+					</tr>
 					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="Sano" placeholder="<fmt:message key="nombre"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1" placeholder="<fmt:message key="informacion"/>"></textarea></td></tr>
 					<tr><td colspan="2"><textarea name="descripcion" class="descripcion" rows="3" cols="1" placeholder="<fmt:message key="descripcion"/>"></textarea></td></tr>
@@ -220,13 +247,13 @@
 				<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2); return false;"/>
 				<br/>
 				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn oculto"
-					onclick="modificar2(iden.value,seleccionRadio(this.form,2),1,nombre.value,info.value,descripcion.value,
+					onclick="modificar2(iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
 						direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
 				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog2">
 					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
 					<p class="centrado">
-						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),1,nombre.value,info.value,
+						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
 							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,planta.value);
 							$('#dialog2').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>

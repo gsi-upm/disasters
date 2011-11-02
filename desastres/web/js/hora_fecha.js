@@ -8,7 +8,6 @@ function MostrarHoraActual(){
 	var minuto = ahora.getMinutes();
 	var segundo = ahora.getSeconds();
 	var HHMMSS;
-	var fecha;
        
 	if(hora < 10){
 		hora = '0' + hora;
@@ -22,9 +21,9 @@ function MostrarHoraActual(){
 
 	HHMMSS = hora + ':' + minuto + ':' + segundo;
 	document.getElementById('Reloj24H').innerHTML = HHMMSS;
-	if(fecha == null || (hora == '00' && minuto == '00' && segundo == '00')){
-		fecha = MostrarFechaActual(ahora);
-		document.getElementById('fecha').innerHTML = fecha;
+	
+	if(hora == '00' && minuto == '00' && segundo == '00'){
+		MostrarFechaActual();
 	}
 	
 	Reloj24H = setTimeout('MostrarHoraActual()',1000);
@@ -32,12 +31,13 @@ function MostrarHoraActual(){
 }
 
 // FECHA
-function MostrarFechaActual(hoy_es){
+function MostrarFechaActual(){
 	var nombre_dia = [fmt('domingo',idioma), fmt('lunes',idioma), fmt('martes',idioma),
 		fmt('miercoles',idioma), fmt('jueves',idioma), fmt('viernes',idioma), fmt('sabado',idioma)];
 	var nombre_mes = [fmt('enero',idioma), fmt('febrero',idioma), fmt('marzo',idioma),
 		fmt('abril',idioma), fmt('mayo',idioma), fmt('junio',idioma), fmt('julio',idioma), fmt('agosto',idioma),
 		fmt('septiembre',idioma), fmt('octubre',idioma), fmt('noviembre',idioma), fmt('diciembre',idioma)];
+	var hoy_es = new Date();
 	var dia_mes = hoy_es.getDate();
 	var dia_semana = hoy_es.getDay();
 	var mes = hoy_es.getMonth();
@@ -64,12 +64,14 @@ function MostrarFechaActual(hoy_es){
 	}else if(idioma == 'de'){
 		fecha = nombre_dia[dia_semana] + ', ' + dia_mes + ' ' + nombre_mes[mes] + ' ' + anno;
 	}
-	return fecha;
+	
+	document.getElementById('fecha').innerHTML = fecha;
 }
 
 function IniciarReloj24() {
 	DetenerReloj24();
 	MostrarHoraActual();
+	MostrarFechaActual();
 }
 
 function DetenerReloj24(){
