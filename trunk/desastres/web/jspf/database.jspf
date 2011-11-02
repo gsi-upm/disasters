@@ -1,0 +1,20 @@
+<%
+	String proyecto = getServletContext().getInitParameter("proyect");
+	if(proyecto.equals("disasters")){
+		proyecto = "improvise";
+	}
+%>
+<%-- HSQLDB --%>
+<c:set var="databaseEmpotrado">
+	<% out.print(application.getRealPath("/WEB-INF/db/" + proyecto)); %>
+</c:set>
+<sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver"
+	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+<%-- MySQL local
+<c:set var="proyecto"><%=proyecto%></c:set>
+<sql:setDataSource var="CatastrofesServer" driver="com.mysql.jdbc.Driver"
+	url="jdbc:mysql://localhost:3306/${proyecto}" user="root" password=""/> --%>
+<%-- MySQL servidor
+<c:set var="proyecto"><%=proyecto%></c:set>
+<sql:setDataSource var="CatastrofesServer" driver="com.mysql.jdbc.Driver"
+	url="jdbc:mysql://minsky.gsi.dit.upm.es/${proyecto}" user="jamaldonado" password="abfQ7QLN9QaswPUp"/> --%>

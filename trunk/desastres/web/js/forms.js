@@ -56,7 +56,14 @@ function cambiaIcono(marcador, tipo, cantidad){
 			nombre = 'Atrapado';
 		}
 		document.getElementById('icono_heridos').src = imagen;
-		document.getElementById('heridos').nombre.value = nombre;
+		var heridos = document.getElementById('heridos');
+		heridos.nombre.value = nombre;
+		if(tipo == 'healthy'){
+			document.getElementById('cantidad').style.display = 'block';
+		}else{
+			document.getElementById('cantidad').style.display = 'none';
+			heridos.cantidad.value = 1;
+		}
 	}	
 }
 	
@@ -166,6 +173,25 @@ function borrarFormulario(form, numero){
 	form.latitud.value = 0;
 	form.longitud.value = 0;
 	document.getElementById('validacion' + numero).src = 'images/iconos/no.png'
+}
+
+// Necesario para los radio en los formularios
+function seleccionRadio(form, valor){
+	var types = ['fire','flood','collapse','injuredPerson','lostPerson',
+		'police','firemen','ambulance','nurse','gerocultor','assistant',
+		'healthy','slight','serious','dead','trapped'];
+	var despTypes = 0; // desplaza el valor del tipo
+	for(var count = 0; count < 6; count++){
+		if(form.tipo[count].checked){
+			break;
+		}
+	}
+	if(valor == 1){
+		despTypes = 5;
+	}else if(valor == 2){
+		despTypes = 11;
+	}
+	return types[count+despTypes];
 }
 
 function menuIdiomas(accion){

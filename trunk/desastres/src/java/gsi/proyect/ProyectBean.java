@@ -1,50 +1,66 @@
 package gsi.proyect;
 
-import jadex.desastres.Connection;
+import gsi.rest.Connection;
 import java.beans.*;
 import java.io.Serializable;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
+import org.json.me.*;
 
 /**
  *
  * @author Juan Luis Molina
  */
 public class ProyectBean implements Serializable {
-	public static final String PROYECT = "proyect";
-	public static final String ROL = "rol";
-	public static final String NIVEL_MSG = "nivelMsg";
 	public static final String NOMBRE_USUARIO = "nombreUsuario";
 	public static final String ID = "id";
+	public static final String ROL = "rol";
+	public static final String NIVEL_MSG = "nivelMsg";
+	public static final String PROYECT = "proyect";
 
-	private String proyect;
-	private String rol;
-	private int nivelMsg;
-	private String nombreUsuario;
-	private int id;
-
+	private static final String URL = "http://localhost:8080/desastres/rest/";
 	private PropertyChangeSupport propertySupport;
+
+	private String nombreUsuario, rol, proyect;
+	private int id, nivelMsg;
 
 	public ProyectBean() {
 		propertySupport = new PropertyChangeSupport(this);
-		proyect = "caronte";
-		rol = "citizen";
-		nivelMsg = 0;
 		nombreUsuario = "";
 		id = 0;
+		rol = "citizen";
+		nivelMsg = 0;
+		proyect = "caronte";
 	}
 
-	public String getProyect() {
-		return proyect;
+	public String getNombreUsuario() {
+		return nombreUsuario;
 	}
 
-	public void setProyect(String value) {
-		String oldValue = proyect;
-		proyect = value;
-		propertySupport.firePropertyChange(PROYECT, oldValue, proyect);
+	public void setNombreUsuario(String value) {
+		String oldValue = nombreUsuario;
+		nombreUsuario = value;
+		propertySupport.firePropertyChange(NOMBRE_USUARIO, oldValue, nombreUsuario);
+		if(value != null && value.equals("") == false){
+			try {
+				String proyectoAux = Connection.connect(URL + "userProyect/" + value);
+				JSONArray proyecto = new JSONArray(proyectoAux);
+				setId(proyecto.getJSONObject(0).getInt("id"));
+				setRol(proyecto.getJSONObject(0).getString("rol"));
+				setNivelMsg(proyecto.getJSONObject(0).getInt("level"));
+				setProyect(proyecto.getJSONObject(0).getString("proyect"));
+			} catch (JSONException ex) {
+				System.out.println("Excepcion: " + ex);
+			}
+		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int value) {
+		int oldValue = id;
+		id = value;
+		propertySupport.firePropertyChange(ID, oldValue, id);
 	}
 
 	public String getRol() {
@@ -67,36 +83,14 @@ public class ProyectBean implements Serializable {
 		propertySupport.firePropertyChange(NIVEL_MSG, oldValue, nivelMsg);
 	}
 
-	public String getNombreUsuario() {
-		return nombreUsuario;
+	public String getProyect() {
+		return proyect;
 	}
 
-	public void setNombreUsuario(String value) {
-		String oldValue = nombreUsuario;
-		nombreUsuario = value;
-		propertySupport.firePropertyChange(NOMBRE_USUARIO, oldValue, nombreUsuario);
-		if(value != null && value.equals("") == false){
-			try {
-				String proyectoAux = Connection.connect("http://localhost:8080/desastres/rest/userProyect/" + value);
-				JSONArray proyecto = new JSONArray(proyectoAux);
-				setProyect(proyecto.getJSONObject(0).getString("proyect"));
-				setRol(proyecto.getJSONObject(0).getString("rol"));
-				setNivelMsg(proyecto.getJSONObject(0).getInt("level"));
-				setId(proyecto.getJSONObject(0).getInt("id"));
-			} catch (JSONException ex) {
-				System.out.println("Excepcion: " + ex);
-			}
-		}
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int value) {
-		int oldValue = id;
-		id = value;
-		propertySupport.firePropertyChange(ID, oldValue, id);
+	public void setProyect(String value) {
+		String oldValue = proyect;
+		proyect = value;
+		propertySupport.firePropertyChange(PROYECT, oldValue, proyect);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {

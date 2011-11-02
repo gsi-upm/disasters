@@ -5,9 +5,9 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 <!--  Fecha de hace 5 minutos -->
-<% String hace5min = "'" + new Timestamp(new Date().getTime() - 5*60*1000).toString() + "'"; %>
+<% String hace5min = "'" + new Timestamp(new Date().getTime() - 300000).toString() + "'"; %>
 
 <c:if test="${param.action == 'firstTime'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">

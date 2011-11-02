@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%@ include file="getpost/database.jspf" %>
+<%@ include file="jspf/database.jspf" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -35,11 +35,11 @@
 		<sql:query var="tipos_estados" dataSource="${CatastrofesServer}">
 			SELECT * FROM tipos_estados
 		</sql:query>
-		<sql:query var="tipos_emergencias" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_emergencias
+		<sql:query var="tipos_marcadores" dataSource="${CatastrofesServer}">
+			SELECT * FROM tipos_marcadores
 		</sql:query>
-		<sql:query var="tipos_heridos" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_heridos
+		<sql:query var="tipos_catastrofes" dataSource="${CatastrofesServer}">
+			SELECT * FROM tipos_catastrofes
 		</sql:query>
 		<sql:query var="tipos_usuarios" dataSource="${CatastrofesServer}">
 			SELECT * FROM tipos_usuarios
@@ -68,7 +68,7 @@
 			<tr>
 				<th>ID</th><th>MARCADOR</th><th>TIPO</th><th>CANTIDAD</th><th>NOMBRE</th><th>DESCRIPCION</th>
 				<th>INFO</th><th>LATITUD</th><th>LONGITUD</th><th>DIRECCION</th><th>ESTADO</th><th>SIZE</th>
-				<th>TRAFFIC</th><th>FECHA</th><th>MODIFICADO</th><th>USUARIO</th><th>PLANTA</th><th>IDASSIGNED</th>
+				<th>TRAFFIC</th><th>PLANTA</th><th>IDASSIGNED</th><th>FECHA</th><th>MODIFICADO</th><th>USUARIO</th>
 			</tr>
 			<c:forEach var="evento" items="${eventos.rows}">
 				<tr>
@@ -85,11 +85,11 @@
 					<td>${evento.estado}</td>
 					<td>${evento.size}</td>
 					<td>${evento.traffic}</td>
+					<td>${evento.planta}</td>
+					<td>${evento.idassigned}</td>
 					<td>${evento.fecha}</td>
 					<td>${evento.modificado}</td>
 					<td>${evento.usuario}</td>
-					<td>${evento.planta}</td>
-					<td>${evento.idassigned}</td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -194,35 +194,37 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<p>TIPOS_EMERGENCIAS</p>
+		<p>TIPOS_MARCADORES</p>
 		<table border="1">
-			<tr><th>ID</th><th>TIPO</th><th>DESCRIPCION</th></tr>
-			<c:forEach var="emergencia" items="${tipos_emergencias.rows}">
+			<tr><th>ID</th><th>TIPO_MARCADOR</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="marcador" items="${tipos_marcadores.rows}">
 				<tr>
-					<td>${emergencia.id}</td>
-					<td>${emergencia.tipo}</td>
-					<td>${emergencia.descripcion}</td>
+					<td>${marcador.id}</td>
+					<td>${marcador.tipo_marcador}</td>
+					<td>${marcador.descripcion}</td>
 				</tr>
 			</c:forEach>
 		</table>
-		<p>TIPOS_HERIDOS</p>
+		<p>TIPOS_CATASTROFES</p>
 		<table border="1">
-			<tr><th>ID</th><th>TIPO</th><th>DESCRIPCION</th></tr>
-			<c:forEach var="herido" items="${tipos_heridos.rows}">
+			<tr><th>ID</th><th>ID_MARCADOR</th><th>TIPO_CATASTROFE</th><th>DESCRIPCION</th></tr>
+			<c:forEach var="catastrofe" items="${tipos_catastrofes.rows}">
 				<tr>
-					<td>${herido.id}</td>
-					<td>${herido.tipo}</td>
-					<td>${herido.descripcion}</td>
+					<td>${catastrofe.id}</td>
+					<td>${catastrofe.id_marcador}</td>
+					<td>${catastrofe.tipo_catastrofe}</td>
+					<td>${catastrofe.descripcion}</td>
 				</tr>
 			</c:forEach>
 		</table>
 		<p>TIPOS_USUARIOS</p>
 		<table border="1">
-			<tr><th>ID</th><th>TIPO</th><th>NIVEL</th><th>DESCRIPCION</th></tr>
+			<tr><th>ID</th><th>TIPO</th><th>ID_CATASTROFE</th><th>NIVEL</th><th>DESCRIPCION</th></tr>
 			<c:forEach var="usuario" items="${tipos_usuarios.rows}">
 				<tr>
 					<td>${usuario.id}</td>
 					<td>${usuario.tipo}</td>
+					<td>${usuario.id_catastrofe}</td>
 					<td>${usuario.nivel}</td>
 					<td>${usuario.descripcion}</td>
 				</tr>

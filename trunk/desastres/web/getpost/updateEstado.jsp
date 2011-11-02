@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 
 <% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 
@@ -105,7 +105,9 @@
 	<c:if test="${param.accion == 'curado' || param.accion == 'rescatado'}">
 		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE catastrofes
-			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), tipo = 'healthy', modificado = <%=modif%>
+			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'),
+				tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'healthy'),
+				modificado = <%=modif%>
 			WHERE id = ?
 			<sql:param value="${param.idEvento}"/>
 		</sql:update>

@@ -4,7 +4,7 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 
 <c:if test="${param.id == null}">
 	<c:choose>
@@ -83,15 +83,15 @@
 	<sql:param value="${param.marcador}"/>
 </sql:query>--%>
 
-[
-<c:forEach var="accion" items="${acciones.rows}">
-	<json:object name="temp">
-		<json:property name="id" value="${accion.id}"/>
-		<json:property name="tipo" value="${accion.tipo}"/>
-		<json:property name="descripcion" value="${accion.descripcion}"/>
-		<json:property name="nombre_usuario" value="${accion.nombre_usuario}"/>
-		<json:property name="nombre" value="${accion.nombre}"/>
-		<json:property name="id_emergencia" value="${accion.id_emergencia}"/>
-	</json:object> ,
-</c:forEach>
-]
+<json:array>
+	<c:forEach var="accion" items="${acciones.rows}">
+		<json:object>
+			<json:property name="id" value="${accion.id}"/>
+			<json:property name="tipo" value="${accion.tipo}"/>
+			<json:property name="descripcion" value="${accion.descripcion}"/>
+			<json:property name="nombre_usuario" value="${accion.nombre_usuario}"/>
+			<json:property name="nombre" value="${accion.nombre}"/>
+			<json:property name="id_emergencia" value="${accion.id_emergencia}"/>
+		</json:object>
+	</c:forEach>
+</json:array>

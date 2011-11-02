@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<c:set var="nombreUsuario" value="<%= request.getRemoteUser()%>"/>
+<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <fmt:bundle basename="fmt.eji8n">
 	<!-- Menus from minitabs -->
@@ -34,7 +33,7 @@
 			</table>
 		</form>
 	</div>
-	<c:if test="${nombreUsuario != null}">
+	<c:if test="${proyecto.nombreUsuario != null}">
 		<div id="showSimOptions" class="slideMenu">
 			<form id="SimOptions" method="post" action="/desastres/RunSimulation">
 				<table>

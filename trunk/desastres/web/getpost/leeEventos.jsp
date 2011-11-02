@@ -4,50 +4,62 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 
 <c:choose>
 	<c:when test="${param.action == 'firstTime' && param.nivel gt 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
-				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.planta,
-				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
+				c.direccion, c.size, c.traffic, c.idAssigned, c.usuario, c.planta, c.fecha,
+				c.modificado, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
+			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
 			WHERE c.modificado > ?
-			AND c.estado = t.id
-			AND t.tipo_estado != 'erased'
+			AND c.marcador = m.id
+			AND c.tipo = t.id
+			AND c.estado = e.id
+			AND e.tipo_estado != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'firstTime' && param.nivel == 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
-				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.planta,
-				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
+				c.direccion, c.size, c.traffic, c.idAssigned, c.usuario, c.planta, c.fecha,
+				c.modificado, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
+			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
 			WHERE c.modificado > ?
-			AND c.marcador != 'people'
-			AND c.estado = t.id
-			AND t.tipo_estado != 'erased'
+			AND c.marcador = m.id
+			AND m.tipo_marcador != 'people'
+			AND c.tipo = t.id
+			AND c.estado = e.id
+			AND e.tipo_estado != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'notFirst' && param.nivel gt 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
-				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.planta,
-				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
+				c.direccion, c.size, c.traffic, c.idAssigned, c.usuario, c.planta, c.fecha,
+				c.modificado, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
+			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
 			WHERE c.modificado > ?
-			AND c.estado = t.id
+			AND c.marcador = m.id
+			AND c.tipo = t.id
+			AND c.estado = e.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'notFirst' && param.nivel == 0}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id,c.marcador,c.tipo,c.cantidad,c.nombre,c.descripcion,c.info,
-				c.latitud,c.longitud,c.direccion,c.size,c.traffic,c.idAssigned,c.usuario,c.planta,
-				c.fecha,c.modificado,t.tipo_estado FROM catastrofes c, tipos_estados t
+			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
+				c.direccion, c.size, c.traffic, c.idAssigned, c.usuario, c.planta, c.fecha,
+				c.modificado, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
+			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
 			WHERE c.modificado > ?
-			AND c.marcador != 'people'
-			AND c.estado = t.id
+			AND c.marcador = m.id
+			AND m.tipo_marcador != 'people'
+			AND c.tipo = t.id
+			AND c.estado = e.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -59,8 +71,8 @@
 <c:forEach var="evento" items="${eventos.rows}">
 	<json:object name="temporal">
 		<json:property name="id" value="${evento.id}"/>
-		<json:property name="item" value="${evento.marcador}"/>
-		<json:property name="type" value="${evento.tipo}"/>
+		<json:property name="item" value="${evento.tipo_marcador}"/>
+		<json:property name="type" value="${evento.tipo_catastrofe}"/>
 		<json:property name="quantity" value="${evento.cantidad}"/>
 		<json:property name="name" value="${evento.nombre}"/>
 		<json:property name="description" value="${evento.descripcion}"/>

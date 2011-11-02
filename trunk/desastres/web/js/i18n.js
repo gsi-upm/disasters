@@ -35,7 +35,7 @@ function fmt(key, lang){
 
 	var palabra = dictionary[key][langAux];
 	if(palabra == null){
-		palabra = '';
+		palabra = '???' + key + '???';
 	}
 	return palabra;
 }

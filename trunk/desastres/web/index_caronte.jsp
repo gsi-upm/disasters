@@ -15,10 +15,10 @@
 <html>
 	<fmt:bundle basename="fmt.eji8n">
 		<head>
-			<!--[if lt IE 9]><meta http-equiv="refresh" content="0; URL=error/mensajeIE.jsp"/><![endif]-->
-			<noscript><meta http-equiv="refresh" content="0; URL=error/nojscript.jsp"/></noscript>
+			<!--[if lt IE 9]><meta http-equiv="refresh" content="0; URL=mensajeIE.jsp"/><![endif]-->
+			<noscript><meta http-equiv="refresh" content="0; URL=nojscript.jsp"/></noscript>
 			<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-			<title><fmt:message key="title_caronte"/></title>
+			<title>Caronte</title>
 			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_caronte.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_caronte.css"/>
@@ -30,15 +30,15 @@
 				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhQel9MQybMe66MKP3JO4yeJZZpmpBRzTAem65aDN5SbzD0WHx5UGyq72Q">
 			</script>
 			<script type="text/javascript">
-				var nivelMsg = ${proyecto.nivelMsg};
 				var userName = '${proyecto.nombreUsuario}';
 				var usuario_actual = ${proyecto.id};
 				var usuario_actual_tipo = '${proyecto.rol}';
+				var nivelMsg = ${proyecto.nivelMsg};
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
 			<script type="text/javascript" src="js/mapa_caronte.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>
-			<script type="text/javascript" src="js/mensajesYExperto.js"></script>
+			<script type="text/javascript" src="js/mensajes.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->
 			<script type="text/javascript" src="js/marcador.js"></script>
@@ -48,15 +48,10 @@
 			<script type="text/javascript" src="js/tab-view.js"></script>
 			<script type="text/javascript" src="js/forms.js"></script>
 			<!-- jqModal Dependencies -->
-			<script type="text/javascript" src="js/jquery.js"></script>
 			<script type="text/javascript" src="js/jqModal.js"></script>
 			<!-- Optional Javascript for Drag'n'Resize -->
 			<script type="text/javascript" src="js/jqDnR.js"></script>
 			<script type="text/javascript" src="js/dimensions.js"></script>
-			<!-- Necesario para los radio en los formularios -->
-			<script type="text/javascript" src="js/seleccionRadio.js"></script>
-			<!-- Necesario para los pop-ups -->
-			<script type="text/javascript" src="js/popUps.js"></script>
 			<!-- jQuery -->
 			<script type="text/javascript" src="js/jquery-fieldselection.js"></script>
 			<script type="text/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>
@@ -72,17 +67,19 @@
 			<script type="text/javascript" src="js/einsert.js"></script>
 		</head>
 		<body onload="IniciarReloj24(); initialize(); mostrarMensajes(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
-			<!-- Cabecera con imagen y hora -->
-			<div>
-				<c:import url="cabecera.jsp"/>
-			</div>
-			<!-- Cuerpo de la pagina -->
 			<table class="tabla_body">
+				<!-- Cabecera con imagen y hora -->
+				<tr>
+					<td colspan="3">
+						<c:import url="jspf/cabecera.jsp"/>
+					</td>
+				</tr>
+				<!-- Cuerpo de la pagina -->
 				<tr>
 					<td id="left">
 						<!-- If the user isn't autenticated, we show the login form -->
 						<c:if test="${proyecto.nombreUsuario == null}">
-							<c:import url="formInicio.jsp"/>
+							<c:import url="jspf/formInicio.jsp"/>
 						</c:if>
 						<c:if test="${proyecto.nombreUsuario != null}">
 							<!-- and if the user is autenticated, we show the username and logout button -->
@@ -94,22 +91,24 @@
 							</a>
 							<c:if test="${proyecto.rol != 'citizen'}">
 								<!-- if the user is in role 'administrator' or 'agent' -->
-								<c:import url="menu_caronte_admin.jsp"/>
+								<c:import url="jspf/menu_caronte_admin.jsp"/>
 							</c:if>
 							<c:if test="${proyecto.rol == 'citizen'}">
 								<!-- if the user is in role 'citizen' -->
-								<c:import url="menu_caronte_user.jsp"/>
+								<c:import url="jspf/menu_caronte_user.jsp"/>
 							</c:if>
 						</c:if>
 					</td>
 					<td id="fila_mapa">
 						<c:if test="${proyecto.nombreUsuario == null}">
 							<div class="div_vacio"></div>
-							<div id="map_canvas"></div>
+							<div id="contenedor_mapa">
+								<div id="map_canvas"></div>
+							</div>
 						</c:if>
 						<c:if test="${proyecto.nombreUsuario != null}">
 							<c:if test="${proyecto.rol != 'citizen'}">
-								<c:import url="residencia_caronte.jsp"/>
+								<c:import url="jspf/residencia.jsp"/>
 							</c:if>
 							<c:if test="${proyecto.rol == 'citizen'}">
 								<div class="div_vacio"></div>

@@ -18,7 +18,7 @@
 		</head>
 		<body onload="IniciarReloj24()">
 			<div>
-				<c:import url="cabecera.jsp"/>
+				<c:import url="../jspf/cabecera.jsp"/>
 			</div>
 			<br/>
 			<h1 class="error">Error en el servidor</h1>

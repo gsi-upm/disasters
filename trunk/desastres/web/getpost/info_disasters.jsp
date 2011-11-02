@@ -4,49 +4,77 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 
 <sql:query var="eventos" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE marcador = 'event' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="controlled" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE marcador = 'event' AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'controlled')
+	SELECT id FROM catastrofes
+	WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
+	AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'controlled')
 </sql:query>
 <sql:query var="fires" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'fire' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'fire')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="floods" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'flood' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'flood')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="collapses" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'collapse' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'collapse')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="resources" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE marcador = 'resource' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="policemen" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'police' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'police')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="firemen" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'firemen' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'firemen')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="ambulance" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'ambulance' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'ambulance')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="heridos" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE marcador = 'people' AND tipo != 'healthy' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'people')
+	AND tipo != 'healthy' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="slight" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'slight' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'slight')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="serious" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'serious' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'serious')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="dead" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'dead' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'dead')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <sql:query var="trapped" dataSource="${CatastrofesServer}">
-	SELECT * FROM catastrofes WHERE tipo = 'trapped' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT id FROM catastrofes
+	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'trapped')
+	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 </sql:query>
 <fmt:bundle basename="fmt.eji8n">
 	<p><fmt:message key="actualmentehay"/> ${eventos.rowCount} <fmt:message key="desastres"/>. (${controlled.rowCount} <fmt:message key="controlados"/>):</p>

@@ -55,15 +55,9 @@
 
 package org.securityfilter.example.realm;
 
-import java.security.NoSuchAlgorithmException;
-import org.securityfilter.example.Constants;
-import org.securityfilter.realm.SimpleSecurityRealmBase;
-import jadex.desastres.*;
-import java.net.URL;
-import java.net.URLConnection;
+import gsi.rest.Connection;
 import java.security.MessageDigest;
-import java.sql.Timestamp;
-import java.util.Date;
+import org.securityfilter.realm.SimpleSecurityRealmBase;
 import org.json.me.*;
 
 /**
@@ -77,37 +71,37 @@ import org.json.me.*;
  */
 public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 
-   private String exampleProperty;
+	private String exampleProperty;
+	private static final String URL = "http://localhost:8080/desastres/rest/";
 
-   /**
-    * Authenticate a user.
-    *
-    * Implement this method in a subclass to avoid dealing with Principal objects.
-    *
-    * @param username a username
-    * @param password a plain text password, as entered by the user
-    *
-    * @return null if the user cannot be authenticated, otherwise a Pricipal object is returned
-    */
-	public boolean booleanAuthenticate(String username, String password) {
+	/**
+	 * Authenticate a user.
+	 *
+	 * Implement this method in a subclass to avoid dealing with Principal objects.
+	 *
+	 * @param username a username
+	 * @param password a plain text password, as entered by the user
+	 *
+	 * @return null if the user cannot be authenticated, otherwise a Pricipal object is returned
+	 */
+	public boolean booleanAuthenticate(String username, String password){
 		boolean autenticado = false;
-		try {
+		try{
 			String pass = MD5(password);
-			String usuarioAux = Connection.connect("http://localhost:8080/desastres/rest/user/" + username + "/" + pass);
+			String usuarioAux = Connection.connect(URL + "user/" + username + "/" + pass);
 			JSONArray usuario = new JSONArray(usuarioAux);
 			
-			if(usuario.length() == 1) {
+			if(usuario.length() == 1){
 				autenticado = true;
-				String date = new Timestamp(new Date().getTime()).toString();
 				String tipoUsuario = usuario.getJSONObject(0).getString("type");
 				String latitud = usuario.getJSONObject(0).getString("latitud");
 				String longitud = usuario.getJSONObject(0).getString("longitud");
 				String descripcion = usuario.getJSONObject(0).getString("real_name");
 				String informacion = usuario.getJSONObject(0).getString("email");
-				Connection.connect("http://localhost:8080/desastres/rest/insertar/" + tipoUsuario +
-					"/" + username + "/" + descripcion + "/" + informacion + "/" + latitud + "/" + longitud);
+				Connection.connect(URL + "insertar/" + tipoUsuario + "/" + username + "/" +
+					descripcion + "/" + informacion + "/" + latitud + "/" + longitud);
 			}
-		} catch (Exception ex) {
+		}catch (Exception ex){
 			System.out.println("Excepcion: " + ex);
 		}	
 		return autenticado;
@@ -115,36 +109,36 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 
 	private String MD5(String valor){
 		String hash = "";
-		try {
+		try{
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			md5.update(valor.getBytes("UTF-8"));
 			byte[] valorHash = md5.digest();
 			int[] valorHash2 = new int[16];
-			for (int i = 0; i < valorHash.length; i++) {
+			for(int i = 0; i < valorHash.length; i++){
 				valorHash2[i] = new Integer(valorHash[i]);
-				if (valorHash2[i] < 0) {
+				if(valorHash2[i] < 0){
 					valorHash2[i] += 256;
 				}
 				hash += (Integer.toHexString(valorHash2[i]));
 			}
-		} catch (Exception ex) {}
+		}catch(Exception ex){}
 
 		return hash;
 	}
 
-   /**
-    * Test for role membership.
-    *
-    * Implement this method in a subclass to avoid dealing with Principal objects.
-    *
-    * @param username The name of the user
-    * @param role name of a role to test for membership
-    * @return true if the user is in the role, false otherwise
-    */
-   public boolean isUserInRole(String username, String role) {
-	   boolean rol = false;
-	   try {
-			String rolUsuarioAux = Connection.connect("http://localhost:8080/desastres/rest/userRole/" + username);
+	/**
+	 * Test for role membership.
+	 *
+	 * Implement this method in a subclass to avoid dealing with Principal objects.
+	 *
+	 * @param username The name of the user
+	 * @param role name of a role to test for membership
+	 * @return true if the user is in the role, false otherwise
+	 */
+	public boolean isUserInRole(String username, String role) {
+		boolean rol = false;
+		try {
+			String rolUsuarioAux = Connection.connect(URL + "userRole/" + username);
 			JSONArray rolUsuario = new JSONArray(rolUsuarioAux);
 			
 			if(rolUsuario.getJSONObject(0).getString("user_type").equals(role)) {
@@ -153,29 +147,29 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 		} catch (JSONException ex) {
 			System.out.println("Excepcion: " + ex);
 		}
-	   return rol;
-   }
+		return rol;
+	}
 
-   /**
-    * Setter for exampleProperty to deomonstrate setting realm properties from config file.
-    *
-    * This has no effect other than printing a message when the property is set.
-    *
-    * @param value example property value
-    */
-   public void setExampleProperty(String value) {
-      exampleProperty = value;
-      System.out.println(this.getClass().getName() + ": exampleProperty set to \'" + value + "\'");
-   }
+	/**
+	 * Setter for exampleProperty to deomonstrate setting realm properties from config file.
+	 *
+	 * This has no effect other than printing a message when the property is set.
+	 *
+	 * @param value example property value
+	 */
+	public void setExampleProperty(String value) {
+		exampleProperty = value;
+		System.out.println(this.getClass().getName() + ": exampleProperty set to \'" + value + "\'");
+	}
 
-   /**
-    * Getter for exampleProperty.
-    *
-    * @return the value of exampleProperty
-    */
-   public String getExampleProperty() {
-      return exampleProperty;
-   }
+	/**
+	 * Getter for exampleProperty.
+	 *
+	 * @return the value of exampleProperty
+	 */
+	public String getExampleProperty() {
+		return exampleProperty;
+	}
 }
 
 // ----------------------------------------------------------------------------

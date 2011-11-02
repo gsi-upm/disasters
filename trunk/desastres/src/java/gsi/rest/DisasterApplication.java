@@ -1,16 +1,9 @@
 package gsi.rest;
 
 import java.sql.Timestamp;
-import org.restlet.Application;
-import org.restlet.Restlet;
-import org.restlet.Router;
-import org.restlet.Context;
-import org.restlet.data.MediaType;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import java.util.Date;
-import java.net.*;
-import java.io.*;
+import org.restlet.*;
+import org.restlet.data.*;
 
 /**
  * Class used to define routes and Restlets

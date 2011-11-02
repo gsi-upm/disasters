@@ -5,7 +5,7 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
-<%@ include file="database.jspf" %>
+<%@ include file="../jspf/database.jspf" %>
 <% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 
 <c:if test="${param.nombre != null && param.localizacion == null}">
