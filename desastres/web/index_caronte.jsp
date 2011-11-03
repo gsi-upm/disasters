@@ -36,8 +36,9 @@
 				var nivelMsg = ${proyecto.nivelMsg};
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
-			<script type="text/javascript" src="js/mapa_caronte.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>
+			<script type="text/javascript" src="js/mapa_caronte.js"></script>
+			<script type="text/javascript" src="js/mapa_caronte2.js"></script>
 			<script type="text/javascript" src="js/mensajes.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->
@@ -123,8 +124,8 @@
 							<p><fmt:message key="mensajes"/>:</p>
 						</div>
 						<audio id="audio" class="oculto" controls="controls">
-							<source src="images/bad.ogg" type="audio/ogg"/>
-							<source src="images/alarm.mp3" type="audio/mpeg"/>
+							<source type="audio/ogg" src="sounds/bad.ogg"/>
+							<source type="audio/mpeg" src="sounds/alarm.mp3"/>
 						</audio>
 					</td>
 				</tr>

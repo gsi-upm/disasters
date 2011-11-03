@@ -32,11 +32,10 @@ function MostrarHoraActual(){
 
 // FECHA
 function MostrarFechaActual(){
-	var nombre_dia = [fmt('domingo',idioma), fmt('lunes',idioma), fmt('martes',idioma),
-		fmt('miercoles',idioma), fmt('jueves',idioma), fmt('viernes',idioma), fmt('sabado',idioma)];
-	var nombre_mes = [fmt('enero',idioma), fmt('febrero',idioma), fmt('marzo',idioma),
-		fmt('abril',idioma), fmt('mayo',idioma), fmt('junio',idioma), fmt('julio',idioma), fmt('agosto',idioma),
-		fmt('septiembre',idioma), fmt('octubre',idioma), fmt('noviembre',idioma), fmt('diciembre',idioma)];
+	var nombre_dia = [fmt('domingo'), fmt('lunes'), fmt('martes'),
+		fmt('miercoles'), fmt('jueves'), fmt('viernes'), fmt('sabado')]; // en i18n.js
+	var nombre_mes = [fmt('enero'), fmt('febrero'), fmt('marzo'), fmt('abril'), fmt('mayo'), fmt('junio'),
+		fmt('julio'), fmt('agosto'), fmt('septiembre'), fmt('octubre'), fmt('noviembre'), fmt('diciembre')];
 	var hoy_es = new Date();
 	var dia_mes = hoy_es.getDate();
 	var dia_semana = hoy_es.getDay();

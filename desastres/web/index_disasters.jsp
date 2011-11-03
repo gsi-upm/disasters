@@ -36,8 +36,9 @@
 				var usuario_actual_tipo = '${proyecto.rol}';
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
-			<script type="text/javascript" src="js/mapa_disasters.js"></script>
 			<script type="text/javascript" src="js/mapa.js"></script>
+			<script type="text/javascript" src="js/mapa_disasters.js"></script>
+			<script type="text/javascript" src="js/mapa_disasters2.js"></script>
 			<script type="text/javascript" src="js/experto.js"></script>
 			<script type="text/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->

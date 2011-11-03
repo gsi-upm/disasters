@@ -31,151 +31,191 @@ function showBuilding(type){
 	}
 }
 
-function hideBuilding(type){
-	var matrix;
-	if(type == 'hospital'){
-		matrix = hospitals;
-		hospitals = new Array;
-		hospIndex = 0;
-	}else if(type == 'policeStation'){
-		matrix = policeStations;
-		policeStations = new Array;
-		policeIndex = 0;
-	}else if(type == 'firemenStation'){
-		matrix = firemenStations;
-		firemenStations = new Array;
-		fireIndex = 0;
-	}else if(type == 'geriatricCenter'){
-		matrix = geriatricCenters;
-		geriatricCenters = new Array;
-		geriatricIndex = 0;
-	}
-	for(var i = 0; i < matrix.length; i++){
-		map.removeOverlay(matrix[i]);
-	}
-}
+function definirOpciones(evento){
+	var opciones;
+	var icono = new GIcon(G_DEFAULT_ICON);
 
-function visualize(selected, type){
-	if(selected == true){
-		showBuilding(type);
+	//MAXIMO DE RECURSOS POR MARCADOR ES 10
+	var cantidad;
+	if(evento.cantidad > 10){
+		cantidad = 10;
 	}else{
-		hideBuilding(type);
+		cantidad = evento.cantidad;
 	}
+
+	if(evento.marcador == 'event'){ // Es un evento
+		if(evento.tipo == 'fire'){ // Incendio
+			icono.image = 'markers/events/fuego.png';
+			if(evento.estado == 'controlled'){
+				icono.image ='markers/events/fuego_control.png';
+			}
+		}else if(evento.tipo == 'flood'){// Inundacion
+			icono.image = 'markers/events/agua.png';
+			if(evento.estado == 'controlled'){
+				icono.image ='markers/events/agua_control.png';
+			}
+		}else if(evento.tipo == 'collapse'){ // derrumbamiento
+			icono.image = 'markers/events/casa.png';
+			if(evento.estado == 'controlled'){
+				icono.image ='markers/events/casa_control.png';
+			}
+		}else if(evento.tipo == 'lostPerson'){ // anciano perdido
+			icono.image = 'markers/events/personaPerdida.png';
+			if(evento.estado == 'controlled'){
+				icono.image ='markers/events/personaPerdida_control.png';
+			}
+		}else if(evento.tipo == 'injuredPerson'){ // anciano herido
+			icono.image = 'markers/events/personaHerida.png';
+			if(evento.estado == 'controlled'){
+				icono.image ='markers/events/personaHerida_control.png';
+			}
+		}
+		opciones = {
+			icon: icono,
+			zIndexProcess: orden,
+			draggable: true // Para que se pueda arrastrar
+		};
+	}else if (evento.marcador == 'resource'){ // es un recurso
+		if(evento.tipo == 'police'){ // es un policia
+			icono.image = 'markers/resources/policia' + cantidad + '.png';
+		}else if(evento.tipo == 'firemen'){ // es un bombero
+			icono.image = 'markers/resources/bombero' + cantidad + '.png';
+		}else if(evento.tipo == 'ambulance' || evento.tipo == 'ambulancia'){ // es una ambulancia
+			icono.image = 'markers/resources/ambulancia' + cantidad + '.png';
+		}else if(evento.tipo == 'nurse'){ // es un enfermero
+			icono.image = 'markers/resources/enfermero' + cantidad + '.png';
+		}else if(evento.tipo == 'gerocultor'){ // es un gerocultor
+			icono.image = 'markers/resources/gerocultor' + cantidad + '.png';
+		}else if(evento.tipo == 'assistant'){ // es un auxiliar
+			icono.image = 'markers/resources/auxiliar' + cantidad + '.png';
+		}else if(evento.tipo == 'otherStaff'){ // otro
+			icono.image = 'markers/resources/otroPersonal' + cantidad + '.png';
+		}
+		opciones = {
+			icon: icono,
+			zIndexProcess: orden,
+			draggable: false
+		};
+	}else if(evento.marcador == 'people'){ // es una victima
+		if(evento.tipo == 'trapped'){ // personas atrapadas
+			icono.image = 'markers/people/trapped' + cantidad + '.png';
+			if(evento.estado == 'controlled'){
+				icono.image = 'markers/people/trapped_control.png';
+			}
+		}else if(evento.tipo=='healthy'){ // sanos
+			icono.image = 'markers/people/sano' + cantidad + '.png';
+			if(evento.estado=='controlled'){
+				icono.image = 'markers/people/sano_control.png';
+			}
+		}else if(evento.tipo == 'slight'){ // heridos leves
+			icono.image = 'markers/people/leve' + cantidad + '.png';
+			if(evento.estado == 'controlled'){
+				icono.image = 'markers/people/leve_control.png';
+			}
+		}else if(evento.tipo == 'serious'){ // heridos graves
+			icono.image = 'markers/people/grave' + cantidad + '.png';
+			if(evento.estado == 'controlled'){
+				icono.image = 'markers/people/grave_control.png';
+			}
+		}else if(evento.tipo == 'dead'){ // muertos
+			icono.image = 'markers/people/muerto' + cantidad + '.png';
+			if(evento.estado == 'controlled'){
+				icono.image = 'markers/people/muerto_control.png';
+			}
+		}
+		icono.iconSize = new GSize(28, 43);
+		icono.iconAnchor = new GPoint(13, 43);
+		icono.infoWindowAnchor = new GPoint(13, 0);
+		opciones = {
+			icon: icono,
+			zIndexProcess: orden,
+			draggable: true // Se pueden arrastrar para asociarlo
+		};
+	}
+
+	return opciones;
 }
 
-function cargarMenuAcciones(){}
+function comportamientoMarcador(evento, caracter, opciones){
+	var marker = new GMarker (new GLatLng(evento.latitud, evento.longitud), opciones);
 
-function cargarListaActividades(){}
+	// Annadimos el comportamiento
+	if(caracter == TEMPORAL){ // aqui hay que guardar los datos
+		var content = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>' +
+		'<a id="guardar" href="#" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</a>'+ ' - ' +
+		'<a id="modificar" href="#" onclick="cargarModificar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Modificar</a>'+ ' - ' +
+		'<a id="eliminar" href="#" onclick="eliminar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Eliminar</a>';
 
-function cargarLateral(){}
+		GEvent.addListener(marker, 'click', function(){
+			marker.openInfoWindowHtml('<div id="bocadillo">' + content + '</div>');
+		});
 
-function limpiarLateral(){}
+		GEvent.addListener(marker, 'dragstart', function(){
+			map.closeInfoWindow();
+		});
 
-function verMas(id){
-	var evento = marcadores_definitivos[id];
-	var complete = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>Direccion: ' + evento.direccion + '<br/>';
-	var links2;
-	if(nivelMsg > 1){
-		links2 = '<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO);return false;">Modificar</a>' + ' - ' +
-			'<a id="acciones" href="#" onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])">Acciones</a>' + ' - ' +
-			'<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO);return false;">Eliminar</a>' + ' - ' +
-			'<a id="ver_mas2" href="#" onclick="verMenos(' + evento.id + ');return false;">Ver menos</a>';
-	}else{
-		links2 = '<a id="ver_mas2" href="#" onclick="verMenos(' + evento.id + ');return false;">Ver menos</a>';
-	}
-	marcadores_definitivos[id].marker.openInfoWindowHtml('<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links2 + '</div></div>');
-}
+		GEvent.addListener(marker, 'dragend', function(){
+			var asociada = asociar(evento.id, evento.marker);
+			marker.openInfoWindowHtml('<div id="bocadillo">Es necesario guardar para poder asociar recursos.<br/>' +
+				marcadores_definitivos[asociada].nombre + '<br/>' +
+				'<a id="guardar_asociacion" href="#" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</a>' + ' - ' +
+				'<a id="cancelar" href="#" onclick="map.closeInfoWindow();">Cancelar</a>"+"</div>');
+		});
+	}else if(caracter == DEFINITIVO){ // aqui podemos realizar modificaciones a los ya existentes
+		GEvent.addListener(marker, 'click', function(){
+			var small = evento.nombre + '<br/>' + evento.descripcion;
+			var links1 = '<form id="form_acciones" name="form_acciones" action="#">';
+			links1 += '</form>';
 
-function verMenos(id){
-	var evento = marcadores_definitivos[id];
-	var small = evento.nombre + '<br/>' + evento.descripcion ;
-	var links1;
-	if(nivelMsg > 1){
-		links1 = '<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO);return false;">Modificar</a>' + ' - ' +
-			'<a id="acciones" href="#"onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])"  >Acciones</a>' + ' - ' +
-			'<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;" >Eliminar</a>' + ' - ' +
-			'<a id="ver_mas1" href="#" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</a>';
-	}else{
-		links1 = '<a id="ver_mas1" href="#" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</a>';
-	}
-	marcadores_definitivos[id].marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 + '</div></div>');
-}
+			/*	'<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos['+evento.id+'],DEFINITIVO);return false;">Modificar</a>'+' - '+
+				'<a id="acciones" href="#" onclick="cargarAcciones(marcadores_definitivos['+evento.id+'])">Acciones</a>'+' - '+
+				'<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos['+evento.id+'],DEFINITIVO);return false;">Eliminar</a>'+' - '+
+				'<a id="ver_mas1" href="#" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</a>'
+			}else{
+				links1 = '<a id="ver_mas1" href="#" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</a><br/>';
+			}*/
 
-function cargarModificar(puntero,caracter){
-	// mostrar la ventanita
-	// carga el evento a modificar en una variabla accesible por todos
-	puntero_temp = puntero;
-	caracter_temp = caracter;
-	if(puntero.marcador == 'event'){
-		document.getElementById('quantity').style.visibility = 'hidden';
-		document.getElementById('size-traffic').style.visibility = 'visible';
-		document.getElementById('traffic-select').style.visibility = 'visible';
-		document.getElementById('control').style.visibility = 'visible';
-		document.getElementById('sintomas').style.visibility = 'hidden';
-	}else{
-		document.getElementById('quantity').style.visibility = 'visible';
-		document.getElementById('size-traffic').style.visibility = 'hidden';
-		document.getElementById('traffic-select').style.visibility = 'hidden';
-		document.getElementById('sintomas').style.visibility = 'visible';
-		if(puntero.marcador == 'resource'){
-			document.getElementById('control').style.visibility = 'hidden';
-			document.getElementById('sintomas').style.visibility = 'hidden';
-		}else{
-			document.getElementById('control').style.visibility = 'visible';
-		}
-		if(puntero.idAssigned != 0){
-			document.getElementById('asociacion').innerHTML = 'Asociado a ' + marcadores_temporales[puntero.idAssigned].nombre;
-		}
-	}
+			marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
+				'</div><div id="bocadillo_links2"></div></div>');
+		});
 
-	$('#modificar').jqm().jqmShow();
-	// rellenamos con los campos recibidos
-	document.getElementById('iden').value = puntero.id;
-	document.getElementById('item_tipo').innerHTML = puntero.marcador + ' - ' + puntero.tipo;
-	document.getElementById('iconoAdecuado').src = iconoAdecuado(puntero.marcador,puntero.tipo,puntero.cantidad);
-	document.getElementById('cantidad').value = puntero.cantidad;
-	document.getElementById('nombre').value = puntero.nombre;
-	document.getElementById('info').value = puntero.info;
-	document.getElementById('descripcion').value = puntero.descripcion;
-	document.getElementById('direccion0').value = puntero.direccion;
-	document.getElementById('latitud0').value = puntero.latitud;
-	document.getElementById('longitud0').value = puntero.longitud;
-	document.getElementById('estado').value = puntero.estado;
-	document.getElementById('size').value = puntero.size;
-	document.getElementById('traffic').value = puntero.traffic;
-	document.getElementById('idAssigned').value = puntero.idAssigned;
-	document.getElementById('validacion0').src = 'images/iconos/no.png';
-	// annadir las que faltan....
-	document.getElementById('pincha').innerHTML = 'Marcar posici&oacute;n en el mapa';
-}
+		GEvent.addListener(marker, 'dragstart', function(){
+			map.closeInfoWindow();
+		});
 
-function asociar(id, marker){
-	// 1.hallar el punto del marcador pasado
-	var latitud1 = marker.getLatLng().lat(); // = marcadores_definitivos[id].marker.lat();
-	var longitud1 = marker.getLatLng().lng(); // = marcadores_definitivos[id].marker.lng();
+		GEvent.addListener(marker, 'dragend', function(latlng){
+			//var asociada = asociar(evento.id, evento.marker);
+			/*marker.openInfoWindowHtml('<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>'+
+				marcadores_definitivos[asociada].nombre+'<br/>'+
+				'<a id="guardar_asociacion" href="#" onclick="guardar_asociacion('+asociada+','+evento.id+');return false;">Guardar</a>'+' - '+
+				'<a id="cancelar" href="#" onclick="cancelar_asignacion('+evento.id+');return false;">Cancelar</a></div>');*/
 
-	// 2.hallar la distancia a cada catastrofe de la matriz definitiva
-	var diferencia = 999999999999;
-	var id_mas_cercano;
-	var idDefinitivo;
+			var nuevaLat = latlng.lat();
+			var nuevaLong = latlng.lng();
+			var nuevaPos = new GLatLng(nuevaLat, nuevaLong);
+			map.removeOverlay(marker);
+			marker.setLatLng(nuevaPos);
+			map.addOverlay(marker);
+			marker.openInfoWindowHtml('<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
+				'<span id="confirmar" class="pulsable azul" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
+				',' + nuevaLat + ',' + nuevaLong + ')" >Confirmar</span>'+ ' - ' +
+				'<span id="cancelar" class="pulsable azul" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>');
+			// Temporal*****************************************************************************************
+			//cancelar_asignacion(evento.id);
+			//**************************************************************************************************
 
-	for(var i = 0; indices[i] != null; i++){
-		idDefinitivo = indices[i];
-		// nos quedamos solo con los eventos (catastrofes)
-		if(marcadores_definitivos[idDefinitivo].marcador != 'event'){
-			continue;
-		}
-		var latitud2 = marcadores_definitivos[idDefinitivo].latitud;
-		var longitud2 = marcadores_definitivos[idDefinitivo].longitud;
-		var dif_lat = Math.pow(latitud1 - latitud2, 2);
-		var dif_long = Math.pow(longitud1 - longitud2, 2);
-		var distancia = Math.sqrt(dif_lat + dif_long);
-		if(distancia < diferencia){
-			diferencia = distancia;
-			id_mas_cercano = idDefinitivo;
-		}
+			/*marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>'+
+				'<a id="confirmar" href="#" onclick="map.closeInfoWindow();guardar_posicion('+evento.id+
+				','+marker.getLatLng().lat()+','+marker.getLatLng().lng()+')">Confirmar</a>'+ ' - '+
+				'<a id="cancelar" href="#" onclick="map.closeInfoWindow();">Cancelar</a></div>');*/
+		});
+
+		GEvent.addListener(marker, 'infowindowclose', function(){});
 	}
 
-	// 3.Devolver el id de la catastrofe mas cercana o hacer el post directamente
-	return id_mas_cercano;
+	// (!(evento.marcador=='resource' && caracter==1)){
+	map.addOverlay(marker);
+	// }
+
+	return marker;
 }

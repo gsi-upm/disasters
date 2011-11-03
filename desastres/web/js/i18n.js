@@ -7,33 +7,37 @@ var dictionary = {
 	'jueves': ['Jueves','Thursday','Jeudi','Donnerstag'],
 	'viernes': ['Viernes','Friday','Vendredi','Freitag'],
 	'sabado': ['Sábado','Saturday','Samedi','Samstag'],
-	'enero': ['Enero','January','Janvier','Januar'],
-	'febrero': ['Febrero','February','Février','Februar'],
-	'marzo': ['Marzo','March','Mars','März'],
-	'abril': ['Abril','April','Avril','April'],
-	'mayo': ['Mayo','May','Mai','Mai'],
-	'junio': ['Junio','June','Juin','Juni'],
-	'julio': ['Julio','July','Juillet','Juli'],
-	'agosto': ['Agosto','August','Août','August'],
-	'septiembre': ['Septiembre','September','Septembre','September'],
-	'octubre': ['Octubre','October','Octobre','Oktober'],
-	'noviembre': ['Noviembre','November','Novembre','November'],
-	'diciembre': ['Diciembre','December','Décembre','Dezember']
+	'enero': ['enero','January','Janvier','Januar'],
+	'febrero': ['febrero','February','Février','Februar'],
+	'marzo': ['marzo','March','Mars','März'],
+	'abril': ['abril','April','Avril','April'],
+	'mayo': ['mayo','May','Mai','Mai'],
+	'junio': ['junio','June','Juin','Juni'],
+	'julio': ['julio','July','Juillet','Juli'],
+	'agosto': ['agosto','August','Août','August'],
+	'septiembre': ['septiembre','September','Septembre','September'],
+	'octubre': ['octubre','October','Octobre','Oktober'],
+	'noviembre': ['noviembre','November','Novembre','November'],
+	'diciembre': ['diciembre','December','Décembre','Dezember'],
+	'incendio':['Incendio','Fire','Feu','Feuer'],
+	'inundacion':['Inundación','Flood','Inondation','Flut'],
+	'derrumbamiento':['Derrumbamiento','Collapse','Effondrement','Einsturz'],
+	'personaPerdida':['Persona perdida','Lost person','Personne perdue','Vermisste']
 };
 
-function fmt(key, lang){
-	var langAux;
-	if(lang == 'es'){
-		langAux = 0;
-	}else if(lang == 'en' || lang == 'en_GB'){
-		langAux = 1;
-	}else if(lang == 'fr'){
-		langAux = 2;
-	}else if(lang == 'de'){
-		langAux = 3;
+function fmt(key){
+	var lang;
+	if(idioma == 'es'){
+		lang = 0;
+	}else if(idioma == 'en' || idioma == 'en_GB'){
+		lang = 1;
+	}else if(idioma == 'fr'){
+		lang = 2;
+	}else if(idioma == 'de'){
+		lang = 3;
 	}
 
-	var palabra = dictionary[key][langAux];
+	var palabra = dictionary[key][lang];
 	if(palabra == null){
 		palabra = '???' + key + '???';
 	}
