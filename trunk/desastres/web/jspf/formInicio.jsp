@@ -28,7 +28,7 @@
 			<tr><td id="userError" class="rojo" colspan="2"></td></tr>
 			<tr id="user">
 				<td><fmt:message key="nombreUsuario"/></td>
-				<td><input type="text" name="user"size="20"/></td>
+				<td><input type="text" name="user" size="20"/></td>
 			</tr>
 			<tr><td id="passError" class="rojo" colspan="2"></td></tr>
 			<tr id="pass1">

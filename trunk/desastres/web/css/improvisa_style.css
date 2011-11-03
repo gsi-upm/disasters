@@ -156,6 +156,11 @@ input:focus, textarea:focus{
 	cursor: pointer;
 }
 
+.azul{
+	color: blue;
+	text-decoration: underline;
+}
+
 .rojo{
 	color: red;
 }

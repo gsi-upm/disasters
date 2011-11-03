@@ -9,19 +9,19 @@ function moveAgents(){
 		roadsInfo[resourcesList[i]] = new ObjDirectionsInfo(new GDirections(), 5, null, null, null, 0, 0, null, null);
 		myAddListener(resourcesList[i]);
 		if(marcadores_definitivos[indices[i]].tipo == "police"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/policia" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.image = "markers/resources/policia" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "firemen"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/bombero" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.image = "markers/resources/bombero" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "ambulance"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/ambulancia" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.image = "markers/resources/ambulancia" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "nurse"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/enfermero" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.image = "markers/resources/enfermero" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "gerocultor"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/gerocultor" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.image = "markers/resources/gerocultor" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "assistant"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/auxiliar" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.image = "markers/resources/auxiliar" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "otherStaff"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/otro" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.image = "markers/resources/otroPersonal" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}
 	}
 	DirectionsBean.sendDirections();

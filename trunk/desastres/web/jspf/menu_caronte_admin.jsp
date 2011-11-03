@@ -13,7 +13,7 @@
 								<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono('event','fire');"/>
 								<fmt:message key="incendio"/>
 							</td>
-							<td rowspan="5"><img id="icono_catastrofes" class="rayas" alt="" src="markers/fuego.png"/></td>
+							<td rowspan="5"><img id="icono_catastrofes" class="rayas" alt="" src="markers/events/fuego.png"/></td>
 						</tr>
 						<tr>
 							<td>
@@ -45,7 +45,7 @@
 					<table class="tabla_menu">
 						<tr>
 							<td id="tipo_catastrofes_2"></td>
-							<td><img id="icono_catastrofes_2" class="rayas" alt="" src="markers/fuego.png"/></td>
+							<td><img id="icono_catastrofes_2" class="rayas" alt="" src="markers/events/fuego.png"/></td>
 						</tr>
 					</table>
 				</div>
@@ -127,7 +127,7 @@
 							<input type="radio" name="tipo" value="healthy" checked="checked" onclick="cambiaIcono('people','healthy',cantidad.value);"/>
 							<fmt:message key="sanos"/>
 						</td>
-						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/sano1.png" class="rayas"/></td>
+						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/people/sano1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
@@ -198,31 +198,27 @@
 						</td>
 					</tr>
 				</table>
-				<div id="sintomas" class="oculto">
+				<table id="cantidad" class="tabla_menu">
+					<tr>
+						<td><fmt:message key="numeropersonas"/>&thinsp;</td>
+						<td>
+							<select name="cantidad" onchange="cambiaIcono('people',seleccionRadio(this.form,2),cantidad.value);">
+								<option value="1" selected="selected">1</option>
+								<c:forEach var="item" begin="2" end="99" step="1">
+									<option value="${item}">${item}</option>
+								</c:forEach>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<!--<div id="sintomas">
 					<span style="float:left">S&iacute;ntomas:</span>
 					<ul>
 						<li id="textoSintomas">&thinsp;</li>
 						<span id="listaSintomas"></span>
 					</ul>
-				</div>
+				</div>-->
 				<table class="tabla_menu">
-					<tr id="cantidad">
-						<td colspan="2">
-							<label for="cantidad"><fmt:message key="numeropersonas"/>:</label>
-							<select name="cantidad" onchange="cambiaIcono('people',seleccionRadio(this.form,2),cantidad.value);">
-								<option value="1" selected="selected">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="10">10</option>
-							</select>
-						</td>
-					</tr>
 					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="Sano" placeholder="<fmt:message key="nombre"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1" placeholder="<fmt:message key="informacion"/>"></textarea></td></tr>
 					<tr><td colspan="2"><textarea name="descripcion" class="descripcion" rows="3" cols="1" placeholder="<fmt:message key="descripcion"/>"></textarea></td></tr>
@@ -266,32 +262,32 @@
 				<table class="tabla_menu">
 					<tr>
 						<td><fmt:message key="enfermero"/> <span id="numEnfermeros"></span></td>
-						<td><img alt="" src="markers/enfermero1.png" class="rayas"/></td>
+						<td><img alt="" src="markers/resources/enfermero.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td><fmt:message key="gerocultor"/> <span id="numGerocultores"></span></td>
-						<td><img alt="" src="markers/gerocultor1.png" class="rayas"/></td>
+						<td><img alt="" src="markers/resources/gerocultor.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td><fmt:message key="auxiliar"/> <span id="numAuxiliares"></span></td>
-						<td><img alt="" src="markers/auxiliar1.png" class="rayas"/></td>
+						<td><img alt="" src="markers/resources/auxiliar.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td><fmt:message key="otroPersonal"/> <span id="numOtros"></span></td>
-						<td><img alt="" src="markers/otro1.png" class="rayas"/></td>
+						<td><img alt="" src="markers/resources/otroPersonal.png" class="rayas"/></td>
 					</tr>
 					<tr><td colspan="2"><hr/></td></tr>
 					<tr>
 						<td><fmt:message key="policia"/> <span id="numPolicias"></span></td>
-						<td><img alt="" src="markers/policia1.png" class="rayas"/></td>
+						<td><img alt="" src="markers/resources/policia.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td><fmt:message key="bomberos"/> <span id="numBomberos"></span></td>
-						<td><img alt="" src="markers/bombero1.png" class="rayas"/></td>
+						<td><img alt="" src="markers/resources/bombero.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td><fmt:message key="ambulancia"/> <span id="numAmbulancias"></span></td>
-						<td><img alt="" src="markers/ambulancia1.png" class="rayas"/></td>
+						<td><img alt="" src="markers/resources/ambulancia.png" class="rayas"/></td>
 					</tr>
 				</table>
 			</div>

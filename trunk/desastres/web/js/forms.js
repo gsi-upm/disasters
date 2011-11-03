@@ -2,57 +2,60 @@
 function cambiaIcono(marcador, tipo, cantidad){
 	var nombre;
 	var imagen;
+	if(cantidad > 10){
+		cantidad = 10;
+	}
 	if(marcador == 'event'){
 		if(tipo == 'fire'){
-			imagen = 'markers/fuego.png';
+			imagen = 'markers/events/fuego.png';
 			nombre = 'Incencio';
 		}else if(tipo == 'flood'){
-			imagen = 'markers/agua.png';
+			imagen = 'markers/events/agua.png';
 			nombre = 'Inundación';
 		}else if(tipo == 'collapse'){
-			imagen = 'markers/casa.png';
+			imagen = 'markers/events/casa.png';
 			nombre = 'Derrumbamiento';
 		}else if(tipo == 'lostPerson'){
-			imagen = 'markers/personaPerdida.png';
+			imagen = 'markers/events/personaPerdida.png';
 			nombre = 'Persona perdida';
 		}else if(tipo == 'injuredPerson'){
-			imagen = 'markers/personaHerida.png';
+			imagen = 'markers/events/personaHerida.png';
 			nombre = 'Persona herida';
 		}
 		document.getElementById('icono_catastrofes').src = imagen;
 		document.getElementById('catastrofes').nombre.value = nombre;
 	}else if(marcador == 'resource'){
 		if(tipo == 'police'){
-			imagen = 'markers/policia' + cantidad + '.png';
+			imagen = 'markers/resources/policia' + cantidad + '.png';
 		}else if(tipo == 'firemen'){
-			imagen = 'markers/bombero' + cantidad + '.png';
+			imagen = 'markers/resources/bombero' + cantidad + '.png';
 		}else if(tipo == 'ambulance' || tipo == 'ambulancia'){
-			imagen = 'markers/ambulancia' + cantidad + '.png';
+			imagen = 'markers/resources/ambulancia' + cantidad + '.png';
 		}else if(tipo == 'nurse'){
-			imagen = 'markers/enfermero' + cantidad + '.png';
+			imagen = 'markers/resources/enfermero' + cantidad + '.png';
 		}else if(tipo == 'gerocultor'){
-			imagen = 'markers/gerocultor' + cantidad + '.png';
+			imagen = 'markers/resources/gerocultor' + cantidad + '.png';
 		}else if(tipo == 'assistant'){
-			imagen = 'markers/auxiliar' + cantidad + '.png';
+			imagen = 'markers/resources/auxiliar' + cantidad + '.png';
 		}else if(tipo == 'otherStaff'){
-			imagen = 'markers/otro' + cantidad + '.png';
+			imagen = 'markers/resources/otroPersonal' + cantidad + '.png';
 		}
 		document.getElementById('icono_recursos').src = imagen;
 	}else if(marcador == 'people'){
 		if(tipo == 'healthy'){
-			imagen = 'markers/sano' + cantidad + '.png';
+			imagen = 'markers/people/sano' + cantidad + '.png';
 			nombre = 'Sano';
 		}else if(tipo == 'slight'){
-			imagen = 'markers/leve' + cantidad + '.png';
+			imagen = 'markers/people/leve' + cantidad + '.png';
 			nombre = 'Leve';
 		}else if(tipo == 'serious'){
-			imagen = 'markers/grave' + cantidad + '.png';
+			imagen = 'markers/people/grave' + cantidad + '.png';
 			nombre = 'Grave';
 		}else if(tipo == 'dead'){
-			imagen = 'markers/muerto' + cantidad + '.png';
+			imagen = 'markers/people/muerto' + cantidad + '.png';
 			nombre = 'Muerto';
 		}else if(tipo == 'trapped'){
-			imagen = 'markers/trapped' + cantidad + '.png';
+			imagen = 'markers/people/trapped' + cantidad + '.png';
 			nombre = 'Atrapado';
 		}
 		document.getElementById('icono_heridos').src = imagen;
@@ -118,47 +121,44 @@ function pinchaMapa(numero){
 function iconoAdecuado(marcador,tipo,cantidad){
 	var imagen;
 	if(marcador == 'event'){
-		imagen = 'markers/fuego.png'
 		if(tipo == 'fire'){
-			imagen = 'markers/fuego.png';
+			imagen = 'markers/events/fuego.png';
 		}else if(tipo == 'flood'){
-			imagen = 'markers/agua.png';
+			imagen = 'markers/events/agua.png';
 		}else if(tipo == 'collapse'){
-			imagen = 'markers/casa.png';
+			imagen = 'markers/events/casa.png';
 		}else if(tipo == 'lostPerson'){
-			imagen = 'markers/personaPerdida.png';
+			imagen = 'markers/events/personaPerdida.png';
 		}else if(tipo == 'injuredPerson'){
-			imagen = 'markers/personaHerida.png';
+			imagen = 'markers/events/personaHerida.png';
 		}
 	}else if(marcador == 'resource'){
-		imagen = 'markers/policia1.png';
 		if(tipo == 'police'){
-			imagen = 'markers/policia' + cantidad + '.png';
+			imagen = 'markers/resources/policia' + cantidad + '.png';
 		}else if(tipo == 'firemen'){
-			imagen = 'markers/bombero' + cantidad + '.png';
-		}else if(tipo == 'ambulance' || tipo=='ambulancia'){
-			imagen = 'markers/ambulancia' + cantidad + '.png';
+			imagen = 'markers/resources/bombero' + cantidad + '.png';
+		}else if(tipo == 'ambulance' || tipo == 'ambulancia'){
+			imagen = 'markers/resources/ambulancia' + cantidad + '.png';
 		}else if(tipo == 'nurse'){
-			imagen = 'markers/enfermero' + cantidad + '.png';
+			imagen = 'markers/resources/enfermero' + cantidad + '.png';
 		}else if(tipo == 'gerocultor'){
-			imagen = 'markers/gerocultor' + cantidad + '.png';
+			imagen = 'markers/resources/gerocultor' + cantidad + '.png';
 		}else if(tipo == 'assistant'){
-			imagen = 'markers/auxiliar' + cantidad + '.png';
+			imagen = 'markers/resources/auxiliar' + cantidad + '.png';
 		}else if(tipo == 'otherStaff'){
-			imagen = 'markers/otro' + cantidad + '.png';
+			imagen = 'markers/resources/otroPersoal' + cantidad + '.png';
 		}
 	}else if(marcador == 'people'){
-		imagen = 'markers/leve1.png';
-		if(tipo == 'trapped'){
-			imagen = 'markers/trapped' + cantidad + '.png';
-		}else if(tipo == 'healthy'){
-			imagen = 'markers/sano' + cantidad + '.png';
+		if(tipo == 'healthy'){
+			imagen = 'markers/people/sano' + cantidad + '.png';
 		}else if(tipo == 'slight'){
-			imagen = 'markers/leve' + cantidad + '.png';
+			imagen = 'markers/people/leve' + cantidad + '.png';
 		}else if(tipo == 'serious'){
-			imagen = 'markers/grave' + cantidad + '.png';
+			imagen = 'markers/people/grave' + cantidad + '.png';
 		}else if(tipo == 'dead'){
-			imagen = 'markers/muerto' + cantidad + '.png';
+			imagen = 'markers/people/muerto' + cantidad + '.png';
+		}else if(tipo == 'trapped'){
+			imagen = 'markers/people/trapped' + cantidad + '.png';
 		}
 	}
 	return imagen;

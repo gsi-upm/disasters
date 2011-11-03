@@ -16,7 +16,7 @@
 							<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono(marcador.value,'fire');"/>
 							<fmt:message key="incendio"/>
 						</td>
-						<td rowspan="3"><img alt="" id="icono_catastrofes" src="markers/fuego.png" class="rayas"/></td>
+						<td rowspan="3"><img alt="" id="icono_catastrofes" src="markers/events/fuego.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
@@ -104,7 +104,7 @@
 							<input type="radio" name="tipo" value="police" checked="checked" onclick="cambiaIcono(marcador.value,'police', cantidad.value);"/>
 							<fmt:message key="policia"/>
 						</td>
-						<td rowspan="3"><img alt="" id="icono_recursos" src="markers/policia1.png" class="rayas"/></td>
+						<td rowspan="3"><img alt="" id="icono_recursos" src="markers/resources/policia1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
@@ -190,7 +190,7 @@
 							<input type="radio" name="tipo" value="slight" checked="checked" onclick="cambiaIcono(marcador.value,'slight',cantidad.value);"/>
 							<fmt:message key="leves"/>
 						</td>
-						<td rowspan="4"><img alt="" id="icono_heridos" src="markers/leve1.png" class="rayas"/></td>
+						<td rowspan="4"><img alt="" id="icono_heridos" src="markers/people/leve1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>

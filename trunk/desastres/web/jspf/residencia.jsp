@@ -19,37 +19,37 @@
 			<table class="tabla_menu">
 				<tr>
 					<th rowspan="5">
-						<img id="planoResidencia" src="images/residencia/planta0.jpg" alt="Residencia"/>
+						<img id="planoResidencia" src="markers/residencia/planta0.jpg" alt="Residencia"/>
 						<br/>
 						<fmt:message key="planta"/> <span id="plantaPlano">0</span>
 					</th>
-					<td><img alt="" src="markers/fuego.png"/></td>
+					<td><img alt="" src="markers/events/fuego.png"/></td>
 					<td id="numFuegos"></td>
-					<td><img alt="" src="markers/sano1.png"/></td>
+					<td><img alt="" src="markers/people/sano1.png"/></td>
 					<td id="numSanos"></td>
 				</tr>
 				<tr>
-					<td><img alt="" src="markers/agua.png"/></td>
+					<td><img alt="" src="markers/events/agua.png"/></td>
 					<td id="numInundaciones"></td>
-					<td><img alt="" src="markers/leve1.png"/></td>
+					<td><img alt="" src="markers/people/leve1.png"/></td>
 					<td id="numLeves"></td>
 				</tr>
 				<tr>
-					<td><img alt="" src="markers/casa.png"/></td>
+					<td><img alt="" src="markers/events/casa.png"/></td>
 					<td id="numDerrumbamientos"></td>
-					<td><img alt="" src="markers/grave1.png"/></td>
+					<td><img alt="" src="markers/people/grave1.png"/></td>
 					<td id="numGraves"></td>
 				</tr>
 				<tr>
-					<td><img alt="" src="markers/personaHerida.png"/></td>
+					<td><img alt="" src="markers/events/personaHerida.png"/></td>
 					<td id="numHeridos"></td>
-					<td><img alt="" src="markers/muerto1.png"/></td>
+					<td><img alt="" src="markers/people/muerto1.png"/></td>
 					<td id="numMuertos"></td>
 				</tr>
 				<tr>
-					<td><img alt="" src="markers/personaPerdida.png"/></td>
+					<td><img alt="" src="markers/events/personaPerdida.png"/></td>
 					<td id="numPerdidos"></td>
-					<td><img alt="" src="markers/trapped1.png"/></td>
+					<td><img alt="" src="markers/people/trapped1.png"/></td>
 					<td id="numAtrapados"></td>
 				</tr>
 			</table>

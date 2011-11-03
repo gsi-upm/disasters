@@ -48,7 +48,6 @@ function initialize(){
 		map.addControl(new GScaleControl());       // escala
 		map.addControl(new GMenuMapTypeControl()); // selector mapa
 		// map.addControl(new GOverviewMapControl()); // minimapa
-		var minimapa = new GOverviewMapControl(); // minimapa
 
 		buildingInit(); // en mapa_xxx.js
 
@@ -72,9 +71,10 @@ function initialize(){
 		ultimamodif = obtiene_fecha();
 		
 		initialize2(); // en mapa_xxx.js
-
-		cambiaIcono('event',seleccionRadio(document.getElementById('catastrofes'),0));
-		cambiaIcono('people',seleccionRadio(document.getElementById('heridos'),2),1);
+		if(userName != ''){
+			cambiaIcono('event',seleccionRadio(document.getElementById('catastrofes'),0));
+			cambiaIcono('people',seleccionRadio(document.getElementById('heridos'),2),1);
+		}
 		// setTimeout('moveAgents()',2000);
 		setTimeout('actualizar()',tiempoInicial);
 	}
@@ -164,10 +164,10 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	}
 
 	var icono = new GIcon();
-	icono.image = 'markers/' + imagen;
+	icono.image = 'markers/buildings/' + imagen;
 	icono.iconSize = new GSize(50, 49);
-	icono.iconAnchor = new GPoint(25, 49);
-	icono.infoWindowAnchor = new GPoint(5, 1);
+	icono.iconAnchor = new GPoint(24, 49);
+	icono.infoWindowAnchor = new GPoint(24, 2);
 	var opciones = {
 		icon: icono,
 		zIndexProcess: orden
@@ -180,7 +180,7 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		var esquina2 = [38.232380, -1.698640];
 		var esquina3 = [38.232105, -1.698690];
 		var esquina4 = [38.232165, -1.699210];
-		var color = '#00ff00';
+		var color = '#00FF00';
 		var anchura = 1;
 		var opacidad = 0.5;
 
@@ -227,209 +227,8 @@ function generateBuilding(type, mensaje, latitud, longitud){
 }
 
 function generaMarcador(evento, caracter){
-	var opciones;
-	var icono = new GIcon(G_DEFAULT_ICON);
-
-	if(evento.marcador == 'event'){ // Es un evento
-		if(evento.tipo == 'fire'){ // Incendio
-			icono.image = 'markers/fuego.png';
-			if(evento.estado == 'controlled'){
-				icono.image ='markers/fuego_control.png';
-			}
-		}else if(evento.tipo == 'flood'){// Inundacion
-			icono.image = 'markers/agua.png';
-			if(evento.estado == 'controlled'){
-				icono.image ='markers/agua_control.png';
-			}
-		}else if(evento.tipo == 'collapse'){ // derrumbamiento
-			icono.image = 'markers/casa.png';
-			if(evento.estado == 'controlled'){
-				icono.image ='markers/casa_control.png';
-			}
-		}else if(evento.tipo == 'lostPerson'){ // anciano perdido
-			icono.image = 'markers/personaPerdida.png';
-			if(evento.estado == 'controlled'){
-				icono.image ='markers/personaPerdida_control.png';
-			}
-		}else if(evento.tipo == 'injuredPerson'){ // anciano herido
-			icono.image = 'markers/personaHerida.png';
-			if(evento.estado == 'controlled'){
-				icono.image ='markers/personaHerida_control.png';
-			}
-		}
-		opciones = {
-			icon: icono,
-			zIndexProcess: orden,
-			draggable: true // Para que se pueda arrastrar
-		}; 
-	}else if (evento.marcador == 'resource'){ // es un recurso
-		//MAXIMO DE RECURSOS POR MARCADOR ES 10
-		if(evento.cantidad > 10){
-			evento.cantidad = 10;
-		}
-		
-		var active;
-		if(evento.estado == 'active'){
-			active = '_no';
-		}else{
-			active = evento.cantidad;
-		}
-		
-		if(evento.tipo == 'police'){ // es un policia
-			icono.image = 'markers/policia' + active + '.png';
-		}else if(evento.tipo == 'firemen'){ // es un bombero
-			icono.image = 'markers/bombero' + active + '.png';
-		}else if(evento.tipo == 'ambulance' || evento.tipo == 'ambulancia'){ // es una ambulancia
-			icono.image = 'markers/ambulancia' + active + '.png';
-		}else if(evento.tipo == 'nurse'){ // es un enfermero
-			icono.image = 'markers/enfermero' + active + '.png';
-		}else if(evento.tipo == 'gerocultor'){ // es un gerocultor
-			icono.image = 'markers/gerocultor' + active + '.png';
-		}else if(evento.tipo == 'assistant'){ // es un auxiliar
-			icono.image = 'markers/auxiliar' + active + '.png';
-		}else if(evento.tipo == 'otherStaff'){ // otro
-			icono.image = 'markers/otro' + active + '.png';
-		}
-		opciones = {
-			icon: icono,
-			zIndexProcess: orden
-		// draggable: false //No se puede arrastrar
-		}; 
-	}else if(evento.marcador == 'people'){ // es una victima
-		//MAXIMO DE VICTIMAS POR MARCADOR ES 10
-		if(evento.cantidad > 10){
-			evento.cantidad = 10;
-		}
-
-		if(evento.tipo == 'trapped'){ // personas atrapadas
-			icono.image = 'markers/trapped' + evento.cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.image = 'markers/trapped_control.png';
-			}
-		}else if(evento.tipo=='healthy'){ // sanos
-			icono.image = 'markers/sano' + evento.cantidad + '.png';
-			if(evento.estado=='controlled'){
-				icono.image = 'markers/sano_control.png';
-			}
-		}else if(evento.tipo == 'slight'){ // heridos leves
-			icono.image = 'markers/leve' + evento.cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.image = 'markers/slight_control.png';
-			}
-		}else if(evento.tipo == 'serious'){ // heridos graves
-			icono.image = 'markers/grave' + evento.cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.image = 'markers/serious_control.png';
-			}
-		}else if(evento.tipo == 'dead'){ // muertos
-			icono.image = 'markers/muerto' + evento.cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.image = 'markers/dead_control.png';
-			}
-		}
-		icono.shadow = 'markers/shadow50.png';
-		icono.iconSize = new GSize(28, 43);
-		icono.shadowSize = new GSize(43, 43);
-		icono.iconAnchor = new GPoint(14, 43);
-		icono.infoWindowAnchor = new GPoint(14, 0);
-		opciones = {
-			icon: icono,
-			zIndexProcess: orden,
-			draggable: true // Se pueden arrastrar para asociarlo
-		}; 
-	}
-
-	var marker = new GMarker (new GLatLng(evento.latitud, evento.longitud), opciones);
-
-	// Annadimos el comportamiento
-	if(caracter == TEMPORAL){ // aqui hay que guardar los datos
-		var content = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>' +
-		'<a id="guardar" href="#" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</a>'+ ' - ' +
-		'<a id="modificar" href="#" onclick="cargarModificar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Modificar</a>'+ ' - ' +
-		'<a id="eliminar" href="#" onclick="eliminar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Eliminar</a>';
-		
-		GEvent.addListener(marker, 'click', function(){
-			marker.openInfoWindowHtml('<div id="bocadillo">' + content + '</div>');
-		});
-
-		GEvent.addListener(marker, 'dragstart', function(){
-			map.closeInfoWindow();
-		});
-
-		GEvent.addListener(marker, 'dragend', function(){
-			var asociada = asociar(evento.id, evento.marker);
-			marker.openInfoWindowHtml('<div id="bocadillo">Es necesario guardar para poder asociar recursos.<br/>' +
-				marcadores_definitivos[asociada].nombre + '<br/>' +
-				'<a id="guardar_asociacion" href="#" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</a>' + ' - ' +
-				'<a id="cancelar" href="#" onclick="map.closeInfoWindow();">Cancelar</a>"+"</div>');
-		});
-	}else if(caracter == DEFINITIVO){ // aqui podemos realizar modificaciones a los ya existentes
-		GEvent.addListener(marker, 'click', function(){
-			var small = evento.nombre + '<br/>' + evento.descripcion;
-			var links1 = '<form id="form_acciones" name="form_acciones" action="#">';
-			if(nivelMsg > 1){
-				if(evento.marcador != 'resource'){
-					links1 += cargarMenuAcciones(marcadores_definitivos[evento.id]); // en mapa_xxx.js
-				}else{
-					links1 += cargarListaActividades(marcadores_definitivos[evento.id]); // en mapa_xxx.js
-				}
-			}
-			links1 += '</form>';
-			
-			/*	'<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos['+evento.id+'],DEFINITIVO);return false;">Modificar</a>'+' - '+
-				'<a id="acciones" href="#" onclick="cargarAcciones(marcadores_definitivos['+evento.id+'])">Acciones</a>'+' - '+
-				'<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos['+evento.id+'],DEFINITIVO);return false;">Eliminar</a>'+' - '+
-				'<a id="ver_mas1" href="#" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</a>'
-			}else{
-				links1 = '<a id="ver_mas1" href="#" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</a><br/>';
-			}*/
-				
-			marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
-				'</div><div id="bocadillo_links2"></div></div>');
-			cargarLateral(evento); // en mapa_xxx.js
-		});
-
-		GEvent.addListener(marker, 'dragstart', function(){
-			map.closeInfoWindow();
-		});
-
-		GEvent.addListener(marker, 'dragend', function(latlng){
-			//var asociada = asociar(evento.id, evento.marker);
-			/*marker.openInfoWindowHtml('<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>'+
-				marcadores_definitivos[asociada].nombre+'<br/>'+
-				'<a id="guardar_asociacion" href="#" onclick="guardar_asociacion('+asociada+','+evento.id+');return false;">Guardar</a>'+' - '+
-				'<a id="cancelar" href="#" onclick="cancelar_asignacion('+evento.id+');return false;">Cancelar</a></div>');*/
-			
-			var nuevaLat = latlng.lat();
-			var nuevaLong = latlng.lng();
-			var nuevaPos = new GLatLng(nuevaLat, nuevaLong);
-			map.removeOverlay(marker);
-			marker.setLatLng(nuevaPos);
-			map.addOverlay(marker);
-			marker.openInfoWindowHtml('<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/>' +
-				'<a id="confirmar" href="#" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
-				',' + nuevaLat + ',' + nuevaLong + ')" >Confirmar</a>'+ ' - ' +
-				'<a id="cancelar" href="#" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');">Cancelar</a></div>');
-
-			// Temporal*****************************************************************************************
-			//cancelar_asignacion(evento.id);
-			//**************************************************************************************************
-			
-			/*marker.openInfoWindowHtml('<div id="bocadillo">¿Confirmar cambio de posición?<br/>'+
-				'<a id="confirmar" href="#" onclick="map.closeInfoWindow();guardar_posicion('+evento.id+
-				','+marker.getLatLng().lat()+','+marker.getLatLng().lng()+')">Confirmar</a>'+ ' - '+
-				'<a id="cancelar" href="#" onclick="map.closeInfoWindow();">Cancelar</a></div>');*/
-		});
-
-		GEvent.addListener(marker, 'infowindowclose', function() {
-			limpiarLateral(evento.marcador); // en mapa_xxx.js
-		});
-	}
-
-	if((evento.planta == plantaResidencia || evento.planta == -2 || plantaResidencia == -2) && (evento.tipo != 'healthy' || verSanos == true)){
-		// (!(evento.marcador=='resource' && caracter==1)){
-		map.addOverlay(marker);
-	}
+	var opciones = definirOpciones(evento); // en mapa_xxx.js
+	var marker = comportamientoMarcador(evento, caracter, opciones); // en mapa_xxx.js
 	return marker;
 }
 
@@ -588,14 +387,7 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 		'planta':planta,
 		'accion':accion
 	});
-
-	if(puntero.cantidad-cantidad > 0 && tipo != 'healthy'){
-		crearCatastrofe(puntero.marcador, puntero.tipo, puntero.cantidad-1, puntero.nombre, puntero.info, puntero.descripcion, puntero.direccion,
-			puntero.longitud+0.00001, puntero.latitud-0.000005, puntero.estado, puntero.tamanno, puntero.trafico, puntero.idAssigned, puntero.planta);
-	}
 	
-
-
 	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
 		if(emergenciasAsociadas[0][i][1] != emergenciasAsociadas[1][i][1]){
 			var accion2;
@@ -626,6 +418,18 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 			});
 		}
 	}*/
+
+	if(puntero.cantidad-cantidad > 0 && tipo != 'healthy'){
+		for(i = 0; i < emergenciasAsociadas[0].length; i++){
+			emergenciasAsociadas[0][i][1] = emergenciasAsociadas[1][i][1];
+		}
+		/*for(i = 0; i < sintomas[0].length; i++){
+			sintomas[0][i][1] = sintomas[1][i][1];
+		}*/
+		crearCatastrofe(puntero.marcador, puntero.tipo, puntero.cantidad-1, puntero.nombre, puntero.info, puntero.descripcion, puntero.direccion,
+			puntero.longitud+0.00001, puntero.latitud-0.000005, puntero.estado, puntero.size, puntero.traffic, puntero.idAssigned, puntero.planta);
+	}
+
 	escribirMensaje(puntero.nombre, puntero.planta, 'modificar', 1);
 	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 }
@@ -720,6 +524,7 @@ function cancelar_asignacion(id){
 	// borro la posicion actual y lo dibujo en la antigua
 	map.removeOverlay(marcadores_definitivos[id].marker);
 	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
+	noActualizar = 0;
 }
 
 function guardar_posicion(id, lat, lng){
@@ -731,6 +536,7 @@ function guardar_posicion(id, lat, lng){
 		'longitud':lng
 	});
 	registrarHistorial(userName, marcador.marcador, marcador.tipo, id, 'mover');
+	noActualizar = 0;
 }
 
 function obtiene_fecha() {
