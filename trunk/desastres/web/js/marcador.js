@@ -1,5 +1,5 @@
 function ObjMarcador(id, marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud,
-		direccion, estado, fecha, modificado, marker, size, traffic, idAssigned, usuario, planta){
+		direccion, size, traffic, planta, estado, idAssigned, fecha, modificado, usuario, marker){
 	//variables privadas
 	this.id = id;
 	this.marcador = marcador;
@@ -11,13 +11,13 @@ function ObjMarcador(id, marcador, tipo, cantidad, nombre, descripcion, info, la
 	this.latitud = latitud;
 	this.longitud = longitud;
 	this.direccion = direccion;
-	this.estado = estado;
-	this.fecha = fecha;
-	this.modificado = modificado;
-	this.marker = marker;
 	this.size = size;
 	this.traffic = traffic;
-	this.idAssigned = idAssigned;
-	this.usuario = usuario;
 	this.planta = planta;
+	this.estado = estado;
+	this.idAssigned = idAssigned;
+	this.fecha = fecha;
+	this.modificado = modificado;
+	this.usuario = usuario;
+	this.marker = marker;
 }

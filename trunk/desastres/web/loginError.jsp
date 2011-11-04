@@ -13,7 +13,9 @@
 			<link type="image/x-icon" rel="shotcut icon" href="images/favicon_<%=proyecto%>.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<script type="text/javascript" src="js/i18n.js"></script>
-			<script type="text/javascript">var idioma = '<fmt:message key="idioma"/>'</script>
+			<script type="text/javascript">
+				var idioma = '<fmt:message key="idioma"/>';
+			</script>
 			<script type="text/javascript" src="js/hora_fecha.js"></script>
 		</head>
 		<body onload="IniciarReloj24()">

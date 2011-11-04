@@ -219,3 +219,7 @@ function comportamientoMarcador(evento, caracter, opciones){
 
 	return marker;
 }
+
+function escribirMensaje(){}
+
+function registrarHistorial(){}
