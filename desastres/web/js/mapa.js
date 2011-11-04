@@ -60,8 +60,8 @@ function initialize(){
 			$.each(data, function(entryIndex, entry){
 				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
 					entry['quantity'],entry['name'],entry['description'],entry['info'],entry['latitud'],
-					entry['longitud'],entry['address'],entry['state'],entry['date'], entry['modified'],
-					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['user'],entry['floor']);
+					entry['longitud'],entry['address'],entry['size'],entry['traffic'],entry['floor'],
+					entry['state'],entry['idAssigned'],entry['date'], entry['modified'],entry['user'],null);
 				nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 				marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 				indices[pos_indices] = nuevomarcador.id;
@@ -92,8 +92,8 @@ function actualizar(){
 				// el id lo asigna la base de datos
 				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
 					entry['quantity'],entry['name'],entry['description'],entry['info'],entry['latitud'],
-					entry['longitud'],entry['address'],entry['state'],entry['date'], entry['modified'],
-					null,entry['size'],entry['traffic'],entry['idAssigned'],entry['user'],entry['floor']);
+					entry['longitud'],entry['address'],entry['size'],entry['traffic'],entry['floor'],
+					entry['state'],entry['idAssigned'],entry['date'], entry['modified'],entry['user'],null);
 
 				// pintamos los nuevos, para lo que comprobamos que no existian
 				if(marcadores_definitivos[nuevomarcador.id] == null){
@@ -235,7 +235,7 @@ function generaMarcador(evento, caracter){
 function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,planta){
 	var fecha = obtiene_fecha();
 	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,descripcion,info,
-		latitud,longitud,direccion,estado,fecha,fecha,null,size,traffic,idAssigned,usuario_actual,planta);
+		latitud,longitud,direccion,size,traffic,planta,estado,idAssigned,fecha,fecha,usuario_actual,null);
 
 	if(marcador == 'event' && tipo == 'injuredPerson'){
 		nuevomarcador.marcador = 'people';
@@ -266,13 +266,13 @@ function guardar(puntero){
 			'latitud':puntero.latitud,
 			'longitud':puntero.longitud,
 			'direccion':puntero.direccion,
-			'estado':puntero.estado,
 			'size':puntero.size,
 			'traffic':puntero.traffic,
-			'fecha':puntero.fecha,
+			'planta':puntero.planta,
+			'estado':puntero.estado,
 			'idAssigned':puntero.idAssigned,
-			'usuario':puntero.usuario,
-			'planta':puntero.planta
+			'fecha':puntero.fecha,
+			'usuario':puntero.usuario
 		},
 		success: function(data){
 			$('#guardar').innerHTML = data;
@@ -327,6 +327,7 @@ function modificar(id, cantidad, nombre, info, descripcion, direccion, longitud,
 	}else if(caracter_temp == DEFINITIVO){
 		// hay que hacer un update a la base de datos
 		$.post('getpost/update.jsp',{
+			'accion':'modificar',
 			'id':id,
 			'marcador':puntero_temp.marcador,
 			'tipo':puntero_temp.tipo,
@@ -337,14 +338,13 @@ function modificar(id, cantidad, nombre, info, descripcion, direccion, longitud,
 			'latitud':latitud,
 			'longitud':longitud,
 			'direccion':direccion,
-			'estado':estado,
 			'size':size,
 			'traffic':traffic,
+			'planta':planta,
+			'estado':estado,
 			'idAssigned':idAssigned,
 			'fecha':puntero_temp.fecha,
-			'usuario':usuario_actual,
-			'planta':planta,
-			'accion':'modificar'
+			'usuario':usuario_actual
 		});
 	}
 }
@@ -368,6 +368,7 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 	}
 
 	$.post('getpost/update.jsp',{
+		'accion':accion,
 		'id':id,
 		'marcador':puntero.marcador,
 		'tipo':tipo,
@@ -378,14 +379,13 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 		'latitud':puntero.latitud,
 		'longitud':puntero.longitud,
 		'direccion':direccion,
-		'estado':puntero.estado,
 		'size':tamanno,
 		'traffic':trafico,
+		'planta':planta,
+		'estado':puntero.estado,
 		'idAssigned':idA,
 		'fecha':puntero.fecha,
-		'usuario':usuario_actual,
-		'planta':planta,
-		'accion':accion
+		'usuario':usuario_actual
 	});
 	
 	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
@@ -397,9 +397,9 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 				accion2 = 'eliminarAsociacion';
 			}
 			$.post('getpost/update.jsp',{
+				'accion':accion2,
 				'id_herido':id,
-				'id_emergencia':emergenciasAsociadas[0][i][0],
-				'accion':accion2
+				'id_emergencia':emergenciasAsociadas[0][i][0]
 			});
 		}
 	}
@@ -412,9 +412,9 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 				accion3 = 'eliminarSintoma';
 			}
 			$.post('getpost/update.jsp',{
+				'accion':accion3,
 				'id_herido':id,
-				'tipo_sintoma':sintomas[0][i][0],
-				'accion':accion3
+				'tipo_sintoma':sintomas[0][i][0]
 			});
 		}
 	}*/
@@ -441,6 +441,7 @@ function eliminar(puntero,caracter){
 		// hay que hacer un update
 		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
 			$.post('getpost/update.jsp',{
+				'accion':'eliminar',
 				'id':puntero.id,
 				'marcador':puntero.marcador,
 				'tipo':'healthy',
@@ -451,19 +452,19 @@ function eliminar(puntero,caracter){
 				'latitud':puntero.latitud,
 				'longitud':puntero.longitud,
 				'direccion':puntero.direccion,
-				'estado':'active',
 				'size':puntero.size,
 				'traffic':puntero.traffic,
+				'planta':puntero.planta,
+				'estado':'active',
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
-				'usuario':usuario_actual,
-				'planta':puntero.planta,
-				'accion':'eliminar'
+				'usuario':usuario_actual
 			});
 			escribirMensaje(puntero.nombre, puntero.planta, 'eliminar', 1);
 			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
 		}else{
 			$.post('getpost/update.jsp',{
+				'accion':'eliminar',
 				'id':puntero.id,
 				'marcador':puntero.marcador,
 				'tipo':puntero.tipo,
@@ -474,14 +475,13 @@ function eliminar(puntero,caracter){
 				'latitud':puntero.latitud,
 				'longitud':puntero.longitud,
 				'direccion':puntero.direccion,
-				'estado':'erased',
 				'size':puntero.size,
 				'traffic':puntero.traffic,
+				'planta':puntero.planta,
+				'estado':'erased',
 				'idAssigned':puntero.idAssigned,
 				'fecha':puntero.fecha,
-				'usuario':usuario_actual,
-				'planta':puntero.planta,
-				'accion':'eliminar'
+				'usuario':usuario_actual
 			});
 			escribirMensaje(puntero.nombre, puntero.planta, 'eliminar', 1);
 			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
