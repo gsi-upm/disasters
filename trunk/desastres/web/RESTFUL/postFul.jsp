@@ -1,6 +1,6 @@
 <%@ page contentType="application/json" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%> 
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
 
 <%@ include file="../jspf/database.jspf" %>
@@ -82,12 +82,12 @@
 </c:choose>
 
 <c:catch var="errorUpdate">
-    <sql:update dataSource="${CatastrofesServer}">
+	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
-			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
-		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,
-		       (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
-			   ?, ?, ?, ?, ?, ?)
+			longitud, direccion, size, traffic, planta, estado, idAssigned, fecha, usuario)
+		VALUES((SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
+			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+			(SELECT id FROM tipos_estados WHERE tipo_estado = ?), ?, ?, ?)
 		<sql:param value="${item}"/>
 		<sql:param value="${param.type}"/>
 		<sql:param value="${number}"/>
@@ -97,13 +97,13 @@
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.address}"/>
-		<sql:param value="${param.state}"/>
 		<sql:param value="${param.size}"/>
 		<sql:param value="${param.traffic}"/>
+		<sql:param value="${param.floor}"/>
+		<sql:param value="${param.state}"/>
 		<sql:param value="${idAssigned}"/>
 		<sql:param value="${param.date}"/>
 		<sql:param value="${param.user}"/>
-		<sql:param value="${param.floor}"/>
 	</sql:update>
 </c:catch>
 

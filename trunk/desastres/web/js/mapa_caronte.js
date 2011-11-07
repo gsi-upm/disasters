@@ -11,7 +11,7 @@ function initialize2(){
 		}
 	}
 
-	if(userName != ''){
+	if(userName != '' && nivelMsg > 1){
 		plantaResidencia = 0;
 		var icono = new GIcon();
 		icono.image = 'markers/residencia/planta'+ plantaResidencia + '.png';
@@ -58,7 +58,7 @@ function initialize2(){
 			$.getJSON('getpost/getLatLong.jsp',{
 				'nombre':userName
 			}, function(data){
-				localizacion = data[0]['localizacion']; // entonces valor por defecto del usuario
+				localizacion = data[0].localizacion; // entonces valor por defecto del usuario
 				document.getElementById('form-posicion').localizacion.checked = localizacion;
 			});
 		}else{
@@ -69,11 +69,11 @@ function initialize2(){
 			'tipo':'todasEmergencias'
 		}, function(data){
 			$.each(data, function(entryIndex, entry) {
-				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
-				'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
-				entry['id'] +' - ' + entry['nombre'] + '</li>';
-				emergenciasAsociadas[0].push([entry['id'], false]);
-				emergenciasAsociadas[1].push([entry['id'], false]);
+				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
+					'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"/>' +
+					entry.id +' - ' + entry.nombre + '</li>';
+				emergenciasAsociadas[0].push([entry.id, false]);
+				emergenciasAsociadas[1].push([entry.id, false]);
 			});
 			if(document.getElementById('checkboxAsoc').innerHTML == ''){
 				document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
@@ -322,11 +322,11 @@ function registrarHistorial(usuario, marcador, tipo, emergencia, accion){
 	}
 
 	$.post('getpost/registrarHistorial.jsp',{
+		'accion':accion,
 		'usuario':usuario,
 		'marcador':marcador,
 		'tipo':tipo,
 		'emergencia':emergencia,
-		'evento':evento,
-		'accion':accion
+		'evento':evento
 	});
 }

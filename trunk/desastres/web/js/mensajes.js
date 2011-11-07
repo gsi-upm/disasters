@@ -25,9 +25,9 @@ function mostrarMensajes(){
 	}, function(data){
 		var tamanno = data.length;
 		$.each(data, function(entryIndex, entry){
-			msgs.innerHTML += '<p>(' + entry['fecha'].split(' ')[1].split('.')[0] + ') ' + entry['mensaje'] + '</p>';
+			msgs.innerHTML += '<p>(' + entry.fecha.split(' ')[1].split('.')[0] + ') ' + entry.mensaje + '</p>';
 			if(entryIndex == tamanno-1){
-				id = entry['id'];
+				id = entry.id;
 				msgs.innerHTML += '<hr/>';
 			}
 		});
@@ -50,7 +50,7 @@ function mostrarMensajes2(index){
 		var tamanno = data.length;
 		id += tamanno;
 		$.each(data, function(entryIndex, entry){
-			msgs.innerHTML += '<p>(' + entry['fecha'].split(' ')[1].split('.')[0] + ') ' + entry['mensaje'] + '</p>';
+			msgs.innerHTML += '<p>(' + entry.fecha.split(' ')[1].split('.')[0] + ') ' + entry.mensaje + '</p>';
 		});
 		if(tamanno > 0){
 			msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;

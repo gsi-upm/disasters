@@ -113,7 +113,9 @@
 							</c:if>
 							<c:if test="${proyecto.rol == 'citizen'}">
 								<div class="div_vacio"></div>
-								<div id="map_canvas"></div>
+								<div id="contenedor_mapa">
+									<div id="map_canvas"></div>
+								</div>
 							</c:if>
 						</c:if>
 					</td>

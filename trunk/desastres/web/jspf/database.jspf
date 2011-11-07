@@ -1,7 +1,7 @@
 <%
 	String proyecto = getServletContext().getInitParameter("proyect");
 	if(proyecto.equals("disasters")){
-		proyecto = "improvise";
+		proyecto = "improvisa";
 	}
 %>
 <%-- HSQLDB --%>

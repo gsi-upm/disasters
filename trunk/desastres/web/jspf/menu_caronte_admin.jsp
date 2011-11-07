@@ -29,14 +29,14 @@
 						</tr>
 						<tr>
 							<td>
-								<input type="radio" name="tipo" value="injuredPerson" onclick="cambiaIcono('event','injuredPerson');"/>
-								<fmt:message key="personaherida"/>
+								<input type="radio" name="tipo" value="lostPerson" onclick="cambiaIcono('event','lostPerson');"/>
+								<fmt:message key="personaperdida"/>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<input type="radio" name="tipo" value="lostPerson" onclick="cambiaIcono('event','lostPerson');"/>
-								<fmt:message key="personaperdida"/>
+								<input type="radio" name="tipo" value="injuredPerson" onclick="cambiaIcono('event','injuredPerson');"/>
+								<fmt:message key="personaherida"/>
 							</td>
 						</tr>
 					</table>

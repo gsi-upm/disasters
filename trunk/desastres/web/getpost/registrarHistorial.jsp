@@ -8,8 +8,7 @@
 <c:if test="${param.accion != 'crear'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO historial(id_usuario,tipo,id_tipo,id_emergencia,evento)
-		VALUES(
-			(SELECT id FROM usuarios WHERE nombre_usuario = ?),
+		VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
 			(SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
 			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?), ?, ?)
 		<sql:param value="${param.usuario}"/>
@@ -22,8 +21,7 @@
 <c:if test="${param.accion == 'crear'}">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO historial(id_usuario,tipo,id_tipo,id_emergencia,evento)
-		VALUES(
-			(SELECT id FROM usuarios WHERE nombre_usuario = ?),
+		VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
 			(SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
 			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
 			(SELECT id FROM catastrofes WHERE fecha = ?), ?)

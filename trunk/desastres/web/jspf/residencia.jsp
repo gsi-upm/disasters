@@ -41,14 +41,13 @@
 					<td id="numGraves"></td>
 				</tr>
 				<tr>
-					<td><img alt="" src="markers/events/personaHerida.png"/></td>
-					<td id="numHeridos"></td>
+					<td><img alt="" src="markers/events/personaPerdida.png"/></td>
+					<td id="numPerdidos"></td>
 					<td><img alt="" src="markers/people/muerto1.png"/></td>
 					<td id="numMuertos"></td>
 				</tr>
 				<tr>
-					<td><img alt="" src="markers/events/personaPerdida.png"/></td>
-					<td id="numPerdidos"></td>
+					<td colspan="2"></td>
 					<td><img alt="" src="markers/people/trapped1.png"/></td>
 					<td id="numAtrapados"></td>
 				</tr>

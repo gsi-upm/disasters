@@ -38,13 +38,6 @@
 				AND planta = ?
 				<sql:param value="${planta}"/>
 			</sql:query>
-			<sql:query var="injuredPerson" dataSource="${CatastrofesServer}">
-				SELECT id FROM catastrofes
-				WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'injuredPerson')
-				AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-				AND planta = ?
-				<sql:param value="${planta}"/>
-			</sql:query>
 			<sql:query var="healthy" dataSource="${CatastrofesServer}">
 				SELECT id FROM catastrofes
 				WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'healthy')
@@ -100,11 +93,6 @@
 			<sql:query var="lostPerson" dataSource="${CatastrofesServer}">
 				SELECT id FROM catastrofes
 				WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'lostPerson')
-				AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-			</sql:query>
-			<sql:query var="injuredPerson" dataSource="${CatastrofesServer}">
-				SELECT id FROM catastrofes
-				WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'injuredPerson')
 				AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 			</sql:query>
 			<sql:query var="healthy" dataSource="${CatastrofesServer}">
@@ -172,12 +160,11 @@
 		AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 	</sql:query>
 </c:if>
-[
+
 <json:object name="info">
 	<json:property name="fire" value="${fire.rowCount}"/>
 	<json:property name="flood" value="${flood.rowCount}"/>
 	<json:property name="collapse" value="${collapse.rowCount}"/>
-	<json:property name="injuredPerson" value="${injuredPerson.rowCount}"/>
 	<json:property name="lostPerson" value="${lostPerson.rowCount}"/>
 	<json:property name="healthy" value="${healthy.rowCount}"/>
 	<json:property name="slight" value="${slight.rowCount}"/>
@@ -191,5 +178,4 @@
 	<json:property name="police" value="${police.rowCount}"/>
 	<json:property name="firemen" value="${firemen.rowCount}"/>
 	<json:property name="ambulance" value="${ambulance.rowCount}"/>
-</json:object> ,
-]
+</json:object>

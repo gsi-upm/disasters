@@ -93,7 +93,7 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 			
 			if(usuario.length() == 1){
 				autenticado = true;
-				String tipoUsuario = usuario.getJSONObject(0).getString("type");
+				String tipoUsuario = usuario.getJSONObject(0).getString("user_type");
 				String latitud = usuario.getJSONObject(0).getString("latitud");
 				String longitud = usuario.getJSONObject(0).getString("longitud");
 				String descripcion = usuario.getJSONObject(0).getString("real_name");

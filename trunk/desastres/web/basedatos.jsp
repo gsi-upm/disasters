@@ -12,7 +12,14 @@
 	</head>
 	<body>
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT * FROM catastrofes
+			SELECT c.id, c.tipo, c.marcador, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud,
+				c.longitud, c.direccion, c.size, c.traffic, c.planta, c.estado, c.idAssigned, c.fecha,
+				c.modificado, c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado, u.nombre_usuario
+			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e, usuarios u
+			WHERE c.marcador = m.id
+			AND c.tipo = t.id
+			AND c.estado = e.id
+			AND c.usuario = u.id
 		</sql:query>
 		<sql:query var="asociaciones" dataSource="${CatastrofesServer}">
 			SELECT * FROM asociaciones_heridos_emergencias
@@ -39,13 +46,20 @@
 			SELECT * FROM tipos_marcadores
 		</sql:query>
 		<sql:query var="tipos_catastrofes" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_catastrofes
+			SELECT c.id, c.id_marcador, c.tipo_catastrofe, c.descripcion, m.tipo_marcador
+			FROM tipos_catastrofes c, tipos_marcadores m
+			WHERE c.id_marcador = m.id
 		</sql:query>
 		<sql:query var="tipos_usuarios" dataSource="${CatastrofesServer}">
 			SELECT * FROM tipos_usuarios
 		</sql:query>
 		<sql:query var="tipos_actividades" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_actividades
+			SELECT a.id, a.tipo, a.tipo_emergencia, a.tipo_marcador, a.estado_emergencia, a.descripcion,
+				m.tipo_marcador tipomarcador, c.tipo_catastrofe, e.tipo_estado
+			FROM tipos_actividades a, tipos_marcadores m, tipos_catastrofes c, tipos_estados e
+			WHERE (a.tipo_marcador = m.id OR (a.tipo_marcador IS NULL AND m.id = 1)) /* ID forzado solo muestre 1 */
+			AND (a.tipo_emergencia = c.id OR (a.tipo_emergencia IS NULL AND c.id = 1)) /* ID forzado solo muestre 1 */
+			AND a.estado_emergencia = e.id
 		</sql:query>
 		<sql:query var="tipos_eventos" dataSource="${CatastrofesServer}">
 			SELECT * FROM tipos_eventos
@@ -67,14 +81,14 @@
 		<table border="1">
 			<tr>
 				<th>ID</th><th>MARCADOR</th><th>TIPO</th><th>CANTIDAD</th><th>NOMBRE</th><th>DESCRIPCION</th>
-				<th>INFO</th><th>LATITUD</th><th>LONGITUD</th><th>DIRECCION</th><th>ESTADO</th><th>SIZE</th>
-				<th>TRAFFIC</th><th>PLANTA</th><th>IDASSIGNED</th><th>FECHA</th><th>MODIFICADO</th><th>USUARIO</th>
+				<th>INFO</th><th>LATITUD</th><th>LONGITUD</th><th>DIRECCION</th><th>SIZE</th><th>TRAFFIC</th>
+				<th>PLANTA</th><th>ESTADO</th><th>IDASSIGNED</th><th>FECHA</th><th>MODIFICADO</th><th>USUARIO</th>
 			</tr>
 			<c:forEach var="evento" items="${eventos.rows}">
 				<tr>
 					<td>${evento.id}</td>
-					<td>${evento.marcador}</td>
-					<td>${evento.tipo}</td>
+					<td>${evento.marcador} - [${evento.tipo_marcador}]</td>
+					<td>${evento.tipo} - [${evento.tipo_catastrofe}]</td>
 					<td>${evento.cantidad}</td>
 					<td>${evento.nombre}</td>
 					<td>${evento.descripcion}</td>
@@ -82,14 +96,14 @@
 					<td>${evento.latitud}</td>
 					<td>${evento.longitud}</td>
 					<td>${evento.direccion}</td>
-					<td>${evento.estado}</td>
 					<td>${evento.size}</td>
 					<td>${evento.traffic}</td>
 					<td>${evento.planta}</td>
+					<td>${evento.estado} - [${evento.tipo_estado}]</td>
 					<td>${evento.idassigned}</td>
 					<td>${evento.fecha}</td>
 					<td>${evento.modificado}</td>
-					<td>${evento.usuario}</td>
+					<td>${evento.usuario} - [${evento.nombre_usuario}]</td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -211,7 +225,7 @@
 			<c:forEach var="catastrofe" items="${tipos_catastrofes.rows}">
 				<tr>
 					<td>${catastrofe.id}</td>
-					<td>${catastrofe.id_marcador}</td>
+					<td>${catastrofe.id_marcador} - [${catastrofe.tipo_marcador}]</td>
 					<td>${catastrofe.tipo_catastrofe}</td>
 					<td>${catastrofe.descripcion}</td>
 				</tr>
@@ -232,13 +246,14 @@
 		</table>
 		<p>TIPOS_ACTIVIDADES</p>
 		<table border="1">
-			<tr><th>ID</th><th>TIPO</th><th>TIPO_EMERGENCIA</th><th>ESTADO_EMERGENCIA</th><th>DESCRIPCION</th></tr>
+			<tr><th>ID</th><th>TIPO</th><th>TIPO_MARCADOR</th><th>TIPO_EMERGENCIA</th><th>ESTADO_EMERGENCIA</th><th>DESCRIPCION</th></tr>
 			<c:forEach var="actividad" items="${tipos_actividades.rows}">
 				<tr>
 					<td>${actividad.id}</td>
 					<td>${actividad.tipo}</td>
-					<td>${actividad.tipo_emergencia}</td>
-					<td>${actividad.estado_emergencia}</td>
+					<td>${actividad.tipo_marcador}<c:if test="${actividad.tipo_marcador != null}"> - [${actividad.tipomarcador}]</c:if></td>
+					<td>${actividad.tipo_emergencia}<c:if test="${actividad.tipo_emergencia != null}"> - [${actividad.tipo_catastrofe}]</c:if></td>
+					<td>${actividad.estado_emergencia} - [${actividad.tipo_estado}]</td>
 					<td>${actividad.descripcion}</td>
 				</tr>
 			</c:forEach>

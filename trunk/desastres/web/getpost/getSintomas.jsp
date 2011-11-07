@@ -1,7 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page isELIgnored = "false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <%@ include file="../jspf/database.jspf" %>
@@ -16,8 +16,8 @@
 		<sql:query var="sintomas" dataSource="${CatastrofesServer}">
 			SELECT * FROM tipos_sintomas
 			WHERE id NOT IN (SELECT DISTINCT id_sintoma FROM sintomas
-			                 WHERE id_herido = ?
-							 AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
+				WHERE id_herido = ?
+				AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>
@@ -32,12 +32,13 @@
 		</sql:query>
 	</c:when>
 </c:choose>
-[
-<c:forEach var="sintoma" items="${sintomas.rows}">
-	<json:object name="temp">
-		<json:property name="id" value="${sintoma.id}"/>
-		<json:property name="tipo" value="${sintoma.tipo}"/>
-		<json:property name="descripcion" value="${sintoma.descripcion}"/>
-	</json:object> ,
-</c:forEach>
-]
+
+<json:array>
+	<c:forEach var="sintoma" items="${sintomas.rows}">
+		<json:object>
+			<json:property name="id" value="${sintoma.id}"/>
+			<json:property name="tipo" value="${sintoma.tipo}"/>
+			<json:property name="descripcion" value="${sintoma.descripcion}"/>
+		</json:object>
+	</c:forEach>
+</json:array>

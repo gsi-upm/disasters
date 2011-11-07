@@ -1,7 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page isELIgnored = "false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <%@ include file="../jspf/database.jspf" %>
@@ -13,10 +13,10 @@
 				SELECT id, tipo, descripcion
 				FROM tipos_actividades
 				WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo_estado = ?)
-				AND (tipo_emergencia = '' OR tipo_emergencia = ? OR tipo_emergencia = ?)
+				AND (tipo_emergencia = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?)
+					OR tipo_marcador IS NULL)
 				<sql:param value="${param.estado}"/>
 				<sql:param value="${param.tipo}"/>
-				<sql:param value="${param.marcador}"/>
 			</sql:query>
 		</c:when>
 		<c:when test="${param.marcador == 'people'}">
@@ -26,7 +26,8 @@
 						SELECT id, tipo, descripcion
 						FROM tipos_actividades
 						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo_estado = ?)
-						AND (tipo_emergencia = '' OR tipo_emergencia = ?)
+						AND (tipo_emergencia = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?)
+							OR tipo_marcador IS NULL)
 						<sql:param value="${param.estado}"/>
 						<sql:param value="${param.tipo}"/>
 					</sql:query>
@@ -36,9 +37,10 @@
 						SELECT id, tipo, descripcion
 						FROM tipos_actividades
 						WHERE estado_emergencia = (SELECT id FROM tipos_estados WHERE tipo_estado = ?)
-						AND (tipo_emergencia = '' OR tipo_emergencia = ?)
+						AND ((tipo_marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'people')
+								AND tipo_emergencia IS NULL)
+							OR tipo_marcador IS NULL)
 						<sql:param value="${param.estado}"/>
-						<sql:param value="${param.marcador}"/>
 					</sql:query>
 				</c:otherwise>
 			</c:choose>
@@ -72,16 +74,6 @@
 		</c:when>
 	</c:choose>
 </c:if>
-
-<%--<sql:query var="acciones" dataSource="${CatastrofesServer}">
-	SELECT id, tipo, descripcion
-	FROM tipos_actividades
-	WHERE estado_emergencia=?
-	AND (tipo_emergencia='' OR tipo_emergencia=? OR tipo_emergencia=?)
-	<sql:param value="${param.estado}"/>
-	<sql:param value="${param.tipo}"/>
-	<sql:param value="${param.marcador}"/>
-</sql:query>--%>
 
 <json:array>
 	<c:forEach var="accion" items="${acciones.rows}">

@@ -2,7 +2,7 @@
 <%@ page isELIgnored = "false" %>
 <%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <%@ include file="../jspf/database.jspf" %>
@@ -12,8 +12,7 @@
 		<c:choose>
 			<c:when test="${param.action == 'user'}">
 				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT u.id, u.nombre_usuario, u.tipo_usuario, u.nombre_real,
-						u.correo, u.latitud, u.longitud, t.tipo
+					SELECT u.id, u.nombre_usuario, u.nombre_real, u.correo, u.latitud, u.longitud, t.tipo
 					FROM usuarios u, tipos_usuarios t
 					WHERE u.nombre_usuario = ?
 					AND u.password = ?
@@ -24,8 +23,7 @@
 			</c:when>
 			<c:when test="${param.action == 'userProyect'}">
 				<sql:query var="proyectos" dataSource="${CatastrofesServer}">
-					SELECT u.id, u.nombre_usuario, u.tipo_usuario, u.nombre_real,
-						u.correo, u.latitud, u.longitud, t.tipo, t.nivel
+					SELECT u.id, u.proyecto, t.tipo, t.nivel
 					FROM usuarios u, tipos_usuarios t
 					WHERE u.nombre_usuario = ?
 					AND u.tipo_usuario = t.id
@@ -34,34 +32,36 @@
 			</c:when>
 			<c:when test="${param.action == 'userRole'}">
 				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT * FROM usuarios
-					WHERE nombre_usuario = ?
+					SELECT u.id, u.nombre_usuario, u.nombre_real, u.correo, u.latitud, u.longitud, t.tipo
+					FROM usuarios u, tipos_usuarios t
+					WHERE u.nombre_usuario = ?
+					AND u.tipo_usuario = t.id
 					<sql:param value="${param.nombre_usuario}"/>
 				</sql:query>
 			</c:when>
 		</c:choose>
-		[
-		<c:forEach var="evento" items="${eventos.rows}">
-			<json:object name="temporal">
-				<json:property name="id" value="${evento.id}"/>
-				<json:property name="user_name" value="${evento.nombre_usuario}"/>
-				<json:property name="user_type" value="${evento.tipo_usuario}"/>
-				<json:property name="real_name" value="${evento.nombre_real}"/>
-				<json:property name="email" value="${evento.correo}"/>
-				<json:property name="latitud" value="${evento.latitud}"/>
-				<json:property name="longitud" value="${evento.longitud}"/>
-				<json:property name="type" value="${evento.tipo}"/>
-			</json:object> ,
-		</c:forEach>
-		<c:forEach var="proyecto" items="${proyectos.rows}">
-			<json:object name="temporal">
-				<json:property name="id" value="${proyecto.id}"/>
-				<json:property name="rol" value="${proyecto.tipo}"/>
-				<json:property name="level" value="${proyecto.nivel}"/>
-				<json:property name="proyect" value="${proyecto.proyect}"/>
-			</json:object> ,
-		</c:forEach>
-		]
+		
+		<json:array>
+			<c:forEach var="evento" items="${eventos.rows}">
+				<json:object>
+					<json:property name="id" value="${evento.id}"/>
+					<json:property name="user_name" value="${evento.nombre_usuario}"/>
+					<json:property name="user_type" value="${evento.tipo}"/>
+					<json:property name="real_name" value="${evento.nombre_real}"/>
+					<json:property name="email" value="${evento.correo}"/>
+					<json:property name="latitud" value="${evento.latitud}"/>
+					<json:property name="longitud" value="${evento.longitud}"/>
+				</json:object>
+			</c:forEach>
+			<c:forEach var="proyecto" items="${proyectos.rows}">
+				<json:object>
+					<json:property name="id" value="${proyecto.id}"/>
+					<json:property name="rol" value="${proyecto.tipo}"/>
+					<json:property name="level" value="${proyecto.nivel}"/>
+					<json:property name="proyect" value="${proyecto.proyect}"/>
+				</json:object>
+			</c:forEach>
+		</json:array>
 	</c:when>
 	<c:when test="${param.action == 'insertar'}">
 		<% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
