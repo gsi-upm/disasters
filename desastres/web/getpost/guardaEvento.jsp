@@ -8,12 +8,10 @@
 <c:catch var="errorUpdate">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
-			longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
+			longitud, direccion, size, traffic, planta, estado, idAssigned, fecha, usuario)
 		VALUES((SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
-		       (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
-		       ?, ?, ?, ?, ?, ?, ?,
-		       (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
-		       ?, ?, ?, ?, ?, ?)
+			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+			(SELECT id FROM tipos_estados WHERE tipo_estado = ?), ?, ?, ?)
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
 		<sql:param value="${param.cantidad}"/>
@@ -23,13 +21,13 @@
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.direccion}"/>
-		<sql:param value="${param.estado}"/>
 		<sql:param value="${param.size}"/>
 		<sql:param value="${param.traffic}"/>
+		<sql:param value="${param.planta}"/>
+		<sql:param value="${param.estado}"/>
 		<sql:param value="${param.idAssigned}"/>
 		<sql:param value="${param.fecha}"/>
 		<sql:param value="${param.usuario}"/>
-		<sql:param value="${param.planta}"/>
 	</sql:update>
 	
 	<%-- Uncomment this code in order to enable Twitter service for new disasters.
@@ -47,9 +45,8 @@
 		msg += new Date();
 		msg += " Size: " + request.getParameter("size");
 		if( msg.length() > 140){
-		    msg = msg.substring(0, 134) +"(...)";
+			msg = msg.substring(0, 134) +"(...)";
 		}
 		twitt.updateStatus(msg);
 	--%>
 </c:catch>
-ok

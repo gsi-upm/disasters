@@ -94,8 +94,8 @@ function validarDireccion(numero){
 			document.getElementById('longitud' + numero).value = point.lng();
 			//Esto es el puntero provisional
 			/*var marker = new GMarker(point);
-       		map.addOverlay(marker);
-       		marker.openInfoWindowHtml('<b>My house</b> <br/> Calle embajadores, 181');*/
+			map.addOverlay(marker);
+			marker.openInfoWindowHtml('<b>My house</b> <br/> Calle embajadores, 181');*/
 		}
 	});
 }
@@ -177,7 +177,7 @@ function borrarFormulario(form, numero){
 
 // Necesario para los radio en los formularios
 function seleccionRadio(form, valor){
-	var types = ['fire','flood','collapse','injuredPerson','lostPerson',
+	var types = ['fire','flood','collapse','lostPerson','injuredPerson',
 		'police','firemen','ambulance','nurse','gerocultor','assistant',
 		'healthy','slight','serious','dead','trapped'];
 	var despTypes = 0; // desplaza el valor del tipo

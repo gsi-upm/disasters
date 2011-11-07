@@ -1,4 +1,4 @@
-//  RELOJ 24 HORAS
+// RELOJ 24 HORAS
 var Reloj24H = null;
 var RelojEnMarcha = false;
 
@@ -8,7 +8,7 @@ function MostrarHoraActual(){
 	var minuto = ahora.getMinutes();
 	var segundo = ahora.getSeconds();
 	var HHMMSS;
-       
+	
 	if(hora < 10){
 		hora = '0' + hora;
 	}

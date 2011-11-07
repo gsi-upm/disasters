@@ -13,9 +13,10 @@
 		UPDATE catastrofes
 		SET marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
 			tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
-			cantidad = ?, nombre = ?, descripcion = ?, info = ?, latitud = ?, longitud = ?,
-			direccion = ?, estado = (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
-			size = ?, traffic = ?, fecha = ?, usuario = ?, planta = ?, modificado = <%=modif%>
+			cantidad = ?, nombre = ?, descripcion = ?, info = ?, latitud = ?,
+			longitud = ?, direccion = ?, size = ?, traffic = ?, planta = ?,
+			estado = (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
+			fecha = ?, modificado = <%=modif%>, usuario = ?
 		WHERE id = ?
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
@@ -26,12 +27,12 @@
 		<sql:param value="${param.latitud}"/>
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.direccion}"/>
-		<sql:param value="${param.estado}"/>
 		<sql:param value="${param.size}"/>
 		<sql:param value="${param.traffic}"/>
+		<sql:param value="${param.planta}"/>
+		<sql:param value="${param.estado}"/>
 		<sql:param value="${param.fecha}"/>
 		<sql:param value="${param.usuario}"/>
-		<sql:param value="${param.planta}"/>
 		<sql:param value="${param.id}"/>
 	</sql:update>
 </c:if>
@@ -80,8 +81,8 @@
 			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
 			WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
 			AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-			                   WHERE u.id = a.id_usuario
-							   AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+				WHERE u.id = a.id_usuario
+				AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 		</sql:update>
 	</c:when>
 	<c:when test="${param.accion == 'eliminarAsociacion'}">
@@ -108,7 +109,7 @@
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO asociaciones_heridos_emergencias(id_herido, id_emergencia, estado)
 				VALUES((SELECT id FROM catastrofes WHERE fecha = ?), ?,
-					   (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 				<sql:param value="${param.fecha}"/>
 				<sql:param value="${param.id_emergencia}"/>
 			</sql:update>
@@ -132,16 +133,16 @@
 			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
 			WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
 			AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-			                   WHERE u.id = a.id_usuario
-							   AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+				WHERE u.id = a.id_usuario
+				AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 		</sql:update>
 	</c:when>
 	<%--<c:when test="${param.accion == 'annadirSintoma'}">
 		<c:if test="${param.fecha == null}">
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO sintomas(id_herido,id_sintoma,estado)
-				VALUES(?,(SELECT id FROM tipos_sintomas WHERE tipo = ?),
-				       (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+				VALUES(?, (SELECT id FROM tipos_sintomas WHERE tipo = ?),
+					(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 				<sql:param value="${param.id_herido}"/>
 				<sql:param value="${param.tipo_sintoma}"/>
 			</sql:update>
@@ -150,8 +151,8 @@
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO sintomas(id_herido, id_sintoma, estado)
 				VALUES((SELECT id FROM catastrofes WHERE fecha = ?),
-				       (SELECT id FROM tipos_sintomas WHERE tipo = ?),
-					   (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					(SELECT id FROM tipos_sintomas WHERE tipo = ?),
+					(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 				<sql:param value="${param.fecha}"/>
 				<sql:param value="${param.tipo_sintoma}"/>
 			</sql:update>
@@ -177,4 +178,3 @@
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
 </c:if>
-ok

@@ -51,8 +51,8 @@ function verMenos(id){
 	var links1;
 	if(nivelMsg > 1){
 		links1 = '<a id="modificar" href="#" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO);return false;">Modificar</a>' + ' - ' +
-			'<a id="acciones" href="#"onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])"  >Acciones</a>' + ' - ' +
-			'<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;" >Eliminar</a>' + ' - ' +
+			'<a id="acciones" href="#"onclick="cargarAcciones(marcadores_definitivos[' + evento.id + '])">Acciones</a>' + ' - ' +
+			'<a id="eliminar" href="#" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;">Eliminar</a>' + ' - ' +
 			'<a id="ver_mas1" href="#" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</a>';
 	}else{
 		links1 = '<a id="ver_mas1" href="#" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</a>';
@@ -110,8 +110,8 @@ function cargarModificar(puntero,caracter){
 
 function asociar(id, marker){
 	// 1.hallar el punto del marcador pasado
-	var latitud1 = marker.getLatLng().lat(); // = marcadores_definitivos[id].marker.lat();
-	var longitud1 = marker.getLatLng().lng(); // = marcadores_definitivos[id].marker.lng();
+	var latitud1 = marker.getLatLng().lat(); // marcadores_definitivos[id].marker.lat();
+	var longitud1 = marker.getLatLng().lng(); // marcadores_definitivos[id].marker.lng();
 
 	// 2.hallar la distancia a cada catastrofe de la matriz definitiva
 	var diferencia = 999999999999;

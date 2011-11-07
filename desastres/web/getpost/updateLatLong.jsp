@@ -2,7 +2,7 @@
 <%@ page isELIgnored = "false" %>
 <%@ page import="java.sql.Timestamp, java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %> 
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 
 <%@ include file="../jspf/database.jspf" %>
@@ -48,4 +48,3 @@
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
 </c:if>
-ok

@@ -11,7 +11,7 @@
 			<div id="fecha"></div>
 			<div id="Reloj24H"></div>
 		</div>
-		v.92
+		v.93
 		<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
 			 alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
 		<div id="langSelect" class="oculto">

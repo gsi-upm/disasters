@@ -31,7 +31,8 @@
 	<c:when test="${param.action eq 'healthy'}">
 		<sql:update dataSource="${CatastrofesServer}" >
 			UPDATE catastrofes
-			SET tipo = 'healthy', estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), modificado = <%=modif%>
+			SET tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'healthy'),
+				estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), modificado = <%=modif%>
 			WHERE id = ?
 			<sql:param value="${param.id}"/>
 		</sql:update>

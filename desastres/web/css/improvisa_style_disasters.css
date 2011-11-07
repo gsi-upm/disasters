@@ -15,10 +15,10 @@
 }
 
 #messages{
-    margin-top: 0px;
-    height: 528px; /* 400 con botones */
+	margin-top: 0px;
+	height: 528px; /* 400 con botones */
 }
 
 #close_messages, #open_messages{
-    margin-top: 0px;
+	margin-top: 0px;
 }

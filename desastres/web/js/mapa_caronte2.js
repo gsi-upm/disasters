@@ -28,13 +28,13 @@ function numeroMarcadores(planta){
 		$.getJSON('getpost/info_caronte.jsp',{
 			'marcadores':'lateral'
 		}, function(data){
-			document.getElementById('numEnfermeros').innerHTML = '(' + data[0].nurse + ')';
-			document.getElementById('numGerocultores').innerHTML = '(' + data[0].gerocultor + ')';
-			document.getElementById('numAuxiliares').innerHTML = '(' + data[0].assistant + ')';
-			document.getElementById('numOtros').innerHTML = '(' + data[0].otherStaff + ')';
-			document.getElementById('numPolicias').innerHTML = '(' + data[0].police + ')';
-			document.getElementById('numBomberos').innerHTML = '(' + data[0].firemen + ')';
-			document.getElementById('numAmbulancias').innerHTML = '(' + data[0].ambulance + ')';
+			document.getElementById('numEnfermeros').innerHTML = '(' + data.nurse + ')';
+			document.getElementById('numGerocultores').innerHTML = '(' + data.gerocultor + ')';
+			document.getElementById('numAuxiliares').innerHTML = '(' + data.assistant + ')';
+			document.getElementById('numOtros').innerHTML = '(' + data.otherStaff + ')';
+			document.getElementById('numPolicias').innerHTML = '(' + data.police + ')';
+			document.getElementById('numBomberos').innerHTML = '(' + data.firemen + ')';
+			document.getElementById('numAmbulancias').innerHTML = '(' + data.ambulance + ')';
 		});
 	}
 	if(activeTabIndex['dhtmlgoodies_tabView2'] == 1){
@@ -42,16 +42,15 @@ function numeroMarcadores(planta){
 			'marcadores':'plano',
 			'planta':planta
 		}, function(data){
-			document.getElementById('numFuegos').innerHTML = '(' + data[0].fire + ')';
-			document.getElementById('numInundaciones').innerHTML = '(' + data[0].flood + ')';
-			document.getElementById('numDerrumbamientos').innerHTML = '(' + data[0].collapse + ')';
-			document.getElementById('numHeridos').innerHTML = '(' + data[0].injuredPerson + ')';
-			document.getElementById('numPerdidos').innerHTML = '(' + data[0].lostPerson + ')';
-			document.getElementById('numSanos').innerHTML = '(' + data[0].healthy + ')';
-			document.getElementById('numLeves').innerHTML = '(' + data[0].slight + ')';
-			document.getElementById('numGraves').innerHTML = '(' + data[0].serious + ')';
-			document.getElementById('numMuertos').innerHTML = '(' + data[0].dead + ')';
-			document.getElementById('numAtrapados').innerHTML = '(' + data[0].trapped + ')';
+			document.getElementById('numFuegos').innerHTML = '(' + data.fire + ')';
+			document.getElementById('numInundaciones').innerHTML = '(' + data.flood + ')';
+			document.getElementById('numDerrumbamientos').innerHTML = '(' + data.collapse + ')';
+			document.getElementById('numPerdidos').innerHTML = '(' + data.lostPerson + ')';
+			document.getElementById('numSanos').innerHTML = '(' + data.healthy + ')';
+			document.getElementById('numLeves').innerHTML = '(' + data.slight + ')';
+			document.getElementById('numGraves').innerHTML = '(' + data.serious + ')';
+			document.getElementById('numMuertos').innerHTML = '(' + data.dead + ')';
+			document.getElementById('numAtrapados').innerHTML = '(' + data.trapped + ')';
 		});
 	}
 }
@@ -60,9 +59,9 @@ function cargarMenuAcciones(puntero){
 	var menu = '';
 	// igual que $.getJSON(url,data,success) pero forzamos async=false para que cargue bien el pop-up
 	$.ajax({
-		url: 'getpost/getActividades.jsp',
 		type: 'GET',
 		dataType: 'json',
+		url: 'getpost/getActividades.jsp',
 		data: {
 			'marcador':puntero.marcador,
 			'id':puntero.id
@@ -72,7 +71,7 @@ function cargarMenuAcciones(puntero){
 				if(entryIndex == 0){
 					menu += '<br/><table class="tabla_menu">';
 				}
-				menu += '<tr><td><b>' + entry['nombre_usuario'] + '</b> realiza la accion <b>' + entry['tipo'] + '</b></td></tr>';
+				menu += '<tr><td><b>' + entry.nombre_usuario + '</b> realiza la accion <b>' + entry.tipo + '</b></td></tr>';
 				if(entryIndex == data.length-1){
 					menu += '</table>';
 				}
@@ -81,9 +80,9 @@ function cargarMenuAcciones(puntero){
 		async: false
 	});
 	$.ajax({
-		url: 'getpost/getActividades.jsp',
 		type: 'GET',
 		dataType: 'json',
+		url: 'getpost/getActividades.jsp',
 		data: {
 			'marcador':puntero.marcador,
 			'tipo':puntero.tipo,
@@ -96,8 +95,8 @@ function cargarMenuAcciones(puntero){
 				'<tr><th><label for="accion">Acciones a realizar</label></th></tr>' +
 				'<tr class="oculto"><td><input type="radio" name="accion" value="" checked="checked"/></td></tr>'; // Sin esto no funciona!!
 				}
-				menu += '<tr id="' + entry['tipo'] + '"><td>' +
-				'<input type="radio" name="accion" value="' + entry['tipo'] + '"/>' + entry['descripcion'] +
+				menu += '<tr id="' + entry.tipo + '"><td>' +
+				'<input type="radio" name="accion" value="' + entry.tipo + '"/>' + entry.descripcion +
 				'</td></tr>';
 				if(entryIndex == data.length-1){
 					menu += '<tr><td>' +
@@ -115,9 +114,9 @@ function cargarListaActividades(evento){
 	var menu = '';
 	// igual que $.getJSON(url,data,success) pero async=false
 	$.ajax({
-		url: 'getpost/getActividades.jsp',
 		type: 'GET',
 		dataType: 'json',
+		url: 'getpost/getActividades.jsp',
 		data: {
 			'marcador':evento.marcador,
 			'id':evento.id
@@ -127,9 +126,9 @@ function cargarListaActividades(evento){
 				if(entryIndex == 0){
 					menu += '</br><table class="tabla_menu">';
 				}
-				menu += '<tr><td>Accion <b>' + entry['tipo'] + '</b> realizada sobre <b>' + entry['nombre'] + '</b></td>';
+				menu += '<tr><td>Accion <b>' + entry.tipo + '</b> realizada sobre <b>' + entry.nombre + '</b></td>';
 				if(evento.nombre == userName){
-					menu += '<td><input type="button" value="Detener" onclick="detener(' + evento.id + ',' + entry['id_emergencia'] + ',\'' + evento.nombre + '\');map.closeInfoWindow()"></td>';
+					menu += '<td><input type="button" value="Detener" onclick="detener(' + evento.id + ',' + entry.id_emergencia + ',\'' + evento.nombre + '\');map.closeInfoWindow()"></td>';
 				}
 				menu += '</tr>';
 				if(entryIndex == data.length-1){
@@ -177,39 +176,39 @@ function cargarLateral(evento){
 		//document.getElementById('listaSintomas').innerHTML = '';
 		//sintomas = [new Array(), new Array()];
 		$.ajax({
-			url: 'getpost/getAsociaciones.jsp',
 			type: 'GET',
 			dataType: 'json',
+			url: 'getpost/getAsociaciones.jsp',
 			data: {
 				'tipo':'asociadas',
 				'iden': evento.id
 				},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
-					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
-					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)" checked="checked"/>' +
-					entry['id'] +' - ' + entry['nombre'] + '</li>';
-					emergenciasAsociadas[0].push([entry['id'], true]);
-					emergenciasAsociadas[1].push([entry['id'], true]);
+					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
+						'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)" checked="checked"/>' +
+						entry.id + ' - ' + entry.nombre + '</li>';
+					emergenciasAsociadas[0].push([entry.id, true]);
+					emergenciasAsociadas[1].push([entry.id, true]);
 				});
 			},
 			async: false
 		});
 		$.ajax({
-			url: 'getpost/getAsociaciones.jsp',
 			type: 'GET',
 			dataType: 'json',
+			url: 'getpost/getAsociaciones.jsp',
 			data: {
 				'tipo':'emergencias',
 				'iden': evento.id
 				},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
-					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
-					'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
-					entry['id'] +' - ' + entry['nombre'] + '</li>';
-					emergenciasAsociadas[0].push([entry['id'], false]);
-					emergenciasAsociadas[1].push([entry['id'], false]);
+					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
+						'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"/>' +
+						entry.id + ' - ' + entry.nombre + '</li>';
+					emergenciasAsociadas[0].push([entry.id, false]);
+					emergenciasAsociadas[1].push([entry.id, false]);
 				});
 				if(document.getElementById('checkboxAsoc').innerHTML == ''){
 					document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
@@ -220,33 +219,33 @@ function cargarLateral(evento){
 			async: false
 		});
 		/*$.ajax({
-			url: 'getpost/getSintomas.jsp',
 			type: 'GET',
 			dataType: 'json',
+			url: 'getpost/getSintomas.jsp',
 			data: {'tipo':'sintomasSI', 'iden': evento.id},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
-					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry['tipo'] +
-							'" onclick="annadirSintoma(\'' + entry['tipo'] + '\', ' + entry['tipo'] + '.checked)" checked="checked"/>' +
-							entry['descripcion'] + '</li>';
-					sintomas[0].push([entry['tipo'], true]);
-					sintomas[1].push([entry['tipo'], true]);
+					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
+						'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)" checked="checked"/>' +
+						entry.descripcion + '</li>';
+					sintomas[0].push([entry.tipo, true]);
+					sintomas[1].push([entry.tipo, true]);
 				});
 			},
 			async: false
 		});
 		$.ajax({
-			url: 'getpost/getSintomas.jsp',
 			type: 'GET',
 			dataType: 'json',
+			url: 'getpost/getSintomas.jsp',
 			data: {'tipo':'sintomasNO', 'iden': evento.id},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
-					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry['tipo'] +
-							'" onclick="annadirSintoma(\'' + entry['tipo'] + '\', ' + entry['tipo'] + '.checked)"/>' +
-							entry['descripcion'] + '</li>';
-					sintomas[0].push([entry['tipo'], false]);
-					sintomas[1].push([entry['tipo'], false]);
+					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
+						'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"/>' +
+						entry.descripcion + '</li>';
+					sintomas[0].push([entry.tipo, false]);
+					sintomas[1].push([entry.tipo, false]);
 				});
 			},
 			async: false
@@ -267,7 +266,7 @@ function cargarLateral(evento){
 			centroAux = {
 				'center':map.getCenter(),
 				'zoom':map.getZoom()
-				};
+			};
 		}
 	}
 			
@@ -368,19 +367,19 @@ function limpiarLateral(marcador){
 				//document.getElementById('listaSintomas').innerHTML = '';
 				//sintomas = [new Array(), new Array()];
 				$.ajax({
-					url: 'getpost/getAsociaciones.jsp',
 					type: 'GET',
 					dataType: 'json',
+					url: 'getpost/getAsociaciones.jsp',
 					data: {
 						'tipo':'todasEmergencias'
 					},
 					success: function(data){
 						$.each(data, function(entryIndex, entry){
-							document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry['id'] +
-							'" onclick="asociarEmergencia(' + entry['id'] + ', assigned' + entry['id'] + '.checked)"/>' +
-							entry['id'] +' - ' + entry['nombre'] + '</li>';
-							emergenciasAsociadas[0].push([entry['id'], false]);
-							emergenciasAsociadas[1].push([entry['id'], false]);
+							document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
+								'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"/>' +
+								entry.id +' - ' + entry.nombre + '</li>';
+							emergenciasAsociadas[0].push([entry.id, false]);
+							emergenciasAsociadas[1].push([entry.id, false]);
 						});
 						if(document.getElementById('checkboxAsoc').innerHTML == ''){
 							document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
@@ -390,18 +389,18 @@ function limpiarLateral(marcador){
 					},
 					async: false
 				});
-			/*$.ajax({
-					url: 'getpost/getSintomas.jsp',
+				/*$.ajax({
 					type: 'GET',
 					dataType: 'json',
+					url: 'getpost/getSintomas.jsp',
 					data: {'tipo':'todosSintomas'},
 					success: function(data){
 						$.each(data, function(entryIndex, entry){
-							document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry['tipo'] +
-									'" onclick="annadirSintoma(\'' + entry['tipo'] + '\', ' + entry['tipo'] + '.checked)"/>' +
-									entry['descripcion'] + '</li>';
-							sintomas[0].push([entry['tipo'], false]);
-							sintomas[1].push([entry['tipo'], false]);
+							document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
+								'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"/>' +
+								entry.descripcion + '</li>';
+							sintomas[0].push([entry.tipo, false]);
+							sintomas[1].push([entry.tipo, false]);
 						});
 					},
 					async: false
@@ -456,16 +455,17 @@ function actuar(idEvento,nombreUsuario,accionAux){
 			accion=='curado' || accion=='rescatado'){
 			estadoEvento = 'erased';
 			estadoUsuario = 'active';
-		}else if(accion=='vuelto' || accion=='dejar'){
+			escribirMensaje(idEvento, null, 'eliminar', 1);
+		}else if(accion=='vuelto' || accion=='trasladado' || accion=='dejar'){
 			estadoEvento = 'active';
 			estadoUsuario = 'active';
 		}
 		$.post('getpost/updateEstado.jsp',{
+			'accion':accion,
 			'idEvento':idEvento,
 			'nombreUsuario':nombreUsuario,
 			'estadoEvento':estadoEvento,
-			'estadoUsuario':estadoUsuario,
-			'accion':accion
+			'estadoUsuario':estadoUsuario
 		});
 	}
 	var marcador = marcadores_definitivos[idEvento];
@@ -474,10 +474,10 @@ function actuar(idEvento,nombreUsuario,accionAux){
 
 function detener(idEvento,idEmergencia,nombreUsuario){
 	$.post('getpost/updateEstado.jsp',{
+		'accion':'detener',
 		'idEvento':idEvento,
 		'idEmergencia':idEmergencia,
-		'nombreUsuario':nombreUsuario,
-		'accion':'detener'
+		'nombreUsuario':nombreUsuario
 	});
 }
 
@@ -558,7 +558,7 @@ function localizar(punto){
 			var event = GEvent.addListener(map, 'click', function(){
 				map.removeOverlay(puntoAux);
 				puntoAux = null;
-				map.setCenter(centroAux['center'], centroAux['zoom']);
+				map.setCenter(centroAux.center, centroAux.zoom);
 				limpiarLateral('resource');
 				GEvent.removeListener(event);
 			});

@@ -6,39 +6,49 @@
 	<div id="dhtmlgoodies_tabView1">
 		<div class="dhtmlgoodies_aTab">
 			<form id="catastrofes" action="#">
-				<table class="tabla_menu">
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono('event','fire');"/>
-							<fmt:message key="incendio"/>
-						</td>
-						<td rowspan="5"><img id="icono_catastrofes" class="rayas" alt="" src="markers/fuego.png"/></td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="flood" onclick="cambiaIcono('event','flood');"/>
-							<fmt:message key="inundacion"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="collapse" onclick="cambiaIcono('event','collapse');"/>
-							<fmt:message key="derrumbamiento"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="injuredPerson" onclick="cambiaIcono('event','injuredPerson');"/>
-							<fmt:message key="personaherida"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="lostPerson" onclick="cambiaIcono('event','lostPerson');"/>
-							<fmt:message key="personaperdida"/>
-						</td>
-					</tr>
-				</table>
+				<div id="radio_catastrofes">
+					<table class="tabla_menu">
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="fire" checked="checked" onclick="cambiaIcono('event','fire');"/>
+								<fmt:message key="incendio"/>
+							</td>
+							<td rowspan="5"><img id="icono_catastrofes" class="rayas" alt="" src="markers/events/fuego.png"/></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="flood" onclick="cambiaIcono('event','flood');"/>
+								<fmt:message key="inundacion"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="collapse" onclick="cambiaIcono('event','collapse');"/>
+								<fmt:message key="derrumbamiento"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="lostPerson" onclick="cambiaIcono('event','lostPerson');"/>
+								<fmt:message key="personaperdida"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" name="tipo" value="injuredPerson" onclick="cambiaIcono('event','injuredPerson');"/>
+								<fmt:message key="personaherida"/>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="radio_catastrofes_2" style="display:none">
+					<table class="tabla_menu">
+						<tr>
+							<td id="tipo_catastrofes_2"></td>
+							<td><img id="icono_catastrofes_2" class="rayas" alt="" src="markers/events/fuego.png"/></td>
+						</tr>
+					</table>
+				</div>
 				<table class="tabla_menu">
 					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="Incendio" placeholder="<fmt:message key="nombre"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1" placeholder="<fmt:message key="informacion"/>"></textarea></td></tr>
@@ -114,10 +124,10 @@
 				<table class="tabla_menu">
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="healthy" checked="checked" onclick="cambiaIcono('people','healthy',1);"/>
+							<input type="radio" name="tipo" value="healthy" checked="checked" onclick="cambiaIcono('people','healthy',cantidad.value);"/>
 							<fmt:message key="sanos"/>
 						</td>
-						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/sano1.png" class="rayas"/></td>
+						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/people/sano1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
@@ -188,13 +198,26 @@
 						</td>
 					</tr>
 				</table>
-				<div id="sintomas" class="oculto">
+				<table id="cantidad" class="tabla_menu">
+					<tr>
+						<td><fmt:message key="numeropersonas"/>&thinsp;</td>
+						<td>
+							<select name="cantidad" onchange="cambiaIcono('people',seleccionRadio(this.form,2),cantidad.value);">
+								<option value="1" selected="selected">1</option>
+								<c:forEach var="item" begin="2" end="99" step="1">
+									<option value="${item}">${item}</option>
+								</c:forEach>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<!--<div id="sintomas">
 					<span style="float:left">S&iacute;ntomas:</span>
 					<ul>
 						<li id="textoSintomas">&thinsp;</li>
 						<span id="listaSintomas"></span>
 					</ul>
-				</div>
+				</div>-->
 				<table class="tabla_menu">
 					<tr><td colspan="2"><input type="text" name="nombre" class="nombre" value="Sano" placeholder="<fmt:message key="nombre"/>"/></td></tr>
 					<tr><td colspan="2"><textarea name="info" class="info" rows="3" cols="1" placeholder="<fmt:message key="informacion"/>"></textarea></td></tr>
@@ -220,13 +243,13 @@
 				<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2); return false;"/>
 				<br/>
 				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn oculto"
-					onclick="modificar2(iden.value,seleccionRadio(this.form,2),1,nombre.value,info.value,descripcion.value,
+					onclick="modificar2(iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
 						direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
 				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog2">
 					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
 					<p class="centrado">
-						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),1,nombre.value,info.value,
+						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
 							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,planta.value);
 							$('#dialog2').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
@@ -234,94 +257,9 @@
 				</div>
 			</form>
 		</div>
-		<div class="dhtmlgoodies_aTab">
-			<div id="listaRecursos">
-				<table class="tabla_menu">
-					<tr>
-						<td><fmt:message key="enfermero"/> <span id="numEnfermeros"></span></td>
-						<td><img alt="" src="markers/enfermero1.png" class="rayas"/></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="gerocultor"/> <span id="numGerocultores"></span></td>
-						<td><img alt="" src="markers/gerocultor1.png" class="rayas"/></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="auxiliar"/> <span id="numAuxiliares"></span></td>
-						<td><img alt="" src="markers/auxiliar1.png" class="rayas"/></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="otroPersonal"/> <span id="numOtros"></span></td>
-						<td><img alt="" src="markers/otro1.png" class="rayas"/></td>
-					</tr>
-					<tr><td colspan="2"><hr/></td></tr>
-					<tr>
-						<td><fmt:message key="policia"/> <span id="numPolicias"></span></td>
-						<td><img alt="" src="markers/policia1.png" class="rayas"/></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="bomberos"/> <span id="numBomberos"></span></td>
-						<td><img alt="" src="markers/bombero1.png" class="rayas"/></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="ambulancia"/> <span id="numAmbulancias"></span></td>
-						<td><img alt="" src="markers/ambulancia1.png" class="rayas"/></td>
-					</tr>
-				</table>
-			</div>
-			<div id="datos" class="oculto">
-				<table class="tabla_menu">
-					<tr>
-						<td><fmt:message key="usuario"/></td>
-						<td id="datos-usuario"></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="nombre"/></td>
-						<td id="datos-nombre"></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="correo"/></td>
-						<td id="datos-correo"></td>
-					</tr>
-					<tr>
-						<td id="datos-actividades-titulo"></td>
-						<td id="datos-actividades"></td>
-					</tr>
-				</table>
-			</div>
-			<form id="form-posicion" class="oculto" action="#">
-				<hr/>
-				<p>
-					<input type="checkbox" name="localizacion" onclick="cambiarGeolocalizacion(localizacion.checked)"/>Activar geolocalizaci&oacute;n
-				</p>
-				<table class="tabla_menu">
-					<tr>
-						<th colspan="2"><fmt:message key="posicion"/></th>
-					</tr>
-					<tr>
-						<td><fmt:message key="latitud"/></td>
-						<td><input type="number" class="coordenadas" name="latitud" value="0" max="90" min="-90" step="0.000001"/></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="longitud"/></td>
-						<td><input type="number" class="coordenadas" name="longitud" value="0" max="180" min="-179.999999" step="0.000001"/></td>
-					</tr>
-					<tr>
-						<td><fmt:message key="direccion"/></td>
-						<td><textarea class="dirCoordenadas" name="direccion" rows="2" cols="1"></textarea></td>
-					</tr>
-				</table>
-				<p>
-					<input type="checkbox" name="porDefecto"><fmt:message key="guardarPosicion"/>
-				</p>
-				<p>
-					<input type="button" id="submit01" value="<fmt:message key="comprobar"/>" class="btn" onclick="findPos(latitud.value,longitud.value,direccion.value)"/>
-					<input type="button" id="submit02" value="<fmt:message key="aceptar"/>" class="btn" onclick="newPos(latitud.value,longitud.value,porDefecto.checked)"/>
-				</p>
-			</form>
-		</div>
 	</div>
 	<!-- aqui se cambia el tamanno y titulo de las tabs -->
 	<script type="text/javascript">
-		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="emergencias"/>','<fmt:message key="heridos"/>','<fmt:message key="agentes"/>'),0,235,490);
+		initTabs('dhtmlgoodies_tabView1',Array('<fmt:message key="emergencias"/>','<fmt:message key="heridos"/>'),0,235,490);
 	</script>
 </fmt:bundle>

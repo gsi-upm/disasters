@@ -22,9 +22,9 @@
 			WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
 			AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
 			AND id NOT IN (SELECT DISTINCT id_emergencia
-					         FROM asociaciones_heridos_emergencias a
-						     WHERE id_herido = ?
-						     AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
+				FROM asociaciones_heridos_emergencias a
+				WHERE id_herido = ?
+				AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>

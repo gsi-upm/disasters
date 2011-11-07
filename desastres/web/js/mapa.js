@@ -43,7 +43,7 @@ function initialize(){
 		localizador = new GClientGeocoder();
 		map = new GMap2(document.getElementById('map_canvas'));
 		var centro = mapInit(); // en mapa_xxx.js
-		map.setCenter(centro['center'], centro['zoom']);
+		map.setCenter(centro.center, centro.zoom);
 		map.addControl(new GLargeMapControl());    // controles completos
 		map.addControl(new GScaleControl());       // escala
 		map.addControl(new GMenuMapTypeControl()); // selector mapa
@@ -58,10 +58,10 @@ function initialize(){
 			'nivel':nivelMsg
 		}, function(data) {
 			$.each(data, function(entryIndex, entry){
-				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
-					entry['quantity'],entry['name'],entry['description'],entry['info'],entry['latitud'],
-					entry['longitud'],entry['address'],entry['size'],entry['traffic'],entry['floor'],
-					entry['state'],entry['idAssigned'],entry['date'], entry['modified'],entry['user'],null);
+				var nuevomarcador = new ObjMarcador(entry.id, entry.item, entry.type,
+					entry.quantity, entry.name, entry.description, entry.info, entry.latitud,
+					entry.longitud, entry.address, entry.size, entry.traffic, entry.floor,
+					entry.state, entry.idAssigned, entry.date, entry.modified, entry.user, null);
 				nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 				marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 				indices[pos_indices] = nuevomarcador.id;
@@ -88,12 +88,12 @@ function actualizar(){
 		'nivel':nivelMsg
 	}, function(data) {
 		$.each(data, function(entryIndex, entry){
-			if(entry['id'] != noActualizar){
+			if(entry.id != noActualizar){
 				// el id lo asigna la base de datos
-				var nuevomarcador = new ObjMarcador(entry['id'],entry['item'],entry['type'],
-					entry['quantity'],entry['name'],entry['description'],entry['info'],entry['latitud'],
-					entry['longitud'],entry['address'],entry['size'],entry['traffic'],entry['floor'],
-					entry['state'],entry['idAssigned'],entry['date'], entry['modified'],entry['user'],null);
+				var nuevomarcador = new ObjMarcador(entry.id, entry.item, entry.type,
+					entry.quantity, entry.name, entry.description, entry.info, entry.latitud,
+					entry.longitud, entry.address, entry.size, entry.traffic, entry.floor,
+					entry.state, entry.idAssigned, entry.date, entry.modified, entry.user, null);
 
 				// pintamos los nuevos, para lo que comprobamos que no existian
 				if(marcadores_definitivos[nuevomarcador.id] == null){
@@ -286,9 +286,9 @@ function guardar(puntero){
 				type: 'POST',
 				url: 'getpost/update.jsp',
 				data: {
+					'accion':'asociar',
 					'fecha':puntero.fecha,
-					'id_emergencia':emergenciasAsociadas[0][i][0],
-					'accion':'asociar'
+					'id_emergencia':emergenciasAsociadas[0][i][0]
 				},
 				async: false
 			});
@@ -300,9 +300,9 @@ function guardar(puntero){
 				type: 'POST',
 				url: 'getpost/update.jsp',
 				data: {
+					'accion':'annadirSintoma',
 					'fecha':puntero.fecha,
-					'tipo_sintoma':sintomas[0][i][0],
-					'accion':'annadirSintoma'
+					'tipo_sintoma':sintomas[0][i][0]
 				},
 				async: false
 			});
@@ -430,7 +430,7 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 			puntero.longitud+0.00001, puntero.latitud-0.000005, puntero.estado, puntero.size, puntero.traffic, puntero.idAssigned, puntero.planta);
 	}
 
-	escribirMensaje(puntero.nombre, puntero.planta, 'modificar', 1);
+	escribirMensaje(puntero.nombre, puntero.planta, 'modificar', 2);
 	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 }
 

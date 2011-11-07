@@ -12,7 +12,7 @@
 <c:if test="${param.action == 'firstTime'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 		SELECT * FROM mensajes
-		WHERE fecha > <%=hace5min%> AND nivel <= ?
+		WHERE fecha > <%= hace5min %> AND nivel <= ?
 		<sql:param value="${param.nivel}"/>
 	</sql:query>
 </c:if>
@@ -24,14 +24,15 @@
 		<sql:param value="${param.nivel}"/>
 	</sql:query>
 </c:if>
-[
-<c:forEach var="mensaje" items="${mensajes.rows}">
-    <json:object name="temp">
-		<json:property name="id" value="${mensaje.id}"/>
-		<json:property name="creador" value="${mensaje.creador}"/>
-		<json:property name="mensaje" value="${mensaje.mensaje}"/>
-		<json:property name="nivel" value="${mensaje.nivel}"/>
-		<json:property name="fecha" value="${mensaje.fecha}"/>
-	</json:object> ,
-</c:forEach>
-]
+
+<json:array>
+	<c:forEach var="mensaje" items="${mensajes.rows}">
+		<json:object>
+			<json:property name="id" value="${mensaje.id}"/>
+			<json:property name="creador" value="${mensaje.creador}"/>
+			<json:property name="mensaje" value="${mensaje.mensaje}"/>
+			<json:property name="nivel" value="${mensaje.nivel}"/>
+			<json:property name="fecha" value="${mensaje.fecha}"/>
+		</json:object>
+	</c:forEach>
+</json:array>

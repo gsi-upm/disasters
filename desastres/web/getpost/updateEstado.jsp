@@ -24,10 +24,9 @@
 		<c:when test="${param.estadoEvento == 'erased' || param.accion == 'dejar'}">
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO actividades(id_usuario, id_emergencia, id_tipo_actividad, estado)
-				VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
-					   ?,
-				       (SELECT id FROM tipos_actividades WHERE tipo = ?),
-					   (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
+				VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?), ?,
+					(SELECT id FROM tipos_actividades WHERE tipo = ?),
+					(SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
 				<sql:param value="${param.nombreUsuario}"/>
 				<sql:param value="${param.idEvento}"/>
 				<sql:param value="${param.accion}"/>
@@ -36,10 +35,9 @@
 		<c:otherwise>
 			<sql:update dataSource="${CatastrofesServer}">
 				INSERT INTO actividades(id_usuario, id_emergencia, id_tipo_actividad, estado)
-				VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
-					   ?,
-				       (SELECT id FROM tipos_actividades WHERE tipo = ?),
-					   (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+				VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?), ?,
+					(SELECT id FROM tipos_actividades WHERE tipo = ?),
+					(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 				<sql:param value="${param.nombreUsuario}"/>
 				<sql:param value="${param.idEvento}"/>
 				<sql:param value="${param.accion}"/>
@@ -61,8 +59,8 @@
 				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), modificado = <%=modif%>
 				WHERE nombre = ? AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'acting')
 				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-							       WHERE u.id = a.id_usuario
-								   AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					WHERE u.id = a.id_usuario
+					AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 				<sql:param value="${param.nombreUsuario}"/>
 			</sql:update>
 		</c:when>
@@ -72,7 +70,7 @@
 				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), modificado = <%=modif%>
 				WHERE id = ?
 				AND id NOT IN (SELECT DISTINCT id_emergencia FROM actividades
-				               WHERE estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					WHERE estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 				<sql:param value="${param.idEvento}"/>
 			</sql:update>
 			<sql:update dataSource="${CatastrofesServer}">
@@ -80,8 +78,8 @@
 				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), modificado = <%=modif%>
 				WHERE nombre = ? AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'acting')
 				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-							       WHERE u.id = a.id_usuario
-								   AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					WHERE u.id = a.id_usuario
+					AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 				<sql:param value="${param.nombreUsuario}"/>
 			</sql:update>
 		</c:when>
@@ -127,7 +125,7 @@
 		SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), modificado = <%=modif%>
 		WHERE id = ?
 		AND id NOT IN (SELECT DISTINCT id_emergencia FROM actividades
-		               WHERE estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+			WHERE estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 		<sql:param value="${param.idEmergencia}"/>
 	</sql:update>
 	<sql:update dataSource="${CatastrofesServer}">
@@ -136,7 +134,7 @@
 		WHERE id = ?
 		AND (SELECT id FROM usuarios WHERE nombre_usuario = ?)
 		NOT IN (SELECT DISTINCT id_usuario FROM actividades
-		        WHERE estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+			WHERE estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
 		<sql:param value="${param.idEvento}"/>
 		<sql:param value="${param.nombreUsuario}"/>
 	</sql:update>
