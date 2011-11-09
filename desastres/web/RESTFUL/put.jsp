@@ -1,9 +1,10 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.Timestamp, java.util.Date" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@page contentType="applicacion/x-sql" pageEncoding="UTF-8"%>
+<%@page isELIgnored="false"%>
+<%@page import="java.sql.Timestamp, java.util.Date"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
-<%@ include file="../jspf/database.jspf" %>
+<%@include file="../jspf/database.jspf"%>
 <% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 
 <c:choose>

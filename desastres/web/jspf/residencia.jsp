@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <fmt:bundle basename="fmt.eji8n">
@@ -54,7 +54,7 @@
 			</table>
 		</div>
 	</div>
-	<script type="text/javascript">
+	<script type="application/javascript">
 		initTabs('dhtmlgoodies_tabView2',Array('<fmt:message key="mapapueblo"/>','<fmt:message key="planoresidencia"/>'),0,null,518);
 	</script>
 </fmt:bundle>

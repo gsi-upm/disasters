@@ -1,5 +1,5 @@
-<%@ page import="org.securityfilter.example.Constants" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page import="org.securityfilter.example.Constants"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <fmt:bundle basename="fmt.eji8n">
 	<h2><fmt:message key="iniciarsesion"/></h2>

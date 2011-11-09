@@ -1,10 +1,10 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page isELIgnored = "false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page isELIgnored="false"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<%@ include file="../jspf/database.jspf" %>
+<%@include file="../jspf/database.jspf"%>
 
 <sql:query var="eventos" dataSource="${CatastrofesServer}">
 	SELECT id FROM catastrofes

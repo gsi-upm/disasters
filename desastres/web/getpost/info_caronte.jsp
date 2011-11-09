@@ -1,10 +1,10 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page isELIgnored = "false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
+<%@page contentType="application/json" pageEncoding="UTF-8"%>
+<%@page isELIgnored="false"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
 
-<%@ include file="../jspf/database.jspf" %>
+<%@include file="../jspf/database.jspf"%>
 
 <c:set var="planta" value="${param.planta}"/>
 <c:if test="${param.marcadores == 'plano'}">
