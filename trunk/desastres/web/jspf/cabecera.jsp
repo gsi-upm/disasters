@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <% String proyect = getServletContext().getInitParameter("proyect"); %>
 
@@ -11,7 +11,7 @@
 			<div id="fecha"></div>
 			<div id="Reloj24H"></div>
 		</div>
-		v.93
+		v.95
 		<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
 			 alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
 		<div id="langSelect" class="oculto">

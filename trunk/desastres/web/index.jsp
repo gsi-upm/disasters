@@ -1,3 +1,11 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:import url="index_caronte.jsp"/>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>index</title>
+	</head>
+	<body>
+		<h1>index.jsp</h1>
+	</body>
+</html>

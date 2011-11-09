@@ -1,9 +1,9 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page isELIgnored = "false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+<%@page contentType="application/x-sql" pageEncoding="UTF-8"%>
+<%@page isELIgnored="false"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
-<%@ include file="../jspf/database.jspf" %>
+<%@include file="../jspf/database.jspf"%>
 
 <c:if test="${param.accion != 'crear'}">
 	<sql:update dataSource="${CatastrofesServer}">

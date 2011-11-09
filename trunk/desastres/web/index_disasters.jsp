@@ -1,7 +1,7 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page isELIgnored="false" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page isELIgnored="false"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%--<jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>--%>
 <jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
@@ -23,51 +23,51 @@
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_disasters.css"/>
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen"/>
-			<script type="text/javascript" src="js/i18n.js"></script>
-			<script type="text/javascript" src="js/jquery.js"></script>
-			<script type="text/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
-			<script type="text/javascript"
+			<script type="application/javascript" src="js/i18n.js"></script>
+			<script type="application/javascript" src="js/jquery.js"></script>
+			<script type="application/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
+			<script type="application/javascript"
 				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhShGMulApA1qGrWH2FWs8V2HjpzbhR6R94HFuEi6_iz-WDuB-XPDkJ2rA">
 			</script>
-			<script type="text/javascript">
+			<script type="application/javascript">
 				var nivelMsg = ${proyecto.nivelMsg};
 				var userName = '${proyecto.nombreUsuario}';
 				var usuario_actual = ${proyecto.id};
 				var usuario_actual_tipo = '${proyecto.rol}';
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
-			<script type="text/javascript" src="js/mapa.js"></script>
-			<script type="text/javascript" src="js/mapa_disasters.js"></script>
-			<script type="text/javascript" src="js/mapa_disasters2.js"></script>
-			<script type="text/javascript" src="js/experto.js"></script>
-			<script type="text/javascript" src="js/registro.js"></script>
+			<script type="application/javascript" src="js/mapa.js"></script>
+			<script type="application/javascript" src="js/mapa_disasters.js"></script>
+			<script type="application/javascript" src="js/mapa_disasters2.js"></script>
+			<script type="application/javascript" src="js/experto.js"></script>
+			<script type="application/javascript" src="js/registro.js"></script>
 			<!-- Objeto Marcador -->
-			<script type="text/javascript" src="js/marcador.js"></script>
+			<script type="application/javascript" src="js/marcador.js"></script>
 			<!--Hora y Fecha -->
-			<script type="text/javascript" src="js/hora_fecha.js"></script>
+			<script type="application/javascript" src="js/hora_fecha.js"></script>
 			<!-- Formularios, parte grafica y logica -->
-			<script type="text/javascript" src="js/tab-view.js"></script>
-			<script type="text/javascript" src="js/forms.js"></script>
+			<script type="application/javascript" src="js/tab-view.js"></script>
+			<script type="application/javascript" src="js/forms.js"></script>
 			<!-- jqModal Dependencies -->
-			<script type="text/javascript" src="js/jqModal.js"></script>
+			<script type="application/javascript" src="js/jqModal.js"></script>
 			<!-- Optional Javascript for Drag'n'Resize -->
-			<script type="text/javascript" src="js/jqDnR.js"></script>
-			<script type="text/javascript" src="js/dimensions.js"></script>
+			<script type="application/javascript" src="js/jqDnR.js"></script>
+			<script type="application/javascript" src="js/dimensions.js"></script>
 			<!-- Necesario para los pop-ups -->
-			<script type="text/javascript" src="js/popUps.js"></script>
+			<script type="application/javascript" src="js/popUps.js"></script>
 			<!-- jQuery -->
-			<script type="text/javascript" src="js/jquery-fieldselection.js"></script>
-			<script type="text/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>
+			<script type="application/javascript" src="js/jquery-fieldselection.js"></script>
+			<script type="application/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>
 			<!-- DWR. These files are created in the runtime -->
-			<script type="text/javascript" src="/desastres/dwr/util.js"></script>
-			<script type="text/javascript" src="/desastres/dwr/interface/DirectionsBean.js"></script>
-			<script type="text/javascript" src="/desastres/dwr/engine.js"></script>
+			<script type="application/javascript" src="/desastres/dwr/util.js"></script>
+			<script type="application/javascript" src="/desastres/dwr/interface/DirectionsBean.js"></script>
+			<script type="application/javascript" src="/desastres/dwr/engine.js"></script>
 			<!-- Adds various Methods to GPolygon and GPolyline -->
-			<script type="text/javascript" src="js/epoly.js"></script>
+			<script type="application/javascript" src="js/epoly.js"></script>
 			<!-- Agents movement through roads -->
-			<script type="text/javascript" src="js/resourcesOnRoads.js"></script>
+			<script type="application/javascript" src="js/resourcesOnRoads.js"></script>
 			<!-- Areas around fires -->
-			<script type="text/javascript" src="js/einsert.js"></script>
+			<script type="application/javascript" src="js/einsert.js"></script>
 		</head>
 		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
 			<c:import url="jspf/ventana_modificacion.jsp"/>
@@ -151,7 +151,7 @@
 			--%>
 			
 			<c:if test="${param.alert == true}">
-				<script type="text/javascript">
+				<script type="application/javascript">
 					window.alert('Fin de la simulaci&oacute;n');
 				</script>
 			</c:if>
