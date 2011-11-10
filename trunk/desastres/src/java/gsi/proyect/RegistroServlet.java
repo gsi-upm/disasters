@@ -12,8 +12,7 @@ import org.json.me.*;
  * @author Juan Luis Molina
  */
 public class RegistroServlet extends HttpServlet{
-
-	private static final String URL = "http://localhost:8080/desastres/rest/";
+	private static final String URL = Connection.getURL();
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.

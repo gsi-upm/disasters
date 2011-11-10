@@ -72,7 +72,7 @@ import org.json.me.*;
 public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
 
 	private String exampleProperty;
-	private static final String URL = "http://localhost:8080/desastres/rest/";
+	private static final String URL = Connection.getURL();
 
 	/**
 	 * Authenticate a user.

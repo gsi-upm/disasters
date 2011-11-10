@@ -16,7 +16,7 @@ public class ProyectBean implements Serializable {
 	public static final String NIVEL_MSG = "nivelMsg";
 	public static final String PROYECT = "proyect";
 
-	private static final String URL = "http://localhost:8080/desastres/rest/";
+	private static final String URL = Connection.getURL();
 	private PropertyChangeSupport propertySupport;
 
 	private String nombreUsuario, rol, proyect;

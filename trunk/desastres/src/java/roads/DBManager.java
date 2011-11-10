@@ -1,5 +1,6 @@
 package roads;
 
+import gsi.rest.Connection;
 import java.util.*;
 import java.net.*;
 import java.io.*;
@@ -9,7 +10,7 @@ public class DBManager {
     /**
      * URL for Caronte application REST interface
      **/
-    private static final String URL_BASE = "http://localhost:8080/desastres/rest/";
+	private static final String URL_BASE = Connection.getURL();
 
     public DBManager() {
     }

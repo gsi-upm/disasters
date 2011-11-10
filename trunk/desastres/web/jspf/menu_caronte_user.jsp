@@ -66,18 +66,6 @@
 				</table>
 				<table class="tabla_menu">
 					<tr>
-						<td><fmt:message key="planta"/></td>
-						<td>
-							<select name="planta" id="select-planta1">
-								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
-								<option value="-1"><fmt:message key="exterior"/></option>
-								<option value="0"><fmt:message key="planta"/> 0</option>
-								<option value="1"><fmt:message key="planta"/> 1</option>
-								<option value="2"><fmt:message key="planta"/> 2</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
 						<td><label for="tamanno"><fmt:message key="tamanno"/></label></td>
 						<td>
 							<select name="tamanno" id="tamanno">
@@ -106,13 +94,12 @@
 				<br/>
 				<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn oculto" onclick="modificar2(
 					iden.value,seleccionRadio(this.form,0),1,nombre.value,info.value,descripcion.value,
-					direccion.value,tamanno.value,trafico.value,null,planta.value);return false;"/>
-				<input type="button" id="eliminar1" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+					direccion.value,tamanno.value,trafico.value,null,-1);return false;"/>
 				<div class="jqmWindow" id="dialog1">
 					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('event',seleccionRadio(this.form,0),1,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',tamanno.value,trafico.value,0,planta.value);
+							descripcion.value,direccion.value,longitud.value,latitud.value,'active',tamanno.value,trafico.value,0,-1);
 							$('#dialog1').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>
@@ -162,18 +149,6 @@
 					</ul>
 				</div>
 				<table class="tabla_menu">
-					<tr>
-						<td><fmt:message key="planta"/></td>
-						<td>
-							<select name="planta" id="select-planta2">
-								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
-								<option value="-1"><fmt:message key="exterior"/></option>
-								<option value="0"><fmt:message key="planta"/> 0</option>
-								<option value="1"><fmt:message key="planta"/> 1</option>
-								<option value="2"><fmt:message key="planta"/> 2</option>
-							</select>
-						</td>
-					</tr>
 					<tr>
 						<td><fmt:message key="peso"/></td>
 						<td>
@@ -244,13 +219,12 @@
 				<br/>
 				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn oculto"
 					onclick="modificar2(iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
-						direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
-				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+						direccion.value,peso.value,movilidad.value,0,-1); return false;"/>
 				<div class="jqmWindow" id="dialog2">
 					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
 					<p class="centrado">
 						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,planta.value);
+							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,-1);
 							$('#dialog2').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
 						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
 					</p>

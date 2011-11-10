@@ -146,29 +146,29 @@ function cargarLateral(evento){
 	if(evento.marcador == 'event'){
 		lateral = document.getElementById('catastrofes');
 		document.getElementById('submit10').style.display = 'inline';
-		document.getElementById('eliminar1').style.display = 'inline';
+		if(usuario_actual_tipo != 'citizen'){
+			document.getElementById('eliminar1').style.display = 'inline';
+		}
 		document.getElementById('radio_catastrofes').style.display = 'none';
 		document.getElementById('radio_catastrofes_2').style.display = 'block';
 		var tipo, tipo_img;
 		if(evento.tipo == 'fire'){
 			tipo_img = 'fuego';
-			tipo = fmt('incendio'); // en i18n.js
 		}else if(evento.tipo == 'flood'){
 			tipo_img = 'agua';
-			tipo = fmt('inundacion');
 		}else if(evento.tipo == 'collapse'){
 			tipo_img = 'casa';
-			tipo = fmt('derrumbamiento');
 		}else if(evento.tipo == 'lostPerson'){
 			tipo_img = 'personaPerdida';
-			tipo = fmt('personaPerdida');
 		}
 		document.getElementById('icono_catastrofes_2').src = 'markers/events/' + tipo_img + '.png';
-		document.getElementById('tipo_catastrofes_2').innerHTML = tipo;
+		document.getElementById('tipo_catastrofes_2').innerHTML = fmt(evento.tipo);
 	}else if(evento.marcador == 'people'){
 		lateral = document.getElementById('heridos');
 		document.getElementById('submit20').style.display = 'inline';
-		document.getElementById('eliminar2').style.display = 'inline';
+		if(usuario_actual_tipo != 'citizen'){
+			document.getElementById('eliminar2').style.display = 'inline';
+		}
 		//document.getElementById('sintomas').style.display = 'block';
 
 		document.getElementById('checkboxAsoc').innerHTML = '';
@@ -286,9 +286,11 @@ function cargarLateral(evento){
 		lateral.descripcion.value = evento.descripcion;
 		lateral.direccion.value = evento.direccion;
 		lateral.iden.value = evento.id;
-		for(i = 0; i < 5; i++){
-			if(lateral.planta[i].value == evento.planta){
-				lateral.planta[i].selected = 'selected';
+		if(usuario_actual_tipo != 'citizen'){
+			for(i = 0; i < 5; i++){
+				if(lateral.planta[i].value == evento.planta){
+					lateral.planta[i].selected = 'selected';
+				}
 			}
 		}
 		if(evento.marcador == 'event'){
@@ -332,13 +334,17 @@ function limpiarLateral(marcador){
 	if(marcador == 'event'){
 		lateral = document.getElementById('catastrofes');
 		document.getElementById('submit10').style.display = 'none';
-		document.getElementById('eliminar1').style.display = 'none';
+		if(usuario_actual_tipo != 'citizen'){
+			document.getElementById('eliminar1').style.display = 'none';
+		}
 		document.getElementById('radio_catastrofes').style.display = 'inline';
 		document.getElementById('radio_catastrofes_2').style.display = 'none';
 	}else if(marcador == 'people'){
 		lateral = document.getElementById('heridos');
 		document.getElementById('submit20').style.display = 'none';
-		document.getElementById('eliminar2').style.display = 'none';
+		if(usuario_actual_tipo != 'citizen'){
+			document.getElementById('eliminar2').style.display = 'none';
+		}
 	}
 	
 	if(lateral != null){
@@ -355,7 +361,9 @@ function limpiarLateral(marcador){
 			lateral.descripcion.value = '';
 			lateral.direccion.value = '';
 			lateral.iden.value = '';
-			lateral.planta[0].selected = 'selected';
+			if(usuario_actual_tipo != 'citizen'){
+				lateral.planta[0].selected = 'selected';
+			}
 			if(marcador == 'event'){
 				lateral.tamanno[0].selected = 'selected';
 				lateral.trafico[0].selected = 'selected';
@@ -455,7 +463,7 @@ function actuar(idEvento,nombreUsuario,accionAux){
 			accion=='curado' || accion=='rescatado'){
 			estadoEvento = 'erased';
 			estadoUsuario = 'active';
-			escribirMensaje(idEvento, null, 'eliminar', 1);
+			escribirMensaje({'id':idEvento}, 'eliminar', 1);
 		}else if(accion=='vuelto' || accion=='trasladado' || accion=='dejar'){
 			estadoEvento = 'active';
 			estadoUsuario = 'active';

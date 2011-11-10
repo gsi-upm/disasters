@@ -68,13 +68,15 @@ function initialize(){
 				pos_indices++;
 			});
 		});
-		ultimamodif = obtiene_fecha();
 		
 		initialize2(); // en mapa_xxx.js
+		
 		if(userName != ''){
 			cambiaIcono('event',seleccionRadio(document.getElementById('catastrofes'),0));
 			cambiaIcono('people',seleccionRadio(document.getElementById('heridos'),2),1);
 		}
+
+		ultimamodif = obtiene_fecha();
 		// setTimeout('moveAgents()',2000);
 		setTimeout('actualizar()',tiempoInicial);
 	}
@@ -134,10 +136,10 @@ function actualizar(){
 			}
 		});
 	});
-	ultimamodif = obtiene_fecha();
 
 	actualizar2(); // en mapa_xxx.js
-
+	
+	ultimamodif = obtiene_fecha();
 	setTimeout('actualizar()', tiempoActualizacion);
 }
 
@@ -245,9 +247,10 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	pos_temp++;
 	nuevomarcador.marker = generaMarcador(nuevomarcador, TEMPORAL);
 
-	guardar(nuevomarcador);
-	escribirMensaje(nombre, planta, 'crear', 1);
+	escribirMensaje(nuevomarcador, 'crear', 1);
 	registrarHistorial(userName, marcador, tipo, fecha, 'crear');
+
+	guardar(nuevomarcador);
 }
 
 function guardar(puntero){
@@ -367,6 +370,11 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 		accion = 'modificar';
 	}
 
+	var evento = {'id':id, 'marcador':puntero.marcador, 'tipo':tipo, 'cantidad':cantidad, 'nombre':nombre,
+		'info':info, 'descripcion':descripcion, 'size':tamanno, 'traffic':trafico, 'planta':planta}
+	escribirMensaje(evento, 'modificar', 2);
+	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
+
 	$.post('getpost/update.jsp',{
 		'accion':accion,
 		'id':id,
@@ -429,9 +437,6 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 		crearCatastrofe(puntero.marcador, puntero.tipo, puntero.cantidad-1, puntero.nombre, puntero.info, puntero.descripcion, puntero.direccion,
 			puntero.longitud+0.00001, puntero.latitud-0.000005, puntero.estado, puntero.size, puntero.traffic, puntero.idAssigned, puntero.planta);
 	}
-
-	escribirMensaje(puntero.nombre, puntero.planta, 'modificar', 2);
-	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 }
 
 function eliminar(puntero,caracter){
@@ -440,6 +445,9 @@ function eliminar(puntero,caracter){
 	}else if(caracter == DEFINITIVO){
 		// hay que hacer un update
 		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
+			escribirMensaje(puntero, 'eliminar', 1);
+			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
+			
 			$.post('getpost/update.jsp',{
 				'accion':'eliminar',
 				'id':puntero.id,
@@ -460,9 +468,10 @@ function eliminar(puntero,caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
-			escribirMensaje(puntero.nombre, puntero.planta, 'eliminar', 1);
-			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
 		}else{
+			escribirMensaje(puntero, 'eliminar', 1);
+			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
+
 			$.post('getpost/update.jsp',{
 				'accion':'eliminar',
 				'id':puntero.id,
@@ -483,8 +492,6 @@ function eliminar(puntero,caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
-			escribirMensaje(puntero.nombre, puntero.planta, 'eliminar', 1);
-			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
 		}
 	}
 }

@@ -31,6 +31,7 @@
 			AND c.marcador = m.id
 			AND m.tipo_marcador != 'people'
 			AND c.tipo = t.id
+			AND c.planta < 0
 			AND c.estado = e.id
 			AND e.tipo_estado != 'erased'
 			<sql:param value="${param.fecha}"/>
@@ -59,6 +60,7 @@
 			AND c.marcador = m.id
 			AND m.tipo_marcador != 'people'
 			AND c.tipo = t.id
+			AND c.planta < 0
 			AND c.estado = e.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>

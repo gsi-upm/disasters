@@ -1,18 +1,17 @@
 package gsi.simulator.rest;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import gsi.disasters.SizeType;
 import gsi.disasters.DensityType;
+import gsi.rest.Connection;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 /**
  * This class provides an interface for using the REST API.
  * @author al.lopezf
  */
 public class EventsManagement {
-
-    private static final String URL_BASE = "http://localhost:8080/desastres/rest/";
+    private static final String URL_BASE = Connection.getURL();
     private static final String POST = "post/";
     private static final String PUT = "put/";
     private static final String DELETE = "delete/";

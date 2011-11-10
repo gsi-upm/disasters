@@ -67,7 +67,7 @@
 			<!-- Areas around fires -->
 			<script type="application/javascript" src="js/einsert.js"></script>
 		</head>
-		<body onload="IniciarReloj24(); initialize(); mostrarMensajes(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
 			<table class="tabla_body">
 				<!-- Cabecera con imagen y hora -->
 				<tr>
