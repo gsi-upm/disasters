@@ -1,6 +1,5 @@
 // Javascripts para los formularios
 function cambiaIcono(marcador, tipo, cantidad){
-	var nombre;
 	var imagen;
 	if(cantidad > 10){
 		cantidad = 10;
@@ -8,22 +7,17 @@ function cambiaIcono(marcador, tipo, cantidad){
 	if(marcador == 'event'){
 		if(tipo == 'fire'){
 			imagen = 'markers/events/fuego.png';
-			nombre = 'Incencio';
 		}else if(tipo == 'flood'){
 			imagen = 'markers/events/agua.png';
-			nombre = 'Inundación';
 		}else if(tipo == 'collapse'){
 			imagen = 'markers/events/casa.png';
-			nombre = 'Derrumbamiento';
 		}else if(tipo == 'lostPerson'){
 			imagen = 'markers/events/personaPerdida.png';
-			nombre = 'Persona perdida';
 		}else if(tipo == 'injuredPerson'){
 			imagen = 'markers/events/personaHerida.png';
-			nombre = 'Persona herida';
 		}
 		document.getElementById('icono_catastrofes').src = imagen;
-		document.getElementById('catastrofes').nombre.value = nombre;
+		document.getElementById('catastrofes').nombre.value = fmt(tipo,'es'); // en i18n.js
 	}else if(marcador == 'resource'){
 		if(tipo == 'police'){
 			imagen = 'markers/resources/policia' + cantidad + '.png';
@@ -44,28 +38,22 @@ function cambiaIcono(marcador, tipo, cantidad){
 	}else if(marcador == 'people'){
 		if(tipo == 'healthy'){
 			imagen = 'markers/people/sano' + cantidad + '.png';
-			nombre = 'Sano';
 		}else if(tipo == 'slight'){
 			imagen = 'markers/people/leve' + cantidad + '.png';
-			nombre = 'Leve';
 		}else if(tipo == 'serious'){
 			imagen = 'markers/people/grave' + cantidad + '.png';
-			nombre = 'Grave';
 		}else if(tipo == 'dead'){
 			imagen = 'markers/people/muerto' + cantidad + '.png';
-			nombre = 'Muerto';
 		}else if(tipo == 'trapped'){
 			imagen = 'markers/people/trapped' + cantidad + '.png';
-			nombre = 'Atrapado';
 		}
 		document.getElementById('icono_heridos').src = imagen;
-		var heridos = document.getElementById('heridos');
-		heridos.nombre.value = nombre;
+		document.getElementById('heridos').nombre.value = fmt(tipo,'es'); // en i18n.js
 		if(tipo == 'healthy'){
 			document.getElementById('cantidad').style.display = 'block';
 		}else{
 			document.getElementById('cantidad').style.display = 'none';
-			heridos.cantidad.value = 1;
+			document.getElementById('heridos').cantidad.value = 1;
 		}
 	}	
 }

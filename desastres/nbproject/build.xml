@@ -680,15 +680,14 @@ exists or setup the property manually. For example like this:
         <copy file="${web.xml.file.disasters}" tofile="${build.web.dir.disasters}/WEB-INF/web.xml"/>
         <copy file="${context.xml.file.disasters}" tofile="${build.web.dir.disasters}/META-INF/context.xml"/>
         <echo message="files from directory ${web.docbase.dir} copied to ${build.web.dir.disasters}"/>
-        </target>
-        <target depends="init,deps-jar,-pre-pre-compile-disasters,-pre-compile-disasters,-copy-manifest-disasters,-copy-persistence-xml-disasters,-copy-webdir-disasters" if="have.sources" name="-do-compile-disasters"> <!-- library-inclusion-in-archive, library-inclusion-in-manifest, -->
-            <antcall target="library-inclusion-in-archive">
-                <param name="build.specific.web.dir" value="${build.web.dir.disasters}"/>
-            </antcall>
-            <webproject2:javac destdir="${build.classes.dir.disasters}" gensrcdir="${build.generated.sources.dir.disasters}" excludes="${excludes},${excludes.disasters.src}"/>
-            <copy todir="${build.classes.dir.disasters}">
-                <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.disasters.src}" includes="${includes}">
-                </fileset>
+   </target>
+   <target depends="init,deps-jar,-pre-pre-compile-disasters,-pre-compile-disasters,-copy-manifest-disasters,-copy-persistence-xml-disasters,-copy-webdir-disasters" if="have.sources" name="-do-compile-disasters"> <!-- library-inclusion-in-archive, library-inclusion-in-manifest, -->
+        <antcall target="library-inclusion-in-archive">
+            <param name="build.specific.web.dir" value="${build.web.dir.disasters}"/>
+        </antcall>
+        <webproject2:javac destdir="${build.classes.dir.disasters}" gensrcdir="${build.generated.sources.dir.disasters}" excludes="${excludes},${excludes.disasters.src}"/>
+        <copy todir="${build.classes.dir.disasters}">
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.disasters.src}" includes="${includes}"/>
         </copy>
         <echo message="not java sources from ${src.dir} is copied to ${build.classes.dir.disasters} after compiling Disasters Project"/>
     </target>
@@ -993,8 +992,8 @@ exists or setup the property manually. For example like this:
     <target depends="init,-clean-webinf-lib-disasters,-init-cos,compile-disasters,-pre-dist-disasters,do-ear-dist-disasters,-post-dist-disasters" description="Build Disasters distribution (WAR) to be packaged into an EAR." name="dist-ear-disasters"/>
     <target depends="dist-disasters" description="Build Disasters jadex standalone .jar" name="jadex-jar-disasters">
         <copy file="${jadex.jar.reference}" tofile="${jadex.jar.disasters}" overwrite="${jadex.jar.force.updated}"/>
-        <jar jarfile="${jadex.jar.disasters}" update="${jadex.jar.force.updated}" includes="${include.jadex.jar.disasters}">
-            <fileset dir="${build.classes.dir.disasters}"/>
+        <jar jarfile="${jadex.jar.disasters}" update="${jadex.jar.force.updated}">
+            <fileset dir="${build.classes.dir.disasters}" includes="${include.jadex.jar.disasters}"/>
         </jar>
     </target>
     <!--

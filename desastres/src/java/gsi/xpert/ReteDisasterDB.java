@@ -1,14 +1,13 @@
 package gsi.xpert;
 
 import gsi.disasters.*;
-import gsi.simulator.VictimManager;
-import java.io.PrintWriter;
-import jess.*;
-import java.util.*;
-import org.json.me.*;
-import java.sql.Timestamp;
 import gsi.rest.Connection;
-import gsi.simulator.Parameters;
+import gsi.simulator.*;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.util.*;
+import jess.*;
+import org.json.me.*;
 
 /**
  * Launches jess and creates markers
@@ -36,7 +35,7 @@ public class ReteDisasterDB {
 	/**
 	 * URL for Disasters2.0 application REST interface
 	 **/
-	private static final String URL_BASE = "http://localhost:8080/desastres/rest/";
+	private static final String URL_BASE = Connection.getURL();
 	/**
 	 * TimeStamp for the last JSON Request
 	 **/

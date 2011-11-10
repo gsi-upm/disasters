@@ -5,6 +5,8 @@ function mapInit(){
 }
 
 function initialize2(){
+	mostrarMensajes(); // en mensajes.js
+
 	if(nivelMsg > 1){
 		if(document.getElementById('opcionesMapa').verSanos.checked){
 			verSanos = true;
@@ -93,6 +95,8 @@ function initialize2(){
 }
 
 function actualizar2(){
+	mostrarMensajes2(); // en mensajes.js
+
 	if(userName != ''){
 		numeroMarcadores(plantaResidencia);
 	}
@@ -284,49 +288,4 @@ function comportamientoMarcador(evento, caracter, opciones){
 	}
 
 	return marker;
-}
-
-function escribirMensaje(nombre, planta, accion, nivel){
-	var mensaje;
-	if(accion == 'crear'){
-		mensaje = 'Nueva emergencia ' + nombre;
-		if(planta >= 0){
-			mensaje += ' en la planta ' + planta;
-		}else if(planta == -1){
-			mensaje += ' en el exterior';
-		}
-	}else if(accion == 'modificar'){
-		mensaje = 'Emergencia ' + nombre + ' modificada';
-	}else if(accion == 'eliminar'){
-		mensaje = 'Emergencia ' + nombre + ' eliminada';
-	}
-	$.post('getpost/escribirMensaje.jsp', {
-		'creador':usuario_actual,
-		'mensaje':mensaje,
-		'nivel':nivel
-	});
-}
-
-function registrarHistorial(usuario, marcador, tipo, emergencia, accion){
-	var evento;
-	if(accion == 'crear'){
-		evento = 'Evento creado por el usuario ' + usuario;
-	}else if(accion == 'modificar'){
-		evento = 'Emergencia ' + emergencia + ' modificada por ' + usuario;
-	}else if(accion == 'eliminar'){
-		evento = 'Emergencia ' + emergencia + ' eliminada por ' + usuario;
-	}else if(accion == 'mover'){
-		evento = 'Emergencia ' + emergencia + ' cambiada de sitio por ' + usuario;
-	}else{
-		evento = 'El usuario ' + usuario + ' ha actuado sobre ' + emergencia + ' - ' + accion;
-	}
-
-	$.post('getpost/registrarHistorial.jsp',{
-		'accion':accion,
-		'usuario':usuario,
-		'marcador':marcador,
-		'tipo':tipo,
-		'emergencia':emergencia,
-		'evento':evento
-	});
 }

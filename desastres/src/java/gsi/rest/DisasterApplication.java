@@ -12,7 +12,7 @@ import org.restlet.data.*;
  */
 public class DisasterApplication extends Application {
 
-	private static final String URL_BASE = "/desastres/RESTFUL/";
+	private static final String URL_BASE = "/" + Connection.getProyecto() + "/RESTFUL/";
 
 	/**
 	 * Constructor (not used)

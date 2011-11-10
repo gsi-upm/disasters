@@ -7,21 +7,27 @@
 
 <%@include file="../jspf/database.jspf"%>
 <!--  Fecha de hace 5 minutos -->
-<% String hace5min = "'" + new Timestamp(new Date().getTime() - 300000).toString() + "'"; %>
+<%
+	String hace5min = "'" + new Timestamp(new Date().getTime() - 300000).toString() + "'"; // 300000 = 5m*60s*1000ms
+	// String hace12horas = "'" + new Timestamp(new Date().getTime() - 43200000).toString() + "'"; // 43200000 = 12h*60m*60s*1000ms
+%>
 
 <c:if test="${param.action == 'firstTime'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
-		SELECT * FROM mensajes
-		WHERE fecha > <%= hace5min %> AND nivel <= ?
+		SELECT * FROM (
+			SELECT TOP 5 * FROM mensajes
+			WHERE nivel <= ? AND fecha > <%= hace5min %>
+			ORDER BY fecha DESC)
+		ORDER BY id ASC
 		<sql:param value="${param.nivel}"/>
 	</sql:query>
 </c:if>
 <c:if test="${param.action == 'notFirst'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 		SELECT * FROM mensajes
-		WHERE id > ? AND nivel <= ?
-		<sql:param value="${param.id}"/>
+		WHERE nivel <= ? AND fecha > ?
 		<sql:param value="${param.nivel}"/>
+		<sql:param value="${param.fecha}"/>
 	</sql:query>
 </c:if>
 

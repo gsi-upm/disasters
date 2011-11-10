@@ -19,25 +19,39 @@ var dictionary = {
 	'octubre': ['octubre','October','Octobre','Oktober'],
 	'noviembre': ['noviembre','November','Novembre','November'],
 	'diciembre': ['diciembre','December','Décembre','Dezember'],
-	'incendio':['Incendio','Fire','Feu','Feuer'],
-	'inundacion':['Inundación','Flood','Inondation','Flut'],
-	'derrumbamiento':['Derrumbamiento','Collapse','Effondrement','Einsturz'],
-	'personaPerdida':['Persona perdida','Lost person','Personne perdue','Vermisste']
+	'fire':['Incendio','Fire','Feu','Feuer'],
+	'flood':['Inundación','Flood','Inondation','Flut'],
+	'collapse':['Derrumbamiento','Collapse','Effondrement','Einsturz'],
+	'lostPerson':['Persona perdida','Lost person','Personne perdue','Vermisste'],
+	'injuredPerson':['Persona herida','Injured person','Personne blessée','Verletzte'],
+	'healthy':['Sano','','',''],
+	'slight':['Leve','','',''],
+	'serious':['Grave','','',''],
+	'dead':['Muerto','','',''],
+	'trapped':['Atrapado'],
+	'small':['pequeño','small','petit','klein'],
+	'medium':['mediano','medium','moyen','mittle'],
+	'big':['grande','big','grand','groß'],
+	'huge':['enorme','huge','énorme','enorm']
 };
 
-function fmt(key){
-	var lang;
-	if(idioma == 'es'){
-		lang = 0;
-	}else if(idioma == 'en' || idioma == 'en_GB'){
-		lang = 1;
-	}else if(idioma == 'fr'){
-		lang = 2;
-	}else if(idioma == 'de'){
-		lang = 3;
+function fmt(key,lang){
+	if(lang == null){
+		lang = idioma;
 	}
 
-	var palabra = dictionary[key][lang];
+	var langAux;
+	if(lang == 'es'){
+		langAux = 0;
+	}else if(lang == 'en' || lang == 'en_GB'){
+		langAux = 1;
+	}else if(lang == 'fr'){
+		langAux = 2;
+	}else if(lang == 'de'){
+		langAux = 3;
+	}
+
+	var palabra = dictionary[key][langAux];
 	if(palabra == null){
 		palabra = '???' + key + '???';
 	}

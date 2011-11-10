@@ -1,6 +1,6 @@
 <%
 	String proyecto = getServletContext().getInitParameter("proyect");
-	if(proyecto.equals("disasters")){
+	if(proyecto.equals("desastres")){
 		proyecto = "improvisa";
 	}
 %>
