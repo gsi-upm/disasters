@@ -5,7 +5,7 @@ package jadex.desastres;
  * @author julio camarero
  * @version 1.0
  */
-public class People {
+public class People{
 
 	/**
 	 * Resource id
@@ -63,7 +63,7 @@ public class People {
 	 * @param description
 	 * @param quantity
 	 */
-	public People(int id, String type, String name, String info, String description, int idAssigned, int quantity, String state) {
+	public People(int id, String type, String name, String info, String description, int idAssigned, int quantity, String state){
 		super();
 		this.id = id;
 		this.idAssigned = idAssigned;
@@ -80,140 +80,140 @@ public class People {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public int getId(){
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(int id){
 		this.id = id;
 	}
 
 	/**
 	 * @return the idAssigned
 	 */
-	public int getIdAssigned() {
+	public int getIdAssigned(){
 		return idAssigned;
 	}
 
 	/**
 	 * @param idAssigned the idAssigned to set
 	 */
-	public void setIdAssigned(int idAssigned) {
+	public void setIdAssigned(int idAssigned){
 		this.idAssigned = idAssigned;
 	}
 
 	/**
 	 * @return the type
 	 */
-	public String getType() {
+	public String getType(){
 		return type;
 	}
 
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(String type) {
+	public void setType(String type){
 		this.type = type;
 	}
 
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public String getName(){
 		return name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(String name){
 		this.name = name;
 	}
 
 	/**
 	 * @return the info
 	 */
-	public String getInfo() {
+	public String getInfo(){
 		return info;
 	}
 
 	/**
 	 * @param info the info to set
 	 */
-	public void setInfo(String info) {
+	public void setInfo(String info){
 		this.info = info;
 	}
 
 	/**
 	 * @return the description
 	 */
-	public String getDescription() {
+	public String getDescription(){
 		return description;
 	}
 
 	/**
 	 * @param description the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(String description){
 		this.description = description;
 	}
 
 	/**
 	 * @return the state
 	 */
-	public String getState() {
+	public String getState(){
 		return state;
 	}
 
 	/**
 	 * @param state the state to set
 	 */
-	public void setState(String state) {
+	public void setState(String state){
 		this.state = state;
 	}
 
 	/**
 	 * @return the user
 	 */
-	public int getUser() {
+	public int getUser(){
 		return user;
 	}
 
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(int user) {
+	public void setUser(int user){
 		this.user = user;
 	}
 
 	/**
 	 * @return the quantity
 	 */
-	public int getQuantity() {
+	public int getQuantity(){
 		return quantity;
 	}
 
 	/**
 	 * @param quantity the quantity to set
 	 */
-	public void setQuantity(int quantity) {
+	public void setQuantity(int quantity){
 		this.quantity = quantity;
 	}
 
 	/**
 	 * @return the atendido
 	 */
-	public boolean isAtendido() {
+	public boolean isAtendido(){
 		return atendido;
 	}
 
 	/**
 	 * @param atendido the atendido to set
 	 */
-	public void setAtendido(boolean atendido) {
+	public void setAtendido(boolean atendido){
 		this.atendido = atendido;
 	}
 }

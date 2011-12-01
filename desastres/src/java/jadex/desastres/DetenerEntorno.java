@@ -7,16 +7,16 @@ import java.io.IOException;
  *
  * @author Juan Luis Molina
  */
-public class DetenerEntorno extends Plan {
+public class DetenerEntorno extends Plan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public synchronized void body() {
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		try {
+	public synchronized void body(){
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		try{
 			env.terminar();
-		} catch (IOException ex) {
+		}catch(IOException ex){
 			System.out.println("Excepcion en DetenerEntorno: " + ex);
 		}
 	}

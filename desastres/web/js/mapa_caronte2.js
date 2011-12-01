@@ -1,8 +1,8 @@
 function coordenadasUsuario(pos){
-	// PRUEBAAA!!! ***************************************************************
-	var latitud = 38.232272 + (2*Math.random()-1)*0.0001 // pos.coords.latitude;
-	var longitud = -1.698925 + (2*Math.random()-1)*0.0001 // pos.coords.longitude;
-	//****************************************************************************
+	// PRUEBAAA!!! ****************************************************************************************
+	var latitud = (38.232272 + (2*Math.random()-1)*0.0001).toFixed(6); // pos.coords.latitude.toFixed(6);
+	var longitud = (-1.698925 + (2*Math.random()-1)*0.0001).toFixed(6); // pos.coords.longitude.toFixed(6);
+	//*****************************************************************************************************
 
 	if(nivelMsg == null || nivelMsg == 0){
 		var icono = new GIcon(G_DEFAULT_ICON);
@@ -65,7 +65,7 @@ function cargarMenuAcciones(puntero){
 		data: {
 			'marcador':puntero.marcador,
 			'id':puntero.id
-			},
+		},
 		success: function(data){
 			$.each(data, function(entryIndex, entry){
 				if(entryIndex == 0){
@@ -87,7 +87,7 @@ function cargarMenuAcciones(puntero){
 			'marcador':puntero.marcador,
 			'tipo':puntero.tipo,
 			'estado':puntero.estado
-			},
+		},
 		success: function(data){
 			$.each(data, function(entryIndex, entry){
 				if(entryIndex == 0){
@@ -120,7 +120,7 @@ function cargarListaActividades(evento){
 		data: {
 			'marcador':evento.marcador,
 			'id':evento.id
-			},
+		},
 		success: function(data) {
 			$.each(data, function(entryIndex, entry) {
 				if(entryIndex == 0){
@@ -151,17 +151,17 @@ function cargarLateral(evento){
 		}
 		document.getElementById('radio_catastrofes').style.display = 'none';
 		document.getElementById('radio_catastrofes_2').style.display = 'block';
-		var tipo, tipo_img;
+		var tipoImg;
 		if(evento.tipo == 'fire'){
-			tipo_img = 'fuego';
+			tipoImg = 'fuego';
 		}else if(evento.tipo == 'flood'){
-			tipo_img = 'agua';
+			tipoImg = 'agua';
 		}else if(evento.tipo == 'collapse'){
-			tipo_img = 'casa';
+			tipoImg = 'casa';
 		}else if(evento.tipo == 'lostPerson'){
-			tipo_img = 'personaPerdida';
+			tipoImg = 'personaPerdida';
 		}
-		document.getElementById('icono_catastrofes_2').src = 'markers/events/' + tipo_img + '.png';
+		document.getElementById('icono_catastrofes_2').src = 'markers/events/' + tipoImg + '.png';
 		document.getElementById('tipo_catastrofes_2').innerHTML = fmt(evento.tipo);
 	}else if(evento.marcador == 'people'){
 		lateral = document.getElementById('heridos');
@@ -181,8 +181,9 @@ function cargarLateral(evento){
 			url: 'getpost/getAsociaciones.jsp',
 			data: {
 				'tipo':'asociadas',
-				'iden': evento.id
-				},
+				'iden': evento.id,
+				'nivel':nivelMsg
+			},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
 					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
@@ -200,8 +201,9 @@ function cargarLateral(evento){
 			url: 'getpost/getAsociaciones.jsp',
 			data: {
 				'tipo':'emergencias',
-				'iden': evento.id
-				},
+				'iden': evento.id,
+				'nivel':nivelMsg
+			},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
 					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
@@ -222,7 +224,10 @@ function cargarLateral(evento){
 			type: 'GET',
 			dataType: 'json',
 			url: 'getpost/getSintomas.jsp',
-			data: {'tipo':'sintomasSI', 'iden': evento.id},
+			data: {
+				'tipo':'sintomasSI',
+				'iden': evento.id
+			},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
 					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
@@ -238,7 +243,10 @@ function cargarLateral(evento){
 			type: 'GET',
 			dataType: 'json',
 			url: 'getpost/getSintomas.jsp',
-			data: {'tipo':'sintomasNO', 'iden': evento.id},
+			data: {
+				'tipo':'sintomasNO',
+				'iden': evento.id
+			},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
 					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
@@ -329,6 +337,7 @@ function cargarLateral(evento){
 }
 
 function limpiarLateral(marcador){
+	document.getElementById('prueba').innerHTML = marcador;
 	noActualizar = 0;
 	var lateral;
 	if(marcador == 'event'){
@@ -354,8 +363,8 @@ function limpiarLateral(marcador){
 				cambiaIcono('event', 'fire', 1);
 				lateral.nombre.value = 'Incendio';
 			}else if(marcador == 'people'){
-				cambiaIcono('people', 'healthy', lateral.cantidad.value);
-				lateral.nombre.value = 'Sano';
+				cambiaIcono('people', 'slight', 1);
+				lateral.nombre.value = 'Leve';
 			}
 			lateral.info.value = '';
 			lateral.descripcion.value = '';
@@ -379,7 +388,8 @@ function limpiarLateral(marcador){
 					dataType: 'json',
 					url: 'getpost/getAsociaciones.jsp',
 					data: {
-						'tipo':'todasEmergencias'
+						'tipo':'todasEmergencias',
+						'nivel':nivelMsg
 					},
 					success: function(data){
 						$.each(data, function(entryIndex, entry){
@@ -401,7 +411,9 @@ function limpiarLateral(marcador){
 					type: 'GET',
 					dataType: 'json',
 					url: 'getpost/getSintomas.jsp',
-					data: {'tipo':'todosSintomas'},
+					data: {
+						'tipo':'todosSintomas'
+					},
 					success: function(data){
 						$.each(data, function(entryIndex, entry){
 							document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +

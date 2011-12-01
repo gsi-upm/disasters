@@ -1,7 +1,6 @@
 package jadex.desastres.caronte.firemen;
 
-import jadex.bdi.runtime.*;
-import jadex.desastres.*;
+import jadex.bdi.runtime.Plan;
 
 /**
  * Plan de BOMBEROS para llevar al bombero a la estacion de bomberos.
@@ -9,12 +8,12 @@ import jadex.desastres.*;
  * @author Ivan Rojo y Juan Luis Molina
  * 
  */
-public class EstacionBomberosPlan extends Plan {
+public class EstacionBomberosPlan extends Plan{
 
 	/**
 	 * Cuerpo del plan.
 	 */
-	public void body() {
+	public void body(){
 		waitFor(1000);
 	}
 }

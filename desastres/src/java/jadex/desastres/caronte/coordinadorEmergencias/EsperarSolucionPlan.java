@@ -1,6 +1,5 @@
 package jadex.desastres.caronte.coordinadorEmergencias;
 
-import jadex.bdi.runtime.*;
 import jadex.desastres.*;
 
 /**
@@ -9,13 +8,13 @@ import jadex.desastres.*;
  * @author Ivan y Juan Luis Molina
  * 
  */
-public class EsperarSolucionPlan extends EnviarMensajePlan {
+public class EsperarSolucionPlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+	public void body(){
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		env.printout("OO coordinador: esperando una solucion...",3);
 

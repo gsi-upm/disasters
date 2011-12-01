@@ -1,7 +1,7 @@
 package jadex.desastres.caronte.gerocultor;
 
-import jadex.bdi.runtime.*;
-import jadex.desastres.*;
+import jadex.bdi.runtime.Plan;
+import jadex.desastres.Environment;
 
 /**
  * Plan de GEROCULTOR
@@ -11,12 +11,11 @@ import jadex.desastres.*;
 public class ReponerMaterialPlan extends Plan {
 
 	public void body() {
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		env.printout("GG gerocultor: reponiendo el material usado", 0);
 		waitFor(1000);
 		getBeliefbase().getBelief("material").setFact(true);
 		env.printout("GG gerocultor: material repuesto", 0);
 	}
-
 }

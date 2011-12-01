@@ -4,17 +4,13 @@
   Agente que administra todos los agentes y/o eventos que hay en el mapa
 -->
 
-<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
-	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-       name="environment"
-	   package="jadex.desastres">
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+	name="Environment" package="jadex.desastres">
 
 	<imports>
 		<import>jadex.runtime.*</import>
 		<import>jadex.util.*</import>
-		<import>jadex.*</import>
 		<import>java.util.logging.*</import>
 	</imports>
 	

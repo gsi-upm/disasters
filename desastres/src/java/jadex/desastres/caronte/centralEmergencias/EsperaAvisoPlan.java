@@ -1,7 +1,6 @@
 package jadex.desastres.caronte.centralEmergencias;
 
-import jadex.bdi.runtime.*;
-import jadex.desastres.*;
+import jadex.bdi.runtime.Plan;
 
 /**
  * Plan
@@ -9,15 +8,12 @@ import jadex.desastres.*;
  * @author Juan Luis Molina
  *
  */
-public class EsperaAvisoPlan extends EnviarMensajePlan {
+public class EsperaAvisoPlan extends Plan{
 
 	/**
 	 * Cuerpo del plan.
 	 */
-
 	public void body() {
-
 		waitFor(1000);
-
 	}
 }

@@ -1,6 +1,6 @@
 package jadex.desastres.caronte.centralEmergencias;
 
-import jadex.bdi.runtime.*;
+import jadex.bdi.runtime.IGoal;
 import jadex.desastres.*;
 
 /**
@@ -9,14 +9,14 @@ import jadex.desastres.*;
  * @author Juan Luis Molina
  *
  */
-public class MandaAvisoPlan extends EnviarMensajePlan {
+public class MandaAvisoPlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan.
 	 */
-	public void body() {
+	public void body(){
 		// Obtenemos un objeto de la clase entorno para poder usar sus metodos.
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso_geriatrico", "Aviso recibido");
 		//env.printout("CC central: Ack mandado",0);
@@ -31,7 +31,7 @@ public class MandaAvisoPlan extends EnviarMensajePlan {
 		String resultado1 = enviarObjeto("ambulanceCaronte", "aviso", recibido);
 		//env.printout("CC central: Respuesta recibida de la ambulancia: " + resultado1, 0);
 
-		if (!des.getType().equals("injuredPerson") && (des.getSize().equals("big") || des.getSize().equals("huge"))) {
+		if(!des.getType().equals("injuredPerson") && (des.getSize().equals("big") || des.getSize().equals("huge"))){
 			String resultado2 = enviarObjeto("policeCaronte", "aviso", recibido);
 			//env.printout("CC central: Respuesta recibida de la policia: " + resultado2, 0);
 			String resultado3 = enviarObjeto("firemenCaronte", "aviso", recibido);

@@ -1,11 +1,7 @@
 package jadex.desastres.caronte.firemen;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import jadex.desastres.*;
-
-import roads.*;
+//import roads.*;
 
 /**
  * Plan de BOMBEROS
@@ -13,23 +9,23 @@ import roads.*;
  * @author Ivan y Juan Luis Molina
  * 
  */
-public class BomberoEnDesastrePlan extends EnviarMensajePlan {
+public class BomberoEnDesastrePlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
+	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
 		//env.printout("FF firemen: Ack mandado",0);
 		
 		// Posicion actual del bombero, que le permite recoger al herido.
-		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();
+		Position posicionActual = (Position)getBeliefbase().getBelief("pos").getFact();
 
 		// Posicion del parque de bomberos que le corresponde
-		Position posicionParque = (Position) getBeliefbase().getBelief("parqueDeBomberos").getFact();
+		Position posicionParque = (Position)getBeliefbase().getBelief("parqueDeBomberos").getFact();
 
 		//id y posicion del Desastre atendiendose
 		int idDes = recibido.getId();
@@ -41,27 +37,27 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 
 		//in case the agent hasn't an assigned disaster yet, we have to put
 		//the new value for the idAssigned parameter in the DB
-		//int assignedId = ((Integer) getBeliefbase().getBelief("assignedId").getFact()).intValue();
-		//if (assignedId != 0) {
-		//	DBManager.setField(env.getAgent(getComponentName()).getId(), "idAssigned", new Integer(idDes).toString()); //Heridos atrapados
-		//}
+		/*int assignedId = ((Integer)getBeliefbase().getBelief("assignedId").getFact()).intValue();
+		/if(assignedId != 0){
+			DBManager.setField(env.getAgent(getComponentName()).getId(), "idAssigned", new Integer(idDes).toString()); //Heridos atrapados
+		}*/
 		
 
 		// Atiendo el desastre un tiempo medio de 4 segundos. Luego, se tiene
 		// que ajustar a la grado del mismo.
-		try {
+		try{
 			env.printout("FF firemen: Estoy destinado al desastre " + idDes + " con estado " + estadoEmergencia, 0);
 			env.andar(getComponentName(), posicionActual, destino, env.getAgent(getComponentName()).getId(), 0);
 			// el cuarto parametro del metodo andar es el id del bichito
 			// que queremos transportar. en bombero es siempre 0
-		} catch (Exception ex) {
+		}catch(Exception ex){
 			System.out.println("FF firemen: Error metodo andar: " + ex);
 		}
 
 
 		int id = 0;
 		People atrapados = des.getTrapped();
-		if (atrapados != null) {
+		if(atrapados != null){
 			env.printout("FF firemen: He encontrado un herido atrapado cuya id es: " + atrapados.getId() + "!!",0);
 			//actualizar las creencias con el id
 			id = atrapados.getId();
@@ -70,7 +66,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 		env.printout("FF firemen: Solucionando desastre...",0);
 		//waitFor(2000);
 		//borro a los atrapados
-		if (id != 0) {
+		if(id != 0){
 			env.printout("FF firemen: liberando atrapados " + id,0);
 			String resultado = Connection.connect(Environment.URL + "delete/id/" + id);
 			id = 0;
@@ -78,14 +74,14 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 
 		// TENGO QUE COMPROBAR SI HAY HERIDOS, SI LOS HAY, NO ME PUEDO IR HASTA QUE ESTEN ATENDIDOS
 		des = env.getEvent(idDes);
-		while (des.getSlight() != null || des.getSerious() != null || des.getDead() != null) {
+		while(des.getSlight() != null || des.getSerious() != null || des.getDead() != null){
 			//System.out.println("FF firemen: No puedo marcharme porque quedan heridos, espero un poco mas...");
 			waitFor(2000);
 			des = env.getEvent(idDes);
 		}
 
 		// El bombero regresa a su parque correspondiente cuando no hay heridos.
-		try {
+		try{
 			// HAY QUE ELIMINAR EL DESASTRE
 			env.printout("FF firemen: Eliminado el desastre " + idDes,0);
 			String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
@@ -103,7 +99,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan {
 			
 			env.andar(getComponentName(), posicionActual, posicionParque, env.getAgent(getComponentName()).getId(), 0);
 			env.printout("FF firemen: He vuelto al parque de bomberos", 0);
-		} catch (Exception e) {
+		}catch (Exception e){
 			System.out.println("FF firemen: Error metodo andar: " + e);
 		}
 	}

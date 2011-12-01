@@ -1,6 +1,5 @@
 package jadex.desastres.caronte.police;
 
-import jadex.bdi.runtime.*;
 import jadex.desastres.*;
 
 /**
@@ -9,22 +8,22 @@ import jadex.desastres.*;
  * @author Nuria y Juan Luis Molina
  * 
  */
-public class LlegaDesastrePlan extends EnviarMensajePlan {
+public class LlegaDesastrePlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
+	public void body(){
 		//Obtenemos un objeto de la clase Environment para poder usar sus metodos
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso", "Aviso recibido");
 		//env.printout("PP police: Ack mandado",0);
 
 		//Obtengo mi posicion
-		Position oldPos = (Position) getBeliefbase().getBelief("pos").getFact();
+		Position oldPos = (Position)getBeliefbase().getBelief("pos").getFact();
 
-		Position posicionComisaria = (Position) getBeliefbase().getBelief("Comisaria").getFact();
+		Position posicionComisaria = (Position)getBeliefbase().getBelief("Comisaria").getFact();
 
 		//id del Desastre atendiendose
 		int idDes = recibido.getId();
@@ -35,9 +34,9 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		Position positionDesastre = new Position(des.getLatitud(), des.getLongitud());
 		env.printout("PP police: Estoy destinado al desastre " + idDes,0);
 
-		try {
+		try{
 			env.andar(getComponentName(), oldPos, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
-		} catch (Exception e) {
+		}catch (Exception e){
 			System.out.println("PP police: Error metodo andar: " + e);
 		}
 
@@ -46,9 +45,9 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		env.printout("PP police: Desastre " + idDes + " solucionado",0);
 		env.printout("PP police: Vuelvo a la comisaria",0);
 		
-		try {
+		try{
 			env.andar(getComponentName(), oldPos, posicionComisaria, env.getAgent(getComponentName()).getId(), 0);
-		} catch (Exception e) {
+		}catch (Exception e){
 			System.out.println("PP police: Error metodo andar: " + e);
 		}
 		env.printout("PP police: En la comisaria",0);

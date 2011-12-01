@@ -1,14 +1,13 @@
 package jadex.desastres.disasters.sanitarios.coordinadorMedico;
 
-import jadex.desastres.*;
-import jadex.bdi.runtime.*;
+import jadex.desastres.EnviarMensajePlan;
 
 /**
  * Determinar el numero de ambulancias y personal que debe ir a la zona del desastre
  *
  * @author Juan Luis Molina
  */
-public class OrganizarRecursosMedicosPlan extends EnviarMensajePlan {
+public class OrganizarRecursosMedicosPlan extends EnviarMensajePlan{
 	/**
 	 * Cuerpo del plan
 	 */

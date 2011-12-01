@@ -6,27 +6,56 @@
 <%@taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
 
 <%@include file="../jspf/database.jspf"%>
-<!--  Fecha de hace 5 minutos -->
 <%
-	String hace5min = "'" + new Timestamp(new Date().getTime() - 300000).toString() + "'"; // 300000 = 5m*60s*1000ms
-	// String hace12horas = "'" + new Timestamp(new Date().getTime() - 43200000).toString() + "'"; // 43200000 = 12h*60m*60s*1000ms
+	long fecha = new Date().getTime();
+	String hace5min = "'" + new Timestamp(fecha - 300000).toString() + "'"; // 300000 = 5m*60s*1000ms
+	String hace30min = "'" + new Timestamp(fecha - 1800000).toString() + "'"; // 1800000 = 30m*60s*1000ms
+	// String hace12horas = "'" + new Timestamp(fecha - 43200000).toString() + "'"; // 43200000 = 12h*60m*60s*1000ms
 %>
 
 <c:if test="${param.action == 'firstTime'}">
-	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
-		SELECT * FROM (
-			SELECT TOP 5 * FROM mensajes
-			WHERE nivel <= ? AND fecha > <%= hace5min %>
-			ORDER BY fecha DESC)
-		ORDER BY id ASC
-		<sql:param value="${param.nivel}"/>
-	</sql:query>
+	<c:choose>
+		<c:when test="${basedatos == 'mysql'}">
+			<sql:query var="mensajes" dataSource="${CatastrofesServer}">
+				SELECT * FROM (
+					(SELECT * FROM mensajes WHERE nivel <= ? AND fecha >= <%=hace5min%>)
+					UNION
+					(SELECT * FROM mensajes
+					 WHERE nivel <= ? AND fecha < <%=hace5min%> AND fecha >= <%=hace30min%>
+					 ORDER BY fecha DESC
+					 LIMIT 5)) msgs
+				ORDER BY id ASC
+				<sql:param value="${param.nivel}"/>
+				<sql:param value="${param.nivel}"/>
+			</sql:query>
+		</c:when>
+		<c:otherwise>
+			<sql:query var="mensajes" dataSource="${CatastrofesServer}">
+				SELECT * FROM (
+					(SELECT * FROM mensajes WHERE nivel <= ? AND fecha >= <%=hace5min%>)
+					UNION
+					(SELECT TOP 5 * FROM mensajes
+					 WHERE nivel <= ? AND fecha < <%=hace5min%> AND fecha >= <%=hace30min%>
+					 ORDER BY fecha DESC))
+				ORDER BY id ASC
+				<sql:param value="${param.nivel}"/>
+				<sql:param value="${param.nivel}"/>
+			</sql:query>
+		</c:otherwise>
+	</c:choose>
+	
 </c:if>
 <c:if test="${param.action == 'notFirst'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 		SELECT * FROM mensajes
 		WHERE nivel <= ? AND fecha > ?
 		<sql:param value="${param.nivel}"/>
+		<sql:param value="${param.fecha}"/>
+	</sql:query>
+</c:if><c:if test="${param.action == 'idCreado'}">
+	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
+		SELECT id FROM catastrofes
+		WHERE fecha = ?
 		<sql:param value="${param.fecha}"/>
 	</sql:query>
 </c:if>

@@ -1,7 +1,6 @@
 package jadex.desastres.caronte.gerocultor;
 
-import jadex.bdi.runtime.*;
-import jadex.desastres.*;
+import jadex.bdi.runtime.Plan;
 
 /**
  * Plan de GEROCULTOR
@@ -9,12 +8,12 @@ import jadex.desastres.*;
  * @author Lorena Lopez Lebon
  * 
  */
-public class EsperarEmergenciaPlan extends Plan {
+public class EsperarEmergenciaPlan extends Plan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
+	public void body(){
 		waitFor(1000);
 	}
 }

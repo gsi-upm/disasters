@@ -1,11 +1,6 @@
 package jadex.desastres.disasters.police;
 
-import jadex.bdi.runtime.Plan;
-import jadex.desastres.Disaster;
-import jadex.desastres.EnviarMensajePlan;
-import jadex.desastres.Environment;
-import jadex.desastres.Position;
-import jadex.desastres.WorldObject;
+import jadex.desastres.*;
 
 /**
  * Plan de la POLICIA
@@ -13,25 +8,20 @@ import jadex.desastres.WorldObject;
  * @author Nuria y Juan Luis Molina
  * 
  */
-public class LlegaDesastrePlan extends EnviarMensajePlan {
-
-	private Environment env;
+public class LlegaDesastrePlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
+	public void body(){
 
 		//Obtenemos un objeto de la clase Environment para poder usar sus metodos
-		env = (Environment) getBeliefbase().getBelief("env").getFact();
+		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 		//Obtengo mi posicion
-		//Position oldPos = (Position) getBeliefbase().getBelief("pos").getFact();
-		WorldObject agente = (WorldObject)getBeliefbase().getBelief("agente").getFact();
+		Position oldPos = (Position) getBeliefbase().getBelief("pos").getFact();
 
 		Position posicionComisaria = (Position) getBeliefbase().getBelief("Comisaria").getFact();
 
-		Position oldPos = agente.getPosition();
-		
 		//id del Desastre atendiendose
 		//int idDes = (Integer)getBeliefbase().getBelief("desastreActual").getFact();
 		int idDes = env.getTablon();
@@ -44,12 +34,12 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		Position positionDesastre = new Position(des.getLatitud(), des.getLongitud());
 		System.out.println("++ police: Estoy destinado al desastre " + idDes);
 
-		try {
+		try{
 			env.andar(getComponentName(), oldPos, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
-		} catch (Exception e) {
+		}catch(Exception e){
 			System.out.println("++ police: Error metodo andar: " + e);
 		}
-		while (des != null) {
+		while(des != null){
 			//System.out.println("++ police: No puedo marcharme hasta que se solucione este jaleo, espero un poco mas...");
 			//waitFor(2000);
 			des = env.getEvent(idDes);
@@ -58,9 +48,9 @@ public class LlegaDesastrePlan extends EnviarMensajePlan {
 		System.out.println("++ police: Desastre solucionado: " + idDes);
 		System.out.println("++ police: Vuelvo a la comisaria");
 		
-		try {
+		try{
 			env.andar(getComponentName(), oldPos, posicionComisaria, env.getAgent(getComponentName()).getId(), 0);
-		} catch (Exception e) {
+		}catch (Exception e){
 			System.out.println("++ police: Error metodo andar: " + e);
 		}
 		System.out.println("++ police: En la comisaria");

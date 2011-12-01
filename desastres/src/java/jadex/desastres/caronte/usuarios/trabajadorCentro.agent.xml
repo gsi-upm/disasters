@@ -1,16 +1,14 @@
 <!--
   <h3>Agente de ciudadano</h3>
--->
 
-<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
-	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-       name="trabajadorCentro"
-	   package="jadex.desastres.caronte.usuarios">
+  
+-->
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+	name="trabajadorCentro" package="jadex.desastres.caronte.usuarios">
 
 	<imports>
-		<import>jadex.runtime.*</import>
+		<import>jadex.bdi.runtime.*</import>
 	</imports>
 
 	<beliefs>

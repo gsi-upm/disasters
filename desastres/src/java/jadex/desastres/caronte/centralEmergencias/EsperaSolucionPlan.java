@@ -1,6 +1,5 @@
 package jadex.desastres.caronte.centralEmergencias;
 
-import jadex.bdi.runtime.*;
 import jadex.desastres.*;
 
 /**
@@ -9,13 +8,13 @@ import jadex.desastres.*;
  * @author Ivan y Juan Luis Molina
  * 
  */
-public class EsperaSolucionPlan extends EnviarMensajePlan {
+public class EsperaSolucionPlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
+	public void body(){
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		env.printout("CC central: esperando una solucion...", 0);
 		String recibido = esperarYEnviarRespuesta("terminado", "Terminado recibido");

@@ -3,24 +3,19 @@
 
   Agente que patrulla y acude a los desastres en Calasparra
 -->
-<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
-	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-       name="police"
-	   package="jadex.desastres.disasters.police">
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+	name="police" package="jadex.desastres.disasters.police">
 
 	<imports>
 		<import>jadex.base.fipa.*</import>
-		<import>jadex.runtime.*</import>
-		<import>jadex.util.*</import>
-		<import>jadex.*</import>
-		<import>java.util.logging.*</import>
-		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.planlib.df.DF</import>
+		<import>jadex.bdi.planlib.protocols.request.Request</import>
+		<import>jadex.bdi.runtime.*</import>
+		<import>jadex.bridge.service.*</import>
 		<import>jadex.commons.*</import>
-		<import>jadex.commons.service.*</import>
 		<import>jadex.desastres.*</import>
+		<import>java.util.logging.*</import>
 	</imports>
 
 	<capabilities>
@@ -31,7 +26,7 @@
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, en el centro de Madrid -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.POLICIA,$scope.getAgentName(),$beliefbase.Comisaria)</fact>
+			<fact>Environment.getInstance(Environment.POLICIA, $scope.getAgentName(), $beliefbase.Comisaria)</fact>
 		</belief>
 		
 		<!-- Definimos el centro de Madrid -->
@@ -40,15 +35,9 @@
 			<!-- Pagina con todas las comisarias: http://www.valledelkas.com/servicios/InformacionCiudadana/comisarias.asp-->
 		</belief>
 		
-		<!-- Posicion del agente evaluada dinamicamente->
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
-		</belief-->
-		<belief name="agente" class="WorldObject">
-			<fact>$beliefbase.env.getAgent($scope.getAgentName())</fact>
-		</belief>
-		<belief name="pos" class="Position" evaluationmode="dynamic">
-			<fact>$beliefbase.agente.getPosition()</fact>
+		<!-- Posicion del agente evaluada dinamicamente -->
+		<belief name="pos" class="Position">
+			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
 
 		<!-- desastre que esta atendiendo-->
@@ -120,9 +109,8 @@
 				<initialgoal ref="df_keep_registered">
 					<parameter ref="description">
 						<value>
-							$propertybase.getProperty("dfservice")
-								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
-								.createDFServiceDescription("police_service", "police", "GSI DIT UPM"))
+							$properties.dfservice.createDFComponentDescription(null,
+								$properties.dfservice.createDFServiceDescription("police_service", "police", "GSI DIT UPM"))
  						</value>
 					</parameter>
 					<!--<parameter ref="leasetime">
@@ -135,6 +123,6 @@
 	</configurations>
 
 	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class)</property>
+		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
 	</properties>
 </agent>

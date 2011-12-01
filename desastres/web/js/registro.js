@@ -14,7 +14,7 @@ function registrar(user, pass1, pass2, nombre, email){
 	limpiarRegistro();
 	if(user != '' && pass1 != '' && pass2 != '' && nombre != '' && email != ''){
 		if(pass1 == pass2){
-			$.get('/desastres/registro',{
+			$.get('/caronte/registro',{
 				'user':user,
 				'pass':pass1,
 				'nombre':nombre,

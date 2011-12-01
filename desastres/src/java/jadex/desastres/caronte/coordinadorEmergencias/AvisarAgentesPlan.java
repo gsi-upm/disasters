@@ -1,13 +1,13 @@
 package jadex.desastres.caronte.coordinadorEmergencias;
 
-import jadex.bdi.runtime.*;
+import jadex.bdi.runtime.IGoal;
 import jadex.desastres.*;
 
 /**
  *
  * @author Juan Luis Molina
  */
-public class AvisarAgentesPlan extends EnviarMensajePlan {
+public class AvisarAgentesPlan extends EnviarMensajePlan{
 
 	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
@@ -45,8 +45,8 @@ public class AvisarAgentesPlan extends EnviarMensajePlan {
 			Environment.printout("OO coordinador: La emergencia no tiene heridos!!",0);
 		}*/
 
-		if (((emergencia.equals("big") || emergencia.equals("huge")) && !des.getType().equals("injuredPerson")) ||
-				(!herido.equals("null") && !herido.equals("slight"))) {
+		if(((emergencia.equals("big") || emergencia.equals("huge")) && !des.getType().equals("injuredPerson")) ||
+				(!herido.equals("null") && !herido.equals("slight"))){
 			env.printout("OO coordinador: Avisando la central... (en espera)...",3);
 			String resultado = enviarObjeto("centralEmergencias", "aviso_geriatrico", desastre);
 			env.printout("OO coordinador: Respuesta recibida de central: " + resultado,3);
@@ -62,16 +62,16 @@ public class AvisarAgentesPlan extends EnviarMensajePlan {
 	 * @param des Desastre
 	 * @return Herido
 	 */
-	private People getHerido(Disaster des) {
+	private People getHerido(Disaster des){
 		People herido = null;
 
-		if (des.getSlight() != null) {
+		if(des.getSlight() != null){
 			herido = des.getSlight();
 		}
-		if (des.getSerious() != null) {
+		if(des.getSerious() != null){
 			herido = des.getSerious();
 		}
-		if (des.getDead() != null) {
+		if(des.getDead() != null){
 			herido = des.getDead();
 		}
 

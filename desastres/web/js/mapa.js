@@ -243,14 +243,12 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 		nuevomarcador.marcador = 'people';
 		nuevomarcador.tipo = 'serious';
 	}
-
+	
 	pos_temp++;
 	nuevomarcador.marker = generaMarcador(nuevomarcador, TEMPORAL);
+    marcadores_temporales[nuevomarcador.id] = nuevomarcador;
 
-	escribirMensaje(nuevomarcador, 'crear', 1);
-	registrarHistorial(userName, marcador, tipo, fecha, 'crear');
-
-	guardar(nuevomarcador);
+	//guardar(nuevomarcador);
 }
 
 function guardar(puntero){
@@ -312,6 +310,11 @@ function guardar(puntero){
 		}
 	}*/
 
+	escribirMensaje(puntero, 'crear', 1);
+	registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.fecha, 'crear');
+	limpiar = true;
+	limpiarLateral(puntero.marcador);
+
 	// 2.Borrar el elemento del mapa y la matriz temporal
 	marcadores_temporales[puntero.id] = null;
 
@@ -320,13 +323,13 @@ function guardar(puntero){
 }
 
 function modificar(id, cantidad, nombre, info, descripcion, direccion, longitud, latitud,
-	estado, size, traffic, idAssigned, planta){
+	estado, size, traffic, idAssigned){
 	// utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if(caracter_temp == TEMPORAL){
 		// Actualizar la matriz temporal
 		eliminar(marcadores_temporales[id],TEMPORAL);
 		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,
-			direccion,longitud,latitud,estado,size,traffic,idAssigned,planta);
+			direccion,longitud,latitud,estado,size,traffic,idAssigned,-2);
 	}else if(caracter_temp == DEFINITIVO){
 		// hay que hacer un update a la base de datos
 		$.post('getpost/update.jsp',{
@@ -343,7 +346,7 @@ function modificar(id, cantidad, nombre, info, descripcion, direccion, longitud,
 			'direccion':direccion,
 			'size':size,
 			'traffic':traffic,
-			'planta':planta,
+			'planta':puntero_temp.planta,
 			'estado':estado,
 			'idAssigned':idAssigned,
 			'fecha':puntero_temp.fecha,
@@ -369,11 +372,6 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 	}else{
 		accion = 'modificar';
 	}
-
-	var evento = {'id':id, 'marcador':puntero.marcador, 'tipo':tipo, 'cantidad':cantidad, 'nombre':nombre,
-		'info':info, 'descripcion':descripcion, 'size':tamanno, 'traffic':trafico, 'planta':planta}
-	escribirMensaje(evento, 'modificar', 2);
-	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 
 	$.post('getpost/update.jsp',{
 		'accion':accion,
@@ -437,17 +435,20 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 		crearCatastrofe(puntero.marcador, puntero.tipo, puntero.cantidad-1, puntero.nombre, puntero.info, puntero.descripcion, puntero.direccion,
 			puntero.longitud+0.00001, puntero.latitud-0.000005, puntero.estado, puntero.size, puntero.traffic, puntero.idAssigned, puntero.planta);
 	}
+
+	var evento = {'id':id, 'marcador':puntero.marcador, 'tipo':tipo, 'cantidad':cantidad, 'nombre':nombre,
+		'info':info, 'descripcion':descripcion, 'size':tamanno, 'traffic':trafico, 'planta':planta}
+	escribirMensaje(evento, 'modificar', 2);
+	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
+	limpiarLateral(puntero.marcador);
 }
 
-function eliminar(puntero,caracter){
+function eliminar(puntero, caracter){
 	if(caracter == TEMPORAL){
 		map.removeOverlay(puntero.marker);
 	}else if(caracter == DEFINITIVO){
 		// hay que hacer un update
 		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
-			escribirMensaje(puntero, 'eliminar', 1);
-			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
-			
 			$.post('getpost/update.jsp',{
 				'accion':'eliminar',
 				'id':puntero.id,
@@ -468,10 +469,10 @@ function eliminar(puntero,caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
-		}else{
 			escribirMensaje(puntero, 'eliminar', 1);
-			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
-
+			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
+			limpiarLateral(puntero.marcador);
+		}else{
 			$.post('getpost/update.jsp',{
 				'accion':'eliminar',
 				'id':puntero.id,
@@ -492,39 +493,11 @@ function eliminar(puntero,caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
+			escribirMensaje(puntero, 'eliminar', 1);
+			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
+			limpiarLateral(puntero.marcador);
 		}
 	}
-}
-
-function guardar_asociacion(idEvento, idRecurso){
-	// Hallar la nueva posicion del recurso en funcion del tipo
-	var evento = marcadores_definitivos[idEvento];
-	var recurso = marcadores_definitivos[idRecurso];
-	var latitud = evento.latitud;
-	var longitud = evento.longitud;
-	var nueva_latitud = recurso.latitud;
-	var nueva_longitud = recurso.longitud;
-
-	// Hallar las nuevas distancias
-	/*
-	if(recurso.tipo=='police'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.000025;}
-	if(recurso.tipo=='nurse'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='gerocultor'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='assistant'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.000025;}
-	if(recurso.tipo=='firemen'){nueva_latitud=latitud+0.000025;nueva_longitud=longitud-0.00005;}
-	if(recurso.tipo=='ambulance'||recurso.tipo=='ambulancia'){nueva_latitud=latitud+0.000025;nueva_longitud=longitud+0.00005;}
-	if(recurso.tipo=='trapped'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud-0.0001;}
-	if(recurso.tipo=='healthy'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.0001;}
-	if(recurso.tipo=='slight'){nueva_latitud=latitud+0.0001;nueva_longitud=longitud-0.00005;}
-	if(recurso.tipo=='serious'){nueva_latitud=latitud+0.0001;nueva_longitud=longitud+0.00005;}
-	if(recurso.tipo=='dead'){nueva_latitud=latitud+0.00005;nueva_longitud=longitud+0.0001;}
-	*/
-
-	// actualizar las modificaciones con el metodo modificar
-	caracter_temp = DEFINITIVO;
-	puntero_temp = recurso;
-	modificar(idRecurso, recurso.cantidad, recurso.nombre, 'Asociado a ' + evento.nombre + '. ' + recurso.info,
-		recurso.descripcion, evento.direccion, nueva_longitud, nueva_latitud, recurso.estado, recurso.size, recurso.traffic, idEvento);
 }
 
 function cancelar_asignacion(id){

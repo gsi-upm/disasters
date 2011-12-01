@@ -1,11 +1,11 @@
-$().ready(function() {
+$().ready(function(){
 	$('#dialog1').jqm();
 	$('#dialog2').jqm();
 	$('#dialog3').jqm();
 	$('#modificar').jqm();
 });
 
-$(document).ready(function() {
+$(document).ready(function(){
 	$('#screen').hide();
 	$('#close_screen').hide();
 	$('#console').hide();
@@ -13,18 +13,18 @@ $(document).ready(function() {
 	$('#showSimOptions').hide();
 
 	$('#minitab3').toggle(
-		function() {
+		function(){
 			$('#showSimOptions').slideDown();
 			$('#hideSimOptions').click(function(){
 				$('#showSimOptions').slideUp();
 				return false;
 			});
-			$('#submit_simulador').mouseup(function() {
+			$('#submit_simulador').mouseup(function(){
 				$('#showSimOptions').slideUp();
 				return false;
 			})
-		}
-		,function(){
+		},
+		function(){
 			$('#showSimOptions').slideUp();
 		}
 	);
@@ -36,33 +36,30 @@ $(document).ready(function() {
 				$('#visualize').slideUp();
 				return false;
 			});
-		}
-		,function(){
+		},
+		function(){
 			$('#visualize').slideUp();
 		}
 	);
 
 	$('#minitab1').toggle(
-		function() {
-			$.get('getpost/info_disasters.jsp', {}, function(data) {
+		function(){
+			$.get('getpost/info_desastres.jsp', {}, function(data){
 				$('#console').html(data);
 			});
 			$('#console').slideDown();
-			$('#console').click(function(){
-				$(this).slideUp();
-			});
-			return false;
-		},function(){
+		},
+		function(){
 			$('#console').slideUp();
 		}
 	);
 
-	$('#runSim').click(function() {
+	$('#runSim').click(function(){
 		$('#options2').show();
 		$('#runSim').val('run');
 	});
 
-	$('#pauseSim, #restartSim').click(function() {
+	$('#pauseSim, #restartSim').click(function(){
 		$('#options2').hide();
 	});
 });

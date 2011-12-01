@@ -3,21 +3,21 @@ package jadex.desastres;
 import jadex.bdi.runtime.*;
 import jadex.bridge.IComponentIdentifier;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Date;
 import org.json.me.*;
 
 /**
  *
  * @author Juan Luis Molina
  */
-public class UsersManagerPlan extends Plan {
+public class UsersManagerPlan extends Plan{
 
-	public void body() {
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		boolean primera = (Boolean) getBeliefbase().getBelief("primera").getFact();
-		String ahora = (String) getBeliefbase().getBelief("ahora").getFact();
+	public void body(){
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		boolean primera = (Boolean)getBeliefbase().getBelief("primera").getFact();
+		String ahora = (String)getBeliefbase().getBelief("ahora").getFact();
 
-		try {
+		try{
 			String logueados;
 			if(primera){
 				logueados = Connection.connect(Environment.URL + "users");
@@ -30,11 +30,11 @@ public class UsersManagerPlan extends Plan {
 			getBeliefbase().getBelief("ahora").setFact(ahora);
 
 			JSONArray usuarios = new JSONArray(logueados);
-			for (int i = 0; i < usuarios.length(); i++) {
+			for(int i = 0; i < usuarios.length(); i++){
 				JSONObject instancia = usuarios.getJSONObject(i);
 				String nombre = instancia.getString("name");
 				IComponentIdentifier id = env.getListado(nombre);
-				if (instancia.getString("state").equals("active") && !env.containsListado(nombre)) {
+				if(instancia.getString("state").equals("active") && !env.containsListado(nombre)){
 					env.printout("- ENV: New user " + instancia.getString("name"), 5);
 					String tipoUsuario = instancia.getString("type");
 					env.putListado(nombre,null); // se vuelve a llamar por el agente para introducir el id
@@ -47,7 +47,7 @@ public class UsersManagerPlan extends Plan {
 					}
 					sp.getParameter("name").setValue(nombre);
 					dispatchSubgoalAndWait(sp);
-				} else if (instancia.getString("state").equals("erased") && env.containsListado(nombre)) {
+				}else if (instancia.getString("state").equals("erased") && env.containsListado(nombre)){
 					env.printout("- ENV: User " + instancia.getString("name") + " has logged out", 5);
 
 					IGoal sp = createGoal("cms_destroy_component");
@@ -57,7 +57,7 @@ public class UsersManagerPlan extends Plan {
 					env.removeListado(nombre);
 				}
 			}
-		} catch (JSONException ex) {
+		}catch (JSONException ex){
 			System.out.println("Excepcion: " + ex);
 		}
 		waitFor(5000);

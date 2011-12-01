@@ -57,9 +57,9 @@
 			<script type="application/javascript" src="js/jquery-fieldselection.js"></script>
 			<script type="application/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>
 			<!-- DWR. These files are created in the runtime -->
-			<script type="application/javascript" src="/desastres/dwr/util.js"></script>
-			<script type="application/javascript" src="/desastres/dwr/interface/DirectionsBean.js"></script>
-			<script type="application/javascript" src="/desastres/dwr/engine.js"></script>
+			<script type="application/javascript" src="/caronte/dwr/util.js"></script>
+			<script type="application/javascript" src="/caronte/dwr/interface/DirectionsBean.js"></script>
+			<script type="application/javascript" src="/caronte/dwr/engine.js"></script>
 			<!-- Adds various Methods to GPolygon and GPolyline -->
 			<script type="application/javascript" src="js/epoly.js"></script>
 			<!-- Agents movement through roads -->
