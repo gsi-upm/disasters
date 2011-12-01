@@ -1,6 +1,5 @@
 package jadex.desastres.disasters.sanitarios.medicoCACH;
 
-import jadex.bdi.runtime.*;
 import jadex.desastres.*;
 
 /**
@@ -9,18 +8,14 @@ import jadex.desastres.*;
  *
  * @author Juan Luis Molina
  */
-public class EstabilizacionVictimasPlan extends EnviarMensajePlan {
+public class EstabilizacionVictimasPlan extends EnviarMensajePlan{
 	
 	/**
 	 * Cuerpo del plan
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar susmetodos
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		// Posicion actual que le permite recoger al herido.
-		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();
-		// Posicion del hospital que le corresponde
-		Position posicionHospital = (Position) getBeliefbase().getBelief("hospitalMadrid").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		int idDes = env.getTablon();
 		Disaster des = env.getEvent(idDes);
@@ -30,7 +25,7 @@ public class EstabilizacionVictimasPlan extends EnviarMensajePlan {
 		People herido = null;
 		if (des.getSlight() != null){
 			herido = des.getSlight();
-		}else if( des.getSerious() != null){
+		}else if(des.getSerious() != null){
 			herido = des.getSerious();
 		}else if(des.getDead() != null){
 			herido = des.getDead();

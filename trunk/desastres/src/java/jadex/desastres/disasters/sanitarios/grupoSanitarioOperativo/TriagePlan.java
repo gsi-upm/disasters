@@ -1,6 +1,6 @@
 package jadex.desastres.disasters.sanitarios.grupoSanitarioOperativo;
 
-import jadex.bdi.runtime.*;
+import jadex.bdi.runtime.IGoal;
 import jadex.desastres.*;
 
 /**
@@ -15,11 +15,7 @@ public class TriagePlan extends EnviarMensajePlan{
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar susmetodos
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		// Posicion actual que le permite recoger al herido.
-		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();
-		// Posicion del hospital que le corresponde
-		Position posicionHospital = (Position) getBeliefbase().getBelief("hospitalMadrid").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		enviarRespuesta("ack_aviso_coor", "Aviso recibido");
 		System.out.println("** Grupo sanitario: Ack mandado");

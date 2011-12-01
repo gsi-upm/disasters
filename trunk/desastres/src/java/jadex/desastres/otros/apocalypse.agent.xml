@@ -3,30 +3,22 @@
 
   This agent search for unattended disasters and make them bigger
 -->
-
-<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
-	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-       name="apocalypse"
-	   package="jadex.desastres.otros">
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+	name="apocalypse" package="jadex.desastres.otros">
 
 	<imports>
-		<import>jadex.desastres.*</import>
-		<import>jadex.runtime.*</import>
-		<import>jadex.util.*</import>
-		<import>jadex.*</import>
 		<import>jadex.base.fipa.SFipa</import>
-		<import>jadex.bridge.fipa.AgentIdentifier</import>
+		<import>jadex.bdi.runtime.*</import>
+		<import>jadex.bridge.fipa.ComponentIdentifier</import>
+		<import>jadex.desastres.*</import>
 		<import>java.util.logging.*</import>
-		 
 	</imports>
 	
-
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.APOCALIPSIS,$scope.getAgentName(),$beliefbase.centralMadrid)</fact>
+			<fact>Environment.getInstance(Environment.APOCALIPSIS, $scope.getAgentName(), $beliefbase.centralMadrid)</fact>
  		</belief>
 		
 		<!-- Definimos la posicion de la central en Madrid -->
@@ -38,7 +30,6 @@
 		<belief name="unattendedDisaster" class="Disaster" evaluationmode="dynamic">
 			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
 		</belief>
-
 	</beliefs>
 
 	<goals>
@@ -56,7 +47,6 @@
 			<trigger>
 				<goal ref="searchDisaster"/>
 			</trigger>
-			
 		</plan>
 		<!-- Plan to cause trouble -->
 		<plan name="harm-plan">
@@ -66,6 +56,7 @@
 			</trigger>
 		</plan>
 	</plans>
+
  	<!-- Initially we activate the search plan -->
 	<configurations>
 		<configuration name="default">
@@ -79,5 +70,4 @@
 		<property name="logging.level">Level.INFO</property>
 		<property name="logging.useParentHandlers">true</property>
 	</properties>
-
 </agent>

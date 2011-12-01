@@ -1,6 +1,6 @@
 package jadex.desastres;
 
-public class Position {
+public class Position{
 	protected double x;
 	protected double y;
 	
@@ -16,6 +16,4 @@ public class Position {
 	public double getY(){
 		return y;
 	}
-		
 }
-

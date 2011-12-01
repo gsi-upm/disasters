@@ -1,7 +1,6 @@
 package jadex.desastres;
 
-import jadex.bdi.runtime.IGoal;
-import jadex.bdi.runtime.Plan;
+import jadex.bdi.runtime.*;
 
 /**
  *

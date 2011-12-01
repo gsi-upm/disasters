@@ -1,0 +1,33 @@
+#minitabs{
+	width: 120px;
+	height: 31px;
+	margin: 0px -3px 0px auto;
+}
+
+.minitab{
+	position: relative;
+	float: left;
+}
+
+.minitab :hover{
+	position: relative;
+	top: -6px;
+}
+
+.slideMenu{
+	position: absolute;
+	top: 122px;
+	right: 6px;
+	width: 290px;
+	padding: 10px;
+	border: 1px solid #C4D6E1;
+	background-color: #EEF8Fa;
+	color: #666666;
+	list-style: none;
+	list-style-type: none;
+}
+
+.bigger{
+	font-size: 14px;
+	font-variant: small-caps;
+}

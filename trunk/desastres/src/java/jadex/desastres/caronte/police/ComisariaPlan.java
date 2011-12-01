@@ -1,7 +1,6 @@
 package jadex.desastres.caronte.police;
 
-import jadex.bdi.runtime.*;
-import jadex.desastres.*;
+import jadex.bdi.runtime.Plan;
 
 /**
  * Plan de la POLICIA para esperar un aviso en la comisaria.
@@ -9,12 +8,12 @@ import jadex.desastres.*;
  * @author Juan Luis Molina
  *
  */
-public class ComisariaPlan extends Plan {
+public class ComisariaPlan extends Plan{
 
 	/**
 	 * Cuerpo del plan.
 	 */
-	public void body() {
+	public void body(){
 		waitFor(1000);
 	}
 }

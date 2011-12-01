@@ -63,19 +63,38 @@ function escribirMensaje(evento, accion, nivel){
 	if(evento.tipo == null){
 		evento = marcadores_definitivos[evento.id];
 	}
+	if(accion == 'crear'){
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: 'getpost/getMensajes.jsp',
+			data: {
+				'action':'idCreado',
+				'fecha':evento.fecha
+			},
+			success: function(data){
+				evento.id = data[0].id;
+			},
+			async: false
+		});
+	}
 
 	if(evento.tipo == 'slight' || evento.tipo == 'serious'){
-		mensaje = 'Herido ' + fmt(evento.tipo,'es').toLowerCase() + ' "' + evento.nombre + '"'
+		mensaje = 'Herido ' + fmt(evento.tipo,'es').toLowerCase();
 	}else if(evento.tipo == 'healthy'){
-		mensaje = 'Sanos(' + evento.cantidad + ') "' + evento.nombre + '"';
+		mensaje = 'Sanos(' + evento.cantidad + ')';
 	}else{
-		mensaje = fmt(evento.tipo,'es') + ' "' + evento.nombre + '"';
+		mensaje = fmt(evento.tipo,'es');
 	}
+
+	mensaje += ' (' + evento.id + ')"' + evento.nombre + '"';
+
 	if(evento.planta >= 0){
 		mensaje += ' en la planta ' + evento.planta;
 	}else if(evento.planta == -1){
 		mensaje += ' en el exterior';
 	}
+	
 	if(evento.marcador == 'event'){
 		mensaje += ' de tamaño ' + fmt(evento.size,'es');
 	}else{

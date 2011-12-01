@@ -12,7 +12,7 @@ package jadex.desastres;
  *
  * @author	David Reilly
  */
-public class TimerJSON extends Thread {
+public class TimerJSON extends Thread{
 
 	/** Rate at which timer is checked */
 	protected int m_rate = 100;
@@ -26,7 +26,7 @@ public class TimerJSON extends Thread {
 	 * Creates a timer of a specified length
 	 * @param	length	Length of time before timeout occurs
 	 */
-	public TimerJSON(int length, Environment env) {
+	public TimerJSON(int length, Environment env){
 		// Assign to member variable
 		m_length = length;
 
@@ -37,28 +37,28 @@ public class TimerJSON extends Thread {
 	}
 
 	/** Resets the timer back to zero */
-	public synchronized void reset() {
+	public synchronized void reset(){
 		m_elapsed = 0;
 	}
 
 	/** Performs timer specific code */
-	public void run() {
+	public void run(){
 		// Keep looping
-		for (;;) {
+		for(;;){
 			// Put the timer to sleep
-			try {
+			try{
 				Thread.sleep(m_rate);
-			} catch (InterruptedException ioe) {
+			}catch(InterruptedException ioe){
 				continue;
 			}
 
 			// Use 'synchronized' to prevent conflicts
-			synchronized (this) {
+			synchronized(this){
 				// Increment time remaining
 				m_elapsed += m_rate;
 
 				// Check to see if the time has been exceeded
-				if (m_elapsed > m_length) {
+				if(m_elapsed > m_length){
 					// Trigger a timeout
 					timeout();
 				}
@@ -67,7 +67,7 @@ public class TimerJSON extends Thread {
 	}
 
 	// Override this to provide custom functionality
-	public void timeout() {
+	public void timeout(){
 		System.out.println("## ENV: Actualizando el JSON...");
 		env.actualiza();
 	}

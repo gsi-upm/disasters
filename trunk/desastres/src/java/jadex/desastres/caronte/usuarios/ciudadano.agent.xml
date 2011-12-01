@@ -2,22 +2,18 @@
   <h3>Agente de ciudadano</h3>
 -->
 
-<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
-	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-       name="nurse"
-	   package="jadex.desastres.usuarios.ciudadano">
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+	name="ciudadano" package="jadex.desastres.usuarios.ciudadano">
 
 	<imports>
 		<import>jadex.base.fipa.*</import>
 		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.planlib.df.DF</import>
+		<import>jadex.bdi.runtime.*</import>
 		<import>jadex.bridge.fipa.ComponentIdentifier</import>
 		<import>jadex.commons.*</import>
 		<import>jadex.commons.service.*</import>
-		<import>jadex.util.*</import>
-		<import>jadex.runtime.*</import>
 		<import>jadex.desastres.*</import>
 	</imports>
 
@@ -29,7 +25,7 @@
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, en la residencia -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.CIUDADANO, $scope.getAgentName(),$beliefbase.residencia)</fact>
+			<fact>Environment.getInstance(Environment.CIUDADANO, $scope.getAgentName(), $beliefbase.residencia)</fact>
 		</belief>
 
 		<!-- Definimos la posicion de la residencia -->
@@ -80,9 +76,8 @@
 				<initialgoal ref="df_keep_registered">
 					<parameter ref="description">
 						<value>
-							$propertybase.getProperty("dfservice")
-								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
-								.createDFServiceDescription("ciudadano_service", "ciudadano", "GSI DIT UPM"))
+							$properties.dfservice.createDFComponentDescription(null,
+								$properties.dfservice.createDFServiceDescription("ciudadano_service", "ciudadano", "GSI DIT UPM"))
 						</value>
 					</parameter>
 				</initialgoal>
@@ -92,6 +87,6 @@
 	</configurations>
 
 	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(),IDF.class)</property>
+		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
 	</properties>
 </agent>

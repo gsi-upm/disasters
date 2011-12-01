@@ -1,26 +1,22 @@
 <!--
   <h3>Coordinador de emergencias</h3>
--->
 
-<agent xmlns="http://jadex.sourceforge.net/jadex-bdi"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://jadex.sourceforge.net/jadex-bdi
-	                       http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-       name="coordinadorEmergencias"
-	   package="jadex.desastres.caronte.coordinadorEmergencias">
+
+-->
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+	name="coordinadorEmergencias" package="jadex.desastres.caronte.coordinadorEmergencias">
 
 	<imports>
-		<import>jadex.runtime.*</import>
-		<import>jadex.util.*</import>
-		<import>jadex.*</import>
 		<import>jadex.base.fipa.*</import>
-		<import>jadex.bridge.fipa.ComponentIdentifier</import>
-		<import>java.util.logging.*</import>
 		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.planlib.df.DF</import>
+		<import>jadex.bdi.runtime.*</import>
+		<import>jadex.bridge.fipa.ComponentIdentifier</import>
 		<import>jadex.commons.*</import>
 		<import>jadex.commons.service.*</import>
 		<import>jadex.desastres.*</import>
+		<import>java.util.logging.*</import>
 	</imports>
 
 	<capabilities>
@@ -31,7 +27,7 @@
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, una posicion en el centro de Calasparra -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.COORDINADOR_EMERGENCIAS,$scope.getAgentName(),$beliefbase.residencia)</fact>
+			<fact>Environment.getInstance(Environment.COORDINADOR_EMERGENCIAS, $scope.getAgentName(), $beliefbase.residencia)</fact>
 		</belief>
 		
 		<!-- Definimos la posicion de la residencia -->
@@ -164,9 +160,8 @@
 				<initialgoal ref="df_keep_registered">
 					<parameter ref="description">
 						<value>
-							$propertybase.getProperty("dfservice")
-								.createDFComponentDescription(null, $propertybase.getProperty("dfservice")
-								.createDFServiceDescription("coordinadorEmergencias_service", "coordinadorEmergencias", "GSI DIT UPM"))
+							$properties.dfservice.createDFComponentDescription(null,
+								$properties.dfservice.createDFServiceDescription("coordinadorEmergencias_service", "coordinadorEmergencias", "GSI DIT UPM"))
  						</value>
 					</parameter>
 				</initialgoal>
@@ -176,6 +171,6 @@
 	</configurations>
 
 	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class)</property>
+		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
 	</properties>
 </agent>

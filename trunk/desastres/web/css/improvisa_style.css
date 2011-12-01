@@ -256,24 +256,6 @@ input:focus, textarea:focus{
 	/*padding: 10px;*/
 }
 
-.slideMenu{
-	position: absolute;
-	top: 91px;
-	right: 6px;
-	width: 290px;
-	padding: 10px;
-	border: 1px solid #C4D6E1;
-	background-color: #EEF8Fa;
-	color: #666666;
-	list-style: none;
-	list-style-type: none;
-}
-
-.bigger{
-	font-size: 14px;
-	font-variant: small-caps;
-}
-
 .div_vacio{
 	height: 21px;
 }

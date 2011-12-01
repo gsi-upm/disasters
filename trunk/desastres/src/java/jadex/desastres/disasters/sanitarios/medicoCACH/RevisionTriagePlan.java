@@ -1,6 +1,6 @@
 package jadex.desastres.disasters.sanitarios.medicoCACH;
 
-import jadex.bdi.runtime.*;
+import jadex.bdi.runtime.IGoal;
 import jadex.desastres.*;
 
 /**
@@ -9,18 +9,14 @@ import jadex.desastres.*;
  *
  * @author Juan Luis Molina
  */
-public class RevisionTriagePlan extends EnviarMensajePlan {
+public class RevisionTriagePlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
+	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar susmetodos
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		// Posicion actual que le permite recoger al herido.
-		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();
-		// Posicion del hospital que le corresponde
-		Position posicionHospital = (Position) getBeliefbase().getBelief("hospitalMadrid").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		enviarRespuesta("ack_triage", "Aviso recibido");
 		System.out.println("** Medico CACH: Ack mandado");
@@ -30,29 +26,28 @@ public class RevisionTriagePlan extends EnviarMensajePlan {
 
 		// Sacamos el herido
 		People herido = null;
-		if (des.getSlight() != null) {
+		if (des.getSlight() != null){
 			herido = des.getSlight();
-		} else if (des.getSerious() != null) {
+		}else if(des.getSerious() != null){
 			herido = des.getSerious();
-		} else if (des.getDead() != null) {
+		}else if(des.getDead() != null){
 			herido = des.getDead();
 		}
 
-		if (herido != null) {
+		if(herido != null){
 			System.out.println("** Medico CACH: repito el triage");
 			String estadoHerido = herido.getType();
 			System.out.println("** Medico CACH: herido " + herido.getId() + " con estado " + estadoHerido);
 
-			if (estadoHerido.equals("serious")) {
+			if(estadoHerido.equals("serious")) {
 				IGoal estabilizarVictimas = createGoal("estabilizarVictimas");
 				dispatchSubgoalAndWait(estabilizarVictimas);
-			} else {
+			}else{
 				System.out.println("** Medico CACH: avisando a la ambulancia");
 				enviarMensaje("ambulancia", "traslado", "go");
 			}
-		} else {
+		}else{
 			System.out.println("** Medico CACH: desastre sin heridos");
 		}
-
 	}
 }

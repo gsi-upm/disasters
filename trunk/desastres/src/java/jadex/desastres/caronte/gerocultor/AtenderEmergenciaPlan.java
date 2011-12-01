@@ -1,8 +1,7 @@
 package jadex.desastres.caronte.gerocultor;
 
-import jadex.bdi.runtime.*;
+import jadex.bdi.runtime.IGoal;
 import jadex.desastres.*;
-import java.util.*;
 
 /**
  * Plan de GEROCULTOR
@@ -10,17 +9,17 @@ import java.util.*;
  * @author Juan Luis Molina
  * 
  */
-public class AtenderEmergenciaPlan extends EnviarMensajePlan {
+public class AtenderEmergenciaPlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
 	public void body() {
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
-		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
-		Position posicion = (Position) getBeliefbase().getBelief("pos").getFact();
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		Position posicion = (Position)getBeliefbase().getBelief("pos").getFact();
 
-		Desastre recibido = (Desastre) enviarRespuestaObjeto("ack_aviso_geriatrico", "Aviso recibido");
+		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso_geriatrico", "Aviso recibido");
 		//env.printout("GG gerocultor: Ack mandado", 0);
 
 		int idDes = recibido.getId();
@@ -28,16 +27,16 @@ public class AtenderEmergenciaPlan extends EnviarMensajePlan {
 		Disaster des = env.getEvent(idDes);
 		Position positionDesastre = new Position(des.getLatitud(), des.getLongitud());
 
-		try {
+		try{
 			env.andar(getComponentName(), posicion, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
-		} catch (Exception ex) {
+		}catch(Exception ex) {
 			System.out.println("Error al andar: " + ex);
 		}
 
 		env.printout("GG gerocultor: Estoy atendiendo la emergencia: " + idDes, 0);
 
-		if (!des.getType().equals("injuredPerson")) {
-			if (des.getSize().equals("small") || des.getSize().equals("medium")) {
+		if(!des.getType().equals("injuredPerson")){
+			if(des.getSize().equals("small") || des.getSize().equals("medium")){
 				String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
 				env.printout("GG gerocultor: Eliminado el desastre " + idDes, 0);
 
@@ -47,13 +46,13 @@ public class AtenderEmergenciaPlan extends EnviarMensajePlan {
 				//env.printout("GG gerocultor: Respuesta recibida del coordinador: " + respuesta, 0);
 
 				String recibido2 = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
-			} else {
+			}else{
 				env.printout("GG gerocultor: emergencia atendida por bomberos", 0);
 
 				IGoal evacuarResidencia = createGoal("evacuarResidencia");
 				dispatchSubgoalAndWait(evacuarResidencia);
 			}
-		} else {
+		}else{
 			env.printout("GG gerocultor: emergencia de caracter medico", 0);
 			String recibido2 = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
 		}

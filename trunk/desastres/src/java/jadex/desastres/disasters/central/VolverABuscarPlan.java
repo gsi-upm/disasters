@@ -1,13 +1,13 @@
 package jadex.desastres.disasters.central;
 
-import jadex.bdi.runtime.*;
+import jadex.bdi.runtime.IGoal;
 import jadex.desastres.*;
 
 /**
  *
  * @author Juan Luis Molina
  */
-public class VolverABuscarPlan extends EnviarMensajePlan {
+public class VolverABuscarPlan extends EnviarMensajePlan{
 
 	public void body(){
 		enviarRespuesta("ack_terminado", "Terminado recibido");

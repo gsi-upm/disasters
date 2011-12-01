@@ -11,7 +11,7 @@
 			<div id="fecha"></div>
 			<div id="Reloj24H"></div>
 		</div>
-		v.96
+		v.98
 		<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
 			 alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
 		<div id="langSelect" class="oculto">
@@ -31,7 +31,7 @@
 		<c:if test="<%=proyect.equals("caronte")%>">
 			<div>
 				<c:url value="acercaDe.jsp" var="acercaDe"/>
-				<a href="${acercaDe}"><fmt:message key="acerca"/></a>
+				<a href="${acercaDe}"><fmt:message key="informacionGeneral"/></a>
 			</div>
 		</c:if>
 	</div>

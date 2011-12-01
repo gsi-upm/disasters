@@ -1,13 +1,12 @@
 package jadex.desastres.disasters.sanitarios;
 
-import jadex.bdi.runtime.IGoal;
-import jadex.bdi.runtime.Plan;
+import jadex.bdi.runtime.*;
 
 /**
  *
  * @author Juan Luis Molina
  */
-public class ManagerSanitarioPlan extends Plan {
+public class ManagerSanitarioPlan extends Plan{
 
 	public void body(){
 		System.out.println("Comienza manager sanitario");

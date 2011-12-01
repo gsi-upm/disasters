@@ -1,7 +1,7 @@
 package jadex.desastres;
 
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * Clase para conectarse mediante una URL a Desastres 2.0
@@ -9,9 +9,8 @@ import java.io.*;
  * @author juliocamarero
  */
 public class Connection {
-
-	public static String connect(String source) {
-		try {
+	public static String connect(String source){
+		try{
 			URL direccion = new URL(removeBlanks(source));
 			URLConnection direccionConnection = direccion.openConnection();
 
@@ -19,7 +18,7 @@ public class Connection {
 			StringBuffer buff = new StringBuffer();
 			BufferedReader dis = new BufferedReader(new InputStreamReader(direccionConnection.getInputStream()));
 
-			while ((inputLine = dis.readLine()) != null) {
+			while((inputLine = dis.readLine()) != null){
 				buff.append(inputLine);
 				// System.out.println(inputLine);
 			}
@@ -27,22 +26,22 @@ public class Connection {
 			String a = buff.toString();
 			dis.close();
 			return a;
-		} catch (MalformedURLException me) {
+		}catch(MalformedURLException me){
 			return ("MalformedURLException: " + me);
-		} catch (IOException ioe) {
+		}catch(IOException ioe) {
 			return ("IOException: " + ioe);
 		}
 	}
 
-	public static String removeBlanks(String cadena) {
+	public static String removeBlanks(String cadena){
 		String nueva = "";
 		String caracter;
-		for (int i = 0; i < cadena.length(); i++) {
+		for(int i = 0; i < cadena.length(); i++){
 			caracter = cadena.substring(i, i + 1);
 
-			if (caracter.equals(" ")) {
+			if(caracter.equals(" ")){
 				nueva = nueva.concat("+");
-			} else {
+			}else{
 				nueva = nueva.concat(caracter);
 			}
 		}

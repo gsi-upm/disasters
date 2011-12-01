@@ -1,22 +1,19 @@
 package jadex.desastres.otros;
 
-import java.util.Iterator;
-import java.util.Map;
-
-import jadex.bdi.runtime.*; // jadex.runtime.*;
-import jadex.desastres.Disaster;
-import jadex.desastres.Environment;
+import jadex.bdi.runtime.*;
+import jadex.desastres.*;
+import java.util.*;
 
 /** 
  *
  */
-public class SearchDisasterPlan extends Plan {
+public class SearchDisasterPlan extends Plan{
 
     Environment env;
 
-    public void body() {
+    public void body(){
         // Obtenemos un objeto de la clase entorno para poder usar sus metodos.
-        env = (Environment) getBeliefbase().getBelief("env").getFact();
+        env = (Environment)getBeliefbase().getBelief("env").getFact();
 
         checkDisasters();
 
@@ -27,20 +24,20 @@ public class SearchDisasterPlan extends Plan {
      * Iterates through the disasters, looking for unattended ones. When one is found,
      * a new goal is created to expand it.
      */
-    private synchronized void checkDisasters() {
+    private synchronized void checkDisasters(){
         Iterator it = env.disasters.entrySet().iterator();
         Map.Entry e = null;
         Disaster dis;
 
-        while (it.hasNext()) {
-            try {
+        while(it.hasNext()){
+            try{
                 e = (Map.Entry) it.next();
                 dis = (Disaster) e.getValue();
 
-                if ((dis.getState().equals("erased")) | (dis.getState().equals("controlled"))) {
+                if(dis.getState().equals("erased") || dis.getState().equals("controlled")){
                     System.out.println("$$ apocalypse: controlled disaster ");
                     continue;
-                } else {
+                }else{
                     //unattended disaster
                     System.out.println("$$ apocalypse: found disaster");
                     getBeliefbase().getBelief("unattendedDisaster").setFact(dis);
@@ -50,7 +47,7 @@ public class SearchDisasterPlan extends Plan {
                     // Damos prioridad a este subobjetivo, y esperamos a que se cumpla para devolvernos el control.
                     dispatchSubgoalAndWait(harm);
                 }
-            } catch (GoalFailureException exc) {
+            }catch(GoalFailureException exc){
                 System.out.println("$$ apocalypse: error when retrieving disaster:" + exc);
             }
         }

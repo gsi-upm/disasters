@@ -1,61 +1,54 @@
 package jadex.desastres.otros;
 
-import roads.*;
-import java.util.*;
 import jadex.base.fipa.SFipa;
-import jadex.bdi.runtime.*; // jadex.runtime.*; // getContent() cambia a getParameter(SFipa.CONTENT).getValue()
-import java.net.*;
-import java.io.*;
+import jadex.bdi.runtime.*;
+import roads.*;
 
-import org.directwebremoting.WebContext;
-import org.directwebremoting.WebContextFactory;
-import org.directwebremoting.proxy.dwr.Util;
-
-public class MovingPlan extends Plan {
+public class MovingPlan extends Plan{
     //Plan attributes.
     DirectionsBean dirn;
 
-    public MovingPlan() {
+    public MovingPlan(){
         // Initialization code.
         System.out.println("Created: " + this);
     }
 
-    public void body() {
+    public void body(){
         //Plan code.
-        while (true) {
-            try {
+        while(true){
+            try{
                 System.out.println("waiting for a message");
                 IMessageEvent me = waitForMessageEvent("getDirections");
                 System.out.println("Received an order");
-                String st = (String) me.getParameter(SFipa.CONTENT).getValue(); // getContent();
+                String st = (String) me.getParameter(SFipa.CONTENT).getValue();
                 String from = st.substring(st.indexOf("from:") + 6, st.indexOf("to:"));
                 String to = st.substring(st.indexOf("to:") + 4);
                 System.out.println("from: " + from);
                 System.out.println("to: " + to);
                 //dirn = new DirectionsBean();
                 //dirn.setDirections(from, to);
-            } catch (Exception ioe) {
+            }catch(Exception ioe){
                 System.out.println("IOException: " + ioe);
             }
         }
     }
 
     /*public void body() {
-    //Plan code.
-    try {
-    IMessageEvent me = (IMessageEvent) getInitialEvent();
-    System.out.println("Received an order");
-    String st = (String) me.getContent();
-    String from = st.substring(st.indexOf("from:") + 6, st.indexOf("to:"));
-    String to = st.substring(st.indexOf("to:") + 4);
-    System.out.println("from: " + from);
-    System.out.println("to: " + to);
-    addr = new AddressBean(from, to);
-    } catch (Exception ioe) {
-    System.out.println("IOException: " + ioe);
-    }
-    }
-    public void sendDirections() throws InterruptedException {
+		//Plan code.
+		try{
+			IMessageEvent me = (IMessageEvent) getInitialEvent();
+			System.out.println("Received an order");
+			String st = (String) me.getContent();
+			String from = st.substring(st.indexOf("from:") + 6, st.indexOf("to:"));
+			String to = st.substring(st.indexOf("to:") + 4);
+			System.out.println("from: " + from);
+			System.out.println("to: " + to);
+			addr = new AddressBean(from, to);
+		}catch(Exception ioe){
+			System.out.println("IOException: " + ioe);
+		}
+	}
+    public void sendDirections() throws InterruptedException{
         WebContext wctx = WebContextFactory.get();
         String currentPage = wctx.getCurrentPage();
 

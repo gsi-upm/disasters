@@ -1,15 +1,15 @@
 package jadex.desastres;
 
-import jadex.bdi.runtime.*;
 import jadex.base.fipa.*;
+import jadex.bdi.runtime.*;
 import jadex.bridge.*;
-import jadex.commons.service.*;
+import jadex.bridge.service.*;
 
 /**
  *
  * @author Juan Luis Molina
  */
-public abstract class EnviarMensajePlan extends Plan {
+public abstract class EnviarMensajePlan extends Plan{
 
 	/**
 	 *
@@ -35,7 +35,6 @@ public abstract class EnviarMensajePlan extends Plan {
 		sendMessage(msg);
 		IMessageEvent answer = waitForMessageEvent("ack_" + evento);
 		return ((String)answer.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
-
 	}
 
 	/**
@@ -108,7 +107,7 @@ public abstract class EnviarMensajePlan extends Plan {
 	private IComponentIdentifier buscarAgente(String agente){
 		IComponentIdentifier a = null;
 		while(a == null){
-			IDF	dfservice = (IDF)SServiceProvider.getService(getScope().getServiceProvider(), IDF.class).get(this);
+			IDF	dfservice = (IDF)SServiceProvider.getService(getServiceContainer(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM).get(this);
 			IDFServiceDescription sd = dfservice.createDFServiceDescription(null, agente, null);
 			IDFComponentDescription ad = dfservice.createDFComponentDescription(null, sd);
 			IGoal ft = createGoal("df_search");

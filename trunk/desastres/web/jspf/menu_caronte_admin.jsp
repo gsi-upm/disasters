@@ -89,7 +89,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label for="trafico"><fmt:message key="densidadtrafico"/></label></td>
+						<td><label for="trafico"><fmt:message key="restriccion"/></label></td>
 						<td>
 							<select name="trafico" id="trafico">
 								<option value="low" selected="selected"><fmt:message key="baja"/></option>
@@ -124,16 +124,10 @@
 				<table class="tabla_menu">
 					<tr>
 						<td>
-							<input type="radio" name="tipo" value="healthy" checked="checked" onclick="cambiaIcono('people','healthy',cantidad.value);"/>
-							<fmt:message key="sanos"/>
-						</td>
-						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/people/sano1.png" class="rayas"/></td>
-					</tr>
-					<tr>
-						<td>
-							<input type="radio" name="tipo" value="slight" onclick="cambiaIcono('people','slight',1);"/>
+							<input type="radio" name="tipo" value="slight" checked="checked" onclick="cambiaIcono('people','slight',1);"/>
 							<fmt:message key="leves"/>
 						</td>
+						<td rowspan="5"><img alt="" id="icono_heridos" src="markers/people/leve1.png" class="rayas"/></td>
 					</tr>
 					<tr>
 						<td>
@@ -151,6 +145,12 @@
 						<td>
 							<input type="radio" name="tipo" value="trapped" onclick="cambiaIcono('people','trapped',1);"/>
 							<fmt:message key="atrapados"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="radio" name="tipo" value="healthy" onclick="cambiaIcono('people','healthy',cantidad.value);"/>
+							<fmt:message key="sanos"/>
 						</td>
 					</tr>
 				</table>
@@ -204,7 +204,7 @@
 						<td>
 							<select name="cantidad" onchange="cambiaIcono('people',seleccionRadio(this.form,2),cantidad.value);">
 								<option value="1" selected="selected">1</option>
-								<c:forEach var="item" begin="2" end="99" step="1">
+								<c:forEach var="item" begin="2" end="30" step="1">
 									<option value="${item}">${item}</option>
 								</c:forEach>
 							</select>

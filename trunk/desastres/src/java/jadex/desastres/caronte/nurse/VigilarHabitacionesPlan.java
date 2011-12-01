@@ -1,7 +1,6 @@
 package jadex.desastres.caronte.nurse;
 
 import jadex.bdi.runtime.Plan;
-import jadex.desastres.*;
 
 /**
  * Plan de ENFERMERO
@@ -9,12 +8,12 @@ import jadex.desastres.*;
  * @author Juan Luis Molina
  * 
  */
-public class VigilarHabitacionesPlan extends Plan {
+public class VigilarHabitacionesPlan extends Plan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
+	public void body(){
 		waitFor(1000);
 	}
 }

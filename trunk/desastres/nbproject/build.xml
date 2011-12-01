@@ -744,32 +744,36 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.log4j-1.2.12.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jtwitter.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jess.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applib-bdi-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdi-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-micro-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-bridge-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-commons-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-javaparser-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-application-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-application-opengl-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-micro-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-nuggets-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-base-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-applications-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-tools-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-runtimetools-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-xml-2.0-rc6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.activation-1.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applib-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-micro-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-bridge-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-commons-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-javaparser-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-application-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-base-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+		<copyfiles files="${file.reference.jadex-kernel-component-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-agr-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-opengl-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-micro-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-nuggets-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-base-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-applications-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-tools-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-runtimetools-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-xml-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+		<copyfiles files="${file.reference.activation-1.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.antlr-2.7.7.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.antlr-runtime-3.1.3.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.collections-generic-4.01.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -778,15 +782,15 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.de.huxhorn.sulky.3rdparty.jlayer-1.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.gluegen-rt-1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.janino-2.5.10.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.javahelp-2.0.02.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jcalendar-1.3.2.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jcommon-1.0.12.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jfreechart-1.0.9.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jcommon-1.0.15.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jfreechart-1.0.12.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jogl-1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jung-algorithms-2.0.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jung-api-2.0.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jung-graph-impl-2.0.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jung-visualization-2.0.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.junit-3.8.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.mail-1.4.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.smack-3.0.4.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.smackx-3.1.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -827,31 +831,35 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.log4j-1.2.12.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jtwitter.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jess.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applib-bdi-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdi-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-micro-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-bridge-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-commons-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-javaparser-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-application-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-application-opengl-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-micro-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-nuggets-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-base-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-applications-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-tools-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-runtimetools-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-xml-2.0-rc6.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applib-bdi-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdi-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-micro-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-bridge-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-commons-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-javaparser-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-application-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-base-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+		<copyfiles files="${file.reference.jadex-kernel-component-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-agr-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-opengl-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-micro-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-nuggets-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-base-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-applications-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-tools-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-runtimetools-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-xml-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.activation-1.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.antlr-2.7.7.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.antlr-runtime-3.1.3.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
@@ -861,15 +869,15 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.de.huxhorn.sulky.3rdparty.jlayer-1.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.gluegen-rt-1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.janino-2.5.10.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.javahelp-2.0.02.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jcalendar-1.3.2.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jcommon-1.0.12.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jfreechart-1.0.9.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jcommon-1.0.15.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jfreechart-1.0.12.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jogl-1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jung-algorithms-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jung-api-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jung-graph-impl-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jung-visualization-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.junit-3.8.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.mail-1.4.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.smack-3.0.4.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.smackx-3.1.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>

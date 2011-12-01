@@ -94,8 +94,8 @@ function pinchaMapa(numero){
 		$('#modificar').jqm().jqmHide();
 	}
 	var handler = GEvent.addListener(map, 'click', function(overlay,point) {
-		document.getElementById('latitud' + numero).value = point.lat();
-		document.getElementById('longitud' + numero).value = point.lng();
+		document.getElementById('latitud' + numero).value = point.lat().toFixed(6);
+		document.getElementById('longitud' + numero).value = point.lng().toFixed(6);
 		if(numero != 0){
 			$('#dialog'+numero).jqm().jqmShow();
 		}else{
@@ -165,21 +165,16 @@ function borrarFormulario(form, numero){
 
 // Necesario para los radio en los formularios
 function seleccionRadio(form, valor){
-	var types = ['fire','flood','collapse','lostPerson','injuredPerson',
-		'police','firemen','ambulance','nurse','gerocultor','assistant',
-		'healthy','slight','serious','dead','trapped'];
-	var despTypes = 0; // desplaza el valor del tipo
-	for(var count = 0; count < 6; count++){
-		if(form.tipo[count].checked){
-			break;
+	var types = [['fire','flood','collapse','lostPerson','injuredPerson'],
+		['police','firemen','ambulance','nurse','gerocultor','assistant'],
+		['slight','serious','dead','trapped','healthy']];
+	var count;
+	for(var i = 0; i < form.tipo.length; i++){
+		if(form.tipo[i].checked){
+			count = i;
 		}
 	}
-	if(valor == 1){
-		despTypes = 5;
-	}else if(valor == 2){
-		despTypes = 11;
-	}
-	return types[count+despTypes];
+	return types[valor][count];
 }
 
 function menuIdiomas(accion){

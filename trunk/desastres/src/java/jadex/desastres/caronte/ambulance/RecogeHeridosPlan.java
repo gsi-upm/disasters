@@ -1,6 +1,5 @@
 package jadex.desastres.caronte.ambulance;
 
-import jadex.bdi.runtime.*;
 import jadex.desastres.*;
 import org.json.me.*;
 
@@ -9,12 +8,12 @@ import org.json.me.*;
  *
  * @author Olimpia Hernandez y Juan Luis Molina
  */
-public class RecogeHeridosPlan extends EnviarMensajePlan {
+public class RecogeHeridosPlan extends EnviarMensajePlan{
 
 	/**
 	 * Cuerpo del plan
 	 */
-	public void body() {
+	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 
@@ -39,14 +38,14 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 		//sacamos el herido
 		People herido = getHerido(des);
 
-		try {
+		try{
 			env.andar(getComponentName(), posicionActual, posicionDesastre, env.getAgent(getComponentName()).getId(), 0);
-		} catch (Exception e) {
+		}catch(Exception e){
 			System.out.println("AA ambulance: Error metodo andar: " + e);
 		}
 
 		int id = 0;
-		if (herido != null) { // Leves atendidos por el enfermero de la residencia
+		if(herido != null){ // Leves atendidos por el enfermero de la residencia
 			while ((herido = getHerido(des)) != null) {
 				id = herido.getId();
 				env.printout("AA ambulance: Tengo herido " + id, 0);
@@ -54,15 +53,15 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 				//deasociar los heridos del desastre
 				env.printout("AA ambulance: quitando la asociacion del herido " + id, 0);
 				String resultado1 = Connection.connect(Environment.URL + "put/" + id + "/idAssigned/0");
-				if (herido.getType().equals("slight")) {
+				if (herido.getType().equals("slight")){
 					des.setSlight();
-				} else if (herido.getType().equals("serious")) {
+				}else if (herido.getType().equals("serious")){
 					des.setSerious();
-				} else if (herido.getType().equals("dead")) {
+				}else if (herido.getType().equals("dead")){
 					des.setDead();
 				}
 
-				try {
+				try{
 					String herAux = Connection.connect(Environment.URL + "person/" + id);
 					JSONObject her = (new JSONArray(herAux)).getJSONObject(0);
 					Position posHerido1 = new Position(new Double(her.getString("latitud")), new Double(her.getString("longitud")));
@@ -80,7 +79,7 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 						env.printout("AA ambulance: depositando muerto " + id, 0);
 						String resultado = Connection.connect(Environment.URL + "delete/id/" + id);
 					}
-				} catch (Exception ex) {
+				}catch (Exception ex){
 					System.out.println("AA ambulance: Error: " + ex);
 				}
 			}
@@ -89,21 +88,21 @@ public class RecogeHeridosPlan extends EnviarMensajePlan {
 		}
 
 		// La ambulancia regresa a su hospital correspondiente.
-		try {
+		try{
 			env.andar(getComponentName(), posicionActual, posicionHospital, env.getAgent(getComponentName()).getId(), 0);
 			env.printout("AA ambulance: de vuelta en el hospital", 0);
-		} catch (Exception e) {
+		}catch(Exception e){
 			System.out.println("AA ambulance: Error metodo andar: " + e);
 		}
 	}
 
-	private People getHerido(Disaster des) {
+	private People getHerido(Disaster des){
 		People herido = null;
 
 		// No atiende leves porque le corresponde al enfermero
-		if (des.getSerious() != null) {
+		if(des.getSerious() != null){
 			herido = des.getSerious();
-		} else if (des.getDead() != null) {
+		}else if(des.getDead() != null){
 			herido = des.getDead();
 		}
 

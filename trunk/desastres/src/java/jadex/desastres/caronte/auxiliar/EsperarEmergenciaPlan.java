@@ -1,7 +1,6 @@
 package jadex.desastres.caronte.auxiliar;
 
-import jadex.bdi.runtime.*;
-import jadex.desastres.*;
+import jadex.bdi.runtime.Plan;
 
 /**
  *
@@ -12,8 +11,7 @@ public class EsperarEmergenciaPlan extends Plan{
     /**
      * Cuerpo del plan
      */
-    public void body() {
-            waitFor(1000);
+    public void body(){
+		waitFor(1000);
     }
-    
 }

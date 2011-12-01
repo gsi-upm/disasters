@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author julio camarero
  * @version 1.0
  */
-public class Disaster {
+public class Disaster{
 
 	/**
 	 * Disaster id
@@ -104,7 +104,6 @@ public class Disaster {
 
 	/**
 	 * @param id
-
 	 * @param type
 	 * @param address
 	 * @param longitud
@@ -122,10 +121,9 @@ public class Disaster {
 	 * Constructor sin idAsignada
 	 */
 	public Disaster(int id, String type, String name, String info, String description, String address, double longitud,
-			double latitud, String state, String size, String traffic) {
+			double latitud, String state, String size, String traffic){
 		super();
 		this.id = id;
-
 		this.type = type;
 		this.address = address;
 		this.longitud = longitud;
@@ -162,251 +160,251 @@ public class Disaster {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public int getId(){
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(int id){
 		this.id = id;
 	}
 
 	/**
 	 * @return the type
 	 */
-	public String getType() {
+	public String getType(){
 		return type;
 	}
 
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(String type) {
+	public void setType(String type){
 		this.type = type;
 	}
 
 	/**
 	 * @return the address
 	 */
-	public String getAddress() {
+	public String getAddress(){
 		return address;
 	}
 
 	/**
 	 * @param address the address to set
 	 */
-	public void setAddress(String address) {
+	public void setAddress(String address){
 		this.address = address;
 	}
 
 	/**
 	 * @return the longitud
 	 */
-	public double getLongitud() {
+	public double getLongitud(){
 		return longitud;
 	}
 
 	/**
 	 * @param longitud the longitud to set
 	 */
-	public void setLongitud(double longitud) {
+	public void setLongitud(double longitud){
 		this.longitud = longitud;
 	}
 
 	/**
 	 * @return the latitud
 	 */
-	public double getLatitud() {
+	public double getLatitud(){
 		return latitud;
 	}
 
 	/**
 	 * @param latitud the latitud to set
 	 */
-	public void setLatitud(double latitud) {
+	public void setLatitud(double latitud){
 		this.latitud = latitud;
 	}
 
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public String getName(){
 		return name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(String name){
 		this.name = name;
 	}
 
 	/**
 	 * @return the info
 	 */
-	public String getInfo() {
+	public String getInfo(){
 		return info;
 	}
 
 	/**
 	 * @param info the info to set
 	 */
-	public void setInfo(String info) {
+	public void setInfo(String info){
 		this.info = info;
 	}
 
 	/**
 	 * @return the description
 	 */
-	public String getDescription() {
+	public String getDescription(){
 		return description;
 	}
 
 	/**
 	 * @param description the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(String description){
 		this.description = description;
 	}
 
 	/**
 	 * @return the state
 	 */
-	public String getState() {
+	public String getState(){
 		return state;
 	}
 
 	/**
 	 * @param state the state to set
 	 */
-	public void setState(String state) {
+	public void setState(String state){
 		this.state = state;
 	}
 
 	/**
 	 * @return the size
 	 */
-	public String getSize() {
+	public String getSize(){
 		return size;
 	}
 
 	/**
 	 * @param size the size to set
 	 */
-	public void setSize(String size) {
+	public void setSize(String size){
 		this.size = size;
 	}
 
 	/**
 	 * @return the traffic
 	 */
-	public String getTraffic() {
+	public String getTraffic(){
 		return traffic;
 	}
 
 	/**
 	 * @param traffic the traffic to set
 	 */
-	public void setTraffic(String traffic) {
+	public void setTraffic(String traffic){
 		this.traffic = traffic;
 	}
 
 	/**
 	 * @return the policemen
 	 */
-	public int getPolicemen() {
+	public int getPolicemen(){
 		return policemen;
 	}
 
 	/**
 	 * @param policemen the policemen to set
 	 */
-	public void setPolicemen(int policemen) {
+	public void setPolicemen(int policemen){
 		this.policemen = policemen;
 	}
 
 	/**
 	 * @return the firemen
 	 */
-	public int getFiremen() {
+	public int getFiremen(){
 		return firemen;
 	}
 
 	/**
 	 * @param firemen the firemen to set
 	 */
-	public void setFiremen(int firemen) {
+	public void setFiremen(int firemen){
 		this.firemen = firemen;
 	}
 
 	/**
 	 * @return the ambulances
 	 */
-	public int getAmbulances() {
+	public int getAmbulances(){
 		return ambulances;
 	}
 
 	/**
 	 * @param ambulances the ambulances to set
 	 */
-	public void setAmbulances(int ambulances) {
+	public void setAmbulances(int ambulances){
 		this.ambulances = ambulances;
 	}
 
 	/**
 	 * @return the user
 	 */
-	public int getUser() {
+	public int getUser(){
 		return user;
 	}
 
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(int user) {
+	public void setUser(int user){
 		this.user = user;
 	}
 
-	public int getAmbulanceMarker() {
+	public int getAmbulanceMarker(){
 		return ambulanceMarker;
 	}
 
-	public void setAmbulanceMarker(int ambulanceMarker) {
+	public void setAmbulanceMarker(int ambulanceMarker){
 		this.ambulanceMarker = ambulanceMarker;
 	}
 
-	public int getFiremenMarker() {
+	public int getFiremenMarker(){
 		return firemenMarker;
 	}
 
-	public void setFiremenMarker(int firemenMarker) {
+	public void setFiremenMarker(int firemenMarker){
 		this.firemenMarker = firemenMarker;
 	}
 
-	public int getPoliceMarker() {
+	public int getPoliceMarker(){
 		return policeMarker;
 	}
 
-	public void setPoliceMarker(int policeMarker) {
+	public void setPoliceMarker(int policeMarker){
 		this.policeMarker = policeMarker;
 	}
 
 	/**
 	 * @return the slight
 	 */
-	public People getSlight() {
+	public People getSlight(){
 		return slight.get(numSlight);
 	}
 
 	/**
 	 * @param slight the slight to set
 	 */
-	public void setSlight(People slight) {
+	public void setSlight(People slight){
 		boolean existe = false;
 		int index = 0;
-		for(int i=1; i<numSlight; i++){
+		for(int i = 1; i < numSlight; i++){
 			if(this.slight.get(i).getId() == slight.getId()){
 				existe = true;
 				index = i;
@@ -420,7 +418,7 @@ public class Disaster {
 		}
 	}
 
-	public void setSlight() {
+	public void setSlight(){
 		this.slight.remove(numSlight);
 		if(numSlight > 0){
 			numSlight--;
@@ -430,17 +428,17 @@ public class Disaster {
 	/**
 	 * @return the serious
 	 */
-	public People getSerious() {
+	public People getSerious(){
 		return serious.get(numSerious);
 	}
 
 	/**
 	 * @param serious the serious to set
 	 */
-	public void setSerious(People serious) {
+	public void setSerious(People serious){
 		boolean existe = false;
 		int index = 0;
-		for(int i=1; i<numSerious; i++){
+		for(int i = 1; i < numSerious; i++){
 			if(this.serious.get(i).getId() == serious.getId()){
 				existe = true;
 				index = i;
@@ -454,7 +452,7 @@ public class Disaster {
 		}
 	}
 
-	public void setSerious() {
+	public void setSerious(){
 		this.serious.remove(numSerious);
 		if(numSerious > 0){
 			numSerious--;
@@ -464,17 +462,17 @@ public class Disaster {
 	/**
 	 * @return the dead
 	 */
-	public People getDead() {
+	public People getDead(){
 		return dead.get(numDead);
 	}
 
 	/**
 	 * @param dead the dead to set
 	 */
-	public void setDead(People dead) {
+	public void setDead(People dead){
 		boolean existe = false;
 		int index = 0;
-		for(int i=1; i<numDead; i++){
+		for(int i = 1; i < numDead; i++){
 			if(this.dead.get(i).getId() == dead.getId()){
 				existe = true;
 				index = i;
@@ -488,7 +486,7 @@ public class Disaster {
 		}
 	}
 
-	public void setDead() {
+	public void setDead(){
 		this.dead.remove(numDead);
 		if(numDead > 0){
 			numDead--;
@@ -498,17 +496,17 @@ public class Disaster {
 	/**
 	 * @return the trapped
 	 */
-	public People getTrapped() {
+	public People getTrapped(){
 		return trapped.get(numTrapped);
 	}
 
 	/**
 	 * @param trapped the trapped to set
 	 */
-	public void setTrapped(People trapped) {
+	public void setTrapped(People trapped){
 		boolean existe = false;
 		int index = 0;
-		for(int i=1; i<numTrapped; i++){
+		for(int i = 1; i < numTrapped; i++){
 			if(this.trapped.get(i).getId() == trapped.getId()){
 				existe = true;
 				index = i;
@@ -522,7 +520,7 @@ public class Disaster {
 		}
 	}
 
-	public void setTrapped() {
+	public void setTrapped(){
 		this.trapped.remove(numTrapped);
 		if(numTrapped > 0){
 			numTrapped--;

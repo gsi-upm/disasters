@@ -5,7 +5,7 @@ package jadex.desastres;
  * @author julio camarero
  * @version 1.0
  */
-public class Resource {
+public class Resource{
 
 	/**
 	 * Resource id
@@ -27,7 +27,6 @@ public class Resource {
 	 **/
 	private String name;
 	
-		
 	/**
 	 * Address (to represent resources in a map) 
 	 */
@@ -41,8 +40,6 @@ public class Resource {
 	 */
 	private double latitud;
 	
-	
-     
     /**
 	 * Info about the resource
 	 */
@@ -60,8 +57,7 @@ public class Resource {
 	/**
 	 * Size of the Disaster
 	 */
-	
-	
+
 	/**
 	 * id of the user who added the resource
 	 */
@@ -78,81 +74,78 @@ public class Resource {
 	 * @param info
 	 * @param description
 	 */
-	public Resource(int id, String type, String name,String info,String description,
-			  int idAssigned ) {
-		
+	public Resource(int id, String type, String name,String info,String description, int idAssigned){
 		this.id = id;
 		this.idAssigned = idAssigned;
 		this.type = type;
 		this.name = name;
-		
 		this.info = info;
 		this.description = description;
 		this.state = "active";
 		this.user = 1;
-                System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
+		System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
 	}
 
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public int getId(){
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(int id){
 		this.id = id;
 	}
 
 	/**
 	 * @return the idAssigned
 	 */
-	public int getIdAssigned() {
+	public int getIdAssigned(){
 		return idAssigned;
 	}
 
 	/**
 	 * @param idAssigned the idAssigned to set
 	 */
-	public void setIdAssigned(int idAssigned) {
+	public void setIdAssigned(int idAssigned){
 		this.idAssigned = idAssigned;
 	}
 
 	/**
 	 * @return the type
 	 */
-	public String getType() {
+	public String getType(){
 		return type;
 	}
 
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(String type) {
+	public void setType(String type){
 		this.type = type;
 	}
 
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public String getName(){
 		return name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
+	public void setName(String name){
 		this.name = name;
 	}
 
 	/**
 	 * @return the address
 	 */
-	public String getAddress() {
+	public String getAddress(){
 		return address;
 	}
 
@@ -160,14 +153,14 @@ public class Resource {
 	/**
 	 * @return the info
 	 */
-	public String getInfo() {
+	public String getInfo(){
 		return info;
 	}
 
 	/**
 	 * @param info the info to set
 	 */
-	public void setInfo(String info) {
+	public void setInfo(String info){
 		this.info = info;
 	}
 
@@ -181,41 +174,35 @@ public class Resource {
 	/**
 	 * @param description the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(String description){
 		this.description = description;
 	}
 
 	/**
 	 * @return the state
 	 */
-	public String getState() {
+	public String getState(){
 		return state;
 	}
 
 	/**
 	 * @param state the state to set
 	 */
-	public void setState(String state) {
+	public void setState(String state){
 		this.state = state;
 	}
 
 	/**
 	 * @return the user
 	 */
-	public int getUser() {
+	public int getUser(){
 		return user;
 	}
 
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(int user) {
+	public void setUser(int user){
 		this.user = user;
 	}
-	
-	
-	
-	
-	
-	
-	}
+}

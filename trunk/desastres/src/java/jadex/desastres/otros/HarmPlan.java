@@ -1,24 +1,20 @@
 package jadex.desastres.otros;
 
-import java.util.Iterator;
-import java.util.Map;
+import jadex.bdi.runtime.Plan;
+import jadex.desastres.*;
 import java.net.*;
 import java.io.*;
-
-import jadex.bdi.runtime.*; // jadex.runtime.*;
-import jadex.desastres.Disaster;
-import jadex.desastres.Environment;
 
 /**
  *
  * @author luis
  */
-public class HarmPlan extends Plan {
+public class HarmPlan extends Plan{
 
     Environment env;
     double spreading = 0.02;
 
-    public void body() {
+    public void body(){
         System.out.println("$$ apocalypse-HarmPlan: start");
         env = (Environment) getBeliefbase().getBelief("env").getFact();
         Disaster dis = (Disaster) getBeliefbase().getBelief("unattendedDisaster").getFact();
@@ -37,22 +33,22 @@ public class HarmPlan extends Plan {
      * @param st - The String to send to the database
      * @return the response returned by the database
      */
-    public static String sendToDB(String st) {
+    public static String sendToDB(String st){
         String response = new String();
-        try {
+        try{
             URL url = new URL(st);
             URLConnection workingConnection = url.openConnection();
             String inputLine;
             StringBuffer buff = new StringBuffer();
             BufferedReader dis = new BufferedReader(new InputStreamReader(workingConnection.getInputStream()));
-            while ((inputLine = dis.readLine()) != null) {
+            while ((inputLine = dis.readLine()) != null){
                 buff.append(inputLine);
             }
             response = buff.toString();
             dis.close();
-        } catch (MalformedURLException me) {
+        }catch (MalformedURLException me){
             System.out.println("MalformedURLException: " + me);
-        } catch (IOException ioe) {
+        }catch (IOException ioe){
             System.out.println("IOException: " + ioe);
         }
         return response;

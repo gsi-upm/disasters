@@ -68,7 +68,8 @@ function initialize2(){
 		}
 
 		$.getJSON('getpost/getAsociaciones.jsp', {
-			'tipo':'todasEmergencias'
+			'tipo':'todasEmergencias',
+			'nivel':nivelMsg
 		}, function(data){
 			$.each(data, function(entryIndex, entry) {
 				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
@@ -112,7 +113,7 @@ function actualizar2(){
 
 function buildingInit(){
 	showBuilding('hospital');
-	showBuilding('fireStation');
+	showBuilding('firemenStation');
 	showBuilding('policeStation');
 	showBuilding('geriatricCenter');
 }
@@ -120,9 +121,9 @@ function buildingInit(){
 function showBuilding(type){
 	if(type == 'hospital'){
 		generateBuilding('hospital','Centro de salud',38.228138,-1.706449); // Calasparra, Murcia
-	}else if(type == 'fireStation'){
+	}else if(type == 'firemenStation'){
 		generateBuilding('firemenStation','Parque de bomberos',38.111020,-1.865018); // Caravaca de la Cruz, Murcia
-		generateBuilding('firemenStation','Parque de bomberos TEMPORAL',38.21602,-1.72306); // TEMPORAL
+		generateBuilding('firemenStation','Parque de bomberos TEMPORAL',38.216020,-1.723060); // TEMPORAL
 	}else if(type == 'policeStation'){
 		generateBuilding('policeStation','Ayuntamiento y Polic&iacute;a municipal',38.231125,-1.697560); // Calasparra, Murcia
 	}else if(type == 'geriatricCenter'){
@@ -267,8 +268,8 @@ function comportamientoMarcador(evento, caracter, opciones){
 	});
 
 	GEvent.addListener(marker, 'dragend', function(latlng){
-		var nuevaLat = latlng.lat();
-		var nuevaLong = latlng.lng();
+		var nuevaLat = latlng.lat().toFixed(6);
+		var nuevaLong = latlng.lng().toFixed(6);
 		var nuevaPos = new GLatLng(nuevaLat, nuevaLong);
 		map.removeOverlay(marker);
 		marker.setLatLng(nuevaPos);
