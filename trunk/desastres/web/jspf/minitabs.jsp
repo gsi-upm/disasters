@@ -6,7 +6,7 @@
 	<!-- Menus from minitabs -->
 	<div id="console" class="slideMenu"></div>
 	<div id="visualize" class="slideMenu">
-		<form action="#" id="buildings">
+		<form id="buildings" action="#">
 			<table>
 				<tr>
 					<td colspan="2"><fmt:message key="edificios"/></td>
@@ -31,7 +31,7 @@
 	</div>
 	<c:if test="${proyecto.nombreUsuario != null}">
 		<div id="showSimOptions" class="slideMenu">
-			<form id="SimOptions" method="post" action="/desastres/RunSimulation">
+			<form id="SimOptions" action="/desastres/RunSimulation" method="post">
 				<table>
 					<tr>
 						<td><span class="bigger"><fmt:message key="opcionessimulador"/></span></td>

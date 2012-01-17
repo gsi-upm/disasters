@@ -28,13 +28,13 @@ public class MandaAvisoPlan extends EnviarMensajePlan{
 
 		env.printout("CC central: Avisando a agentes... (en espera)...", 0);
 
-		String resultado1 = enviarObjeto("ambulanceCaronte", "aviso", recibido);
+		String resultado1 = enviarObjeto("ambulance", "aviso", recibido);
 		//env.printout("CC central: Respuesta recibida de la ambulancia: " + resultado1, 0);
 
 		if(!des.getType().equals("injuredPerson") && (des.getSize().equals("big") || des.getSize().equals("huge"))){
-			String resultado2 = enviarObjeto("policeCaronte", "aviso", recibido);
+			String resultado2 = enviarObjeto("police", "aviso", recibido);
 			//env.printout("CC central: Respuesta recibida de la policia: " + resultado2, 0);
-			String resultado3 = enviarObjeto("firemenCaronte", "aviso", recibido);
+			String resultado3 = enviarObjeto("firemen", "aviso", recibido);
 			//env.printout("CC central: Respuesta recibida del bombero: " + resultado3, 0);
 		}
 

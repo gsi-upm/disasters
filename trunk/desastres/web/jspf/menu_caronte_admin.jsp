@@ -1,6 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <fmt:bundle basename="fmt.eji8n">
 	<div id="dhtmlgoodies_tabView1">
@@ -41,11 +40,11 @@
 						</tr>
 					</table>
 				</div>
-				<div id="radio_catastrofes_2" style="display:none">
+				<div id="radio_catastrofes_2" class="oculto">
 					<table class="tabla_menu">
 						<tr>
 							<td id="tipo_catastrofes_2"></td>
-							<td><img id="icono_catastrofes_2" class="rayas" alt="" src="markers/events/fuego.png"/></td>
+							<td><img id="icono_catastrofes_2" class="rayas" src="markers/events/fuego.png" alt=""/></td>
 						</tr>
 					</table>
 				</div>
@@ -58,11 +57,11 @@
 							<textarea id="direccion1" class="direccion" name="direccion" rows="4" cols="20" placeholder="<fmt:message key="direccion"/>"></textarea>
 						</td>
 						<td class="img_menu">
-							<img class="botones" alt="Validar direcci&oacute;n" id="validardireccion1" onclick="validarDireccion(1)"
-								onmouseover="cambiaFlecha(0,1)" onmouseout="cambiaFlecha(1,1)" src="images/iconos/confirm2.png"/>
+							<img id="validardireccion1" class="botones" src="images/iconos/confirm2.png" alt="Validar direcci&oacute;n"
+								onclick="validarDireccion(1)" onmouseover="cambiaFlecha(0,1)" onmouseout="cambiaFlecha(1,1)"/>
 						</td>
 					</tr>
-					<tr><td class="img_menu"><img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion1" src="images/iconos/no.png"/></td></tr>
+					<tr><td class="img_menu"><img id="validacion1" class="botones" src="images/iconos/no.png" alt="Direcci&oacute;n no v&aacute;lida"/></td></tr>
 				</table>
 				<table class="tabla_menu">
 					<tr>
@@ -102,19 +101,20 @@
 				<input type="hidden" name="iden" id="iden1" value=""/>
 				<input type="hidden" name="latitud" id="latitud1" value=""/>
 				<input type="hidden" name="longitud" id="longitud1" value=""/>
-				<input type="button" id="submit11" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(1);return false;"/>
+				<input type="button" id="submit11" class="btn" value="<fmt:message key="marcarenelmapa"/>" onclick="pinchaMapa(1);return false;"/>
 				<br/>
-				<input type="button" id="submit10" value="<fmt:message key="modificar"/>" class="btn oculto" onclick="modificar2(
-					iden.value,seleccionRadio(this.form,0),1,nombre.value,info.value,descripcion.value,
-					direccion.value,tamanno.value,trafico.value,null,planta.value);return false;"/>
-				<input type="button" id="eliminar1" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+				<input type="button" id="submit10" class="btn oculto" value="<fmt:message key="modificar"/>" onclick="
+					modificar2(iden.value,seleccionRadio(this.form,0),1,nombre.value,descripcion.value,info.value,
+						direccion.value,tamanno.value,trafico.value,planta.value,0); return false;"/>
+				<input type="button" id="eliminar1" class="btn oculto" value="Eliminar" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog1">
-					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
+					<p><fmt:message key="confirmarMarcador"/></p>
 					<p class="centrado">
-						<button onclick="crearCatastrofe('event',seleccionRadio(this.form,0),1,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',tamanno.value,trafico.value,0,planta.value);
-							$('#dialog1').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
-						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
+						<input type="button" value="<fmt:message key="annadir"/>" onclick="
+							crearCatastrofe('event',seleccionRadio(this.form,0),1,nombre.value,info.value,descripcion.value,
+								direccion.value,longitud.value,latitud.value,'active',tamanno.value,trafico.value,0,planta.value);
+							$('#dialog1').jqm().jqmHide(); return false;"/>
+						<input type="button" class="xxx jqmClose" value="<fmt:message key="cancelar"/>"/>
 					</p>
 				</div>
 			</form>
@@ -155,10 +155,12 @@
 					</tr>
 				</table>
 				<div id="asociacionesEmergencias">
-					<span style="float:left"><fmt:message key="asociado"/>:</span>
+					<span><fmt:message key="asociado"/>:</span>
 					<ul>
 						<li id="textoAsoc"></li>
-						<span id="checkboxAsoc"></span>
+						<li>
+							<ul id="checkboxAsoc"></ul>
+						</li>
 					</ul>
 				</div>
 				<table class="tabla_menu">
@@ -212,10 +214,12 @@
 					</tr>
 				</table>
 				<!--<div id="sintomas">
-					<span style="float:left">S&iacute;ntomas:</span>
+					<span>S&iacute;ntomas:</span>
 					<ul>
 						<li id="textoSintomas">&thinsp;</li>
-						<span id="listaSintomas"></span>
+						<li>
+							<ul id="listaSintomas"></ul>
+						</li>
 					</ul>
 				</div>-->
 				<table class="tabla_menu">
@@ -227,32 +231,33 @@
 							<textarea id="direccion2" name="direccion" class="direccion" rows="4" cols="20" placeholder="<fmt:message key="direccion"/>"></textarea>
 						</td>
 						<td class="img_menu">
-							<img class="botones" alt="Validar direcci&oacute;n" id="validardireccion2" onclick="validarDireccion(2)"
-								 onmouseover="cambiaFlecha(0,2)" onmouseout="cambiaFlecha(1,2)" src="images/iconos/confirm2.png"/>
+							<img id="validardireccion2" class="botones" src="images/iconos/confirm2.png" alt="Validar direcci&oacute;n"
+								  onclick="validarDireccion(2)" onmouseover="cambiaFlecha(0,2)" onmouseout="cambiaFlecha(1,2)"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="img_menu">
-							<img class="botones" alt="Direcci&oacute;n no v&aacute;lida" id="validacion2" src="images/iconos/no.png"/>
+							<img id="validacion2" class="botones" src="images/iconos/no.png" alt="Direcci&oacute;n no v&aacute;lida"/>
 						</td>
 					</tr>
 				</table>
 				<input type="hidden" name="iden" value=""/>
 				<input type="hidden" name="latitud" id="latitud2" value=""/>
 				<input type="hidden" name="longitud" id="longitud2" value=""/>
-				<input type="button" id="submit21" value="<fmt:message key="marcarenelmapa"/>" class="btn" onclick="pinchaMapa(2); return false;"/>
+				<input type="button" id="submit21" class="btn" value="<fmt:message key="marcarenelmapa"/>" onclick="pinchaMapa(2); return false;"/>
 				<br/>
-				<input type="button" id="submit20" value="<fmt:message key="modificar"/>" class="btn oculto"
-					onclick="modificar2(iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
-						direccion.value,peso.value,movilidad.value,0,planta.value); return false;"/>
+				<input type="button" id="submit20" class="btn oculto" value="<fmt:message key="modificar"/>" onclick="
+						modificar2(iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,descripcion.value,
+						info.value,direccion.value,peso.value,movilidad.value,planta.value,0); return false;"/>
 				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
 				<div class="jqmWindow" id="dialog2">
-					<p><fmt:message key="confirmarMarcador"/><%--<fmt:message key="puntoalmacenado"/>--%></p>
+					<p><fmt:message key="confirmarMarcador"/></p>
 					<p class="centrado">
-						<button onclick="crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,
-							descripcion.value,direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,planta.value);
-							$('#dialog2').jqm().jqmHide();return false;"><fmt:message key="annadir"/></button>
-						<button class="xxx jqmClose"><fmt:message key="cancelar"/></button>
+						<input type="button" value="<fmt:message key="annadir"/>" onclick="
+							crearCatastrofe('people',seleccionRadio(this.form,2),cantidad.value,nombre.value,info.value,descripcion.value,
+								direccion.value,longitud.value,latitud.value,'active',peso.value,movilidad.value,0,planta.value);
+							$('#dialog2').jqm().jqmHide(); return false;"/>
+						<input type="button" class="xxx jqmClose" value="<fmt:message key="cancelar"/>"/>
 					</p>
 				</div>
 			</form>
@@ -311,7 +316,7 @@
 					</tr>
 				</table>
 			</div>
-			<form id="form-posicion" class="oculto" action="#">
+			<form id="form-posicion" action="#" class="oculto">
 				<hr/>
 				<p>
 					<input type="checkbox" name="localizacion" onclick="cambiarGeolocalizacion(localizacion.checked)"/>Activar geolocalizaci&oacute;n
@@ -337,8 +342,30 @@
 					<input type="checkbox" name="porDefecto"><fmt:message key="guardarPosicion"/>
 				</p>
 				<p>
-					<input type="button" id="submit01" value="<fmt:message key="comprobar"/>" class="btn" onclick="findPos(latitud.value,longitud.value,direccion.value)"/>
-					<input type="button" id="submit02" value="<fmt:message key="aceptar"/>" class="btn" onclick="newPos(latitud.value,longitud.value,porDefecto.checked)"/>
+					<input type="button" id="submit01" class="btn" value="<fmt:message key="comprobar"/>" onclick="findPos(latitud.value, longitud.value, direccion.value)"/>
+					<input type="button" id="submit02" class="btn" value="<fmt:message key="aceptar"/>" onclick="newPos(latitud.value, longitud.value, porDefecto.checked)"/>
+				</p>
+				<table class="tabla_menu">
+					<tr>
+						<td><fmt:message key="planta"/></td>
+						<td>
+							<select name="planta" id="select-planta3">
+								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
+								<option value="-1"><fmt:message key="exterior"/></option>
+								<option value="0"><fmt:message key="planta"/> 0</option>
+								<option value="1"><fmt:message key="planta"/> 1</option>
+								<option value="2"><fmt:message key="planta"/> 2</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="checkbox" name="plantaPorDefecto"><fmt:message key="porDefecto"/>
+						</td>
+					</tr>
+				</table>
+				<p>
+					<input type="button" id="submit03" class="btn" value="<fmt:message key="aceptar"/>" onclick="editPlanta(planta.value, plantaPorDefecto.checked)"/>				
 				</p>
 			</form>
 		</div>

@@ -181,7 +181,9 @@ function definirOpciones(evento){
 			actuando = '_no';
 		}
 
-		if(evento.tipo == 'police'){ // es un policia
+		if(evento.nombre == userName){
+			icono.image = 'markers/resources/user' + actuando + '.png';
+		}else if(evento.tipo == 'police'){ // es un policia
 			icono.image = 'markers/resources/policia' + actuando + '.png';
 		}else if(evento.tipo == 'firemen'){ // es un bombero
 			icono.image = 'markers/resources/bombero' + actuando + '.png';

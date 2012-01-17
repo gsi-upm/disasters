@@ -299,7 +299,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${javac.processorpath}" name="processorpath"/>
             <attribute default="${build.generated.sources.dir}/ap-source-output" name="apgeneratedsrcdir"/>
             <attribute default="${includes}" name="includes"/>
-            <attribute default="${excludes},${excludes.caronte.src}" name="excludes"/> <!-- MODIFICADO -->
+            <attribute default="${excludes},${excludes.src}" name="excludes"/> <!-- MODIFICADO -->
             <attribute default="${javac.debug}" name="debug"/>
             <attribute default="${empty.dir}" name="gensrcdir"/>
             <element name="customize" optional="true"/>
@@ -555,7 +555,7 @@ exists or setup the property manually. For example like this:
     </target>
     <target name="-copy-webdir">
         <copy todir="${build.web.dir}">
-            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.caronte.web}" includes="${includes}"/> <!-- MODIFICADO -->
+            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.web}" includes="${includes}"/> <!-- MODIFICADO -->
         </copy>
         <copy file="${index.jsp.file}" tofile="${build.web.dir}/index.jsp"/> <!-- NUEVO -->
         <copy file="${web.xml.file}" tofile="${build.web.dir}/WEB-INF/web.xml"/> <!-- NUEVO -->
@@ -571,7 +571,7 @@ exists or setup the property manually. For example like this:
         </antcall> <!-- NUEVO -->
         <webproject2:javac destdir="${build.classes.dir}" gensrcdir="${build.generated.sources.dir}"/>
         <copy todir="${build.classes.dir}">
-            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.caronte.src}" includes="${includes}"/> <!-- MODIFICADO -->
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.src}" includes="${includes}"/> <!-- MODIFICADO -->
         </copy>
         <echo message="source directory ${src.dir} is copied to ${build.classes.dir} after compiling Caronte Project"/> <!-- NUEVO -->
     </target>
@@ -673,7 +673,7 @@ exists or setup the property manually. For example like this:
     </target>
     <target name="-copy-webdir-disasters">
         <copy todir="${build.web.dir.disasters}">
-            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.disasters.web}" includes="${includes}">
+            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.web.disasters}" includes="${includes}">
             </fileset>
         </copy>
         <copy file="${index.jsp.file.disasters}" tofile="${build.web.dir.disasters}/index.jsp"/>
@@ -685,9 +685,9 @@ exists or setup the property manually. For example like this:
         <antcall target="library-inclusion-in-archive">
             <param name="build.specific.web.dir" value="${build.web.dir.disasters}"/>
         </antcall>
-        <webproject2:javac destdir="${build.classes.dir.disasters}" gensrcdir="${build.generated.sources.dir.disasters}" excludes="${excludes},${excludes.disasters.src}"/>
+        <webproject2:javac destdir="${build.classes.dir.disasters}" gensrcdir="${build.generated.sources.dir.disasters}" excludes="${excludes},${excludes.src.disasters}"/>
         <copy todir="${build.classes.dir.disasters}">
-            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.disasters.src}" includes="${includes}"/>
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.src.disasters}" includes="${includes}"/>
         </copy>
         <echo message="not java sources from ${src.dir} is copied to ${build.classes.dir.disasters} after compiling Disasters Project"/>
     </target>
@@ -860,29 +860,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.jadex-rules-tools-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jadex-runtimetools-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jadex-xml-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.activation-1.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.antlr-2.7.7.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.antlr-runtime-3.1.3.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.collections-generic-4.01.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.colt-1.2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.concurrent-1.3.4.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.de.huxhorn.sulky.3rdparty.jlayer-1.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.gluegen-rt-1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.janino-2.5.10.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jcalendar-1.3.2.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jcommon-1.0.15.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jfreechart-1.0.12.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jogl-1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jung-algorithms-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jung-api-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jung-graph-impl-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jung-visualization-2.0.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.junit-3.8.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.mail-1.4.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.smack-3.0.4.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.smackx-3.1.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.stringtemplate-3.2.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.xpp3-1.1.4c.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
     </target>
     <!--
                 DIST BUILDING SECTION
@@ -943,7 +920,7 @@ exists or setup the property manually. For example like this:
     <target depends="dist" description="Build Caronte jadex standalone .jar" name="jadex-jar">
         <copy file="${jadex.jar.reference}" tofile="${jadex.jar}" overwrite="${jadex.jar.force.updated}"/>
         <jar jarfile="${jadex.jar}" update="${jadex.jar.force.updated}">
-            <fileset dir="${build.classes.dir}" includes="${include.jadex.jar}"/>
+            <fileset dir="${build.classes.dir}" includes="${includes.jadex.jar}"/>
         </jar>
     </target>
     <!--
@@ -1001,7 +978,7 @@ exists or setup the property manually. For example like this:
     <target depends="dist-disasters" description="Build Disasters jadex standalone .jar" name="jadex-jar-disasters">
         <copy file="${jadex.jar.reference}" tofile="${jadex.jar.disasters}" overwrite="${jadex.jar.force.updated}"/>
         <jar jarfile="${jadex.jar.disasters}" update="${jadex.jar.force.updated}">
-            <fileset dir="${build.classes.dir.disasters}" includes="${include.jadex.jar.disasters}"/>
+            <fileset dir="${build.classes.dir.disasters}" includes="${includes.jadex.jar.disasters}"/>
         </jar>
     </target>
     <!--
@@ -1229,7 +1206,7 @@ exists or setup the property manually. For example like this:
                     -->
         <antcall target="javadoc-build">
             <param name="dist.specific.javadoc.dir" value="${dist.javadoc.dir}"/>
-            <param name="specific.excludes" value="${excludes},${excludes.caronte.src}"/>
+            <param name="specific.excludes" value="${excludes},${excludes.src}"/>
             <param name="build.specific.generated.sources.dir" value="${build.generated.sources.dir}"/>
         </antcall>
         <antcall target="javadoc-browse">
@@ -1240,7 +1217,7 @@ exists or setup the property manually. For example like this:
                     -->
         <antcall target="javadoc-build">
             <param name="dist.specific.javadoc.dir" value="${dist.javadoc.dir.disasters}"/>
-            <param name="specific.excludes" value="${excludes},${excludes.disasters.src}"/>
+            <param name="specific.excludes" value="${excludes},${excludes.src.disasters}"/>
             <param name="build.specific.generated.sources.dir" value="${build.generated.sources.dir.disasters}"/>
         </antcall>
         <antcall target="javadoc-browse">

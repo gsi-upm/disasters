@@ -30,6 +30,7 @@
 				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhQel9MQybMe66MKP3JO4yeJZZpmpBRzTAem65aDN5SbzD0WHx5UGyq72Q">
 			</script>
 			<script type="application/javascript">
+				var proyecto = 'caronte';
 				var userName = '${proyecto.nombreUsuario}';
 				var usuario_actual = ${proyecto.id};
 				var usuario_actual_tipo = '${proyecto.rol}';

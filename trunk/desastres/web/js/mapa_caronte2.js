@@ -6,7 +6,7 @@ function coordenadasUsuario(pos){
 
 	if(nivelMsg == null || nivelMsg == 0){
 		var icono = new GIcon(G_DEFAULT_ICON);
-		icono.image = 'markers/user.png';
+		icono.image = 'markers/resources/user_no.png';
 		var opciones = {
 			icon:icono
 		};
@@ -337,7 +337,6 @@ function cargarLateral(evento){
 }
 
 function limpiarLateral(marcador){
-	document.getElementById('prueba').innerHTML = marcador;
 	noActualizar = 0;
 	var lateral;
 	if(marcador == 'event'){
@@ -354,6 +353,10 @@ function limpiarLateral(marcador){
 		if(usuario_actual_tipo != 'citizen'){
 			document.getElementById('eliminar2').style.display = 'none';
 		}
+	}else if(marcador == 'resource'){
+		document.getElementById('form-posicion').direccion.innerHTML = '';
+		document.getElementById('form-posicion').porDefecto.checked = false;
+		document.getElementById('form-posicion').plantaPorDefecto.checked = false;
 	}
 	
 	if(lateral != null){
@@ -453,7 +456,7 @@ function annadirSintoma(tipo, valor){
 	}
 }
 
-function actuar(idEvento,nombreUsuario,accionAux){
+function actuar(idEvento, nombreUsuario, accionAux){
 	var accion;
 	var estadoEvento;
 	var estadoUsuario;
@@ -492,13 +495,25 @@ function actuar(idEvento,nombreUsuario,accionAux){
 	registrarHistorial(userName, marcador.marcador, marcador.tipo, idEvento, accion);
 }
 
-function detener(idEvento,idEmergencia,nombreUsuario){
+function detener(idEvento, idEmergencia, nombreUsuario){
 	$.post('getpost/updateEstado.jsp',{
 		'accion':'detener',
 		'idEvento':idEvento,
 		'idEmergencia':idEmergencia,
 		'nombreUsuario':nombreUsuario
 	});
+}
+
+function guardar_posicion(id, lat, lng){
+	var marcador = marcadores_definitivos[id];
+	marcador.marker.setLatLng(new GLatLng(lat, lng));
+	$.post('getpost/updateLatLong.jsp',{
+		'id':id,
+		'latitud':lat,
+		'longitud':lng
+	});
+	registrarHistorial(userName, marcador.marcador, marcador.tipo, id, 'mover');
+	noActualizar = 0;
 }
 
 function cambiarPlanta(num){
@@ -551,7 +566,7 @@ function cambiarGeolocalizacion(valor){
 	});
 }
 
-function findPos(lat,lng,dir){
+function findPos(lat, lng, dir){
 	limpiar = false;
 	if(puntoAux != null){
 		map.removeOverlay(puntoAux);
@@ -602,4 +617,14 @@ function newPos(lat,lng,porDefecto){
 			'longitud':lng
 		});
 	}
+	map.closeInfoWindow();
+}
+
+function editPlanta(planta, porDefecto){
+	$.post('getpost/updateLatLong.jsp',{
+		'nombre':userName,
+		'planta':planta,
+		'plantaPorDefecto':porDefecto
+	});
+	map.closeInfoWindow();
 }

@@ -8,7 +8,7 @@
 <%@include file="../jspf/database.jspf"%>
 <% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 
-<c:if test="${param.nombre != null && param.localizacion == null}">
+<c:if test="${param.nombre != null && param.localizacion == null && param.planta == null}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE catastrofes
 		SET latitud = ?, longitud = ?, modificado = <%=modif%>
@@ -18,6 +18,16 @@
 		<sql:param value="${param.longitud}"/>
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
+	<c:if test="${param.porDefecto == true}">
+		<sql:update dataSource="${CatastrofesServer}">
+			UPDATE usuarios
+			SET latitud = ?, longitud = ?
+			WHERE nombre_usuario = ?
+			<sql:param value="${param.latitud}"/>
+			<sql:param value="${param.longitud}"/>
+			<sql:param value="${param.nombre}"/>
+		</sql:update>
+	</c:if>
 </c:if>
 <c:if test="${param.id != null}">
 	<sql:update dataSource="${CatastrofesServer}">
@@ -29,16 +39,6 @@
 		<sql:param value="${param.id}"/>
 	</sql:update>
 </c:if>
-<c:if test="${param.porDefecto == true}">
-	<sql:update dataSource="${CatastrofesServer}">
-		UPDATE usuarios
-		SET latitud = ?, longitud = ?
-		WHERE nombre_usuario = ?
-		<sql:param value="${param.latitud}"/>
-		<sql:param value="${param.longitud}"/>
-		<sql:param value="${param.nombre}"/>
-	</sql:update>
-</c:if>
 <c:if test="${param.localizacion != null}">
 	<sql:update dataSource="${CatastrofesServer}">
 		UPDATE usuarios
@@ -47,4 +47,22 @@
 		<sql:param value="${param.localizacion}"/>
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
+</c:if>
+<c:if test="${param.planta != null}">
+	<sql:update dataSource="${CatastrofesServer}">
+		UPDATE catastrofes
+		SET planta = ?, modificado = <%=modif%>
+		WHERE nombre = ?
+		<sql:param value="${param.planta}"/>
+		<sql:param value="${param.nombre}"/>
+	</sql:update>
+	<c:if test="${param.plantaPorDefecto == true}">
+		<sql:update dataSource="${CatastrofesServer}">
+			UPDATE usuarios
+			SET planta = ?
+			WHERE nombre_usuario = ?
+			<sql:param value="${param.planta}"/>
+			<sql:param value="${param.nombre}"/>
+		</sql:update>
+	</c:if>
 </c:if>

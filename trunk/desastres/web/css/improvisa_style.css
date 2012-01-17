@@ -19,10 +19,6 @@ form table img{
 	padding: 8px;
 }
 
-input:focus, textarea:focus{
-	border: 2px solid #FFC83C;
-}
-
 #cabecera{
 	float: left;
 }
@@ -271,10 +267,10 @@ input:focus, textarea:focus{
 
 /* CSS3 */
 
-:-webkit-input-placeholder{
+:-moz-placeholder{ /* Firefox */
 	color: silver;
 }
 
-:-moz-placeholder{
+:-webkit-input-placeholder{ /* Chrome y Safari */
 	color: silver;
 }

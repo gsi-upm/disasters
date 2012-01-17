@@ -15,7 +15,7 @@ public class PatrullaPlan extends Plan{
 	 */
 	public void body(){
 		//Obtenemos un objeto de la clase entorno para poder usar sus metodos.
-		Environment env = ((Environment)getBeliefbase().getBelief("env").getFact());
+		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		//Creamos una nueva posicion aleatoria
 		Position newPos = (Position)env.getRandomPosition("disasters");

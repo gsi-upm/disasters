@@ -12,7 +12,7 @@
 		<c:choose>
 			<c:when test="${param.action == 'user'}">
 				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT u.id, u.nombre_usuario, u.nombre_real, u.correo, u.latitud, u.longitud, t.tipo
+					SELECT u.id, u.nombre_usuario, u.nombre_real, u.correo, u.latitud, u.longitud, u.planta, t.tipo
 					FROM usuarios u, tipos_usuarios t
 					WHERE u.nombre_usuario = ?
 					AND u.password = ?
@@ -23,7 +23,7 @@
 			</c:when>
 			<c:when test="${param.action == 'userProyect'}">
 				<sql:query var="proyectos" dataSource="${CatastrofesServer}">
-					SELECT u.id, u.proyecto, t.tipo, t.nivel
+					SELECT u.id, t.tipo, t.nivel
 					FROM usuarios u, tipos_usuarios t
 					WHERE u.nombre_usuario = ?
 					AND u.tipo_usuario = t.id
@@ -51,14 +51,14 @@
 					<json:property name="email" value="${evento.correo}"/>
 					<json:property name="latitud" value="${evento.latitud}"/>
 					<json:property name="longitud" value="${evento.longitud}"/>
+					<json:property name="planta" value="${evento.planta}"/>
 				</json:object>
 			</c:forEach>
-			<c:forEach var="proyecto" items="${proyectos.rows}">
+			<c:forEach var="proyect" items="${proyectos.rows}">
 				<json:object>
-					<json:property name="id" value="${proyecto.id}"/>
-					<json:property name="rol" value="${proyecto.tipo}"/>
-					<json:property name="level" value="${proyecto.nivel}"/>
-					<json:property name="proyect" value="${proyecto.proyect}"/>
+					<json:property name="id" value="${proyect.id}"/>
+					<json:property name="rol" value="${proyect.tipo}"/>
+					<json:property name="level" value="${proyect.nivel}"/>
 				</json:object>
 			</c:forEach>
 		</json:array>
@@ -69,13 +69,14 @@
 			INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
 				longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
 			VALUES(3, (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
-				1, ?, ?, ?, ?, ?, '', 1, '', '', 0, <%=modif%>, 1, -2)
+				1, ?, ?, ?, ?, ?, '', 1, '', '', 0, <%=modif%>, 1, ?)
 			<sql:param value="${param.type}"/>
 			<sql:param value="${param.name}"/>
 			<sql:param value="${param.description}"/>
 			<sql:param value="${param.info}"/>
 			<sql:param value="${param.latitud}"/>
 			<sql:param value="${param.longitud}"/>
+			<sql:param value="${param.planta}"/>
 		</sql:update>
 	</c:when>
 	<c:when test="${param.action == 'registrar'}">

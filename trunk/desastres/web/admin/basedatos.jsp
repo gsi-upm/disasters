@@ -179,7 +179,7 @@
 		<table border="1">
 			<tr>
 				<th>ID</th><th>NOMBRE_USUARIO</th><th>PASSWORD</th><th>TIPO_USUARIO</th><th>NOMBRE_REAL</th>
-				<th>CORREO</th><th>LATITUD</th><th>LONGITUD</th><th>LOCALIZACION</th><th>PROYECTO</th>
+				<th>CORREO</th><th>LATITUD</th><th>LONGITUD</th><th>LOCALIZACION</th><th>PLANTA</th><th>PROYECTO</th>
 			</tr>
 			<c:forEach var="usuario" items="${usuarios.rows}">
 				<tr>
@@ -192,6 +192,7 @@
 					<td>${usuario.latitud}</td>
 					<td>${usuario.longitud}</td>
 					<td>${usuario.localizacion}</td>
+					<td>${usuario.planta}</td>
 					<td>${usuario.proyecto}</td>
 				</tr>
 			</c:forEach>

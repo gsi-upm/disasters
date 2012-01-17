@@ -1,7 +1,8 @@
-package jadex.desastres;
+package jadex.desastres.caronte;
 
 import jadex.bdi.runtime.*;
 import jadex.bridge.IComponentIdentifier;
+import jadex.desastres.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import org.json.me.*;

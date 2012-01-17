@@ -160,8 +160,8 @@ function guardar_asociacion(idEvento, idRecurso){
 	// actualizar las modificaciones con el metodo modificar
 	caracter_temp = DEFINITIVO;
 	puntero_temp = recurso;
-	modificar(idRecurso, recurso.cantidad, recurso.nombre, 'Asociado a ' + evento.nombre + '. ' + recurso.info,
-		recurso.descripcion, evento.direccion, nueva_longitud, nueva_latitud, recurso.estado, recurso.size, recurso.traffic, idEvento);
+	modificar(idRecurso, recurso.cantidad, recurso.nombre, recurso.descripcion, 'Asociado a ' + evento.nombre + '. ' + recurso.info,
+		nueva_latitud, nueva_longitud, evento.direccion, recurso.size, recurso.traffic, recurso.estado, idEvento);
 }
 
 function limpiarLateral(){}
