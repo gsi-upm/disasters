@@ -247,8 +247,10 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	pos_temp++;
 	nuevomarcador.marker = generaMarcador(nuevomarcador, TEMPORAL);
     marcadores_temporales[nuevomarcador.id] = nuevomarcador;
-
-	//guardar(nuevomarcador);
+	
+	if(proyecto == 'caronte'){
+		guardar(nuevomarcador);
+	}
 }
 
 function guardar(puntero){
@@ -310,10 +312,12 @@ function guardar(puntero){
 		}
 	}*/
 
-	escribirMensaje(puntero, 'crear', 1);
-	registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.fecha, 'crear');
-	limpiar = true;
-	limpiarLateral(puntero.marcador);
+	if(proyecto == 'caronte'){
+		escribirMensaje(puntero, 'crear', 1);
+		registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.fecha, 'crear');
+		limpiar = true;
+		limpiarLateral(puntero.marcador);
+	}
 
 	// 2.Borrar el elemento del mapa y la matriz temporal
 	marcadores_temporales[puntero.id] = null;
@@ -322,8 +326,7 @@ function guardar(puntero){
 	// actualizar(); // esto adelanta el timeOut a ahora mismo
 }
 
-function modificar(id, cantidad, nombre, info, descripcion, direccion, longitud, latitud,
-	estado, size, traffic, idAssigned){
+function modificar(id, cantidad, nombre, descripcion, info, latitud, longitud, direccion, size, traffic, estado, idAssigned){
 	// utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if(caracter_temp == TEMPORAL){
 		// Actualizar la matriz temporal
@@ -355,7 +358,7 @@ function modificar(id, cantidad, nombre, info, descripcion, direccion, longitud,
 	}
 }
 
-function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, tamanno, trafico, idAssigned, planta){
+function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, tamanno, trafico, planta, idAssigned){
 	var puntero = marcadores_definitivos[id];
 	var idA;
 	var accion;
@@ -365,9 +368,7 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 		idA = puntero.idAssigned;
 	}
 
-	if(tipo != puntero.tipo &&
-			((tipo == 'slight' && puntero.tipo == 'serious') ||
-			(tipo == 'serious' && puntero.tipo == 'slight')) == false){
+	if(tipo != puntero.tipo && ((tipo == 'slight' && puntero.tipo == 'serious') || (tipo == 'serious' && puntero.tipo == 'slight')) == false){
 		accion = 'cambioTipo';
 	}else{
 		accion = 'modificar';
@@ -438,9 +439,11 @@ function modificar2(id, tipo, cantidad, nombre, info, descripcion, direccion, ta
 
 	var evento = {'id':id, 'marcador':puntero.marcador, 'tipo':tipo, 'cantidad':cantidad, 'nombre':nombre,
 		'info':info, 'descripcion':descripcion, 'size':tamanno, 'traffic':trafico, 'planta':planta}
-	escribirMensaje(evento, 'modificar', 2);
-	registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
-	limpiarLateral(puntero.marcador);
+	if(proyecto == 'caronte'){
+		escribirMensaje(evento, 'modificar', 2);
+		registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
+		limpiarLateral(puntero.marcador);
+	}
 }
 
 function eliminar(puntero, caracter){
@@ -469,9 +472,11 @@ function eliminar(puntero, caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
-			escribirMensaje(puntero, 'eliminar', 1);
-			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
-			limpiarLateral(puntero.marcador);
+			if(proyecto == 'caronte'){
+				escribirMensaje(puntero, 'eliminar', 1);
+				registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
+				limpiarLateral(puntero.marcador);
+			}
 		}else{
 			$.post('getpost/update.jsp',{
 				'accion':'eliminar',
@@ -493,9 +498,11 @@ function eliminar(puntero, caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
-			escribirMensaje(puntero, 'eliminar', 1);
-			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
-			limpiarLateral(puntero.marcador);
+			if(proyecto == 'caronte'){
+				escribirMensaje(puntero, 'eliminar', 1);
+				registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
+				limpiarLateral(puntero.marcador);
+			}
 		}
 	}
 }
@@ -504,18 +511,6 @@ function cancelar_asignacion(id){
 	// borro la posicion actual y lo dibujo en la antigua
 	map.removeOverlay(marcadores_definitivos[id].marker);
 	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
-	noActualizar = 0;
-}
-
-function guardar_posicion(id, lat, lng){
-	var marcador = marcadores_definitivos[id];
-	marcador.marker.setLatLng(new GLatLng(lat, lng));
-	$.post('getpost/updateLatLong.jsp',{
-		'id':id,
-		'latitud':lat,
-		'longitud':lng
-	});
-	registrarHistorial(userName, marcador.marcador, marcador.tipo, id, 'mover');
 	noActualizar = 0;
 }
 

@@ -98,10 +98,12 @@
 				</tr>
 			</table>
 			<p><span class="pulsable azul" onclick="pinchaMapa(0);" id="pincha"><fmt:message key="marcarmapa"/></span></p>
-			<p><input type="button" id="submit0" value="<fmt:message key="modificar"/>" class="btn" onclick="modificar(
-				iden.value,cantidad.value,nombre.value,info.value,descripcion.value,direccion.value,
-				longitud.value,latitud.value,estado.value,magnitude.value,traffic.value,idAssigned.value);
-				borrarFormulario(this.form,1); $('#modificar').jqm().jqmHide(); return false;"/></p>
+			<p>
+				<input type="button" id="submit0" class="btn" value="<fmt:message key="modificar"/>" onclick="modificar(
+					iden.value,cantidad.value,nombre.value,descripcion.value,info.value,latitud.value,
+					longitud.value,direccion.value,magnitude.value,traffic.value,estado.value,idAssigned.value);
+					borrarFormulario(this.form,1); $('#modificar').jqm().jqmHide(); return false;"/>
+			</p>
 		</form>
 	</div>
 </fmt:bundle>

@@ -1,11 +1,12 @@
 <!--
-	<H3>Agente manager</H3>
+	<h3>Agente manager</h3>
 
-	Usado para lanzar el escenario y los agentes ambulancias que consideremos.
+	Usado para lanzar el entorno y los agentes necesarios
 -->
+
 <agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-	name="managerDisasters" package="jadex.desastres">
+	name="managerCaronte" package="jadex.desastres.caronte">
 
 	<imports>
 		<import>jadex.bdi.planlib.*</import>
@@ -28,22 +29,22 @@
 			<concrete ref="cmscap.cms_destroy_component"/>
 		</achievegoalref>
 
-		<performgoal name="managerDisastersGoal"/>
+		<performgoal name="managerCaronteGoal"/>
 	</goals>
 
 	<plans>
-		<plan name="managerDisasters-plan">
-			<body class="ManagerDisastersPlan"/>
+		<plan name="managerCaronte-plan">
+			<body class="ManagerCarontePlan"/>
 			<trigger>
-				<goal ref="managerDisastersGoal"/>
+				<goal ref="managerCaronteGoal"/>
 			</trigger>
 		</plan>
 	</plans>
-
+	
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="managerDisastersGoal"/>
+				<initialgoal ref="managerCaronteGoal"/>
 			</goals>
 		</configuration>
 	</configurations>

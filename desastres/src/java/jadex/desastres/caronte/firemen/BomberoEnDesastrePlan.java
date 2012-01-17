@@ -92,7 +92,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan{
 			String respuesta = enviarMensaje("centralEmergencias", "terminado", "done");
 			env.printout("FF firemen: Respuesta recibida de central: " + respuesta, 0);
 
-			String respuesta2 = enviarMensaje("policeCaronte", "terminado", "done");
+			String respuesta2 = enviarMensaje("police", "terminado", "done");
 			env.printout("FF firemen: Respuesta recibida del policia: " + respuesta2, 0);
 
 			env.printout("FF firemen: Me dirijo al parque de bomberos", 0);

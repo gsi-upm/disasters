@@ -1,6 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
 
 <fmt:bundle basename="fmt.eji8n">
 	<div id="dhtmlgoodies_tabView1">

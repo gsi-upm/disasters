@@ -1,4 +1,4 @@
-package jadex.desastres;
+package jadex.desastres.caronte;
 
 import jadex.bdi.runtime.*;
 
@@ -16,17 +16,17 @@ public class ManagerCarontePlan extends Plan{
 		System.out.println("Entorno creado");
 
 		IGoal sp2 = createGoal("cms_create_component");
-		sp2.getParameter("type").setValue("jadex/desastres/caronte/police/policeCaronte.agent.xml");
+		sp2.getParameter("type").setValue("jadex/desastres/caronte/police/police.agent.xml");
 		dispatchSubgoalAndWait(sp2);
 		System.out.println("Policia creado");
 
 		IGoal sp3 = createGoal("cms_create_component");
-		sp3.getParameter("type").setValue("jadex/desastres/caronte/firemen/firemenCaronte.agent.xml");
+		sp3.getParameter("type").setValue("jadex/desastres/caronte/firemen/firemen.agent.xml");
 		dispatchSubgoalAndWait(sp3);
 		System.out.println("Bombero creado");
 
 		IGoal sp4 = createGoal("cms_create_component");
-		sp4.getParameter("type").setValue("jadex/desastres/caronte/ambulance/ambulanceCaronte.agent.xml");
+		sp4.getParameter("type").setValue("jadex/desastres/caronte/ambulance/ambulance.agent.xml");
 		dispatchSubgoalAndWait(sp4);
 		System.out.println("Ambulancia creada");
 

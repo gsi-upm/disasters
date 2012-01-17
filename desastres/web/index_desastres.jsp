@@ -27,13 +27,14 @@
 			<script type="application/javascript" src="js/jquery.js"></script>
 			<script type="application/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
 			<script type="application/javascript"
-				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhShGMulApA1qGrWH2FWs8V2HjpzbhR6R94HFuEi6_iz-WDuB-XPDkJ2rA">
+				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhQel9MQybMe66MKP3JO4yeJZZpmpBRzTAem65aDN5SbzD0WHx5UGyq72Q">
 			</script>
 			<script type="application/javascript">
-				var nivelMsg = ${proyecto.nivelMsg};
+				var proyecto = 'desastres';
 				var userName = '${proyecto.nombreUsuario}';
 				var usuario_actual = ${proyecto.id};
 				var usuario_actual_tipo = '${proyecto.rol}';
+				var nivelMsg = ${proyecto.nivelMsg};
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
 			<script type="application/javascript" src="js/mapa.js"></script>

@@ -1,4 +1,4 @@
-package jadex.desastres;
+package jadex.desastres.disasters;
 
 import jadex.bdi.runtime.*;
 
