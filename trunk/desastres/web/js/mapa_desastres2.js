@@ -41,7 +41,8 @@ function verMas(id){
 	}else{
 		links2 = '<span id="ver_mas2" class="pulsable azul" onclick="verMenos(' + evento.id + ');return false;">Ver menos</span>';
 	}
-	marcadores_definitivos[id].marker.openInfoWindowHtml('<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links2 + '</div></div>');
+	var infoWin = new google.maps.InfoWindow({content:'<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links2 + '</div></div>'});
+	infoWin.open(map, marcadores_definitivos[id].marker);
 }
 
 function verMenos(id){
@@ -55,7 +56,8 @@ function verMenos(id){
 	}else{
 		links1 = '<span id="ver_mas1" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
 	}
-	marcadores_definitivos[id].marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 + '</div></div>');
+	var infoWin = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 + '</div></div>'});
+	infoWin.open(map, marcadores_definitivos[id].marker);
 }
 
 function cargarModificar(puntero,caracter){
@@ -106,8 +108,8 @@ function cargarModificar(puntero,caracter){
 
 function asociar(id, marker){
 	// 1.hallar el punto del marcador pasado
-	var latitud1 = marker.getLatLng().lat(); // marcadores_definitivos[id].marker.lat();
-	var longitud1 = marker.getLatLng().lng(); // marcadores_definitivos[id].marker.lng();
+	var latitud1 = marker.getPosition().lat(); // marcadores_definitivos[id].marker.lat();
+	var longitud1 = marker.getPosition().lng(); // marcadores_definitivos[id].marker.lng();
 
 	// 2.hallar la distancia a cada catastrofe de la matriz definitiva
 	var diferencia = 999999999999;

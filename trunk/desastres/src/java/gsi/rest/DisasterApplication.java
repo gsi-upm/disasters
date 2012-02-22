@@ -482,26 +482,6 @@ public class DisasterApplication extends Application {
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
-
-		// Get all the users
-		Restlet users = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String redirector = URL_BASE + "get.jsp?action=users";
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		// Get all the modified users
-		Restlet usersModified = new Restlet(getContext()) {
-			@Override
-			public void handle(Request request, Response response) {
-				String redirector_date = (String) request.getAttributes().get("dateTime");
-				String redirector = URL_BASE + "get.jsp?action=usersModified&fecha=" + redirector_date;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
                 
 		// Get all the healthy people in the center
 		Restlet healthy = new Restlet(getContext()) {
@@ -619,6 +599,44 @@ public class DisasterApplication extends Application {
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
+		
+		// Get all the associations
+		Restlet associations = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector = URL_BASE + "get.jsp?action=associations";
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+		
+		// Get all the activities
+		Restlet activities = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector = URL_BASE + "get.jsp?action=activities";
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+		
+		// Get all the modified associations from a timestamp
+		Restlet associationsModified = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector_date = (String) request.getAttributes().get("dateTime");
+				String redirector = URL_BASE + "get.jsp?action=associationsModified&fecha=" + redirector_date;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
+		
+		// Get all the modified activities from a timestamp
+		Restlet activitiesModified = new Restlet(getContext()) {
+			@Override
+			public void handle(Request request, Response response) {
+				String redirector_date = (String) request.getAttributes().get("dateTime");
+				String redirector = URL_BASE + "get.jsp?action=activitiesModified&fecha=" + redirector_date;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
 
 		// Attach the handlers to the root router
 		router.attach("/id/{id}", id);
@@ -678,9 +696,7 @@ public class DisasterApplication extends Application {
 		router.attach("/put/{id}/{parameter}/{value}", put);
 		router.attach("/put/{id}/{action}", putAdd);
 		router.attach("/put/{id}/latlong/{latitud}/{longitud}", putLatLong);
-
-		router.attach("/users", users);
-		router.attach("/users/modified/{dateTime}", usersModified);
+		
 		router.attach("/healthy", healthy);
 		router.attach("/unhealthy", unhealthy);
 		router.attach("/slight", slight);
@@ -694,7 +710,12 @@ public class DisasterApplication extends Application {
 		router.attach("/userRole/{nombre_usuario}", userRole);
 		router.attach("/registrar/{user}/{pass}/{nombre}/{email}", registrar);
 		router.attach("/insertar/{type}/{name}/{description}/{info}/{latitud}/{longitud}", insertar);
-
+		
+		router.attach("/associations", associations);
+		router.attach("/activities", activities);
+		router.attach("/associations/modified/{dateTime}", associationsModified);
+		router.attach("/activities/modified/{dateTime}", activitiesModified);
+		
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);
 		//router.attachDefault(inicial);
 

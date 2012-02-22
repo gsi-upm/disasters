@@ -9,7 +9,7 @@ import java.io.*;
  * @version 1.0
  */
 public class Connection {
-	private static final String PROYECTO = "caronte";
+	private static final String PROYECTO = "caronte"; // "desastres"
 	private static final String URL_BASE = "http://localhost:8080/" + PROYECTO + "/rest/";
 
 	/**

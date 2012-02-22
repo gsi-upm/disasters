@@ -16,42 +16,42 @@ public class ManagerCarontePlan extends Plan{
 		System.out.println("Entorno creado");
 
 		IGoal sp2 = createGoal("cms_create_component");
-		sp2.getParameter("type").setValue("jadex/desastres/caronte/police/police.agent.xml");
+		sp2.getParameter("type").setValue("jadex/desastres/caronte/simulador/police/police.agent.xml");
 		dispatchSubgoalAndWait(sp2);
 		System.out.println("Policia creado");
 
 		IGoal sp3 = createGoal("cms_create_component");
-		sp3.getParameter("type").setValue("jadex/desastres/caronte/firemen/firemen.agent.xml");
+		sp3.getParameter("type").setValue("jadex/desastres/caronte/simulador/firemen/firemen.agent.xml");
 		dispatchSubgoalAndWait(sp3);
 		System.out.println("Bombero creado");
 
 		IGoal sp4 = createGoal("cms_create_component");
-		sp4.getParameter("type").setValue("jadex/desastres/caronte/ambulance/ambulance.agent.xml");
+		sp4.getParameter("type").setValue("jadex/desastres/caronte/simulador/ambulance/ambulance.agent.xml");
 		dispatchSubgoalAndWait(sp4);
 		System.out.println("Ambulancia creada");
 
 		IGoal sp5 = createGoal("cms_create_component");
-		sp5.getParameter("type").setValue("jadex/desastres/caronte/nurse/nurse.agent.xml");
+		sp5.getParameter("type").setValue("jadex/desastres/caronte/simulador/nurse/nurse.agent.xml");
 		dispatchSubgoalAndWait(sp5);
 		System.out.println("Enfermero creado");
 
 		IGoal sp6 = createGoal("cms_create_component");
-		sp6.getParameter("type").setValue("jadex/desastres/caronte/gerocultor/gerocultor.agent.xml");
+		sp6.getParameter("type").setValue("jadex/desastres/caronte/simulador/gerocultor/gerocultor.agent.xml");
 		dispatchSubgoalAndWait(sp6);
 		System.out.println("Gerocultor creado");
 
 		IGoal sp9 = createGoal("cms_create_component");
-		sp9.getParameter("type").setValue("jadex/desastres/caronte/auxiliar/auxiliar.agent.xml");
+		sp9.getParameter("type").setValue("jadex/desastres/caronte/simulador/auxiliar/auxiliar.agent.xml");
 		dispatchSubgoalAndWait(sp9);
 		System.out.println("Auxiliar creado");
 		
 		IGoal sp7 = createGoal("cms_create_component");
-		sp7.getParameter("type").setValue("jadex/desastres/caronte/centralEmergencias/centralEmergencias.agent.xml");
+		sp7.getParameter("type").setValue("jadex/desastres/caronte/simulador/centralEmergencias/centralEmergencias.agent.xml");
 		dispatchSubgoalAndWait(sp7);
 		System.out.println("Central creada");
 		
 		IGoal sp8 = createGoal("cms_create_component");
-		sp8.getParameter("type").setValue("jadex/desastres/caronte/coordinadorEmergencias/coordinadorEmergencias.agent.xml");
+		sp8.getParameter("type").setValue("jadex/desastres/caronte/simulador/coordinadorEmergencias/coordinadorEmergencias.agent.xml");
 		dispatchSubgoalAndWait(sp8);
 		System.out.println("Coordinador creado");
 		

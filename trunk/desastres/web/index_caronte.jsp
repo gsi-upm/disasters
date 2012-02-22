@@ -26,9 +26,11 @@
 			<script type="application/javascript" src="js/i18n.js"></script>
 			<script type="application/javascript" src="js/jquery.js"></script>
 			<script type="application/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
-			<script type="application/javascript"
+			<!-- script type="application/javascript"
 				src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAh7S32QoZL_osuspiqG6JHhQel9MQybMe66MKP3JO4yeJZZpmpBRzTAem65aDN5SbzD0WHx5UGyq72Q">
-			</script>
+				<!- key=ABQIAAAA_pvzu2eEg9OhdvcrhLRkgRSXZ-vMQ48x4C6FPZ72aXwxrdjUDxSASm6YS5fgxM4XDiwIpFkrYCIdUQ ->
+			</script-->
+			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=true"></script>
 			<script type="application/javascript">
 				var proyecto = 'caronte';
 				var userName = '${proyecto.nombreUsuario}';
@@ -62,13 +64,13 @@
 			<script type="application/javascript" src="/caronte/dwr/interface/DirectionsBean.js"></script>
 			<script type="application/javascript" src="/caronte/dwr/engine.js"></script>
 			<!-- Adds various Methods to GPolygon and GPolyline -->
-			<script type="application/javascript" src="js/epoly.js"></script>
+			<!--script type="application/javascript" src="js/epoly.js"></script-->
 			<!-- Agents movement through roads -->
 			<script type="application/javascript" src="js/resourcesOnRoads.js"></script>
 			<!-- Areas around fires -->
-			<script type="application/javascript" src="js/einsert.js"></script>
+			<!--script type="application/javascript" src="js/einsert.js"></script-->
 		</head>
-		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);">
 			<table class="tabla_body">
 				<!-- Cabecera con imagen y hora -->
 				<tr>
