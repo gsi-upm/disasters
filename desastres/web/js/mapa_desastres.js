@@ -1,5 +1,5 @@
 function mapInit(){
-	var center = new GLatLng(40.416878, -3.703480); // La puerta del sol de Madrid
+	var center = new google.maps.LatLng(40.416878, -3.703480); // La puerta del sol de Madrid
 	var zoom = 12;
 	return {'center':center, 'zoom':zoom};
 }
@@ -33,7 +33,7 @@ function showBuilding(type){
 
 function definirOpciones(evento){
 	var opciones;
-	var icono = new GIcon(G_DEFAULT_ICON);
+	var icono = new google.maps.MarkerImage(null);
 
 	//MAXIMO DE RECURSOS POR MARCADOR ES 10
 	var cantidad;
@@ -45,90 +45,89 @@ function definirOpciones(evento){
 
 	if(evento.marcador == 'event'){ // Es un evento
 		if(evento.tipo == 'fire'){ // Incendio
-			icono.image = 'markers/events/fuego.png';
+			icono.url = 'markers/events/fuego.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/fuego_control.png';
+				icono.url ='markers/events/fuego_control.png';
 			}
 		}else if(evento.tipo == 'flood'){// Inundacion
-			icono.image = 'markers/events/agua.png';
+			icono.url = 'markers/events/agua.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/agua_control.png';
+				icono.url ='markers/events/agua_control.png';
 			}
 		}else if(evento.tipo == 'collapse'){ // derrumbamiento
-			icono.image = 'markers/events/casa.png';
+			icono.url = 'markers/events/casa.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/casa_control.png';
+				icono.url ='markers/events/casa_control.png';
 			}
 		}else if(evento.tipo == 'lostPerson'){ // anciano perdido
-			icono.image = 'markers/events/personaPerdida.png';
+			icono.url = 'markers/events/personaPerdida.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/personaPerdida_control.png';
+				icono.url ='markers/events/personaPerdida_control.png';
 			}
 		}else if(evento.tipo == 'injuredPerson'){ // anciano herido
-			icono.image = 'markers/events/personaHerida.png';
+			icono.url = 'markers/events/personaHerida.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/personaHerida_control.png';
+				icono.url ='markers/events/personaHerida_control.png';
 			}
 		}
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden,
+			zIndexProcess: orden(),
 			draggable: false // Para que se pueda arrastrar
 		};
 	}else if (evento.marcador == 'resource'){ // es un recurso
 		if(evento.tipo == 'police'){ // es un policia
-			icono.image = 'markers/resources/policia' + cantidad + '.png';
+			icono.url = 'markers/resources/policia' + cantidad + '.png';
 		}else if(evento.tipo == 'firemen'){ // es un bombero
-			icono.image = 'markers/resources/bombero' + cantidad + '.png';
+			icono.url = 'markers/resources/bombero' + cantidad + '.png';
 		}else if(evento.tipo == 'ambulance' || evento.tipo == 'ambulancia'){ // es una ambulancia
-			icono.image = 'markers/resources/ambulancia' + cantidad + '.png';
+			icono.url = 'markers/resources/ambulancia' + cantidad + '.png';
 		}else if(evento.tipo == 'nurse'){ // es un enfermero
-			icono.image = 'markers/resources/enfermero' + cantidad + '.png';
+			icono.url = 'markers/resources/enfermero' + cantidad + '.png';
 		}else if(evento.tipo == 'gerocultor'){ // es un gerocultor
-			icono.image = 'markers/resources/gerocultor' + cantidad + '.png';
+			icono.url = 'markers/resources/gerocultor' + cantidad + '.png';
 		}else if(evento.tipo == 'assistant'){ // es un auxiliar
-			icono.image = 'markers/resources/auxiliar' + cantidad + '.png';
+			icono.url = 'markers/resources/auxiliar' + cantidad + '.png';
 		}else if(evento.tipo == 'otherStaff'){ // otro
-			icono.image = 'markers/resources/otroPersonal' + cantidad + '.png';
+			icono.url = 'markers/resources/otroPersonal' + cantidad + '.png';
 		}
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden,
+			zIndexProcess: orden(),
 			draggable: false
 		};
 	}else if(evento.marcador == 'people'){ // es una victima
 		if(evento.tipo == 'trapped'){ // personas atrapadas
-			icono.image = 'markers/people/trapped' + cantidad + '.png';
+			icono.url = 'markers/people/trapped' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/trapped_control.png';
+				icono.url = 'markers/people/trapped_control.png';
 			}
 		}else if(evento.tipo=='healthy'){ // sanos
-			icono.image = 'markers/people/sano' + cantidad + '.png';
+			icono.url = 'markers/people/sano' + cantidad + '.png';
 			if(evento.estado=='controlled'){
-				icono.image = 'markers/people/sano_control.png';
+				icono.url = 'markers/people/sano_control.png';
 			}
 		}else if(evento.tipo == 'slight'){ // heridos leves
-			icono.image = 'markers/people/leve' + cantidad + '.png';
+			icono.url = 'markers/people/leve' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/leve_control.png';
+				icono.url = 'markers/people/leve_control.png';
 			}
 		}else if(evento.tipo == 'serious'){ // heridos graves
-			icono.image = 'markers/people/grave' + cantidad + '.png';
+			icono.url = 'markers/people/grave' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/grave_control.png';
+				icono.url = 'markers/people/grave_control.png';
 			}
 		}else if(evento.tipo == 'dead'){ // muertos
-			icono.image = 'markers/people/muerto' + cantidad + '.png';
+			icono.url = 'markers/people/muerto' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/muerto_control.png';
+				icono.url = 'markers/people/muerto_control.png';
 			}
 		}
-		icono.iconSize = new GSize(28, 43);
-		icono.iconAnchor = new GPoint(13, 43);
-		icono.infoWindowAnchor = new GPoint(13, 0);
+		icono.size = new google.maps.Size(28, 43);
+		icono.anchor = new google.map.Point(13, 43);
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden,
+			zIndexProcess: orden(),
 			draggable: true // Se pueden arrastrar para asociarlo
 		};
 	}
@@ -137,32 +136,34 @@ function definirOpciones(evento){
 }
 
 function comportamientoMarcador(evento, caracter, opciones){
-	var marker = new GMarker (new GLatLng(evento.latitud, evento.longitud), opciones);
-
+	var marker = new google.maps.Marker (new google.maps.LatLng(evento.latitud, evento.longitud), opciones);
+	var infoWin = new google.maps.InfoWindow({content:''});
 	// Annadimos el comportamiento
 	if(caracter == TEMPORAL){ // aqui hay que guardar los datos
 		var content = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>' +
 			'<span id="guardar" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</span>'+ ' - ' +
 			'<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Modificar</span>'+ ' - ' +
 			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Eliminar</span>';
-
-		GEvent.addListener(marker, 'click', function(){
-			marker.openInfoWindowHtml('<div id="bocadillo">' + content + '</div>');
+		
+		google.maps.event.addListener(marker, 'click', function(){
+			infoWin.content = '<div id="bocadillo">' + content + '</div>';
+			infoWin.open(map, marker);
 		});
 
-		GEvent.addListener(marker, 'dragstart', function(){
-			map.closeInfoWindow();
+		google.maps.event.addListener(marker, 'dragstart', function(){
+			infoWin.close();
 		});
 
-		GEvent.addListener(marker, 'dragend', function(){
+		google.maps.event.addListener(marker, 'dragend', function(){
 			var asociada = asociar(evento.id, evento.marker);
-			marker.openInfoWindowHtml('<div id="bocadillo">Es necesario guardar para poder asociar recursos.<br/>' +
+			var infoWin2 = new google.maps.InfoWindow({content:'<div id="bocadillo">Es necesario guardar para poder asociar recursos.<br/>' +
 				marcadores_definitivos[asociada].nombre + '<br/>' +
 				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</span>' + ' - ' +
-				'<span id="cancelar" class="pulsable azul" onclick="map.closeInfoWindow();">Cancelar</span>"+"</div>');
+				'<span id="cancelar" class="pulsable azul" onclick="infoWin2.close();">Cancelar</span>"+"</div>'});
+			infoWin2.open(map, marker);
 		});
 	}else if(caracter == DEFINITIVO){ // aqui podemos realizar modificaciones a los ya existentes
-		GEvent.addListener(marker, 'click', function(){
+		google.maps.event.addListener(marker, 'click', function(){
 			var small = evento.nombre + '<br/>' + evento.descripcion;
 			var links1;
 			if(nivelMsg > 1){
@@ -173,27 +174,29 @@ function comportamientoMarcador(evento, caracter, opciones){
 				links1 = '<span id="ver_mas1" class="pulsable azul" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</span>';
 			}
 
-			marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
-				'</div><div id="bocadillo_links2"></div></div>');
+			infoWin.content = '<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
+				'</div><div id="bocadillo_links2"></div></div>';
+			infoWin.open(map, marker);
 		});
 
-		GEvent.addListener(marker, 'dragstart', function(){
-			map.closeInfoWindow();
+		google.maps.event.addListener(marker, 'dragstart', function(){
+			infoWin.close();
 		});
 
-		GEvent.addListener(marker, 'dragend', function(latlng){
+		google.maps.event.addListener(marker, 'dragend', function(){
 			var asociada = asociar(evento.id, evento.marker);
-			marker.openInfoWindowHtml('<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>' +
+			var infoWin2 = new google.maps.InfoWindow({content:'<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>' +
 				marcadores_definitivos[asociada].nombre+'<br/>'+
 				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar_asociacion(' + asociada + ',' + evento.id + ');return false;">Guardar</span>' + ' - ' +
-				'<span id="cancelar" class="pulsable azul" onclick="cancelar_asignacion(' + evento.id + ');return false;">Cancelar</span></div>');
+				'<span id="cancelar" class="pulsable azul" onclick="cancelar_asignacion(' + evento.id + ');return false;">Cancelar</span></div>'});
+			infoWin2.open(map, marker);
 		});
 
-		GEvent.addListener(marker, 'infowindowclose', function(){});
+		google.maps.event.addListener(infoWin, 'closeclick', function(){});
 	}
 
 	// (!(evento.marcador=='resource' && caracter==1)){
-	map.addOverlay(marker);
+	marker.setMap(map);
 	// }
 
 	return marker;

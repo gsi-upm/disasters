@@ -5,13 +5,13 @@ function coordenadasUsuario(pos){
 	//*****************************************************************************************************
 
 	if(nivelMsg == null || nivelMsg == 0){
-		var icono = new GIcon(G_DEFAULT_ICON);
-		icono.image = 'markers/resources/user_no.png';
+		var icono = new google.maps.MarkerImage('markers/resources/user_no.png');
 		var opciones = {
-			icon:icono
+			position: new google.maps.LatLng(latitud, longitud),
+			icon: icono
 		};
-		var marker = new GMarker(new GLatLng(latitud,longitud), opciones);
-		map.addOverlay(marker);
+		var marker = new google.maps.Marker(opciones);
+		marker.setMap(map);
 	}
 
 	if(userName != '' && nivelMsg > 0 && localizacion == true){
@@ -100,7 +100,7 @@ function cargarMenuAcciones(puntero){
 				'</td></tr>';
 				if(entryIndex == data.length-1){
 					menu += '<tr><td>' +
-					'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(' + puntero.id + ',\'' + userName + '\',accion);map.closeInfoWindow();"/>' +
+					'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(' + puntero.id + ',\'' + userName + '\',accion);"/>' + // map.closeInfoWindow();
 					'</td></tr></table>';
 				}
 			});
@@ -128,7 +128,7 @@ function cargarListaActividades(evento){
 				}
 				menu += '<tr><td>Accion <b>' + entry.tipo + '</b> realizada sobre <b>' + entry.nombre + '</b></td>';
 				if(evento.nombre == userName){
-					menu += '<td><input type="button" value="Detener" onclick="detener(' + evento.id + ',' + entry.id_emergencia + ',\'' + evento.nombre + '\');map.closeInfoWindow()"></td>';
+					menu += '<td><input type="button" value="Detener" onclick="detener(' + evento.id + ',' + entry.id_emergencia + ',\'' + evento.nombre + '\');"></td>'; // map.closeInfoWindow()
 				}
 				menu += '</tr>';
 				if(entryIndex == data.length-1){
@@ -506,7 +506,7 @@ function detener(idEvento, idEmergencia, nombreUsuario){
 
 function guardar_posicion(id, lat, lng){
 	var marcador = marcadores_definitivos[id];
-	marcador.marker.setLatLng(new GLatLng(lat, lng));
+	marcador.marker.setPosition(new google.maps.LatLng(lat, lng));
 	$.post('getpost/updateLatLong.jsp',{
 		'id':id,
 		'latitud':lat,
@@ -517,7 +517,7 @@ function guardar_posicion(id, lat, lng){
 }
 
 function cambiarPlanta(num){
-	map.removeOverlay(residencia);
+	residencia.setMap(null);
 	document.getElementById('planta' + plantaResidencia).style.fontWeight = 'normal';
 	document.getElementById('planta' + plantaResidencia).style.textDecoration = 'none';
 
@@ -528,17 +528,17 @@ function cambiarPlanta(num){
 	if(num >= 0){
 		document.getElementById('planoResidencia').src = 'markers/residencia/planta' + num + '.jpg';
 		document.getElementById('plantaPlano').innerHTML = num;
-		residencia.getIcon().image = 'markers/residencia/planta' + num + '.png';
-		if(map.getZoom() >= 20 && map.getCurrentMapType().getName() == 'Mapa'){
-			map.addOverlay(residencia);
+		residencia.getIcon().url = 'markers/residencia/planta' + num + '.png';
+		if(map.getZoom() >= 20 && map.getMapTypeId() == google.maps.MapTypeId.ROADMAP){
+			residencia.setMap(map);
 		}
 	}
 
 	for(var i in marcadores_definitivos){
-		map.removeOverlay(marcadores_definitivos[i].marker);
+		marcadores_definitivos[i].marker.setMap(null);
 		if((num == -2 || marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2) &&
 				(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true)){
-			map.addOverlay(marcadores_definitivos[i].marker);
+			marcadores_definitivos[i].marker.setMap(map);
 		}
 	}
 
@@ -550,9 +550,9 @@ function mostrarSanos(mostrar){
 	for(var i in marcadores_definitivos){
 		if(marcadores_definitivos[i].tipo == 'healthy'){
 			if(mostrar == true && (marcadores_definitivos[i].planta == plantaResidencia || marcadores_definitivos[i].planta == -2 || plantaResidencia == -2)){
-				map.addOverlay(marcadores_definitivos[i].marker);
+				marcadores_definitivos[i].marker.setMap(map);
 			}else{
-				map.removeOverlay(marcadores_definitivos[i].marker);
+				marcadores_definitivos[i].marker.setMap(null);
 			}
 		}
 	}
@@ -569,39 +569,40 @@ function cambiarGeolocalizacion(valor){
 function findPos(lat, lng, dir){
 	limpiar = false;
 	if(puntoAux != null){
-		map.removeOverlay(puntoAux);
+		puntoAux.setMap(null);
 	}
 	if(dir == ''){
-		localizar(new GLatLng(lat,lng));
+		localizar(new google.maps.LatLng(lat,lng));
 	}else{
-		localizador.getLatLng(dir,function(point){
-			localizar(point)
+		localizador.geocode({address:dir}, function(respuesta){
+			localizar(respuesta[0].geometry.location);
 		});
 	}
 }
 
 function localizar(punto){
-	localizador.getLocations(punto,function(response){
-		if(response.Status.code == 200){
-			document.getElementById('form-posicion').direccion.value = response.Placemark[0].address;
-			document.getElementById('form-posicion').longitud.value = response.Placemark[0].Point.coordinates[0];
-			document.getElementById('form-posicion').latitud.value = response.Placemark[0].Point.coordinates[1];
-			var coorAux = new GLatLng(response.Placemark[0].Point.coordinates[1],response.Placemark[0].Point.coordinates[0]);
-			puntoAux = new GMarker(coorAux);
-			map.setCenter(coorAux,14);
-			map.addOverlay(puntoAux);
-			var event = GEvent.addListener(map, 'click', function(){
-				map.removeOverlay(puntoAux);
+	localizador.geocode({location:punto}, function(respuesta, estado){
+		var latlng = respuesta[0].geometry.location;
+		if(estado == google.maps.GeocoderStatus.OK){
+			document.getElementById('form-posicion').direccion.value = respuesta[0].formatted_address;
+			document.getElementById('form-posicion').latitud.value = latlng.lat();
+			document.getElementById('form-posicion').longitud.value = latlng.lng();
+			var coorAux = new google.maps.LatLng(latlng.lat(),latlng.lng());
+			puntoAux = new google.maps.Marker({position:coorAux});
+			map.setCenter(coorAux, 14);
+			puntoAux.setMap(map);
+			var event = google.maps.event.addListener(map, 'click', function(){
+				puntoAux.setMap(null);
 				puntoAux = null;
 				map.setCenter(centroAux.center, centroAux.zoom);
 				limpiarLateral('resource');
-				GEvent.removeListener(event);
+				google.maps.event.removeListener(event);
 			});
 		}
 	});
 }
 
-function newPos(lat,lng,porDefecto){
+function newPos(lat, lng, porDefecto){
 	if(porDefecto == true){
 		document.getElementById('form-posicion').porDefecto.checked = false;
 		$.post('getpost/updateLatLong.jsp',{
@@ -617,7 +618,7 @@ function newPos(lat,lng,porDefecto){
 			'longitud':lng
 		});
 	}
-	map.closeInfoWindow();
+	//map.closeInfoWindow();
 }
 
 function editPlanta(planta, porDefecto){
@@ -626,5 +627,5 @@ function editPlanta(planta, porDefecto){
 		'planta':planta,
 		'plantaPorDefecto':porDefecto
 	});
-	map.closeInfoWindow();
+	//map.closeInfoWindow();
 }

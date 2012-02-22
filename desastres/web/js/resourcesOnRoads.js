@@ -6,22 +6,22 @@ var resourcesList;
 function moveAgents(){
 	getResources();
 	for(i in resourcesList){
-		roadsInfo[resourcesList[i]] = new ObjDirectionsInfo(new GDirections(), 5, null, null, null, 0, 0, null, null);
+		roadsInfo[resourcesList[i]] = new ObjDirectionsInfo(new google.maps.DirectionsRenderer(), 5, null, null, null, 0, 0, null, null);
 		myAddListener(resourcesList[i]);
 		if(marcadores_definitivos[indices[i]].tipo == "police"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/resources/policia" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.url = "markers/resources/policia" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "firemen"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/resources/bombero" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.url = "markers/resources/bombero" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "ambulance"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/resources/ambulancia" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.url = "markers/resources/ambulancia" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "nurse"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/resources/enfermero" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.url = "markers/resources/enfermero" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "gerocultor"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/resources/gerocultor" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.url = "markers/resources/gerocultor" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "assistant"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/resources/auxiliar" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.url = "markers/resources/auxiliar" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}else if(marcadores_definitivos[indices[i]].tipo == "otherStaff"){
-			roadsInfo[resourcesList[i]].icon.image = "markers/resources/otroPersonal" + marcadores_definitivos[indices[i]].cantidad + ".png";
+			roadsInfo[resourcesList[i]].icon.url = "markers/resources/otroPersonal" + marcadores_definitivos[indices[i]].cantidad + ".png";
 		}
 	}
 	DirectionsBean.sendDirections();
@@ -43,7 +43,7 @@ function update() {
 		var newend = document.getElementById("end" + resourcesList[i]).value;
 		if(starts[resourcesList[i]] != newstart && ends[resourcesList[i]] != newend){
 			roadsInfo[resourcesList[i]].d = 0;
-			map.removeOverlay(roadsInfo[resourcesList[i]].marker);
+			roadsInfo[resourcesList[i]].marker.setMap(null);
 			roadsInfo[resourcesList[i]].dirn.loadFromWaypoints([starts[resourcesList[i]], newstart,newend], {getPolyline:true, getSteps:true});
 			starts[resourcesList[i]] = newstart;
 			ends[resourcesList[i]] = newend;
@@ -51,13 +51,13 @@ function update() {
 		}
 		if(starts[resourcesList[i]] != newstart){
 			roadsInfo[resourcesList[i]].d = 0;
-			map.removeOverlay(roadsInfo[resourcesList[i]].marker);
+			roadsInfo[resourcesList[i]].marker.setMap(null);
 			roadsInfo[resourcesList[i]].dirn.loadFromWaypoints([starts[resourcesList[i]], newstart], {getPolyline:true, getSteps:true});
 			starts[resourcesList[i]] = newstart;
 		}
 		if(ends[resourcesList[i]] != newend){
 			roadsInfo[resourcesList[i]].d = 0;
-			map.removeOverlay(roadsInfo[resourcesList[i]].marker);
+			roadsInfo[resourcesList[i]].marker.setMap(null);
 			roadsInfo[resourcesList[i]].dirn.loadFromWaypoints([starts[resourcesList[i]], newend], {getPolyline:true, getSteps:true});
 			ends[resourcesList[i]] = newend;
 		}
@@ -92,7 +92,7 @@ function myAddListener(id){
 		// map.addOverlay(new GMarker(roadsInfo[id].poly.getVertex(0),G_START_ICON));
 		// map.addOverlay(new GMarker(roadsInfo[id].poly.getVertex(roadsInfo[id].poly.getVertexCount()-1),G_END_ICON));
 		roadsInfo[id].marker = new GMarker(roadsInfo[id].poly.getVertex(0),{icon:roadsInfo[id].icon});
-		map.addOverlay(roadsInfo[id].marker);
+		roadsInfo[id].marker.setMap(map);
 	});
 
 	GEvent.addListener(roadsInfo[id].dirn, "error", function() {

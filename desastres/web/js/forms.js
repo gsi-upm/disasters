@@ -93,16 +93,16 @@ function pinchaMapa(numero){
 	if(numero == 0){
 		$('#modificar').jqm().jqmHide();
 	}
-	var handler = GEvent.addListener(map, 'click', function(overlay,point) {
-		document.getElementById('latitud' + numero).value = point.lat().toFixed(6);
-		document.getElementById('longitud' + numero).value = point.lng().toFixed(6);
+	var handler = google.maps.event.addListener(map, 'click', function(point) {
+		document.getElementById('latitud' + numero).value = point.latLng.lat().toFixed(6);
+		document.getElementById('longitud' + numero).value = point.latLng.lng().toFixed(6);
 		if(numero != 0){
 			$('#dialog'+numero).jqm().jqmShow();
 		}else{
 			$('#modificar').jqm().jqmShow();
 			document.getElementById('pincha').innerHTML = 'Posici&oacute;n guardada. &iquest;Otra vez?';
 		}
-		GEvent.removeListener(handler);
+		google.maps.event.removeListener(handler);
 	});
 }
 

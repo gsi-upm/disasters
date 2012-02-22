@@ -65,17 +65,33 @@
 	</c:when>
 	<c:when test="${param.action == 'insertar'}">
 		<% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
+		<c:set var="estado" value="1"/>
+		<sql:query var="conectados" dataSource="${CatastrofesServer}">
+			SELECT id, estado FROM catastrofes
+			WHERE nombre = ? AND estado != 5
+			<sql:param value="${param.name}"/>
+		</sql:query>
+		<c:forEach var="conect" items="${conectados.rows}">
+			<c:set var="estado" value="${conect.estado}"/>
+			<sql:update dataSource="${CatastrofesServer}">
+				UPDATE catastrofes
+				SET estado = 5, modificado = <%=modif%>
+				WHERE id = ?
+				<sql:param value="${conect.id}"/>
+			</sql:update>
+		</c:forEach>
 		<sql:update dataSource="${CatastrofesServer}">
 			INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
 				longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
 			VALUES(3, (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
-				1, ?, ?, ?, ?, ?, '', 1, '', '', 0, <%=modif%>, 1, ?)
+				1, ?, ?, ?, ?, ?, '', ?, '', '', 0, <%=modif%>, 1, ?)
 			<sql:param value="${param.type}"/>
 			<sql:param value="${param.name}"/>
 			<sql:param value="${param.description}"/>
 			<sql:param value="${param.info}"/>
 			<sql:param value="${param.latitud}"/>
 			<sql:param value="${param.longitud}"/>
+			<sql:param value="${estado}"/>
 			<sql:param value="${param.planta}"/>
 		</sql:update>
 	</c:when>

@@ -37,51 +37,62 @@ var limpiar = true;
 var noActualizar = 0;
 var centroAux = new Array();
 var puntoAux;
+var markerId;
 
+/**
+ * Funcion que se ejecuta para iniciar el mapa cuando se abre el navegador 
+ */
 function initialize(){
-	if(GBrowserIsCompatible()){
-		localizador = new GClientGeocoder();
-		map = new GMap2(document.getElementById('map_canvas'));
-		var centro = mapInit(); // en mapa_xxx.js
-		map.setCenter(centro.center, centro.zoom);
-		map.addControl(new GLargeMapControl());    // controles completos
-		map.addControl(new GScaleControl());       // escala
-		map.addControl(new GMenuMapTypeControl()); // selector mapa
-		// map.addControl(new GOverviewMapControl()); // minimapa
+	localizador = new google.maps.Geocoder();
+	var centro = mapInit(); // en mapa_xxx.js
+	var myOptions = {
+		center: centro.center,
+		zoom: centro.zoom,
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		mapTypeControlOptions:{style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+		overviewMapControl: true,
+		scaleControl: true
+	};
+	map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
 
-		buildingInit(); // en mapa_xxx.js
+	buildingInit(); // en mapa_xxx.js
 
-		// hacemos la peticion inicial del json (baja todo menos los borrados)
-		$.getJSON('getpost/leeEventos.jsp', {
-			'fecha': ultimamodif,
-			'action':'firstTime',
-			'nivel':nivelMsg
-		}, function(data) {
-			$.each(data, function(entryIndex, entry){
-				var nuevomarcador = new ObjMarcador(entry.id, entry.item, entry.type,
-					entry.quantity, entry.name, entry.description, entry.info, entry.latitud,
-					entry.longitud, entry.address, entry.size, entry.traffic, entry.floor,
-					entry.state, entry.idAssigned, entry.date, entry.modified, entry.user, null);
-				nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
-				marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
-				indices[pos_indices] = nuevomarcador.id;
-				pos_indices++;
-			});
+	// hacemos la peticion inicial del json (baja todo menos los borrados)
+	$.getJSON('getpost/leeEventos.jsp', {
+		'fecha': ultimamodif,
+		'action':'firstTime',
+		'nivel':nivelMsg
+	}, function(data) {
+		$.each(data, function(entryIndex, entry){
+			var nuevomarcador = new ObjMarcador(entry.id, entry.item, entry.type,
+				entry.quantity, entry.name, entry.description, entry.info, entry.latitud,
+				entry.longitud, entry.address, entry.size, entry.traffic, entry.floor,
+				entry.state, entry.idAssigned, entry.date, entry.modified, entry.user, null);
+			nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
+			marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
+			indices[pos_indices] = nuevomarcador.id;
+			pos_indices++;
+			if(entry.name == userName){
+				markerId = entry.id;
+			}
 		});
-		
-		initialize2(); // en mapa_xxx.js
-		
-		if(userName != ''){
-			cambiaIcono('event',seleccionRadio(document.getElementById('catastrofes'),0));
-			cambiaIcono('people',seleccionRadio(document.getElementById('heridos'),2),1);
-		}
-
-		ultimamodif = obtiene_fecha();
-		// setTimeout('moveAgents()',2000);
-		setTimeout('actualizar()',tiempoInicial);
+	});
+	
+	initialize2(); // en mapa_xxx.js
+	
+	if(userName != ''){
+		cambiaIcono('event',seleccionRadio(document.getElementById('catastrofes'),0));
+		cambiaIcono('people',seleccionRadio(document.getElementById('heridos'),2),1);
 	}
+
+	ultimamodif = obtiene_fecha();
+	// setTimeout('moveAgents()',2000);
+	setTimeout('actualizar()',tiempoInicial);
 }
 
+/**
+ * Actualiza el mapa
+ */
 function actualizar(){
 	// cada 2 segundos hacemos la peticion actualizadora de json
 	$.getJSON('getpost/leeEventos.jsp', {
@@ -108,11 +119,11 @@ function actualizar(){
 				}else{ // actualizamos los que han sido modificados
 					// si se ha modificado algun dato se actualiza
 					if(nuevomarcador.estado != 'erased'){
-						map.removeOverlay(marcadores_definitivos[nuevomarcador.id].marker);
+						marcadores_definitivos[nuevomarcador.id].marker.setMap(null);
 						nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 					}else{ // si se ha eliminado un marcador
-						map.removeOverlay(marcadores_definitivos[nuevomarcador.id].marker);
+						marcadores_definitivos[nuevomarcador.id].marker.setMap(map);
 						marcadores_definitivos[nuevomarcador.id] = null;
 						pos_indices--;
 
@@ -131,6 +142,10 @@ function actualizar(){
 							index++;
 						}
 						indices[index] = null;
+						
+						if(entry.id == markerId){
+							document.location.href = 'logout.jsp';
+						}
 					}
 				}
 			}
@@ -143,6 +158,15 @@ function actualizar(){
 	setTimeout('actualizar()', tiempoActualizacion);
 }
 
+/**
+ * Marca en el mapa un edificio
+ *
+ * @param type Tipo de edificio
+ * @param mensaje Mensaje que muestra el bocadillo
+ * @param latitud Latitud del edificio
+ * @param longitud Longitud del edificio
+ * @return Marcador
+ */
 function generateBuilding(type, mensaje, latitud, longitud){
 	var imagen;
 	var matrix;
@@ -165,49 +189,39 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		matrixIndex = geriatricIndex;
 	}
 
-	var icono = new GIcon();
-	icono.image = 'markers/buildings/' + imagen;
-	icono.iconSize = new GSize(50, 49);
-	icono.iconAnchor = new GPoint(24, 49);
-	icono.infoWindowAnchor = new GPoint(24, 2);
+	var icono = new google.maps.MarkerImage('markers/buildings/' + imagen);
+	icono.size = new google.maps.Size(50, 49);
+	icono.anchor = new google.maps.Point(24, 49);
 	var opciones = {
+		position: new google.maps.LatLng(latitud, longitud),
 		icon: icono,
-		zIndexProcess: orden
+		zIndex: orden()
 	}; // se pueden arrastrar para asociarlo
 
-	var marker = new GMarker (new GLatLng(latitud,longitud), opciones);
+	var marker = new google.maps.Marker(opciones);
+	var infoWin = new google.maps.InfoWindow({content:'<div id="bocadillo">' + mensaje + '</div>'});
 	if(type == 'geriatricCenter'){
-		var lineas = new Array();
-		var esquina1 = [38.232440, -1.699160]; // desplazado (-0.000095, 0.000120)
-		var esquina2 = [38.232380, -1.698640];
-		var esquina3 = [38.232105, -1.698690];
-		var esquina4 = [38.232165, -1.699210];
-		var color = '#00FF00';
-		var anchura = 1;
-		var opacidad = 0.5;
-
-		lineas[0] = new GPolyline([new GLatLng(esquina1[0],esquina1[1]), new GLatLng(esquina2[0],esquina2[1])], color, anchura, opacidad);
-		lineas[1] = new GPolyline([new GLatLng(esquina2[0],esquina2[1]), new GLatLng(esquina3[0],esquina3[1])], color, anchura, opacidad);
-		lineas[2] = new GPolyline([new GLatLng(esquina3[0],esquina3[1]), new GLatLng(esquina4[0],esquina4[1])], color, anchura, opacidad);
-		lineas[3] = new GPolyline([new GLatLng(esquina4[0],esquina4[1]), new GLatLng(esquina1[0],esquina1[1])], color, anchura, opacidad);
-		GEvent.addListener(marker, 'click', function(){
-			marker.openInfoWindowHtml('<div id="bocadillo">' + mensaje + '</div>');
-			for(var i = 0; i < 4; i++){
-				map.addOverlay(lineas[i]);
-			}
+		var esquina1 = new google.maps.LatLng(38.232440, -1.699160); // desplazado (-0.000095, 0.000120)
+		var esquina2 = new google.maps.LatLng(38.232380, -1.698640);
+		var esquina3 = new google.maps.LatLng(38.232105, -1.698690);
+		var esquina4 = new google.maps.LatLng(38.232165, -1.699210);
+		var opcRect = {path:[esquina1, esquina2, esquina3, esquina4, esquina1], strokeColor:'#00FF00', strokeWeight:1, strokeOpacity:0.5};
+		var rectangulo = new google.maps.Polyline(opcRect);
+		
+		google.maps.event.addListener(marker, 'click', function(){
+			infoWin.open(map, marker);
+			rectangulo.setMap(map);
 		});
-		GEvent.addListener(marker, 'infowindowclose', function(){
-			for(var i = 0; i < 4; i++){
-				map.removeOverlay(lineas[i]);
-			}
+		google.maps.event.addListener(infoWin, 'closeclick', function(){
+			rectangulo.setMap(null);
 		});
 	}else{
-		GEvent.addListener(marker, 'click', function(){
-			marker.openInfoWindowHtml('<div id="bocadillo">' + mensaje + '</div>');
+		google.maps.event.addListener(marker, 'click', function(){
+			infoWin.open(map, marker);
 		});
 	}
 
-	map.addOverlay(marker);
+	marker.setMap(map);
 	matrix[matrixIndex]=marker;
 	matrixIndex++;
 
@@ -228,16 +242,41 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	return marker;
 }
 
+/**
+ * Obtiene los datos de un marcador
+ * 
+ * @param evento Indica si es emergencia (event), herido (people) o usuario (resource)
+ * @param caracter Indica si es temporal (TEMPORAL) o definitivo (DEFINITIVO)
+ * @return Marcador
+ */
 function generaMarcador(evento, caracter){
 	var opciones = definirOpciones(evento); // en mapa_xxx.js
 	var marker = comportamientoMarcador(evento, caracter, opciones); // en mapa_xxx.js
 	return marker;
 }
 
-function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccion,longitud,latitud,estado,size,traffic,idAssigned,planta){
+/**
+ * Crea una nueva catastrofe
+ * 
+ * @param marcador
+ * @param tipo
+ * @param cantidad
+ * @param nombre
+ * @param info
+ * @param descripcion
+ * @param direccion
+ * @param longitud
+ * @param latitud
+ * @param estado
+ * @param size
+ * @param traffic
+ * @param idAssigned
+ * @param planta
+ */
+function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, direccion, longitud, latitud, estado, size,traffic, idAssigned, planta){
 	var fecha = obtiene_fecha();
-	var nuevomarcador = new ObjMarcador(pos_temp,marcador,tipo,cantidad,nombre,descripcion,info,
-		latitud,longitud,direccion,size,traffic,planta,estado,idAssigned,fecha,fecha,usuario_actual,null);
+	var nuevomarcador = new ObjMarcador(pos_temp, marcador, tipo, cantidad, nombre, descripcion, info, latitud,
+		longitud, direccion, size, traffic, planta, estado, idAssigned, fecha, fecha, usuario_actual, null);
 
 	if(marcador == 'event' && tipo == 'injuredPerson'){
 		nuevomarcador.marcador = 'people';
@@ -253,6 +292,11 @@ function crearCatastrofe(marcador,tipo,cantidad,nombre,info,descripcion,direccio
 	}
 }
 
+/**
+ * Guarda en la base de datos el marcador pasado como parametro
+ * 
+ * @param puntero Marcador que se va a guardar
+ */
 function guardar(puntero){
 	eliminar(puntero, TEMPORAL);
 	// 1.Guardar el elemento en la base de datos
@@ -326,13 +370,29 @@ function guardar(puntero){
 	// actualizar(); // esto adelanta el timeOut a ahora mismo
 }
 
+/**
+ * Modifica los datos de un marcador (funcion usada en 'desastres')
+ * 
+ * @param id
+ * @param cantidad
+ * @param nombre
+ * @param descripcion
+ * @param info
+ * @param latitud
+ * @param longitud
+ * @param direccion
+ * @param size
+ * @param traffic
+ * @param estado
+ * @param idAssigned
+ */
 function modificar(id, cantidad, nombre, descripcion, info, latitud, longitud, direccion, size, traffic, estado, idAssigned){
 	// utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
 	if(caracter_temp == TEMPORAL){
 		// Actualizar la matriz temporal
 		eliminar(marcadores_temporales[id],TEMPORAL);
-		crearCatastrofe(puntero_temp.marcador,puntero_temp.tipo,cantidad,nombre,info,descripcion,
-			direccion,longitud,latitud,estado,size,traffic,idAssigned,-2);
+		crearCatastrofe(puntero_temp.marcador, puntero_temp.tipo, cantidad, nombre, info, descripcion,
+			direccion, longitud, latitud, estado, size, traffic, idAssigned, -2);
 	}else if(caracter_temp == DEFINITIVO){
 		// hay que hacer un update a la base de datos
 		$.post('getpost/update.jsp',{
@@ -358,6 +418,21 @@ function modificar(id, cantidad, nombre, descripcion, info, latitud, longitud, d
 	}
 }
 
+/**
+ * Modifica los datos de un marcador (funcion usada en 'caronte')
+ * 
+ * @param id
+ * @param tipo
+ * @param cantidad
+ * @param nombre
+ * @param descripcion
+ * @param info
+ * @param direccion
+ * @param tamanno
+ * @param trafico
+ * @param planta
+ * @param idAssigned
+ */
 function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, tamanno, trafico, planta, idAssigned){
 	var puntero = marcadores_definitivos[id];
 	var idA;
@@ -446,9 +521,15 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 	}
 }
 
+/**
+ * Elimina un marcador de la base de datos
+ * 
+ * @param puntero
+ * @param caracter
+ */
 function eliminar(puntero, caracter){
 	if(caracter == TEMPORAL){
-		map.removeOverlay(puntero.marker);
+		puntero.marker.setMap(null);
 	}else if(caracter == DEFINITIVO){
 		// hay que hacer un update
 		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
@@ -507,13 +588,21 @@ function eliminar(puntero, caracter){
 	}
 }
 
+/**
+ * Cancela la asociacion entre un herido y una emergencia
+ * 
+ * @param id Identificador del marcador
+ */
 function cancelar_asignacion(id){
 	// borro la posicion actual y lo dibujo en la antigua
-	map.removeOverlay(marcadores_definitivos[id].marker);
+	marcadores_definitivos[id].marker.setMap(null);
 	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
 	noActualizar = 0;
 }
 
+/**
+ * Obtiene la hora
+ */
 function obtiene_fecha() {
 	// La hora se obtiene del servidor
 	var hora;
@@ -552,10 +641,20 @@ function obtiene_fecha() {
 	*/
 }
 
+/**
+ * Funcion que devuelve un valor para que el marcador del mapa aparezca siempre al fondo
+ * 
+ * @return valor
+ */
 function fondo(marker, b){
 	return -100000;
 }
 
+/**
+ * Funcion que devuelve un valor para que el marcador del mapa aparezca en el orden de creacion
+ * 
+ * @return valor
+ */
 function orden(marker, b){
 	return 1;
 }

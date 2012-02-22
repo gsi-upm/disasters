@@ -1,5 +1,5 @@
 function mapInit(){
-	var center = new GLatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
+	var center = new google.maps.LatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
 	var zoom = 21;
 	return {'center':center, 'zoom':zoom};
 }
@@ -15,46 +15,47 @@ function initialize2(){
 
 	if(userName != '' && nivelMsg > 1){
 		plantaResidencia = 0;
-		var icono = new GIcon();
-		icono.image = 'markers/residencia/planta'+ plantaResidencia + '.png';
-		icono.iconSize = new GSize(733, 585);
-		icono.iconAnchor = new GPoint(367, 305);
+		var icono = new google.maps.MarkerImage('markers/residencia/planta'+ plantaResidencia + '.png');
+		icono.size = new google.maps.Size(733, 585);
+		icono.anchor = new google.maps.Point(367, 305);
 		var opciones = {
-			icon:icono,
-			clickable:false,
-			zIndexProcess:fondo
+			icon: icono,
+			position: new google.maps.LatLng(38.232272,-1.698925),
+			clickable: false,
+			zIndex: fondo()
 		};
-		residencia = new GMarker(new GLatLng(38.232272,-1.698925), opciones);
+		residencia = new google.maps.Marker(opciones);
 
-		GEvent.addListener(map, 'zoomend', function(oldZoom, newZoom){
-			map.removeOverlay(residencia);
-			var tipoMapa = map.getCurrentMapType().getName();
+		google.maps.event.addListener(map, 'zoom_changed', function(){
+			residencia.setMap(null);
+			var tipoMapa = map.getMapTypeId();
+			var newZoom = map.getZoom();
 			switch(newZoom){
 				case 21:
-					residencia.getIcon().iconSize = new GSize(733, 585);
-					residencia.getIcon().iconAnchor = new GPoint(367, 305);
+					residencia.getIcon().size = new google.maps.Size(733, 585);
+					residencia.getIcon().anchor = new google.maps.Point(367, 305);
 					break;
 				case 20:
-					residencia.getIcon().iconSize = new GSize(367, 293);
-					residencia.getIcon().iconAnchor = new GPoint(183, 155);
+					residencia.getIcon().size = new google.maps.Size(367, 293);
+					residencia.getIcon().anchor = new google.maps.Point(183, 155);
 					break;
 				default:
 					cambiarPlanta(-2);
 			}
-			if(newZoom >= 20 && tipoMapa == 'Mapa' && plantaResidencia >= 0){
-				map.addOverlay(residencia);
+			if(newZoom >= 20 && tipoMapa == google.maps.MapTypeId.ROADMAP && plantaResidencia >= 0){
+				residencia.setMap(map);
 			}
 		});
 
-		GEvent.addListener(map, 'maptypechanged', function(){
-			map.removeOverlay(residencia);
-			var tipoMapa = map.getCurrentMapType().getName();
-			if(map.getZoom() >= 20 && tipoMapa == 'Mapa' && plantaResidencia >= 0){
-				map.addOverlay(residencia);
+		google.maps.event.addListener(map, 'maptypeid_changed', function(){
+			residencia.setMap(null);
+			var tipoMapa = map.getMapTypeId();
+			if(map.getZoom() >= 20 && tipoMapa == google.maps.MapTypeId.ROADMAP && plantaResidencia >= 0){
+				residencia.setMap(map);
 			}
 		});
 
-		map.addOverlay(residencia);
+		residencia.setMap(map);
 
 		if(localizacion == true){ // si el navegador soporta geolocalizacion (valor inicial)
 			$.getJSON('getpost/getLatLong.jsp',{
@@ -133,7 +134,7 @@ function showBuilding(type){
 
 function definirOpciones(evento){
 	var opciones;
-	var icono = new GIcon(G_DEFAULT_ICON);
+	var icono = new google.maps.MarkerImage(null);
 
 	//MAXIMO DE RECURSOS POR MARCADOR ES 10
 	var cantidad;
@@ -145,97 +146,96 @@ function definirOpciones(evento){
 
 	if(evento.marcador == 'event'){ // Es un evento
 		if(evento.tipo == 'fire'){ // Incendio
-			icono.image = 'markers/events/fuego.png';
+			icono.url = 'markers/events/fuego.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/fuego_control.png';
+				icono.url ='markers/events/fuego_control.png';
 			}
 		}else if(evento.tipo == 'flood'){// Inundacion
-			icono.image = 'markers/events/agua.png';
+			icono.url = 'markers/events/agua.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/agua_control.png';
+				icono.url ='markers/events/agua_control.png';
 			}
 		}else if(evento.tipo == 'collapse'){ // derrumbamiento
-			icono.image = 'markers/events/casa.png';
+			icono.url = 'markers/events/casa.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/casa_control.png';
+				icono.url ='markers/events/casa_control.png';
 			}
 		}else if(evento.tipo == 'lostPerson'){ // anciano perdido
-			icono.image = 'markers/events/personaPerdida.png';
+			icono.url = 'markers/events/personaPerdida.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/personaPerdida_control.png';
+				icono.url ='markers/events/personaPerdida_control.png';
 			}
 		}else if(evento.tipo == 'injuredPerson'){ // anciano herido
-			icono.image = 'markers/events/personaHerida.png';
+			icono.url = 'markers/events/personaHerida.png';
 			if(evento.estado == 'controlled'){
-				icono.image ='markers/events/personaHerida_control.png';
+				icono.url ='markers/events/personaHerida_control.png';
 			}
 		}
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden,
+			zIndex: orden(),
 			draggable: true // Para que se pueda arrastrar
 		};
-	}else if (evento.marcador == 'resource'){ // es un recurso
+	}else if(evento.marcador == 'resource'){ // es un recurso
 		var actuando = '';
 		if(evento.estado == 'active'){
 			actuando = '_no';
 		}
 
 		if(evento.nombre == userName){
-			icono.image = 'markers/resources/user' + actuando + '.png';
+			icono.url = 'markers/resources/user' + actuando + '.png';
 		}else if(evento.tipo == 'police'){ // es un policia
-			icono.image = 'markers/resources/policia' + actuando + '.png';
+			icono.url = 'markers/resources/policia' + actuando + '.png';
 		}else if(evento.tipo == 'firemen'){ // es un bombero
-			icono.image = 'markers/resources/bombero' + actuando + '.png';
+			icono.url = 'markers/resources/bombero' + actuando + '.png';
 		}else if(evento.tipo == 'ambulance' || evento.tipo == 'ambulancia'){ // es una ambulancia
-			icono.image = 'markers/resources/ambulancia' + actuando + '.png';
+			icono.url = 'markers/resources/ambulancia' + actuando + '.png';
 		}else if(evento.tipo == 'nurse'){ // es un enfermero
-			icono.image = 'markers/resources/enfermero' + actuando + '.png';
+			icono.url = 'markers/resources/enfermero' + actuando + '.png';
 		}else if(evento.tipo == 'gerocultor'){ // es un gerocultor
-			icono.image = 'markers/resources/gerocultor' + actuando + '.png';
+			icono.url = 'markers/resources/gerocultor' + actuando + '.png';
 		}else if(evento.tipo == 'assistant'){ // es un auxiliar
-			icono.image = 'markers/resources/auxiliar' + actuando + '.png';
+			icono.url = 'markers/resources/auxiliar' + actuando + '.png';
 		}else if(evento.tipo == 'otherStaff'){ // otro
-			icono.image = 'markers/resources/otroPersonal' + actuando + '.png';
+			icono.url = 'markers/resources/otroPersonal' + actuando + '.png';
 		}
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden,
+			zIndex: orden(),
 			draggable: (evento.nombre == userName) // Arrastrar si soy yo
 		};
 	}else if(evento.marcador == 'people'){ // es una victima
 		if(evento.tipo == 'trapped'){ // personas atrapadas
-			icono.image = 'markers/people/trapped' + cantidad + '.png';
+			icono.url = 'markers/people/trapped' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/trapped_control.png';
+				icono.url = 'markers/people/trapped_control.png';
 			}
 		}else if(evento.tipo=='healthy'){ // sanos
-			icono.image = 'markers/people/sano' + cantidad + '.png';
+			icono.url = 'markers/people/sano' + cantidad + '.png';
 			if(evento.estado=='controlled'){
-				icono.image = 'markers/people/sano_control.png';
+				icono.url = 'markers/people/sano_control.png';
 			}
 		}else if(evento.tipo == 'slight'){ // heridos leves
-			icono.image = 'markers/people/leve' + cantidad + '.png';
+			icono.url = 'markers/people/leve' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/leve_control.png';
+				icono.url = 'markers/people/leve_control.png';
 			}
 		}else if(evento.tipo == 'serious'){ // heridos graves
-			icono.image = 'markers/people/grave' + cantidad + '.png';
+			icono.url = 'markers/people/grave' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/grave_control.png';
+				icono.url = 'markers/people/grave_control.png';
 			}
 		}else if(evento.tipo == 'dead'){ // muertos
-			icono.image = 'markers/people/muerto' + cantidad + '.png';
+			icono.url = 'markers/people/muerto' + cantidad + '.png';
 			if(evento.estado == 'controlled'){
-				icono.image = 'markers/people/muerto_control.png';
+				icono.url = 'markers/people/muerto_control.png';
 			}
 		}
-		icono.iconSize = new GSize(28, 43);
-		icono.iconAnchor = new GPoint(13, 43);
-		icono.infoWindowAnchor = new GPoint(13, 2);
+		icono.size = new google.maps.Size(28, 43);
+		icono.anchor = new google.maps.Point(13, 43);
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden,
+			zIndex: orden(),
 			draggable: true // Se pueden arrastrar para asociarlo
 		};
 	}
@@ -244,10 +244,16 @@ function definirOpciones(evento){
 }
 
 function comportamientoMarcador(evento, caracter, opciones){
-	var marker = new GMarker (new GLatLng(evento.latitud, evento.longitud), opciones);
-
+	var opts = {
+		position: new google.maps.LatLng(evento.latitud, evento.longitud),
+		icon:opciones.icon,
+		zIndex:opciones.zIndex,
+		draggable:opciones.draggable
+	};
+	var marker = new google.maps.Marker(opts);
+	var infoWin = new google.maps.InfoWindow({content:''});
 	// Annadimos el comportamiento
-	GEvent.addListener(marker, 'click', function(){
+	google.maps.event.addListener(marker, 'click', function(){
 		var small = evento.nombre + '<br/>' + evento.descripcion;
 		var links1 = '<form id="form_acciones" name="form_acciones" action="#">';
 		if(nivelMsg > 1){
@@ -258,36 +264,40 @@ function comportamientoMarcador(evento, caracter, opciones){
 			}
 		}
 		links1 += '</form>';
-
-		marker.openInfoWindowHtml('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
-			'</div><div id="bocadillo_links2"></div></div>');
+		
+		infoWin.content = '<div id="bocadillo">' + small + '<div id="bocadillo_links">' +
+			links1 + '</div><div id="bocadillo_links2"></div></div>';
+		infoWin.open(map, marker);
 		cargarLateral(evento); // en mapa_caronte2.js
 	});
 
-	GEvent.addListener(marker, 'dragstart', function(){
+	google.maps.event.addListener(marker, 'dragstart', function(){
 		noActualizar = evento.id;
-		map.closeInfoWindow();
+		infoWin.close();
 	});
 
-	GEvent.addListener(marker, 'dragend', function(latlng){
-		var nuevaLat = latlng.lat().toFixed(6);
-		var nuevaLong = latlng.lng().toFixed(6);
-		var nuevaPos = new GLatLng(nuevaLat, nuevaLong);
-		map.removeOverlay(marker);
-		marker.setLatLng(nuevaPos);
-		map.addOverlay(marker);
-		marker.openInfoWindowHtml('<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
-			'<span id="confirmar" class="pulsable azul" onclick="map.closeInfoWindow(); guardar_posicion(' + evento.id +
+// AQUI!!!!!!!
+	google.maps.event.addListener(marker, 'dragend', function(punto){
+		var nuevaLat = punto.latLng.lat().toFixed(6);
+		var nuevaLong = punto.latLng.lng().toFixed(6);
+		var nuevaPos = new google.maps.LatLng(nuevaLat, nuevaLong);
+		marker.setMap(null);
+		marker.setPosition(nuevaPos);
+		marker.setMap(map);
+		
+		var infoWin2 = new google.maps.InfoWindow({content:'<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
+			'<span id="confirmar" class="pulsable azul" onclick="infoWin2.close(); guardar_posicion(' + evento.id +
 			',' + nuevaLat + ',' + nuevaLong + ')" >Confirmar</span>'+ ' - ' +
-			'<span id="cancelar" class="pulsable azul" onclick="map.closeInfoWindow(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>');
+			'<span id="cancelar" class="pulsable azul" onclick="infoWin2.close(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>'});
+		infoWin2.open(map, marker);
 	});
 
-	GEvent.addListener(marker, 'infowindowclose', function() {
+	google.maps.event.addListener(infoWin, 'closeclick', function() {
 		limpiarLateral(evento.marcador); // en mapa_caronte2.js
 	});
 
 	if((evento.planta == plantaResidencia || evento.planta == -2 || plantaResidencia == -2) && (evento.tipo != 'healthy' || verSanos == true)){
-		map.addOverlay(marker);
+		marker.setMap(map);
 	}
 
 	return marker;
