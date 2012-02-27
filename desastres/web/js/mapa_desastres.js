@@ -72,7 +72,6 @@ function definirOpciones(evento){
 		}
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden(),
 			draggable: false // Para que se pueda arrastrar
 		};
 	}else if (evento.marcador == 'resource'){ // es un recurso
@@ -93,7 +92,6 @@ function definirOpciones(evento){
 		}
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden(),
 			draggable: false
 		};
 	}else if(evento.marcador == 'people'){ // es una victima
@@ -127,7 +125,6 @@ function definirOpciones(evento){
 		icono.anchor = new google.map.Point(13, 43);
 		opciones = {
 			icon: icono,
-			zIndexProcess: orden(),
 			draggable: true // Se pueden arrastrar para asociarlo
 		};
 	}
@@ -137,62 +134,61 @@ function definirOpciones(evento){
 
 function comportamientoMarcador(evento, caracter, opciones){
 	var marker = new google.maps.Marker (new google.maps.LatLng(evento.latitud, evento.longitud), opciones);
-	var infoWin = new google.maps.InfoWindow({content:''});
 	// Annadimos el comportamiento
-	if(caracter == TEMPORAL){ // aqui hay que guardar los datos
+	if(caracter == temporal){ // aqui hay que guardar los datos
 		var content = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>' +
 			'<span id="guardar" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</span>'+ ' - ' +
-			'<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Modificar</span>'+ ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_temporales[' + evento.id + '],TEMPORAL); return false;">Eliminar</span>';
+			'<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_temporales[' + evento.id + '], temporal); return false;">Modificar</span>'+ ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_temporales[' + evento.id + '], temporal); return false;">Eliminar</span>';
 		
 		google.maps.event.addListener(marker, 'click', function(){
-			infoWin.content = '<div id="bocadillo">' + content + '</div>';
-			infoWin.open(map, marker);
+			infoWindow.close();
+			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + content + '</div>'});
+			infoWindow.open(map, marker);
 		});
 
 		google.maps.event.addListener(marker, 'dragstart', function(){
-			infoWin.close();
+			infoWindow.close();
 		});
 
 		google.maps.event.addListener(marker, 'dragend', function(){
 			var asociada = asociar(evento.id, evento.marker);
-			var infoWin2 = new google.maps.InfoWindow({content:'<div id="bocadillo">Es necesario guardar para poder asociar recursos.<br/>' +
+			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">Es necesario guardar para poder asociar recursos.<br/>' +
 				marcadores_definitivos[asociada].nombre + '<br/>' +
 				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</span>' + ' - ' +
 				'<span id="cancelar" class="pulsable azul" onclick="infoWin2.close();">Cancelar</span>"+"</div>'});
-			infoWin2.open(map, marker);
+			infoWindow.open(map, marker);
 		});
-	}else if(caracter == DEFINITIVO){ // aqui podemos realizar modificaciones a los ya existentes
+	}else if(caracter == definitivo){ // aqui podemos realizar modificaciones a los ya existentes
 		google.maps.event.addListener(marker, 'click', function(){
 			var small = evento.nombre + '<br/>' + evento.descripcion;
 			var links1;
 			if(nivelMsg > 1){
-				links1 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos['+evento.id+'],DEFINITIVO);return false;">Modificar</span>'+' - '+
-					'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos['+evento.id+'],DEFINITIVO);return false;">Eliminar</span>'+' - '+
+				links1 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos['+evento.id+'], definitivo); return false;">Modificar</span>'+' - '+
+					'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos['+evento.id+'], definitivo); return false;">Eliminar</span>'+' - '+
 					'<span id="ver_mas1" class="pulsable azul" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</span>';
 			}else{
 				links1 = '<span id="ver_mas1" class="pulsable azul" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</span>';
 			}
 
-			infoWin.content = '<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
-				'</div><div id="bocadillo_links2"></div></div>';
-			infoWin.open(map, marker);
+			infoWindow.close();
+			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
+				'</div><div id="bocadillo_links2"></div></div>'});
+			infoWindow.open(map, marker);
 		});
 
 		google.maps.event.addListener(marker, 'dragstart', function(){
-			infoWin.close();
+			infoWindow.close();
 		});
 
 		google.maps.event.addListener(marker, 'dragend', function(){
 			var asociada = asociar(evento.id, evento.marker);
-			var infoWin2 = new google.maps.InfoWindow({content:'<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>' +
+			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>' +
 				marcadores_definitivos[asociada].nombre+'<br/>'+
-				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar_asociacion(' + asociada + ',' + evento.id + ');return false;">Guardar</span>' + ' - ' +
-				'<span id="cancelar" class="pulsable azul" onclick="cancelar_asignacion(' + evento.id + ');return false;">Cancelar</span></div>'});
-			infoWin2.open(map, marker);
+				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar_asociacion(' + asociada + ',' + evento.id + '); return false;">Guardar</span>' + ' - ' +
+				'<span id="cancelar" class="pulsable azul" onclick="cancelar_asignacion(' + evento.id + '); return false;">Cancelar</span></div>'});
+			infoWindow.open(map, marker);
 		});
-
-		google.maps.event.addListener(infoWin, 'closeclick', function(){});
 	}
 
 	// (!(evento.marcador=='resource' && caracter==1)){

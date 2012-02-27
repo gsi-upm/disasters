@@ -1,11 +1,12 @@
-var map;
-var localizador;
-
-var tiempoActualizacion = 2000;
-var tiempoInicial = tiempoActualizacion;
+const tiempoActualizacion = 2000;
+const tiempoInicial = 2000;
 var contador = 0;
 
+var localizador;
+var map;
+
 var ultimamodif = '1992-01-01 00:00:01.000'; // una fecha antigua para empezar
+var desfase = 0; // positivo: hora de local posterior a servidor
 var marcadores_definitivos = new Array();
 var marcadores_temporales = new Array();
 var indices = new Array();
@@ -15,8 +16,8 @@ var pos_indices = 0;
 
 var puntero_temp;
 var caracter_temp;
-var TEMPORAL = 0;
-var DEFINITIVO = 1;
+const temporal = 0;
+const definitivo = 1;
 
 var hospitals = new Array();
 var policeStations = new Array();
@@ -30,8 +31,8 @@ var geriatricIndex = 0;
 var localizacion = (navigator.geolocation != null);
 var residencia; // marcador de la imagen de la residencia
 var plantaResidencia = -1;
-var emergenciasAsociadas = [new Array(), new Array()];
-var sintomas = [new Array(), new Array()];
+var emergenciasAsociadas = new Array(new Array(), new Array());
+var sintomas = new Array(new Array(), new Array());
 var verSanos = false;
 var limpiar = true;
 var noActualizar = 0;
@@ -39,21 +40,37 @@ var centroAux = new Array();
 var puntoAux;
 var markerId;
 
+const roadmap = google.maps.MapTypeId.ROADMAP;
+
+var infoWindow;
+var infoWinMarker = '';
+
 /**
  * Funcion que se ejecuta para iniciar el mapa cuando se abre el navegador 
  */
 function initialize(){
 	localizador = new google.maps.Geocoder();
+	infoWindow = new google.maps.InfoWindow();
 	var centro = mapInit(); // en mapa_xxx.js
 	var myOptions = {
 		center: centro.center,
 		zoom: centro.zoom,
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		mapTypeControlOptions:{style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+		mapTypeId: roadmap,
+		mapTypeControlOptions: {
+			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+		},
+		panControl: false,
 		overviewMapControl: true,
 		scaleControl: true
 	};
 	map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
+	
+	google.maps.event.addListener(map, 'click', function(){
+		infoWindow.close();
+		if(infoWinMarker != 'building'){
+			limpiarLateral(infoWinMarker);
+		}
+	});
 
 	buildingInit(); // en mapa_xxx.js
 
@@ -62,13 +79,13 @@ function initialize(){
 		'fecha': ultimamodif,
 		'action':'firstTime',
 		'nivel':nivelMsg
-	}, function(data) {
+	}, function(data){
 		$.each(data, function(entryIndex, entry){
 			var nuevomarcador = new ObjMarcador(entry.id, entry.item, entry.type,
 				entry.quantity, entry.name, entry.description, entry.info, entry.latitud,
 				entry.longitud, entry.address, entry.size, entry.traffic, entry.floor,
 				entry.state, entry.idAssigned, entry.date, entry.modified, entry.user, null);
-			nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
+			nuevomarcador.marker = generaMarcador(nuevomarcador, definitivo);
 			marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 			indices[pos_indices] = nuevomarcador.id;
 			pos_indices++;
@@ -81,13 +98,13 @@ function initialize(){
 	initialize2(); // en mapa_xxx.js
 	
 	if(userName != ''){
-		cambiaIcono('event',seleccionRadio(document.getElementById('catastrofes'),0));
-		cambiaIcono('people',seleccionRadio(document.getElementById('heridos'),2),1);
+		cambiaIcono('event', seleccionRadio(document.getElementById('catastrofes'), 0));
+		cambiaIcono('people', seleccionRadio(document.getElementById('heridos'), 2), 1);
 	}
 
-	ultimamodif = obtiene_fecha();
-	// setTimeout('moveAgents()',2000);
-	setTimeout('actualizar()',tiempoInicial);
+	ultimamodif = obtiene_fecha(true);
+	// setTimeout('moveAgents()', 2000);
+	setTimeout('actualizar()', tiempoInicial);
 }
 
 /**
@@ -99,7 +116,7 @@ function actualizar(){
 		'fecha': ultimamodif,
 		'action':'notFirst',
 		'nivel':nivelMsg
-	}, function(data) {
+	}, function(data){
 		$.each(data, function(entryIndex, entry){
 			if(entry.id != noActualizar){
 				// el id lo asigna la base de datos
@@ -111,7 +128,7 @@ function actualizar(){
 				// pintamos los nuevos, para lo que comprobamos que no existian
 				if(marcadores_definitivos[nuevomarcador.id] == null){
 					if(nuevomarcador.estado != 'erased'){
-						nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
+						nuevomarcador.marker = generaMarcador(nuevomarcador, definitivo);
 						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 						indices[pos_indices] = nuevomarcador.id;
 						pos_indices++;
@@ -120,7 +137,7 @@ function actualizar(){
 					// si se ha modificado algun dato se actualiza
 					if(nuevomarcador.estado != 'erased'){
 						marcadores_definitivos[nuevomarcador.id].marker.setMap(null);
-						nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
+						nuevomarcador.marker = generaMarcador(nuevomarcador, definitivo);
 						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 					}else{ // si se ha eliminado un marcador
 						marcadores_definitivos[nuevomarcador.id].marker.setMap(map);
@@ -138,7 +155,7 @@ function actualizar(){
 							}
 						}
 						while(indices[index+1] != null){
-							indices[index] = indices[index+1];
+							indices[index] = indices[index + 1];
 							index++;
 						}
 						indices[index] = null;
@@ -154,7 +171,7 @@ function actualizar(){
 
 	actualizar2(); // en mapa_xxx.js
 	
-	ultimamodif = obtiene_fecha();
+	ultimamodif = obtiene_fecha(false);
 	setTimeout('actualizar()', tiempoActualizacion);
 }
 
@@ -189,40 +206,34 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		matrixIndex = geriatricIndex;
 	}
 
-	var icono = new google.maps.MarkerImage('markers/buildings/' + imagen);
-	icono.size = new google.maps.Size(50, 49);
-	icono.anchor = new google.maps.Point(24, 49);
-	var opciones = {
+	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(latitud, longitud),
-		icon: icono,
-		zIndex: orden()
-	}; // se pueden arrastrar para asociarlo
-
-	var marker = new google.maps.Marker(opciones);
-	var infoWin = new google.maps.InfoWindow({content:'<div id="bocadillo">' + mensaje + '</div>'});
-	if(type == 'geriatricCenter'){
-		var esquina1 = new google.maps.LatLng(38.232440, -1.699160); // desplazado (-0.000095, 0.000120)
-		var esquina2 = new google.maps.LatLng(38.232380, -1.698640);
-		var esquina3 = new google.maps.LatLng(38.232105, -1.698690);
-		var esquina4 = new google.maps.LatLng(38.232165, -1.699210);
-		var opcRect = {path:[esquina1, esquina2, esquina3, esquina4, esquina1], strokeColor:'#00FF00', strokeWeight:1, strokeOpacity:0.5};
-		var rectangulo = new google.maps.Polyline(opcRect);
+		icon: new google.maps.MarkerImage('markers/buildings/' + imagen)
+	});
+	
+	google.maps.event.addListener(marker, 'click', function(){
+		infoWindow.close();	
+		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + mensaje + '</div>'});
+		infoWinMarker = 'building';
+		infoWindow.open(map, marker);
 		
-		google.maps.event.addListener(marker, 'click', function(){
-			infoWin.open(map, marker);
+		if(type == 'geriatricCenter'){
+			var esquina1 = new google.maps.LatLng(38.232440, -1.699160); // desplazado (-0.000095, 0.000120)
+			var esquina2 = new google.maps.LatLng(38.232380, -1.698640);
+			var esquina3 = new google.maps.LatLng(38.232105, -1.698690);
+			var esquina4 = new google.maps.LatLng(38.232165, -1.699210);
+			var opcRect = {paths:[esquina1, esquina2, esquina3, esquina4], strokeColor:'#00FF00', strokeWeight:1, strokeOpacity:0.5, fillOpacity:0};
+			var rectangulo = new google.maps.Polygon(opcRect);
 			rectangulo.setMap(map);
-		});
-		google.maps.event.addListener(infoWin, 'closeclick', function(){
-			rectangulo.setMap(null);
-		});
-	}else{
-		google.maps.event.addListener(marker, 'click', function(){
-			infoWin.open(map, marker);
-		});
-	}
-
+			
+			google.maps.event.addListener(infoWindow, 'closeclick', function(){
+				rectangulo.setMap(null);
+			});
+		}
+	});
+	
 	marker.setMap(map);
-	matrix[matrixIndex]=marker;
+	matrix[matrixIndex] = marker;
 	matrixIndex++;
 
 	if(type == 'hospital'){
@@ -246,7 +257,7 @@ function generateBuilding(type, mensaje, latitud, longitud){
  * Obtiene los datos de un marcador
  * 
  * @param evento Indica si es emergencia (event), herido (people) o usuario (resource)
- * @param caracter Indica si es temporal (TEMPORAL) o definitivo (DEFINITIVO)
+ * @param caracter Indica si es temporal o definitivo
  * @return Marcador
  */
 function generaMarcador(evento, caracter){
@@ -284,7 +295,7 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
 	}
 	
 	pos_temp++;
-	nuevomarcador.marker = generaMarcador(nuevomarcador, TEMPORAL);
+	nuevomarcador.marker = generaMarcador(nuevomarcador, temporal);
     marcadores_temporales[nuevomarcador.id] = nuevomarcador;
 	
 	if(proyecto == 'caronte'){
@@ -298,7 +309,7 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
  * @param puntero Marcador que se va a guardar
  */
 function guardar(puntero){
-	eliminar(puntero, TEMPORAL);
+	eliminar(puntero, temporal);
 	// 1.Guardar el elemento en la base de datos
 	$.ajax({
 		type: 'POST',
@@ -388,12 +399,12 @@ function guardar(puntero){
  */
 function modificar(id, cantidad, nombre, descripcion, info, latitud, longitud, direccion, size, traffic, estado, idAssigned){
 	// utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
-	if(caracter_temp == TEMPORAL){
+	if(caracter_temp == temporal){
 		// Actualizar la matriz temporal
-		eliminar(marcadores_temporales[id],TEMPORAL);
+		eliminar(marcadores_temporales[id], temporal);
 		crearCatastrofe(puntero_temp.marcador, puntero_temp.tipo, cantidad, nombre, info, descripcion,
 			direccion, longitud, latitud, estado, size, traffic, idAssigned, -2);
-	}else if(caracter_temp == DEFINITIVO){
+	}else if(caracter_temp == definitivo){
 		// hay que hacer un update a la base de datos
 		$.post('getpost/update.jsp',{
 			'accion':'modificar',
@@ -528,9 +539,9 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
  * @param caracter
  */
 function eliminar(puntero, caracter){
-	if(caracter == TEMPORAL){
+	if(caracter == temporal){
 		puntero.marker.setMap(null);
-	}else if(caracter == DEFINITIVO){
+	}else if(caracter == definitivo){
 		// hay que hacer un update
 		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
 			$.post('getpost/update.jsp',{
@@ -596,31 +607,33 @@ function eliminar(puntero, caracter){
 function cancelar_asignacion(id){
 	// borro la posicion actual y lo dibujo en la antigua
 	marcadores_definitivos[id].marker.setMap(null);
-	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
+	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], definitivo);
 	noActualizar = 0;
 }
 
 /**
  * Obtiene la hora
  */
-function obtiene_fecha() {
-	// La hora se obtiene del servidor
-	var hora;
-	$.ajax({
-		type: 'GET',
-		dataType: 'json',
-		url: 'getpost/getHora.jsp',
-		success: function(data){
-			hora = data.hora;
-		},
-		async: false
-	});
-	return hora;
-
+function obtiene_fecha(primera) {
 	// La hora se obtiene en local
-	/*
-	// llega a algo como esto: 1992-01-01 00:00:01 , necesario para MySql a partir de la fecha actual
-	var fecha_actual = new Date();
+	var fecha_actual = new Date(new Date().getTime() - desfase);
+	
+	if(primera){
+		// La hora se obtiene del servidor
+		var hora_server;
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: 'getpost/getHora.jsp',
+			success: function(data){
+				hora_server = data.hora;
+			},
+			async: false
+		});
+		desfase = fecha_actual.getTime() - hora_server;
+		fecha_actual = new Date(fecha_actual.getTime() - desfase);
+	}
+
 	var dia = fecha_actual.getDate();
 	var mes = fecha_actual.getMonth() + 1;
 	var anno = fecha_actual.getFullYear();
@@ -629,32 +642,28 @@ function obtiene_fecha() {
 	var segundos = fecha_actual.getSeconds();
 	var milisegundos = fecha_actual.getMilliseconds();
 
-	if(mes < 10) mes = '0' + mes;
-	if(dia < 10) dia = '0' + dia;
-	if(horas < 10) horas = '0' + horas;
-	if(minutos < 10) minutos = '0' + minutos;
-	if(segundos < 10) segundos = '0' + segundos;
-	if(milisegundos < 10) milisegundos = '00' + milisegundos;
-	else if(milisegundos < 100) milisegundos = '0' + milisegundos;
-
-	return (anno + '-' + mes + '-' + dia + ' ' + horas + ':' + minutos + ':' + segundos + '.' + milisegundos);
-	*/
-}
-
-/**
- * Funcion que devuelve un valor para que el marcador del mapa aparezca siempre al fondo
- * 
- * @return valor
- */
-function fondo(marker, b){
-	return -100000;
-}
-
-/**
- * Funcion que devuelve un valor para que el marcador del mapa aparezca en el orden de creacion
- * 
- * @return valor
- */
-function orden(marker, b){
-	return 1;
+	if(mes < 10){
+		mes = '0' + mes;
+	}
+	if(dia < 10){
+		dia = '0' + dia;
+	}
+	if(horas < 10){
+		horas = '0' + horas;
+	}
+	if(minutos < 10){
+		minutos = '0' + minutos;
+	}
+	if(segundos < 10){
+		segundos = '0' + segundos;
+	}
+	if(milisegundos < 10){
+		milisegundos = '00' + milisegundos;
+	}else if(milisegundos < 100){
+		milisegundos = '0' + milisegundos;
+	}
+	
+	// llega a algo como esto: 1992-01-01 00:00:01 , necesario para MySql a partir de la fecha actual
+	var hora = anno + '-' + mes + '-' + dia + ' ' + horas + ':' + minutos + ':' + segundos + '.' + milisegundos;
+	return hora;
 }

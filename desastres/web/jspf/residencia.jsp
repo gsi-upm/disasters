@@ -54,6 +54,6 @@
 		</div>
 	</div>
 	<script type="application/javascript">
-		initTabs('dhtmlgoodies_tabView2',Array('<fmt:message key="gestionEmergencias"/>','<fmt:message key="recursos"/>'),0,null,518);
+		initTabs('dhtmlgoodies_tabView2',Array('<fmt:message key="gestionEmergencias"/>','<fmt:message key="recursos"/>'),0,'100%',518);
 	</script>
 </fmt:bundle>

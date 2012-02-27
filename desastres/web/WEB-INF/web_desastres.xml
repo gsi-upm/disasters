@@ -4,6 +4,7 @@
         <session-timeout>30</session-timeout>
     </session-config>
     <!-- Application class name -->
+    <display-name>Desastres 2.0</display-name>
     <context-param>
         <param-name>org.restlet.application</param-name>
         <param-value>gsi.rest.DisasterApplication</param-value>
