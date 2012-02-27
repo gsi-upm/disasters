@@ -17,4 +17,4 @@
 <%-- MySQL servidor
 <c:set var="basedatos" value="mysql"/>
 <sql:setDataSource var="CatastrofesServer" driver="com.mysql.jdbc.Driver"
-	url="jdbc:mysql://minsky.gsi.dit.upm.es/${proyecto}" user="jamaldonado" password="abfQ7QLN9QaswPUp"/> --%>
+	url="jdbc:mysql://shannon.gsi.dit.upm.es:3306/${proyecto}" user="jlmolina" password="NafDuJ4VhG6dcmtP"/>--%>

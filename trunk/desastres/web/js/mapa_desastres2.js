@@ -2,19 +2,19 @@ function hideBuilding(type){
 	var matrix;
 	if(type == 'hospital'){
 		matrix = hospitals;
-		hospitals = new Array;
+		hospitals = new Array();
 		hospIndex = 0;
 	}else if(type == 'policeStation'){
 		matrix = policeStations;
-		policeStations = new Array;
+		policeStations = new Array();
 		policeIndex = 0;
 	}else if(type == 'firemenStation'){
 		matrix = firemenStations;
-		firemenStations = new Array;
+		firemenStations = new Array();
 		fireIndex = 0;
 	}else if(type == 'geriatricCenter'){
 		matrix = geriatricCenters;
-		geriatricCenters = new Array;
+		geriatricCenters = new Array();
 		geriatricIndex = 0;
 	}
 	for(var i = 0; i < matrix.length; i++){
@@ -35,14 +35,15 @@ function verMas(id){
 	var complete = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>Direccion: ' + evento.direccion + '<br/>';
 	var links2;
 	if(nivelMsg > 1){
-		links2 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO);return false;">Modificar</span>' + ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO);return false;">Eliminar</span>' + ' - ' +
+		links2 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Modificar</span>' + ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Eliminar</span>' + ' - ' +
 			'<span id="ver_mas2" class="pulsable azul" onclick="verMenos(' + evento.id + ');return false;">Ver menos</span>';
 	}else{
 		links2 = '<span id="ver_mas2" class="pulsable azul" onclick="verMenos(' + evento.id + ');return false;">Ver menos</span>';
 	}
-	var infoWin = new google.maps.InfoWindow({content:'<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links2 + '</div></div>'});
-	infoWin.open(map, marcadores_definitivos[id].marker);
+	infoWindow.close();
+	infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links2 + '</div></div>'});
+	infoWindow.open(map, marcadores_definitivos[id].marker);
 }
 
 function verMenos(id){
@@ -50,17 +51,18 @@ function verMenos(id){
 	var small = evento.nombre + '<br/>' + evento.descripcion ;
 	var links1;
 	if(nivelMsg > 1){
-		links1 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '],DEFINITIVO);return false;">Modificar</span>' + ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '],DEFINITIVO); return false;">Eliminar</span>' + ' - ' +
+		links1 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Modificar</span>' + ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Eliminar</span>' + ' - ' +
 			'<span id="ver_mas1" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
 	}else{
 		links1 = '<span id="ver_mas1" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
 	}
-	var infoWin = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 + '</div></div>'});
-	infoWin.open(map, marcadores_definitivos[id].marker);
+	infoWindow.close()
+	infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 + '</div></div>'});
+	infoWindow.open(map, marcadores_definitivos[id].marker);
 }
 
-function cargarModificar(puntero,caracter){
+function cargarModificar(puntero, caracter){
 	// mostrar la ventanita
 	// carga el evento a modificar en una variabla accesible por todos
 	puntero_temp = puntero;
@@ -160,7 +162,7 @@ function guardar_asociacion(idEvento, idRecurso){
 	else if(recurso.tipo == 'dead'){nueva_latitud=latitud+0.00005; nueva_longitud=longitud+0.0001;}
 
 	// actualizar las modificaciones con el metodo modificar
-	caracter_temp = DEFINITIVO;
+	caracter_temp = definitivo;
 	puntero_temp = recurso;
 	modificar(idRecurso, recurso.cantidad, recurso.nombre, recurso.descripcion, 'Asociado a ' + evento.nombre + '. ' + recurso.info,
 		nueva_latitud, nueva_longitud, evento.direccion, recurso.size, recurso.traffic, recurso.estado, idEvento);

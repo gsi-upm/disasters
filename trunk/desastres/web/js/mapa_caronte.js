@@ -15,43 +15,33 @@ function initialize2(){
 
 	if(userName != '' && nivelMsg > 1){
 		plantaResidencia = 0;
-		var icono = new google.maps.MarkerImage('markers/residencia/planta'+ plantaResidencia + '.png');
-		icono.size = new google.maps.Size(733, 585);
-		icono.anchor = new google.maps.Point(367, 305);
-		var opciones = {
-			icon: icono,
-			position: new google.maps.LatLng(38.232272,-1.698925),
-			clickable: false,
-			zIndex: fondo()
-		};
-		residencia = new google.maps.Marker(opciones);
+		var url = 'markers/residencia/planta'+ plantaResidencia + '.png';
+		var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(38.232140, -1.699210), new google.maps.LatLng(38.232440, -1.698640));
+		residencia = new google.maps.GroundOverlay(url, bounds, {clickable: false});
 
 		google.maps.event.addListener(map, 'zoom_changed', function(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
 			var newZoom = map.getZoom();
-			switch(newZoom){
-				case 21:
-					residencia.getIcon().size = new google.maps.Size(733, 585);
-					residencia.getIcon().anchor = new google.maps.Point(367, 305);
-					break;
-				case 20:
-					residencia.getIcon().size = new google.maps.Size(367, 293);
-					residencia.getIcon().anchor = new google.maps.Point(183, 155);
-					break;
-				default:
-					cambiarPlanta(-2);
-			}
-			if(newZoom >= 20 && tipoMapa == google.maps.MapTypeId.ROADMAP && plantaResidencia >= 0){
+			if(newZoom >= 20 && tipoMapa == roadmap && plantaResidencia >= 0){
 				residencia.setMap(map);
+			}else if(newZoom < 20){
+				cambiarPlanta(-2);
 			}
 		});
 
 		google.maps.event.addListener(map, 'maptypeid_changed', function(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
-			if(map.getZoom() >= 20 && tipoMapa == google.maps.MapTypeId.ROADMAP && plantaResidencia >= 0){
+			if(map.getZoom() >= 20 && tipoMapa == roadmap && plantaResidencia >= 0){
 				residencia.setMap(map);
+			}
+		});
+		
+		google.maps.event.addListener(residencia, 'click', function(){
+			infoWindow.close();
+			if(infoWinMarker != 'building'){
+				limpiarLateral(infoWinMarker);
 			}
 		});
 
@@ -121,14 +111,14 @@ function buildingInit(){
 
 function showBuilding(type){
 	if(type == 'hospital'){
-		generateBuilding('hospital','Centro de salud',38.228138,-1.706449); // Calasparra, Murcia
+		generateBuilding('hospital', 'Centro de salud', 38.228138, -1.706449); // Calasparra, Murcia
 	}else if(type == 'firemenStation'){
-		generateBuilding('firemenStation','Parque de bomberos',38.111020,-1.865018); // Caravaca de la Cruz, Murcia
-		generateBuilding('firemenStation','Parque de bomberos TEMPORAL',38.216020,-1.723060); // TEMPORAL
+		generateBuilding('firemenStation', 'Parque de bomberos', 38.111020, -1.865018); // Caravaca de la Cruz, Murcia
+		generateBuilding('firemenStation', 'Parque de bomberos TEMPORAL', 38.216020, -1.723060); // TEMPORAL
 	}else if(type == 'policeStation'){
-		generateBuilding('policeStation','Ayuntamiento y Polic&iacute;a municipal',38.231125,-1.697560); // Calasparra, Murcia
+		generateBuilding('policeStation', 'Ayuntamiento y Polic&iacute;a municipal', 38.231125, -1.697560); // Calasparra, Murcia
 	}else if(type == 'geriatricCenter'){
-		generateBuilding('geriatricCenter','Residencia Virgen de la Esperanza',38.232272,-1.698925); // Calasparra, Murcia
+		generateBuilding('geriatricCenter', 'Residencia Virgen de la Esperanza', 38.232272, -1.698925); // Calasparra, Murcia
 	}
 }
 
@@ -173,7 +163,6 @@ function definirOpciones(evento){
 		}
 		opciones = {
 			icon: icono,
-			zIndex: orden(),
 			draggable: true // Para que se pueda arrastrar
 		};
 	}else if(evento.marcador == 'resource'){ // es un recurso
@@ -201,7 +190,6 @@ function definirOpciones(evento){
 		}
 		opciones = {
 			icon: icono,
-			zIndex: orden(),
 			draggable: (evento.nombre == userName) // Arrastrar si soy yo
 		};
 	}else if(evento.marcador == 'people'){ // es una victima
@@ -235,7 +223,6 @@ function definirOpciones(evento){
 		icono.anchor = new google.maps.Point(13, 43);
 		opciones = {
 			icon: icono,
-			zIndex: orden(),
 			draggable: true // Se pueden arrastrar para asociarlo
 		};
 	}
@@ -246,12 +233,10 @@ function definirOpciones(evento){
 function comportamientoMarcador(evento, caracter, opciones){
 	var opts = {
 		position: new google.maps.LatLng(evento.latitud, evento.longitud),
-		icon:opciones.icon,
-		zIndex:opciones.zIndex,
-		draggable:opciones.draggable
+		icon: opciones.icon,
+		draggable: opciones.draggable
 	};
 	var marker = new google.maps.Marker(opts);
-	var infoWin = new google.maps.InfoWindow({content:''});
 	// Annadimos el comportamiento
 	google.maps.event.addListener(marker, 'click', function(){
 		var small = evento.nombre + '<br/>' + evento.descripcion;
@@ -265,18 +250,25 @@ function comportamientoMarcador(evento, caracter, opciones){
 		}
 		links1 += '</form>';
 		
-		infoWin.content = '<div id="bocadillo">' + small + '<div id="bocadillo_links">' +
-			links1 + '</div><div id="bocadillo_links2"></div></div>';
-		infoWin.open(map, marker);
+		infoWindow.close();
+		limpiarLateral(evento.marcador);
+		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' +
+			links1 + '</div><div id="bocadillo_links2"></div></div>'});
+		infoWinMarker = evento.marcador;
+		infoWindow.open(map, marker);
+		google.maps.event.addListener(infoWindow, 'closeclick', function(){
+			if(infoWinMarker != 'building'){
+				limpiarLateral(evento.marcador);
+			}
+		});
 		cargarLateral(evento); // en mapa_caronte2.js
 	});
 
 	google.maps.event.addListener(marker, 'dragstart', function(){
 		noActualizar = evento.id;
-		infoWin.close();
+		infoWindow.close();
 	});
 
-// AQUI!!!!!!!
 	google.maps.event.addListener(marker, 'dragend', function(punto){
 		var nuevaLat = punto.latLng.lat().toFixed(6);
 		var nuevaLong = punto.latLng.lng().toFixed(6);
@@ -285,15 +277,16 @@ function comportamientoMarcador(evento, caracter, opciones){
 		marker.setPosition(nuevaPos);
 		marker.setMap(map);
 		
-		var infoWin2 = new google.maps.InfoWindow({content:'<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
-			'<span id="confirmar" class="pulsable azul" onclick="infoWin2.close(); guardar_posicion(' + evento.id +
+		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
+			'<span id="confirmar" class="pulsable azul" onclick="infoWindow.close(); guardar_posicion(' + evento.id +
 			',' + nuevaLat + ',' + nuevaLong + ')" >Confirmar</span>'+ ' - ' +
-			'<span id="cancelar" class="pulsable azul" onclick="infoWin2.close(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>'});
-		infoWin2.open(map, marker);
-	});
-
-	google.maps.event.addListener(infoWin, 'closeclick', function() {
-		limpiarLateral(evento.marcador); // en mapa_caronte2.js
+			'<span id="cancelar" class="pulsable azul" onclick="infoWindow.close(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>'});
+		infoWindow.open(map, marker);
+		google.maps.event.addListener(infoWindow, 'closeclick', function(){
+			if(infoWinMarker != 'building'){
+				limpiarLateral(evento.marcador);
+			}
+		});
 	});
 
 	if((evento.planta == plantaResidencia || evento.planta == -2 || plantaResidencia == -2) && (evento.tipo != 'healthy' || verSanos == true)){

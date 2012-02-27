@@ -81,9 +81,13 @@ function validarDireccion(numero){
 			document.getElementById('latitud' + numero).value = point.lat();
 			document.getElementById('longitud' + numero).value = point.lng();
 			//Esto es el puntero provisional
-			/*var marker = new GMarker(point);
-			map.addOverlay(marker);
-			marker.openInfoWindowHtml('<b>My house</b> <br/> Calle embajadores, 181');*/
+			/*
+			var marker = new google.maps.Marker({position:point});
+			marker.setMap(map);
+			infowindow.close();
+			infowindow = new InfoWindow({content:'<b>My house</b><br/>Calle embajadores, 181'});
+			infowindow.open(map, marker);
+			*/
 		}
 	});
 }

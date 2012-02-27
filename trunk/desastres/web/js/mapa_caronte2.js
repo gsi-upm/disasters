@@ -100,7 +100,7 @@ function cargarMenuAcciones(puntero){
 				'</td></tr>';
 				if(entryIndex == data.length-1){
 					menu += '<tr><td>' +
-					'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(' + puntero.id + ',\'' + userName + '\',accion);"/>' + // map.closeInfoWindow();
+					'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(' + puntero.id + ',\'' + userName + '\',accion); infoWindow.close();"/>' +
 					'</td></tr></table>';
 				}
 			});
@@ -128,7 +128,7 @@ function cargarListaActividades(evento){
 				}
 				menu += '<tr><td>Accion <b>' + entry.tipo + '</b> realizada sobre <b>' + entry.nombre + '</b></td>';
 				if(evento.nombre == userName){
-					menu += '<td><input type="button" value="Detener" onclick="detener(' + evento.id + ',' + entry.id_emergencia + ',\'' + evento.nombre + '\');"></td>'; // map.closeInfoWindow()
+					menu += '<td><input type="button" value="Detener" onclick="detener(' + evento.id + ',' + entry.id_emergencia + ',\'' + evento.nombre + '\'); infoWindow.close()"></td>';
 				}
 				menu += '</tr>';
 				if(entryIndex == data.length-1){
@@ -528,8 +528,10 @@ function cambiarPlanta(num){
 	if(num >= 0){
 		document.getElementById('planoResidencia').src = 'markers/residencia/planta' + num + '.jpg';
 		document.getElementById('plantaPlano').innerHTML = num;
-		residencia.getIcon().url = 'markers/residencia/planta' + num + '.png';
-		if(map.getZoom() >= 20 && map.getMapTypeId() == google.maps.MapTypeId.ROADMAP){
+		var url = 'markers/residencia/planta' + num + '.png';
+		var limites = residencia.getBounds();
+		residencia = new google.maps.GroundOverlay(url, limites, {clickable: false});
+		if(map.getZoom() >= 20 && map.getMapTypeId() == roadmap){
 			residencia.setMap(map);
 		}
 	}
@@ -618,7 +620,7 @@ function newPos(lat, lng, porDefecto){
 			'longitud':lng
 		});
 	}
-	//map.closeInfoWindow();
+	infoWindow.close();
 }
 
 function editPlanta(planta, porDefecto){
@@ -627,5 +629,5 @@ function editPlanta(planta, porDefecto){
 		'planta':planta,
 		'plantaPorDefecto':porDefecto
 	});
-	//map.closeInfoWindow();
+	infoWindow.close();
 }
