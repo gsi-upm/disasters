@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
         *** GENERATED FROM project.xml ***
-        *** MODIFIED BY Francisco Blanco AND Juan Luis Molina ***
-        
+        *** EDITED BY Juan Luis Molina ***
+
         For the purpose of easier reading the script
         is divided into following sections:
         - initialization
@@ -16,6 +16,9 @@
         - junit debugging
         - cleanup
 
+        Nuevo target jadex-jar (llamado desde dist)
+        Modificado do-clean
+
         -->
 <project xmlns:webproject1="http://www.netbeans.org/ns/web-project/1" xmlns:webproject2="http://www.netbeans.org/ns/web-project/2" xmlns:webproject3="http://www.netbeans.org/ns/web-project/3" basedir=".." default="default" name="desastres-impl">
     <import file="ant-deploy.xml"/>
@@ -26,7 +29,7 @@
             </not>
         </condition>
     </fail>
-    <target depends="dist,dist-disasters,javadoc,jadex-jar,jadex-jar-disasters" description="Build whole project." name="default"/> <!-- MODIFICADO -->
+    <target depends="dist,javadoc" description="Build whole project." name="default"/>
     <!--
                 INITIALIZATION SECTION
             -->
@@ -59,7 +62,6 @@
                 <available file="${src.dir}"/>
             </or>
         </condition>
-        <echo message="Source directory ${src.dir} is found: ${have.sources}"/> <!--NUEVO-->
         <condition property="netbeans.home+have.tests">
             <and>
                 <isset property="netbeans.home"/>
@@ -80,7 +82,6 @@
                 <isset property="dist.ear.dir"/>
             </not>
         </condition>
-        <echo message="dist.ear directory ${dist.ear.dir} is not found: ${no.dist.ear.dir}"/> <!--NUEVO-->
         <property name="build.web.excludes" value="${build.classes.excludes}"/>
         <condition property="do.compile.jsps">
             <istrue value="${compile.jsps}"/>
@@ -116,7 +117,6 @@
             </and>
         </condition>
         <available file="${conf.dir}/MANIFEST.MF" property="has.custom.manifest"/>
-        <echo message="${conf.dir}/MANIFEST.MF is found: ${has.custom.manifest}"/> <!--NUEVO-->
         <available file="${persistence.xml.dir}/persistence.xml" property="has.persistence.xml"/>
         <condition property="do.war.package.with.custom.manifest">
             <isset property="has.custom.manifest"/>
@@ -153,7 +153,6 @@
             </or>
         </condition>
         <property name="build.meta.inf.dir" value="${build.web.dir}/META-INF"/>
-        <property name="build.meta.inf.dir.disasters" value="${build.web.dir.disasters}/META-INF"/> <!--NUEVO-->
         <condition else="" property="application.args.param" value="${application.args}">
             <and>
                 <isset property="application.args"/>
@@ -194,7 +193,10 @@
     </target>
     <target depends="init" name="-init-cos" unless="deploy.on.save">
         <condition property="deploy.on.save" value="true">
-            <istrue value="${j2ee.deploy.on.save}"/>
+            <or>
+                <istrue value="${j2ee.deploy.on.save}"/>
+                <istrue value="${j2ee.compile.on.save}"/>
+            </or>
         </condition>
     </target>
     <target name="-post-init">
@@ -214,14 +216,6 @@
         <fail unless="build.test.results.dir">Must set build.test.results.dir</fail>
         <fail unless="build.classes.excludes">Must set build.classes.excludes</fail>
         <fail unless="dist.war">Must set dist.war</fail>
-        <fail unless="build.dir.disasters">Must set build.dir.disasters</fail> <!-- NUEVO -->
-        <fail unless="build.web.dir.disasters">Must set build.web.dir.disasters</fail> <!-- NUEVO -->
-        <fail unless="build.generated.dir.disasters">Must set build.generated.dir.disasters</fail> <!-- NUEVO -->
-        <fail unless="build.classes.dir.disasters">Must set build.classes.dir.disasters</fail> <!-- NUEVO -->
-        <fail unless="dist.javadoc.dir.disasters">Must set dist.javadoc.dir.disasters</fail> <!-- NUEVO -->
-        <fail unless="build.test.classes.dir.disasters">Must set build.test.classes.dir.disasters</fail> <!-- NUEVO -->
-        <fail unless="build.test.results.dir.disasters">Must set build.test.results.dir.disasters</fail> <!-- NUEVO -->
-        <fail unless="dist.war.disasters">Must set dist.war.disasters</fail> <!-- NUEVO -->
         <condition property="missing.j2ee.server.home">
             <and>
                 <matches pattern="j2ee.server.home" string="${j2ee.platform.classpath}"/>
@@ -235,14 +229,14 @@ The Java EE server classpath is not correctly set up - server home directory is 
 Either open the project in the IDE and assign the server or setup the server classpath manually.
 For example like this:
    ant -Dj2ee.server.home=&lt;app_server_installation_directory&gt;
-        </fail>
+                </fail>
         <fail unless="j2ee.platform.classpath">
 The Java EE server classpath is not correctly set up. Your active server type is ${j2ee.server.type}.
 Either open the project in the IDE and assign the server or setup the server classpath manually.
 For example like this:
    ant -Duser.properties.file=&lt;path_to_property_file&gt; (where you put the property "j2ee.platform.classpath" in a .properties file)
 or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties file is used)
-        </fail>
+                </fail>
     </target>
     <target name="-init-macrodef-property">
         <macrodef name="property" uri="http://www.netbeans.org/ns/web-project/1">
@@ -299,15 +293,14 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="${javac.processorpath}" name="processorpath"/>
             <attribute default="${build.generated.sources.dir}/ap-source-output" name="apgeneratedsrcdir"/>
             <attribute default="${includes}" name="includes"/>
-            <attribute default="${excludes},${excludes.src}" name="excludes"/> <!-- MODIFICADO -->
+            <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
             <attribute default="${empty.dir}" name="gensrcdir"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <echo message="gensrcdir:@{gensrcdir} - target:${javac.target}"/> <!-- NUEVO -->
                 <property location="${build.dir}/empty" name="empty.dir"/>
                 <mkdir dir="${empty.dir}"/>
-                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" includeantruntime="false" includes="@{includes}" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}" listfiles="true"> <!-- MODIFICADO -->
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" includeantruntime="false" includes="@{includes}" source="${javac.source}" srcdir="@{srcdir}" target="${javac.target}">
                     <src>
                         <dirset dir="@{gensrcdir}" erroronmissingdir="false">
                             <include name="*"/>
@@ -320,7 +313,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     <compilerarg line="${javac.compilerargs}"/>
                     <customize/>
                 </javac>
-        		<echo message="Classes from ${javac.source} and @{srcdir} over filter:@{includes} and excluding patterns:@{excludes} compiled to @{destdir} directory"/> <!-- NUEVO -->
             </sequential>
         </macrodef>
     </target>
@@ -542,12 +534,8 @@ exists or setup the property manually. For example like this:
     <target depends="init" if="no.dist.ear.dir" name="deps-module-jar" unless="no.deps"/>
     <target depends="init" if="dist.ear.dir" name="deps-ear-jar" unless="no.deps"/>
     <target depends="init, deps-module-jar, deps-ear-jar" name="deps-jar" unless="no.deps"/>
-    <!--
-                CARONTE PROJECT COMPILATION
-            -->
     <target depends="init,deps-jar" name="-pre-pre-compile">
         <mkdir dir="${build.classes.dir}"/>
-        <echo message="directory ${build.classes.dir} created to compile Caronte classes"/> <!-- NUEVO -->
     </target>
     <target name="-pre-compile">
         <!-- Empty placeholder for easier customization. -->
@@ -555,32 +543,23 @@ exists or setup the property manually. For example like this:
     </target>
     <target name="-copy-webdir">
         <copy todir="${build.web.dir}">
-            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.web}" includes="${includes}"/> <!-- MODIFICADO -->
+            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.web}" includes="${includes}"/>
         </copy>
-        <copy file="${index.jsp.file}" tofile="${build.web.dir}/index.jsp"/> <!-- NUEVO -->
-        <copy file="${web.xml.file}" tofile="${build.web.dir}/WEB-INF/web.xml"/> <!-- NUEVO -->
-        <copy file="${context.xml.file}" tofile="${build.web.dir}/META-INF/context.xml"/> <!-- NUEVO -->
-        <echo message="files from directory ${web.docbase.dir} copied to ${build.web.dir}"/> <!-- NUEVO -->
-        <!--<copy todir="${build.web.dir}/WEB-INF">
+        <copy todir="${build.web.dir}/WEB-INF">
             <fileset dir="${webinf.dir}" excludes="${build.web.excludes}"/>
-        </copy>-->
+        </copy>
     </target>
-    <target depends="init, deps-jar, -pre-pre-compile, -pre-compile, -copy-manifest, -copy-persistence-xml, -copy-webdir" if="have.sources" name="-do-compile"> <!-- library-inclusion-in-archive, library-inclusion-in-manifest, --> <!-- MODIFICADO -->
-        <antcall target="library-inclusion-in-archive"> <!-- NUEVO -->
-            <param name="build.specific.web.dir" value="${build.web.dir}"/> <!-- NUEVO -->
-        </antcall> <!-- NUEVO -->
+    <target depends="init, deps-jar, -pre-pre-compile, -pre-compile, -copy-manifest, -copy-persistence-xml, -copy-webdir, library-inclusion-in-archive,library-inclusion-in-manifest" if="have.sources" name="-do-compile">
         <webproject2:javac destdir="${build.classes.dir}" gensrcdir="${build.generated.sources.dir}"/>
         <copy todir="${build.classes.dir}">
-            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.src}" includes="${includes}"/> <!-- MODIFICADO -->
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.src}" includes="${includes}"/>
         </copy>
-        <echo message="source directory ${src.dir} is copied to ${build.classes.dir} after compiling Caronte Project"/> <!-- NUEVO -->
     </target>
     <target if="has.custom.manifest" name="-copy-manifest">
         <mkdir dir="${build.meta.inf.dir}"/>
         <copy todir="${build.meta.inf.dir}">
             <fileset dir="${conf.dir}" includes="MANIFEST.MF"/>
         </copy>
-        <echo message="Manifest: ${conf.dir}/MANIFEST.MF is copied in directory ${build.meta.inf.dir}"/> <!-- NUEVO -->
     </target>
     <target if="has.persistence.xml" name="-copy-persistence-xml">
         <mkdir dir="${build.web.dir}/WEB-INF/classes/META-INF"/>
@@ -592,7 +571,7 @@ exists or setup the property manually. For example like this:
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target depends="init,deps-jar,-pre-pre-compile,-pre-compile,-do-compile,-post-compile" description="Compile Caronte project." name="compile"/> <!-- MODIFICADO -->
+    <target depends="init,deps-jar,-pre-pre-compile,-pre-compile,-do-compile,-post-compile" description="Compile project." name="compile"/>
     <target name="-pre-compile-single">
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
@@ -661,58 +640,49 @@ exists or setup the property manually. For example like this:
         <antcall target="-do-compile-single-jsp"/>
     </target>
     <!--
-                DISASTERS PROJECT COMPILATION
+                DIST BUILDING SECTION
             -->
-    <target depends="init,deps-jar" name="-pre-pre-compile-disasters">
-        <mkdir dir="${build.classes.dir.disasters}"/>
-        <echo message="directory ${build.classes.dir.disasters} created to compile DISASTERS classes"/>
-    </target>
-    <target name="-pre-compile-disasters">
+    <target name="-pre-dist">
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target name="-copy-webdir-disasters">
-        <copy todir="${build.web.dir.disasters}">
-            <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes},${excludes.web.disasters}" includes="${includes}">
-            </fileset>
-        </copy>
-        <copy file="${index.jsp.file.disasters}" tofile="${build.web.dir.disasters}/index.jsp"/>
-        <copy file="${web.xml.file.disasters}" tofile="${build.web.dir.disasters}/WEB-INF/web.xml"/>
-        <copy file="${context.xml.file.disasters}" tofile="${build.web.dir.disasters}/META-INF/context.xml"/>
-        <echo message="files from directory ${web.docbase.dir} copied to ${build.web.dir.disasters}"/>
-   </target>
-   <target depends="init,deps-jar,-pre-pre-compile-disasters,-pre-compile-disasters,-copy-manifest-disasters,-copy-persistence-xml-disasters,-copy-webdir-disasters" if="have.sources" name="-do-compile-disasters"> <!-- library-inclusion-in-archive, library-inclusion-in-manifest, -->
-        <antcall target="library-inclusion-in-archive">
-            <param name="build.specific.web.dir" value="${build.web.dir.disasters}"/>
-        </antcall>
-        <webproject2:javac destdir="${build.classes.dir.disasters}" gensrcdir="${build.generated.sources.dir.disasters}" excludes="${excludes},${excludes.src.disasters}"/>
-        <copy todir="${build.classes.dir.disasters}">
-            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes},${excludes.src.disasters}" includes="${includes}"/>
-        </copy>
-        <echo message="not java sources from ${src.dir} is copied to ${build.classes.dir.disasters} after compiling Disasters Project"/>
+    <target depends="init,compile,compile-jsps,-pre-dist" if="do.war.package.without.custom.manifest" name="-do-dist-without-manifest">
+        <dirname file="${dist.war}" property="dist.jar.dir"/>
+        <mkdir dir="${dist.jar.dir}"/>
+        <jar compress="${jar.compress}" jarfile="${dist.war}">
+            <fileset dir="${build.web.dir}" excludes="WEB-INF/classes/.netbeans_*"/>
+        </jar>
     </target>
-    <target if="has.custom.manifest" name="-copy-manifest-disasters">
-        <mkdir dir="${build.meta.inf.dir.disasters}"/>
-        <copy todir="${build.meta.inf.dir.disasters}">
-            <fileset dir="${conf.dir}" includes="MANIFEST.MF"/>
-        </copy>
-        <echo message="Manifest: ${conf.dir}/MANIFEST.MF is copied in directory ${build.meta.inf.dir.disasters}"/>
+    <target depends="init,compile,compile-jsps,-pre-dist" if="do.war.package.with.custom.manifest" name="-do-dist-with-manifest">
+        <dirname file="${dist.war}" property="dist.jar.dir"/>
+        <mkdir dir="${dist.jar.dir}"/>
+        <jar compress="${jar.compress}" jarfile="${dist.war}" manifest="${build.meta.inf.dir}/MANIFEST.MF">
+            <fileset dir="${build.web.dir}" excludes="WEB-INF/classes/.netbeans_*"/>
+        </jar>
     </target>
-    <target if="has.persistence.xml" name="-copy-persistence-xml-disasters">
-        <mkdir dir="${build.web.dir.disasters}/WEB-INF/classes/META-INF"/>
-        <copy todir="${build.web.dir.disasters}/WEB-INF/classes/META-INF">
-            <fileset dir="${persistence.xml.dir}" includes="persistence.xml"/>
-        </copy>
+    <target depends="init,compile,compile-jsps,-pre-dist" if="do.tmp.war.package.without.custom.manifest" name="-do-tmp-dist-without-manifest">
+        <dirname file="${dist.war}" property="dist.jar.dir"/>
+        <mkdir dir="${dist.jar.dir}"/>
+        <jar compress="${jar.compress}" jarfile="${dist.war}">
+            <fileset dir="${build.web.dir}" excludes="WEB-INF/classes/.netbeans_*"/>
+        </jar>
     </target>
-    <target name="-post-compile-disasters">
-        <!-- Empty placeholder for easier customization. -->
-        <!-- You can override this target in the ../build.xml file. -->
+    <target depends="init,compile,compile-jsps,-pre-dist" if="do.tmp.war.package.with.custom.manifest" name="-do-tmp-dist-with-manifest">
+        <dirname file="${dist.war}" property="dist.jar.dir"/>
+        <mkdir dir="${dist.jar.dir}"/>
+        <jar compress="${jar.compress}" jarfile="${dist.war}" manifest="${build.meta.inf.dir}/MANIFEST.MF">
+            <fileset dir="${build.web.dir}" excludes="WEB-INF/classes/.netbeans_*"/>
+        </jar>
     </target>
-    <target depends="init,deps-jar,-pre-pre-compile-disasters,-pre-compile-disasters,-do-compile-disasters,-post-compile-disasters" description="Compile Disasters project." name="compile-disasters"/>	<!-- NUEVO -->
-    <!--
-                GENERAL TO ALL PROJECT COMPILATION
-            -->
-    <!--<target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
+    <target depends="init,compile,-pre-dist" description="Build Jadex agents (JAR)." name="jadex-jar">
+        <dirname file="${jadex.jar}" property="dist.jar.dir"/>
+        <mkdir dir="${dist.jar.dir}"/>
+        <jar compress="${jar.compress}" jarfile="${jadex.jar}">
+            <fileset dir="${build.classes.dir}" includes="${includes.jadex.jar}"/>
+        </jar>
+    </target>
+    <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
+    <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${file.reference.ant-contrib.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.catalina.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -722,14 +692,14 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.commons-collections.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.commons-digester.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.commons-logging.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.hsqldb-2005-08-20.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.hsqldb-2.2.5.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.httpunit.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jakarta-oro.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.js.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.json-taglib-0.4.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jstl.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.junit.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.mysql-connector-java-5.1.5-bin.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.mysql-connector-java-5.1.17-bin.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.org.restlet.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.slamd_server.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.standard.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -743,219 +713,121 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.log4j-1.2.12.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jtwitter.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jess.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applib-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-micro-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-bridge-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-commons-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-javaparser-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-application-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-base-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-		<copyfiles files="${file.reference.jadex-kernel-component-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-extension-agr-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-opengl-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-micro-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-nuggets-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-base-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-applications-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-tools-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-runtimetools-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
-        <copyfiles files="${file.reference.jadex-xml-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${build.web.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applib-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-micro-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-bridge-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-commons-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-javaparser-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-application-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-base-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-component-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-agr-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-opengl-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-micro-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-nuggets-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-base-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-applications-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-tools-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-runtimetools-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-tools-bdi-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-tools-bpmn-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-tools-comanalyzer-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jadex-xml-2.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
-    </target>-->
-    <target name="library-inclusion-in-archive" unless="dist.ear.dir"> <!-- MODIFICADO -->
-        <copyfiles files="${file.reference.ant-contrib.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.catalina.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.com.noelios.restlet.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.commons-beanutils.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.commons-codec.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.commons-collections.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.commons-digester.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.commons-logging.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.hsqldb-2005-08-20.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.httpunit.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jakarta-oro.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.js.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.json-taglib-0.4.1.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jstl.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.junit.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.mysql-connector-java-5.1.5-bin.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.org.restlet.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.slamd_server.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.standard.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.Tidy.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.bsf-2.3.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.bsh-2.0b4.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.commons-logging-1.0.4.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.commons-validator-1.1.4.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.dwr.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jakarta-oro-2.0.8.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.log4j-1.2.12.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jtwitter.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jess.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applib-bdi-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdi-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-applications-micro-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-bridge-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-commons-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-javaparser-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-application-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-base-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-		<copyfiles files="${file.reference.jadex-kernel-component-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-extension-agr-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-opengl-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-kernel-micro-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-nuggets-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-base-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-applications-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-rules-tools-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-runtimetools-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.jadex-xml-2.0.jar}" todir="${build.specific.web.dir}/WEB-INF/lib"/>
     </target>
-    <!--
-                DIST BUILDING SECTION
-            -->
-    <target depends="dist-caronte,dist-disasters" description="Build configurated distributions (WARs)." name="dist"/>
-    <!--
-                CARONTE PROJECT
-            -->
-    <target name="-pre-dist">
-        <!-- Empty placeholder for easier customization. -->
-        <!-- You can override this target in the ../build.xml file. -->
+    <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
+        <copyfiles files="${file.reference.ant-contrib.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.catalina.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.com.noelios.restlet.ext.servlet_2.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.com.noelios.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-beanutils.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-codec.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-collections.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-digester.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-logging.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.hsqldb-2.2.5.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.httpunit.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jakarta-oro.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.js.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.json-taglib-0.4.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jstl.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.junit.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.mysql-connector-java-5.1.17-bin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.org.restlet.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.slamd_server.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.standard.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.Tidy.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.bsf-2.3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.bsh-2.0b4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-logging-1.0.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.commons-validator-1.1.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.dwr.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jakarta-oro-2.0.8.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.log4j-1.2.12.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jtwitter.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applib-bdi-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdi-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bdibpmn-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-bpmn-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-gpmn-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-applications-micro-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-bridge-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-commons-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-javaparser-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-application-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-base-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdi-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bdibpmn-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-bpmn-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-component-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-agr-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-extension-envsupport-opengl-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-gpmn-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-kernel-micro-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-nuggets-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-base-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-platform-standalone-launch-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-applications-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-rules-tools-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-runtimetools-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-tools-bdi-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-tools-bpmn-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-tools-comanalyzer-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jadex-xml-2.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
-    <target depends="init,compile,compile-jsps,-pre-dist" if="do.war.package.without.custom.manifest" name="-do-dist-without-manifest">
-        <dirname file="${dist.war}" property="dist.jar.dir"/>
-        <mkdir dir="${dist.jar.dir}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war}">
-            <fileset dir="${build.web.dir}"/>
-        </jar>
-    </target>
-    <target depends="init,compile,compile-jsps,-pre-dist" if="do.war.package.with.custom.manifest" name="-do-dist-with-manifest">
-        <dirname file="${dist.war}" property="dist.jar.dir"/>
-        <mkdir dir="${dist.jar.dir}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war}" manifest="${build.meta.inf.dir}/MANIFEST.MF">
-            <fileset dir="${build.web.dir}"/>
-        </jar>
-    </target>
-    <target depends="init,compile,compile-jsps,-pre-dist" if="do.tmp.war.package.without.custom.manifest" name="-do-tmp-dist-without-manifest">
-        <dirname file="${dist.war}" property="dist.jar.dir"/>
-        <mkdir dir="${dist.jar.dir}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war}">
-            <fileset dir="${build.web.dir}"/>
-        </jar>
-    </target>
-    <target depends="init,compile,compile-jsps,-pre-dist" if="do.tmp.war.package.with.custom.manifest" name="-do-tmp-dist-with-manifest">
-        <dirname file="${dist.war}" property="dist.jar.dir"/>
-        <mkdir dir="${dist.jar.dir}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war}" manifest="${build.meta.inf.dir}/MANIFEST.MF">
-            <fileset dir="${build.web.dir}"/>
-        </jar>
-    </target>
-    <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
     </target>
-    <target depends="init,-clean-webinf-lib,compile,compile-jsps,-pre-dist" if="do.tmp.war.package" name="do-ear-dist">	<!-- MODIFICADO -->
+    <target depends="init,-clean-webinf-lib,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" if="do.tmp.war.package" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
         <mkdir dir="${dist.jar.dir}"/>
         <jar compress="${jar.compress}" jarfile="${dist.ear.war}" manifest="${build.web.dir}/META-INF/MANIFEST.MF">
-            <fileset dir="${build.web.dir}"/>
+            <fileset dir="${build.web.dir}" excludes="WEB-INF/classes/.netbeans_*"/>
         </jar>
     </target>
     <target name="-post-dist">
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target depends="init,compile,-pre-dist,do-dist,-post-dist" description="Build Caronte distribution (WAR)." name="dist-caronte"/> <!-- MODIFICADO -->
-    <target depends="init,-clean-webinf-lib,-init-cos,compile,-pre-dist,do-ear-dist,-post-dist" description="Build Caronte distribution (WAR) to be packaged into an EAR." name="dist-ear"/> <!-- MODIFICADO -->
-    <target depends="dist" description="Build Caronte jadex standalone .jar" name="jadex-jar">
-        <copy file="${jadex.jar.reference}" tofile="${jadex.jar}" overwrite="${jadex.jar.force.updated}"/>
-        <jar jarfile="${jadex.jar}" update="${jadex.jar.force.updated}">
-            <fileset dir="${build.classes.dir}" includes="${includes.jadex.jar}"/>
-        </jar>
-    </target>
-    <!--
-                DISASTERS PROJECT
-            -->
-    <target name="-pre-dist-disasters">
-        <!-- Empty placeholder for easier customization. -->
-        <!-- You can override this target in the ../build.xml file. -->
-    </target>
-    <target depends="init,compile-disasters,compile-jsps,-pre-dist-disasters" if="do.war.package.without.custom.manifest" name="-do-dist-without-manifest-disasters">
-        <dirname file="${dist.war.disasters}" property="dist.jar.dir.disasters"/>
-        <mkdir dir="${dist.jar.dir.disasters}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war.disasters}">
-            <fileset dir="${build.web.dir.disasters}"/>
-        </jar>
-    </target>
-    <target depends="init,compile-disasters,compile-jsps,-pre-dist-disasters" if="do.war.package.with.custom.manifest" name="-do-dist-with-manifest-disasters">
-        <dirname file="${dist.war.disasters}" property="dist.jar.dir.disasters"/>
-        <mkdir dir="${dist.jar.dir.disasters}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war.disasters}" manifest="${build.meta.inf.dir.disasters}/MANIFEST.MF">
-            <fileset dir="${build.web.dir.disasters}"/>
-        </jar>
-    </target>
-    <target depends="init,compile-disasters,compile-jsps,-pre-dist-disasters" if="do.tmp.war.package.without.custom.manifest" name="-do-tmp-dist-without-manifest-disasters">
-        <dirname file="${dist.war.disasters}" property="dist.jar.dir.disasters"/>
-        <mkdir dir="${dist.jar.dir.disasters}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war.disasters}">
-            <fileset dir="${build.web.dir.disasters}"/>
-        </jar>
-    </target>
-    <target depends="init,compile-disasters,compile-jsps,-pre-dist-disasters" if="do.tmp.war.package.with.custom.manifest" name="-do-tmp-dist-with-manifest-disasters">
-        <dirname file="${dist.war.disasters}" property="dist.jar.dir.disasters"/>
-        <mkdir dir="${dist.jar.dir.disasters}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.war.disasters}" manifest="${build.meta.inf.dir.disasters}/MANIFEST.MF">
-            <fileset dir="${build.web.dir.disasters}"/>
-        </jar>
-    </target>
-    <target depends="init,compile-disasters,compile-jsps,-pre-dist-disasters,-do-dist-with-manifest-disasters,-do-dist-without-manifest-disasters" name="do-dist-disasters"/>
-    <target depends="init" if="dist.ear.dir.disasters" name="-clean-webinf-lib-disasters">
-        <delete dir="${build.web.dir.disasters}/WEB-INF/lib"/>
-    </target>
-    <target depends="init,-clean-webinf-lib-disasters,compile-disasters,compile-jsps,-pre-dist-disasters" if="do.tmp.war.package" name="do-ear-dist-disasters">
-        <dirname file="${dist.ear.war.disasters}" property="dist.jar.dir.disasters"/>
-        <mkdir dir="${dist.jar.dir.disasters}"/>
-        <jar compress="${jar.compress}" jarfile="${dist.ear.war.disasters}" manifest="${build.web.dir.disasters}/META-INF/MANIFEST.MF">
-            <fileset dir="${build.web.dir.disasters}"/>
-        </jar>
-    </target>
-    <target name="-post-dist-disasters">
-        <!-- Empty placeholder for easier customization. -->
-        <!-- You can override this target in the ../build.xml file. -->
-    </target>
-    <target depends="init,compile-disasters,-pre-dist-disasters,do-dist-disasters,-post-dist-disasters" description="Build Disasters distribution (WAR)." name="dist-disasters"/>
-    <target depends="init,-clean-webinf-lib-disasters,-init-cos,compile-disasters,-pre-dist-disasters,do-ear-dist-disasters,-post-dist-disasters" description="Build Disasters distribution (WAR) to be packaged into an EAR." name="dist-ear-disasters"/>
-    <target depends="dist-disasters" description="Build Disasters jadex standalone .jar" name="jadex-jar-disasters">
-        <copy file="${jadex.jar.reference}" tofile="${jadex.jar.disasters}" overwrite="${jadex.jar.force.updated}"/>
-        <jar jarfile="${jadex.jar.disasters}" update="${jadex.jar.force.updated}">
-            <fileset dir="${build.classes.dir.disasters}" includes="${includes.jadex.jar.disasters}"/>
-        </jar>
-    </target>
+    <target depends="init,compile,-pre-dist,do-dist,jadex-jar,-post-dist" description="Build distribution (WAR)." name="dist"/>
+    <target depends="init,-clean-webinf-lib,-init-cos,compile,-pre-dist,do-ear-dist,-post-dist" description="Build distribution (WAR) to be packaged into an EAR." name="dist-ear"/>
     <!--
                 EXECUTION SECTION
             -->
@@ -979,9 +851,7 @@ exists or setup the property manually. For example like this:
     <target name="-run-deploy-am">
         <!-- Task to deploy to the Access Manager runtime. -->
     </target>
-    <target depends="init,-init-cos,compile,compile-jsps,-do-compile-single-jsp,-pre-dist,-do-tmp-dist-with-manifest,-do-tmp-dist-without-manifest,-pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,-post-run-deploy" name="run-deploy">
-        <nbjpdaappreloaded/>
-    </target>
+    <target depends="init,-init-cos,compile,compile-jsps,-do-compile-single-jsp,-pre-dist,-do-tmp-dist-with-manifest,-do-tmp-dist-without-manifest,-pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,-post-run-deploy,-do-update-breakpoints" name="run-deploy"/>
     <target if="netbeans.home" name="-run-deploy-nb">
         <nbdeploy clientUrlPart="${client.urlPart}" debugmode="false" forceRedeploy="${forceRedeploy}"/>
     </target>
@@ -1067,6 +937,9 @@ exists or setup the property manually. For example like this:
         <fail unless="run.class">Must select one file in the IDE or set run.class</fail>
         <webproject1:java classname="${run.class}" classpath="${run.test.classpath}"/>
     </target>
+    <target depends="init" if="netbeans.home" name="-do-update-breakpoints">
+        <webproject1:nbjpdaappreloaded/>
+    </target>
     <!--
                 DEBUGGING SECTION
             -->
@@ -1150,55 +1023,32 @@ exists or setup the property manually. For example like this:
     <!--
                 JAVADOC SECTION
             -->
-    <target if="have.sources" name="javadoc-build"> <!-- MODIFICADO -->
-        <mkdir dir="${dist.specific.javadoc.dir}"/> <!-- MODIFICADO -->
-        <javadoc additionalparam="${javadoc.additionalparam}" author="${javadoc.author}" charset="UTF-8" destdir="${dist.specific.javadoc.dir}" docencoding="UTF-8" encoding="${javadoc.encoding.used}" failonerror="true" noindex="${javadoc.noindex}" nonavbar="${javadoc.nonavbar}" notree="${javadoc.notree}" private="${javadoc.private}" source="${javac.source}" splitindex="${javadoc.splitindex}" use="${javadoc.use}" useexternalfile="true" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}"> <!-- MODIFICADO -->
+    <target depends="init" if="have.sources" name="javadoc-build">
+        <mkdir dir="${dist.javadoc.dir}"/>
+        <javadoc additionalparam="${javadoc.additionalparam}" author="${javadoc.author}" charset="UTF-8" destdir="${dist.javadoc.dir}" docencoding="UTF-8" encoding="${javadoc.encoding.used}" failonerror="true" noindex="${javadoc.noindex}" nonavbar="${javadoc.nonavbar}" notree="${javadoc.notree}" private="${javadoc.private}" source="${javac.source}" splitindex="${javadoc.splitindex}" use="${javadoc.use}" useexternalfile="true" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}">
             <classpath>
                 <path path="${javac.classpath}:${j2ee.platform.classpath}"/>
             </classpath>
-            <fileset dir="${src.dir}" excludes="${specific.excludes}" includes="${includes}"> <!-- MODIFICADO -->
+            <fileset dir="${src.dir}" excludes="${excludes},${excludes.src}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
-            <fileset dir="${build.specific.generated.sources.dir}" erroronmissingdir="false"> <!-- MODIFICADO -->
+            <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
                 <include name="**/*.java"/>
             </fileset>
         </javadoc>
-        <copy todir="${dist.specific.javadoc.dir}"> <!-- MODIFICADO -->
-            <fileset dir="${src.dir}" excludes="@{specific.excludes}" includes="${includes}"> <!-- MODIFICADO -->
+        <copy todir="${dist.javadoc.dir}">
+            <fileset dir="${src.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
-            <fileset dir="${build.specific.generated.sources.dir}" erroronmissingdir="false"> <!-- MODIFICADO -->
+            <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
                 <include name="**/doc-files/**"/>
             </fileset>
         </copy>
     </target>
-    <target if="netbeans.home" name="javadoc-browse" unless="no.javadoc.preview"> <!-- MODIFICADO -->
-        <nbbrowse file="${dist.specific.javadoc.dir}/index.html"/> <!-- MODIFICADO -->
+    <target depends="init,javadoc-build" if="netbeans.home" name="javadoc-browse" unless="no.javadoc.preview">
+        <nbbrowse file="${dist.javadoc.dir}/index.html"/>
     </target>
-    <target depends="init" description="Build Javadoc." name="javadoc"> <!-- MODIFICADO -->
-        <!--
-                CARONTE PROJECT
-                    -->
-        <antcall target="javadoc-build">
-            <param name="dist.specific.javadoc.dir" value="${dist.javadoc.dir}"/>
-            <param name="specific.excludes" value="${excludes},${excludes.src}"/>
-            <param name="build.specific.generated.sources.dir" value="${build.generated.sources.dir}"/>
-        </antcall>
-        <antcall target="javadoc-browse">
-            <param name="dist.javadoc.dir" value="${dist.javadoc.dir}"/>
-        </antcall>
-        <!--
-                DISASTERS PROJECT
-                    -->
-        <antcall target="javadoc-build">
-            <param name="dist.specific.javadoc.dir" value="${dist.javadoc.dir.disasters}"/>
-            <param name="specific.excludes" value="${excludes},${excludes.src.disasters}"/>
-            <param name="build.specific.generated.sources.dir" value="${build.generated.sources.dir.disasters}"/>
-        </antcall>
-        <antcall target="javadoc-browse">
-            <param name="dist.specific.javadoc.dir" value="${dist.javadoc.dir.disasters}"/>
-        </antcall>
-    </target>
+    <target depends="init,javadoc-build,javadoc-browse" description="Build Javadoc." name="javadoc"/>
     <!--
                 
                 JUNIT COMPILATION SECTION
@@ -1324,9 +1174,8 @@ exists or setup the property manually. For example like this:
                 
                 CLEANUP SECTION
             -->
-    <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps"/>
+    <target depends="init" name="deps-clean" unless="no.deps"/>
     <target depends="init" name="do-clean">
-    	<echo message="Doing cleanup..."/><!-- NUEVO -->
         <condition property="build.dir.to.clean" value="${build.web.dir}">
             <isset property="dist.ear.dir"/>
         </condition>
@@ -1334,14 +1183,8 @@ exists or setup the property manually. For example like this:
         <delete includeEmptyDirs="true" quiet="true">
             <fileset dir="${build.dir.to.clean}/WEB-INF/lib"/>
         </delete>
-        <delete dir="${build.dir}"/>
+        <delete dir="${build.directory}"/>
         <available file="${build.dir.to.clean}/WEB-INF/lib" property="status.clean-failed" type="dir"/>
-        <delete includeEmptyDirs="true" quiet="true"> <!-- NUEVO -->
-            <fileset dir="${build.web.dir.disasters}/WEB-INF/lib"/> <!-- NUEVO -->
-        </delete> <!-- NUEVO -->
-        <delete dir="${build.dir.disasters}"/> <!-- NUEVO -->
-        <available file="${build.web.dir.disasters}" property="status.clean-failed" type="dir"/> <!-- NUEVO -->
-        <delete dir="${build.directory}"/> <!-- NUEVO -->
         <delete dir="${dist.dir}"/>
     </target>
     <target depends="do-clean" if="status.clean-failed" name="check-clean">
@@ -1352,7 +1195,6 @@ exists or setup the property manually. For example like this:
         <nbundeploy failOnError="false" startServer="false"/>
     </target>
     <target name="-post-clean">
-        <echo message="Cleanup completed"/> <!--NUEVO -->
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>

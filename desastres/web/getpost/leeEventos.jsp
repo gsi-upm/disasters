@@ -29,9 +29,9 @@
 			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
 			WHERE c.modificado > ?
 			AND c.marcador = m.id
-			AND m.tipo_marcador != 'people'
+			AND m.tipo_marcador = 'event'
 			AND c.tipo = t.id
-			AND c.planta < 0
+			AND c.planta = -1
 			AND c.estado = e.id
 			AND e.tipo_estado != 'erased'
 			<sql:param value="${param.fecha}"/>
@@ -58,9 +58,9 @@
 			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
 			WHERE c.modificado > ?
 			AND c.marcador = m.id
-			AND m.tipo_marcador != 'people'
+			AND m.tipo_marcador = 'event'
 			AND c.tipo = t.id
-			AND c.planta < 0
+			AND c.planta = -1
 			AND c.estado = e.id
 			<sql:param value="${param.fecha}"/>
 		</sql:query>

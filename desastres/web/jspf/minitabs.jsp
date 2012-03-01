@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
+<jsp:useBean class="gsi.project.UserBean" id="usuario" scope="session"/>
 
 <fmt:bundle basename="fmt.eji8n">
 	<!-- Menus from minitabs -->
@@ -29,7 +29,7 @@
 			</table>
 		</form>
 	</div>
-	<c:if test="${proyecto.nombreUsuario != null}">
+	<c:if test="${usuario.nombre != null}">
 		<div id="showSimOptions" class="slideMenu">
 			<form id="SimOptions" action="/desastres/RunSimulation" method="post">
 				<table>
@@ -44,7 +44,6 @@
 							<fmt:message key="victimas"/> <input type="text" name="victims0" size="3"/>
 							<br/>
 							<fmt:message key="incendios"/> <input type="text" name="fires0" size="3"/>
-							<input type="hidden" name="proyectName" value="disasters"/>
 						</td>
 					</tr>
 					<tr>

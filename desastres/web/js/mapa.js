@@ -50,7 +50,6 @@ var infoWinMarker = '';
  */
 function initialize(){
 	localizador = new google.maps.Geocoder();
-	infoWindow = new google.maps.InfoWindow();
 	var centro = mapInit(); // en mapa_xxx.js
 	var myOptions = {
 		center: centro.center,
@@ -66,9 +65,12 @@ function initialize(){
 	map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
 	
 	google.maps.event.addListener(map, 'click', function(){
-		infoWindow.close();
-		if(infoWinMarker != 'building'){
-			limpiarLateral(infoWinMarker);
+		if(infoWindow != null){
+			infoWindow.close();
+			infoWindow = null;
+			if(infoWinMarker != 'building'){
+				limpiarLateral(infoWinMarker);
+			}
 		}
 	});
 
@@ -140,21 +142,16 @@ function actualizar(){
 						nuevomarcador.marker = generaMarcador(nuevomarcador, definitivo);
 						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 					}else{ // si se ha eliminado un marcador
-						marcadores_definitivos[nuevomarcador.id].marker.setMap(map);
-						marcadores_definitivos[nuevomarcador.id] = null;
+						marcadores_definitivos[nuevomarcador.id].marker.setMap(null);
+						delete marcadores_definitivos[nuevomarcador.id];
 						pos_indices--;
 
 						// eliminamos el indice de la matriz de indices sin dejar huecos
-						var id = nuevomarcador.id;
-						var index;
-
-						for(var i = 0; i < indices.length; i++){
-							index = i;
-							if(indices[i] == id){
-								break;
-							}
+						var index = 0;
+						while(indices[index] != nuevomarcador.id){
+							index++;
 						}
-						while(indices[index+1] != null){
+						while(indices[index + 1] != null){
 							indices[index] = indices[index + 1];
 							index++;
 						}
@@ -212,7 +209,9 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	});
 	
 	google.maps.event.addListener(marker, 'click', function(){
-		infoWindow.close();	
+		if(infoWindow != null){
+			infoWindow.close();
+		}
 		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + mensaje + '</div>'});
 		infoWinMarker = 'building';
 		infoWindow.open(map, marker);
@@ -375,7 +374,7 @@ function guardar(puntero){
 	}
 
 	// 2.Borrar el elemento del mapa y la matriz temporal
-	marcadores_temporales[puntero.id] = null;
+	delete marcadores_temporales[puntero.id];
 
 	// 3.Recargar el mapa para que aparezca el elemento nuevo
 	// actualizar(); // esto adelanta el timeOut a ahora mismo
@@ -613,12 +612,15 @@ function cancelar_asignacion(id){
 
 /**
  * Obtiene la hora
+ * 
+ * @param sinc True si sincroniza la hora con el servidor
+ * @return Hora
  */
-function obtiene_fecha(primera) {
+function obtiene_fecha(sinc) {
 	// La hora se obtiene en local
 	var fecha_actual = new Date(new Date().getTime() - desfase);
 	
-	if(primera){
+	if(sinc){
 		// La hora se obtiene del servidor
 		var hora_server;
 		$.ajax({

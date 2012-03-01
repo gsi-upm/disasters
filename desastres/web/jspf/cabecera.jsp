@@ -1,17 +1,20 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<% String proyect = getServletContext().getInitParameter("proyect"); %>
+<%
+	String proyecto = getServletContext().getInitParameter("proyecto");
+	boolean proyectoCaronte = proyecto.equals("caronte");
+%>
 
 <fmt:bundle basename="fmt.eji8n">
-	<img id="cabecera" src="images/<fmt:message key="header"/>_<%=proyect%>.gif" alt=""/>
+	<img id="cabecera" src="images/<fmt:message key="header"/>_<%=proyecto%>.gif" alt=""/>
 	<div class="derecha">
 		<!-- reloj -->
 		<div id="reloj">
 			<div id="fecha"></div>
 			<div id="Reloj24H"></div>
 		</div>
-		v.101
+		v.102
 		<img id="langInit" class="pulsable" src="images/flags/<fmt:message key="idioma"/>.png"
 			 alt="lang:<fmt:message key="idioma"/>" onclick="menuIdiomas('abrir')"/>
 		<div id="langSelect" class="oculto">
@@ -28,7 +31,7 @@
 			<a href="${index_de}"><img src="images/flags/de.png" alt="Deutsch"/></a>
 		</div>
 		<span id="prueba"></span> <!-- SPAN DE PRUEBAS -->
-		<c:if test="<%=proyect.equals("caronte")%>">
+		<c:if test="<%=proyectoCaronte%>">
 			<div>
 				<c:url value="acercaDe.jsp" var="acercaDe"/>
 				<a href="${acercaDe}"><fmt:message key="informacionGeneral"/></a>

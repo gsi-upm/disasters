@@ -103,21 +103,10 @@ public class Parameters {
 	/**
      * Limits for latitude and longitude in Madrid
      */
-    public final double MIN_LATITUDE_DISASTERS = 40.36;
-    public final double MAX_LATITUDE_DISASTERS = 40.48;
-    public final double MIN_LONGITUDE_DISASTERS = -3.78;
-    public final double MAX_LONGITUDE_DISASTERS = -3.57;
-    /**
-     * Limits for latitude and longitude in Calasparra
-     */
-	 public final double MIN_LATITUDE_CARONTE = 38.232272;
-	 public final double MAX_LATITUDE_CARONTE = MIN_LATITUDE_CARONTE;
-	 public final double MIN_LONGITUDE_CARONTE = -1.698925;
-	 public final double MAX_LONGITUDE_CARONTE = MIN_LONGITUDE_CARONTE;
-    //public final double MIN_LATITUDE_CARONTE = 38.225;
-    //public final double MAX_LATITUDE_CARONTE = 38.233;
-    //public final double MIN_LONGITUDE_CARONTE = -1.71;
-    //public final double MAX_LONGITUDE_CARONTE = -1.694;
+    public final double MIN_LATITUDE = 40.36;
+    public final double MAX_LATITUDE = 40.48;
+    public final double MIN_LONGITUDE = -3.78;
+    public final double MAX_LONGITUDE = -3.57;
     /**
      * Differences for marker's latitudes and longitudes
      */

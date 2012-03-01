@@ -1,4 +1,4 @@
-package gsi.proyect;
+package gsi.project;
 
 import gsi.rest.Connection;
 import java.beans.*;
@@ -9,8 +9,8 @@ import org.json.me.*;
  *
  * @author Juan Luis Molina
  */
-public class ProyectBean implements Serializable{
-	public static final String NOMBRE_USUARIO = "nombreUsuario";
+public class UserBean implements Serializable{
+	public static final String NOMBRE = "nombre";
 	public static final String ID = "id";
 	public static final String ROL = "rol";
 	public static final String NIVEL_MSG = "nivelMsg";
@@ -18,28 +18,28 @@ public class ProyectBean implements Serializable{
 	private static final String URL = Connection.getURL();
 	private PropertyChangeSupport propertySupport;
 
-	private String nombreUsuario, rol;
+	private String nombre, rol;
 	private int id, nivelMsg;
 
-	public ProyectBean(){
+	public UserBean(){
 		propertySupport = new PropertyChangeSupport(this);
-		nombreUsuario = "";
+		nombre = "";
 		id = 0;
 		rol = "citizen";
 		nivelMsg = 0;
 	}
 
-	public String getNombreUsuario(){
-		return nombreUsuario;
+	public String getNombre(){
+		return nombre;
 	}
 
-	public void setNombreUsuario(String value){
-		String oldValue = nombreUsuario;
-		nombreUsuario = value;
-		propertySupport.firePropertyChange(NOMBRE_USUARIO, oldValue, nombreUsuario);
+	public void setNombre(String value){
+		String oldValue = nombre;
+		nombre = value;
+		propertySupport.firePropertyChange(NOMBRE, oldValue, nombre);
 		if(value != null && value.equals("") == false){
 			try{
-				String proyectoAux = Connection.connect(URL + "userProyect/" + value);
+				String proyectoAux = Connection.connect(URL + "userProject/" + value);
 				JSONArray proyecto = new JSONArray(proyectoAux);
 				setId(proyecto.getJSONObject(0).getInt("id"));
 				setRol(proyecto.getJSONObject(0).getString("rol"));

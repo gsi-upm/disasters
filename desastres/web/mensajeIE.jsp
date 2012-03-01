@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<% String proyecto = getServletContext().getInitParameter("proyect"); %>
+<% String proyecto = getServletContext().getInitParameter("proyecto"); %>
 
 <!DOCTYPE HTML>
 <html>

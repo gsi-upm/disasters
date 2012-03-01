@@ -1,4 +1,4 @@
-package gsi.proyect;
+package gsi.project;
 
 import gsi.rest.Connection;
 import java.io.*;

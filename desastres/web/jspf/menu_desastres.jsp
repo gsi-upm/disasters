@@ -94,8 +94,7 @@
 		<div class="dhtmlgoodies_aTab">
 			<form id="recursos" action="#">
 				<table class="tabla_menu">
-					<tr><td colspan="2"><input type="hidden" name="marcador" value="resource"/>
-				<input type="hidden" name="proyectName" value="caronte"/></td></tr>
+					<tr><td colspan="2"><input type="hidden" name="marcador" value="resource"/></td></tr>
 					<tr>
 						<td>
 							<input type="radio" name="tipo" value="police" checked="checked" onclick="cambiaIcono(marcador.value,'police', cantidad.value);"/>

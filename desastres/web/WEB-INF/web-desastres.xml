@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
     <!-- Application class name -->
-    <display-name>Caronte</display-name>
+    <display-name>Desastres 2.0</display-name>
     <context-param>
         <param-name>org.restlet.application</param-name>
         <param-value>gsi.rest.DisasterApplication</param-value>
     </context-param>
     <context-param>
-        <param-name>proyect</param-name>
-        <param-value>caronte</param-value>
+        <param-name>proyecto</param-name>
+        <param-value>desastres</param-value>
     </context-param>
     <!-- Restlet adapter -->
     <servlet>
@@ -23,6 +23,14 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
     <!-- Catch all requests -->
+    <servlet>
+        <servlet-name>XpertServlet</servlet-name>
+        <servlet-class>gsi.xpert.XpertServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>XpertServlet</servlet-name>
+        <url-pattern>/Xpert</url-pattern>
+    </servlet-mapping>
     <!-- DWR -->
     <servlet>
         <servlet-name>dwr-invoker</servlet-name>
@@ -43,12 +51,20 @@
     </servlet-mapping>
     <!-- Simulator -->
     <servlet>
-        <servlet-name>RegistroServlet</servlet-name>
-        <servlet-class>gsi.proyect.RegistroServlet</servlet-class>
+        <servlet-name>SimulatorServlet</servlet-name>
+        <servlet-class>simulator.SimulatorServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RegistroServlet</servlet-name>
-        <url-pattern>/registro</url-pattern>
+        <servlet-name>SimulatorServlet</servlet-name>
+        <url-pattern>/SimulatorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RunSimulation</servlet-name>
+        <servlet-class>gsi.simulator.RunSimulation</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RunSimulation</servlet-name>
+        <url-pattern>/RunSimulation</url-pattern>
     </servlet-mapping>
     <!-- Filtering-->
     <filter>
@@ -97,7 +113,6 @@
         <display-name>no_acceso</display-name>
         <web-resource-collection>
             <web-resource-name>sin_acceso</web-resource-name>
-            <description/>
             <url-pattern>/jspf/*</url-pattern>
             <url-pattern>/error/*</url-pattern>
         </web-resource-collection>

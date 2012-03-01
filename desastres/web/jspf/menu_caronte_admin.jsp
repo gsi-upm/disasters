@@ -106,7 +106,7 @@
 				<input type="button" id="submit10" class="btn oculto" value="<fmt:message key="modificar"/>" onclick="
 					modificar2(iden.value,seleccionRadio(this.form,0),1,nombre.value,descripcion.value,info.value,
 						direccion.value,tamanno.value,trafico.value,planta.value,0); return false;"/>
-				<input type="button" id="eliminar1" class="btn oculto" value="Eliminar" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+				<input type="button" id="eliminar1" class="btn oculto" value="Eliminar" onclick="eliminar(marcadores_definitivos[iden.value],definitivo);"/>
 				<div class="jqmWindow" id="dialog1">
 					<p><fmt:message key="confirmarMarcador"/></p>
 					<p class="centrado">
@@ -249,7 +249,7 @@
 				<input type="button" id="submit20" class="btn oculto" value="<fmt:message key="modificar"/>" onclick="
 						modificar2(iden.value,seleccionRadio(this.form,2),cantidad.value,nombre.value,descripcion.value,
 						info.value,direccion.value,peso.value,movilidad.value,planta.value,0); return false;"/>
-				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+				<input type="button" id="eliminar2" value="Eliminar" class="btn oculto" onclick="eliminar(marcadores_definitivos[iden.value],definitivo);"/>
 				<div class="jqmWindow" id="dialog2">
 					<p><fmt:message key="confirmarMarcador"/></p>
 					<p class="centrado">
