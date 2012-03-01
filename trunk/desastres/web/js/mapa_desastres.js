@@ -1,3 +1,5 @@
+const proyecto = 'desastres';
+
 function mapInit(){
 	var center = new google.maps.LatLng(40.416878, -3.703480); // La puerta del sol de Madrid
 	var zoom = 12;

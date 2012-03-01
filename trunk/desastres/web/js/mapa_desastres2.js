@@ -116,22 +116,20 @@ function asociar(id, marker){
 	// 2.hallar la distancia a cada catastrofe de la matriz definitiva
 	var diferencia = 999999999999;
 	var id_mas_cercano;
-	var idDefinitivo;
 
 	for(var i = 0; indices[i] != null; i++){
-		idDefinitivo = indices[i];
+		var idDefinitivo = indices[i];
 		// nos quedamos solo con los eventos (catastrofes)
-		if(marcadores_definitivos[idDefinitivo].marcador != 'event'){
-			continue;
-		}
-		var latitud2 = marcadores_definitivos[idDefinitivo].latitud;
-		var longitud2 = marcadores_definitivos[idDefinitivo].longitud;
-		var dif_lat = Math.pow(latitud1 - latitud2, 2);
-		var dif_long = Math.pow(longitud1 - longitud2, 2);
-		var distancia = Math.sqrt(dif_lat + dif_long);
-		if(distancia < diferencia){
-			diferencia = distancia;
-			id_mas_cercano = idDefinitivo;
+		if(marcadores_definitivos[idDefinitivo].marcador == 'event'){
+			var latitud2 = marcadores_definitivos[idDefinitivo].latitud;
+			var longitud2 = marcadores_definitivos[idDefinitivo].longitud;
+			var dif_lat = Math.pow(latitud1 - latitud2, 2);
+			var dif_long = Math.pow(longitud1 - longitud2, 2);
+			var distancia = Math.sqrt(dif_lat + dif_long);
+			if(distancia < diferencia){
+				diferencia = distancia;
+				id_mas_cercano = idDefinitivo;
+			}
 		}
 	}
 

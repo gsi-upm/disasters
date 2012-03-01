@@ -22,7 +22,7 @@ public class Connection {
 
 	/**
 	 * Getter
-	 * @return String with the Proyect name
+	 * @return String with the Project name
 	 */
 	public static String getProyecto(){
 		return PROYECTO;

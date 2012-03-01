@@ -16,7 +16,7 @@ import gsi.simulator.rest.*;
  *
  * @author Sergio
  */
-public class RunSimulation extends HttpServlet {
+public class RunSimulation extends HttpServlet{
 
 	private static final String URL_BASE = "/desastres/";
 
@@ -27,26 +27,23 @@ public class RunSimulation extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
         Simulator sim = new Simulator();
 
-        if (request.getParameter("sim").equals("run")) {
-            try {
+        if(request.getParameter("sim").equals("run")){
+            try{
                 int victims0 = Integer.parseInt(request.getParameter("victims0"));
                 int fires0 = Integer.parseInt(request.getParameter("fires0"));
-				String proyect = request.getParameter("proyectName");
 
-                if ((victims0 == 0) || (fires0 == 0)) {
-                    sim.runSimulation(proyect);
+                if(victims0 == 0 || fires0 == 0){
+                    sim.runSimulation();
+                }else{
+                    sim.runSimulation(victims0, fires0);
                 }
-                else {
-                    sim.runSimulation(victims0, fires0, proyect);
-                }
-            } catch (Exception e) {
-                sim.runSimulation("");
-            } finally {
+            }catch(Exception e){
+                sim.runSimulation();
+            }finally{
                 response.sendRedirect(URL_BASE + "index.jsp?alert=true");
             }
         }

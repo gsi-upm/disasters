@@ -1,3 +1,8 @@
+/**
+ * Obtiene las coordenadas del usuario y actualiza su posicion
+ * 
+ * @param pos Posicion devuelta
+ */
 function coordenadasUsuario(pos){
 	// PRUEBAAA!!! ****************************************************************************************
 	var latitud = (38.232272 + (2*Math.random()-1)*0.0001).toFixed(6); // pos.coords.latitude.toFixed(6);
@@ -23,6 +28,11 @@ function coordenadasUsuario(pos){
 	}
 }
 
+/**
+ * Indica el numero de agentes, emergencias y heridos en la residencia
+ * 
+ * @param planta Planta de la residencia
+ */
 function numeroMarcadores(planta){
 	if(activeTabIndex['dhtmlgoodies_tabView1'] == 2){
 		$.getJSON('getpost/info_caronte.jsp',{
@@ -55,6 +65,13 @@ function numeroMarcadores(planta){
 	}
 }
 
+/**
+ * Obtiene las acciones que se pueden realizar o se estan llevando a cabo sobre una emergencia o herido y
+ * las envia en forma de menu para mostrarlas en un bocadillo
+ * 
+ * @param puntero Marcador pulsado
+ * @return Menu de acciones
+ */
 function cargarMenuAcciones(puntero){
 	var menu = '';
 	// igual que $.getJSON(url,data,success) pero forzamos async=false para que cargue bien el pop-up
@@ -110,6 +127,13 @@ function cargarMenuAcciones(puntero){
 	return menu;
 }
 
+/**
+ * Obtiene las actividades que esta realizando un agente y
+ * las devuelve en forma de menu para mostrarlas en un bocadillo
+ * 
+ * @param evento
+ * @return Menu de actividades
+ */
 function cargarListaActividades(evento){
 	var menu = '';
 	// igual que $.getJSON(url,data,success) pero async=false
@@ -141,6 +165,11 @@ function cargarListaActividades(evento){
 	return menu;
 }
 
+/**
+ * Edita los datos de las pestannas de la izquierda y la muestra
+ * 
+ * @param evento Marcador del que se va a cargar su pestanna
+ */
 function cargarLateral(evento){
 	var lateral;
 	if(evento.marcador == 'event'){
@@ -336,7 +365,13 @@ function cargarLateral(evento){
 	}
 }
 
-function limpiarLateral(marcador){
+/**
+ * Pone los valores por defecto en la pestanna indicada
+ * 
+ * @param marcador Tipo de marcador del que se va a limpiar su pestanna
+ * @param async Indica si la limpieza es asincrona
+ */
+function limpiarLateral(marcador, async){
 	noActualizar = 0;
 	var lateral;
 	if(marcador == 'event'){
@@ -386,6 +421,9 @@ function limpiarLateral(marcador){
 				emergenciasAsociadas = [new Array(), new Array()];
 				//document.getElementById('listaSintomas').innerHTML = '';
 				//sintomas = [new Array(), new Array()];
+				if(async == null){
+					async = false;
+				}
 				$.ajax({
 					type: 'GET',
 					dataType: 'json',
@@ -408,7 +446,7 @@ function limpiarLateral(marcador){
 							document.getElementById('textoAsoc').innerHTML = '&emsp;V';
 						}
 					},
-					async: false
+					async: async
 				});
 				/*$.ajax({
 					type: 'GET',
@@ -426,7 +464,7 @@ function limpiarLateral(marcador){
 							sintomas[1].push([entry.tipo, false]);
 						});
 					},
-					async: false
+					async: async
 				});*/
 			}
 		}
@@ -440,6 +478,12 @@ function limpiarLateral(marcador){
 	limpiar = true;
 }
 
+/**
+ * 
+ * 
+ * @param id 
+ * @param valor 
+ */
 function asociarEmergencia(id, valor){
 	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
 		if(emergenciasAsociadas[0][i][0] == id){
@@ -448,6 +492,12 @@ function asociarEmergencia(id, valor){
 	}
 }
 
+/**
+ * Annade un sintoma a un herido
+ * 
+ * @param tipo 
+ * @param valor 
+ */
 function annadirSintoma(tipo, valor){
 	for(var i = 0; i < sintomas[0].length; i++){
 		if(sintomas[0][i][0] == tipo){
@@ -456,6 +506,13 @@ function annadirSintoma(tipo, valor){
 	}
 }
 
+/**
+ * Guarda en la base de datos que un agente actua sobre una emergencia o herido
+ * 
+ * @param idEvento Identificador de la actividad
+ * @param nombreUsuario nombre del usuario
+ * @param accionAux Accion a realizar
+ */
 function actuar(idEvento, nombreUsuario, accionAux){
 	var accion;
 	var estadoEvento;
@@ -495,6 +552,13 @@ function actuar(idEvento, nombreUsuario, accionAux){
 	registrarHistorial(userName, marcador.marcador, marcador.tipo, idEvento, accion);
 }
 
+/**
+ * Detiene la actividad que un agente sete realizando sobre una emergencia
+ * 
+ * @param idEvento Identificador de la actividad realiada
+ * @param idEmergencia Identificador de la emergencia
+ * @param nombreUsuario Nombre del usuario
+ */
 function detener(idEvento, idEmergencia, nombreUsuario){
 	$.post('getpost/updateEstado.jsp',{
 		'accion':'detener',
@@ -504,6 +568,13 @@ function detener(idEvento, idEmergencia, nombreUsuario){
 	});
 }
 
+/**
+ * Actualiza la posicion de un marcador
+ * 
+ * @param id Identificador del marcador
+ * @param lat Latitud
+ * @param lng Longitud
+ */
 function guardar_posicion(id, lat, lng){
 	var marcador = marcadores_definitivos[id];
 	marcador.marker.setPosition(new google.maps.LatLng(lat, lng));
@@ -516,8 +587,19 @@ function guardar_posicion(id, lat, lng){
 	noActualizar = 0;
 }
 
+/**
+ * Cambia la planta de la residencia en el mapa
+ * 
+ * @paran num Numero de planta
+ */
 function cambiarPlanta(num){
 	residencia.setMap(null);
+	if(infoWindow != null){
+		infoWindow.close();
+		if(infoWinMarker != 'building'){
+			limpiarLateral(infoWinMarker);
+		}
+	}
 	document.getElementById('planta' + plantaResidencia).style.fontWeight = 'normal';
 	document.getElementById('planta' + plantaResidencia).style.textDecoration = 'none';
 
@@ -531,11 +613,15 @@ function cambiarPlanta(num){
 		var url = 'markers/residencia/planta' + num + '.png';
 		var limites = residencia.getBounds();
 		residencia = new google.maps.GroundOverlay(url, limites, {clickable: false});
-		if(map.getZoom() >= 20 && map.getMapTypeId() == roadmap){
+		if(map.getZoom() >= 19 && map.getMapTypeId() == roadmap){
 			residencia.setMap(map);
 		}
 	}
 
+	document.getElementById('prueba').innerHTML = '';
+	for(var i in marcadores_definitivos){
+		document.getElementById('prueba').innerHTML += i + ' ';
+	}
 	for(var i in marcadores_definitivos){
 		marcadores_definitivos[i].marker.setMap(null);
 		if((num == -2 || marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2) &&
@@ -547,6 +633,11 @@ function cambiarPlanta(num){
 	numeroMarcadores(num);
 }
 
+/**
+ * Muestra los marcadores asociados a personas sanas
+ * 
+ * @param mostrar True para mostrar, false para ocultar
+ */
 function mostrarSanos(mostrar){
 	verSanos = mostrar;
 	for(var i in marcadores_definitivos){
@@ -560,6 +651,11 @@ function mostrarSanos(mostrar){
 	}
 }
 
+/**
+ * Modifica la opcion de ser localizado o no
+ * 
+ * @param valor Indica si el usuario quiere ser localizado
+ */
 function cambiarGeolocalizacion(valor){
 	localizacion = valor;
 	$.post('getpost/updateLatLong.jsp',{
@@ -568,6 +664,13 @@ function cambiarGeolocalizacion(valor){
 	});
 }
 
+/**
+ * Encuentra la posicion de una direccion o de su latitud y longitud
+ * 
+ * @param lat Latitud
+ * @param lng Longitud
+ * @param dir Direccion
+ */
 function findPos(lat, lng, dir){
 	limpiar = false;
 	if(puntoAux != null){
@@ -582,6 +685,11 @@ function findPos(lat, lng, dir){
 	}
 }
 
+/**
+ * Muestra en el mapa el punto que se quiere localizar
+ * 
+ * @param punto Coordenadas del punto a localizar
+ */
 function localizar(punto){
 	localizador.geocode({location:punto}, function(respuesta, estado){
 		var latlng = respuesta[0].geometry.location;
@@ -604,6 +712,13 @@ function localizar(punto){
 	});
 }
 
+/**
+ * Guarda la nueva posicion del usuario
+ * 
+ * @param lat Latitud
+ * @param lng Longitud
+ * @param porDefecto Indica si se quiere guardar esa posicion como la de por defecto del usuario
+ */
 function newPos(lat, lng, porDefecto){
 	if(porDefecto == true){
 		document.getElementById('form-posicion').porDefecto.checked = false;
@@ -623,6 +738,12 @@ function newPos(lat, lng, porDefecto){
 	infoWindow.close();
 }
 
+/**
+ * Guarda la nueva planta donde esta situado el agente
+ * 
+ * @param planta Planta
+ * @param porDefecto Indica si la planta sera la de por defecto del agente
+ */
 function editPlanta(planta, porDefecto){
 	$.post('getpost/updateLatLong.jsp',{
 		'nombre':userName,

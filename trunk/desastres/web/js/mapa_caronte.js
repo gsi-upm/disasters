@@ -1,9 +1,19 @@
+const proyecto = 'caronte';
+
+/**
+ * Devuelve los valores iniciales del centro del mapa y su zoom
+ * 
+ * @return Centro y zoom
+ */
 function mapInit(){
 	var center = new google.maps.LatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
 	var zoom = 21;
 	return {'center':center, 'zoom':zoom};
 }
 
+/**
+ * Ejecucion adicional a initialize()
+ */
 function initialize2(){
 	mostrarMensajes(); // en mensajes.js
 
@@ -23,9 +33,9 @@ function initialize2(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
 			var newZoom = map.getZoom();
-			if(newZoom >= 20 && tipoMapa == roadmap && plantaResidencia >= 0){
+			if(newZoom >= 19 && tipoMapa == roadmap && plantaResidencia >= 0){
 				residencia.setMap(map);
-			}else if(newZoom < 20){
+			}else if(newZoom < 19 && plantaResidencia != -2){
 				cambiarPlanta(-2);
 			}
 		});
@@ -33,15 +43,18 @@ function initialize2(){
 		google.maps.event.addListener(map, 'maptypeid_changed', function(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
-			if(map.getZoom() >= 20 && tipoMapa == roadmap && plantaResidencia >= 0){
+			if(map.getZoom() >= 19 && tipoMapa == roadmap && plantaResidencia >= 0){
 				residencia.setMap(map);
 			}
 		});
 		
 		google.maps.event.addListener(residencia, 'click', function(){
-			infoWindow.close();
-			if(infoWinMarker != 'building'){
-				limpiarLateral(infoWinMarker);
+			if(infoWindow != null){
+				infoWindow.close();
+				infoWindow = null;
+				if(infoWinMarker != 'building'){
+					limpiarLateral(infoWinMarker);
+				}
 			}
 		});
 
@@ -86,6 +99,9 @@ function initialize2(){
 	}
 }
 
+/**
+ * Ejecucion adicional a actualizar()
+ */
 function actualizar2(){
 	mostrarMensajes2(); // en mensajes.js
 
@@ -102,6 +118,9 @@ function actualizar2(){
 	}
 }
 
+/**
+ * Genera los edificios que se muestran en el mapa al inicio
+ */
 function buildingInit(){
 	showBuilding('hospital');
 	showBuilding('firemenStation');
@@ -109,6 +128,11 @@ function buildingInit(){
 	showBuilding('geriatricCenter');
 }
 
+/**
+ * Muestra en el mapa un tipo de edificio
+ * 
+ * @type Tipo de edificio a mostrar
+ */
 function showBuilding(type){
 	if(type == 'hospital'){
 		generateBuilding('hospital', 'Centro de salud', 38.228138, -1.706449); // Calasparra, Murcia
@@ -122,6 +146,12 @@ function showBuilding(type){
 	}
 }
 
+/**
+ * Define las opciones de un tipo de marcador segun sea el evento
+ * 
+ * @param evento Objeto marcador del que se quieren las opciones
+ * @return Opciones del marcador
+ */
 function definirOpciones(evento){
 	var opciones;
 	var icono = new google.maps.MarkerImage(null);
@@ -230,6 +260,14 @@ function definirOpciones(evento){
 	return opciones;
 }
 
+/**
+ * Crea un marcador y le dota de diferentes eventos
+ * 
+ * @param evento Objeto marcador con el que se generara el marcador
+ * @param caracter Si el marcador es definitivo o temporal
+ * @param opciones Opcones del marcador
+ * @retunr Marcador
+ */
 function comportamientoMarcador(evento, caracter, opciones){
 	var opts = {
 		position: new google.maps.LatLng(evento.latitud, evento.longitud),
@@ -250,42 +288,44 @@ function comportamientoMarcador(evento, caracter, opciones){
 		}
 		links1 += '</form>';
 		
-		infoWindow.close();
-		limpiarLateral(evento.marcador);
+		if(infoWindow != null){
+			infoWindow.close();
+			if(infoWinMarker != 'building' && infoWinMarker != evento.marcador){
+				limpiarLateral(infoWinMarker, true);
+			}
+		}
 		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' +
 			links1 + '</div><div id="bocadillo_links2"></div></div>'});
 		infoWinMarker = evento.marcador;
 		infoWindow.open(map, marker);
+		
 		google.maps.event.addListener(infoWindow, 'closeclick', function(){
-			if(infoWinMarker != 'building'){
-				limpiarLateral(evento.marcador);
-			}
+			limpiarLateral(evento.marcador);
 		});
+		
 		cargarLateral(evento); // en mapa_caronte2.js
 	});
 
 	google.maps.event.addListener(marker, 'dragstart', function(){
 		noActualizar = evento.id;
-		infoWindow.close();
+		if(infoWindow != null){
+			infoWindow.close();
+		}
 	});
 
 	google.maps.event.addListener(marker, 'dragend', function(punto){
 		var nuevaLat = punto.latLng.lat().toFixed(6);
 		var nuevaLong = punto.latLng.lng().toFixed(6);
-		var nuevaPos = new google.maps.LatLng(nuevaLat, nuevaLong);
-		marker.setMap(null);
-		marker.setPosition(nuevaPos);
-		marker.setMap(map);
 		
 		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
 			'<span id="confirmar" class="pulsable azul" onclick="infoWindow.close(); guardar_posicion(' + evento.id +
 			',' + nuevaLat + ',' + nuevaLong + ')" >Confirmar</span>'+ ' - ' +
 			'<span id="cancelar" class="pulsable azul" onclick="infoWindow.close(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>'});
 		infoWindow.open(map, marker);
+		
 		google.maps.event.addListener(infoWindow, 'closeclick', function(){
-			if(infoWinMarker != 'building'){
-				limpiarLateral(evento.marcador);
-			}
+			cancelar_asignacion(evento.id);
+			limpiarLateral(evento.marcador);
 		});
 	});
 

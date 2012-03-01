@@ -61,7 +61,7 @@ public class Simulator {
      * Runs a simulation loop which lasts the specified time
      * @param howLong length of the simulation
      */
-    private void simulateLoop(int howLong, int victims0, int fires0, String proyect) {
+    private void simulateLoop(int howLong, int victims0, int fires0) {
         pause = false;
         Event currentEvent = Event.generateNewFire(0);
         Event firstRefresh = Event.generateRefresh(null, generator.refreshPeriod());
@@ -121,8 +121,8 @@ public class Simulator {
                 List<Person> dead = new ArrayList<Person>();
 
                 //Random latitude and longitude (in Madrid!)
-                double latitude = generator.randomLatitude(proyect);
-                double longitude = generator.randomLongitude(proyect);
+                double latitude = generator.randomLatitude();
+                double longitude = generator.randomLongitude();
 
                 //Saves the disaster in the DB and gets its id
                 int idDisaster = EventsManagement.insertFire(latitude, longitude,
@@ -406,15 +406,15 @@ public class Simulator {
         }
     }
 
-     /**
+    /**
      * Runs the simulation with a random value of initial victims and fires
      */
-    public void runSimulation(String proyect) {
+    public void runSimulation() {
         //Inicialization
         LOGGER.info("Simulation beginning. Length = " + this.generator.params.LENGTH);
 
         //Simulation loop running
-        this.simulateLoop(this.generator.params.LENGTH, 0, 0, proyect);
+        this.simulateLoop(this.generator.params.LENGTH, 0, 0);
         LOGGER.info("End of simulation");
     }
 
@@ -423,12 +423,12 @@ public class Simulator {
      * @param victims0 number of initial victims
      * @param fires0 number of initial fires
      */
-    public void runSimulation(int victims0, int fires0, String proyect) {
+    public void runSimulation(int victims0, int fires0) {
         //Inicialization
         LOGGER.info("Simulation beginning. Length = " + this.generator.params.LENGTH);
 
         //Simulation loop running
-        this.simulateLoop(this.generator.params.LENGTH, victims0, fires0, proyect);
+        this.simulateLoop(this.generator.params.LENGTH, victims0, fires0);
         LOGGER.info("End of simulation");
     }
 
@@ -448,7 +448,7 @@ public class Simulator {
         LOGGER.info("Simulation beginning. Length = " + sim.generator.params.LENGTH);
 
          //Simulation loop running
-        sim.simulateLoop(sim.generator.params.LENGTH, 0, 0, "disasters");
+        sim.simulateLoop(sim.generator.params.LENGTH, 0, 0);
         LOGGER.info("End of simulation");
     }
 }

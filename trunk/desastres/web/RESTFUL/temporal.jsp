@@ -21,7 +21,7 @@
 					<sql:param value="${param.password}"/>
 				</sql:query>
 			</c:when>
-			<c:when test="${param.action == 'userProyect'}">
+			<c:when test="${param.action == 'userProject'}">
 				<sql:query var="proyectos" dataSource="${CatastrofesServer}">
 					SELECT u.id, t.tipo, t.nivel
 					FROM usuarios u, tipos_usuarios t
@@ -54,11 +54,11 @@
 					<json:property name="planta" value="${evento.planta}"/>
 				</json:object>
 			</c:forEach>
-			<c:forEach var="proyect" items="${proyectos.rows}">
+			<c:forEach var="proyecto" items="${proyectos.rows}">
 				<json:object>
-					<json:property name="id" value="${proyect.id}"/>
-					<json:property name="rol" value="${proyect.tipo}"/>
-					<json:property name="level" value="${proyect.nivel}"/>
+					<json:property name="id" value="${proyecto.id}"/>
+					<json:property name="rol" value="${proyecto.tipo}"/>
+					<json:property name="level" value="${proyecto.nivel}"/>
 				</json:object>
 			</c:forEach>
 		</json:array>

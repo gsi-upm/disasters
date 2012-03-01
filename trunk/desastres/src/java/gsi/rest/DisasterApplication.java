@@ -552,12 +552,12 @@ public class DisasterApplication extends Application {
 			}
 		};
 
-		// Get the user proyects
-		Restlet userProyect = new Restlet(getContext()) {
+		// Get the user projects
+		Restlet userProject = new Restlet(getContext()) {
 			@Override
 			public void handle(Request request, Response response) {
 				String user_name = (String) request.getAttributes().get("nombre_usuario");
-				String redirector = URL_BASE + "temporal.jsp?action=userProyect&nombre_usuario=" + user_name;
+				String redirector = URL_BASE + "temporal.jsp?action=userProject&nombre_usuario=" + user_name;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -706,7 +706,7 @@ public class DisasterApplication extends Application {
 		router.attach("/message/{valor}/{nivel}", message);
 
 		router.attach("/user/{nombre_usuario}/{password}", user);
-		router.attach("/userProyect/{nombre_usuario}", userProyect);
+		router.attach("/userProject/{nombre_usuario}", userProject);
 		router.attach("/userRole/{nombre_usuario}", userRole);
 		router.attach("/registrar/{user}/{pass}/{nombre}/{email}", registrar);
 		router.attach("/insertar/{type}/{name}/{description}/{info}/{latitud}/{longitud}", insertar);

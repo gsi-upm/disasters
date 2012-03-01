@@ -4,8 +4,8 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%--<jsp:useBean class="roads.DirectionsBean" id="recursos" scope="session"/>--%>
-<jsp:useBean class="gsi.proyect.ProyectBean" id="proyecto" scope="session"/>
-<jsp:setProperty name="proyecto" property="nombreUsuario" value="<%= request.getRemoteUser() %>"/>
+<jsp:useBean class="gsi.project.UserBean" id="usuario" scope="session"/>
+<jsp:setProperty name="usuario" property="nombre" value="<%= request.getRemoteUser() %>"/>
 
 <c:if test="${param.lang != null}">
 	<fmt:setLocale value="${param.lang}" scope="session"/>
@@ -24,15 +24,14 @@
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_desastres.css"/>
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
-			<script type="application/javascript" src="js/jquery.js"></script>
+			<script type="application/javascript" src="js/jquery-1.6.2.js"></script>
 			<script type="application/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
 			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
 			<script type="application/javascript">
-				var proyecto = 'desastres';
-				var userName = '${proyecto.nombreUsuario}';
-				var usuario_actual = ${proyecto.id};
-				var usuario_actual_tipo = '${proyecto.rol}';
-				var nivelMsg = ${proyecto.nivelMsg};
+				var userName = '${usuario.nombre}';
+				var usuario_actual = ${usuario.id};
+				var usuario_actual_tipo = '${usuario.rol}';
+				var nivelMsg = ${usuario.nivelMsg};
 				var idioma = '<fmt:message key="idioma"/>';
 			</script>
 			<script type="application/javascript" src="js/mapa.js"></script>
@@ -64,7 +63,7 @@
 			<!-- Agents movement through roads -->
 			<script type="application/javascript" src="js/resourcesOnRoads.js"></script>
 		</head>
-		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);" onunload="GUnload()">
+		<body onload="IniciarReloj24(); initialize(); dwr.engine.setActiveReverseAjax(true);">
 			<c:import url="jspf/ventana_modificacion.jsp"/>
 			<table class="tabla_body">
 				<!-- Cabecera con imagen y hora -->
@@ -75,15 +74,15 @@
 				<tr>
 					<td id="left">
 						<!-- If the user isn't autenticated, we show the login form -->
-						<c:if test="${proyecto.nombreUsuario == null}">
+						<c:if test="${usuario.nombre == null}">
 							<c:import url="jspf/formInicio.jsp"/>
 						</c:if>
-						<c:if test="${proyecto.nombreUsuario != null}">
+						<c:if test="${usuario.nombre != null}">
 							<!-- and if the user is autenticated, we show the username and logout button -->
-							<fmt:message key="eres"/> <span id="signeduser">${proyecto.nombreUsuario}</span>
+							<fmt:message key="eres"/> <span id="signeduser">${usuario.nombre}</span>
 							<br/>
 							<c:url var="logout" value="logout.jsp"/>
-							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${proyecto.nombreUsuario}'})">
+							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${usuario.nombre}'})">
 								<fmt:message key="cerrarsesion"/>
 							</a>
 							<c:import url="jspf/menu_desastres.jsp"/>
@@ -92,7 +91,7 @@
 					<td id="fila_mapa">
 						<!-- minitabs top-right -->
 						<div id="minitabs">
-							<c:if test="${proyecto.nombreUsuario != null}">
+							<c:if test="${usuario.nombre != null}">
 								<div id="minitab3" class="minitab">
 									<img alt="ver" src="images/tab_simulator.png"/>
 								</div>

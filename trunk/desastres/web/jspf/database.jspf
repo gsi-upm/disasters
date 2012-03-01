@@ -1,5 +1,5 @@
 <%
-	String proyecto = getServletContext().getInitParameter("proyect");
+	String proyecto = getServletContext().getInitParameter("proyecto");
 	if(proyecto.equals("desastres")){
 		proyecto = "improvisa";
 	}
