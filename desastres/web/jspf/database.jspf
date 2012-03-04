@@ -1,15 +1,25 @@
+<%@page import="gsi.project.Constantes"%>
 <%
 	String proyecto = getServletContext().getInitParameter("proyecto");
 	if(proyecto.equals("desastres")){
 		proyecto = "improvisa";
 	}
+	
+	String url = Constantes.DB_URL;
+	if(Constantes.DB.equals("hsqldb")){
+		url += application.getRealPath("/WEB-INF/db/" + proyecto);
+	}
 %>
-<c:set var="proyecto"><%=proyecto%></c:set>
-<%-- HSQLDB --%>
+<c:set var="proyecto" value="<%=proyecto%>"/>
+<c:set var="basedatos" value="<%=Constantes.DB%>"/>
+<sql:setDataSource var="CatastrofesServer" driver="<%=Constantes.DB_DRIVER%>"
+	url="<%=url%>" user="<%=Constantes.DB_USER%>" password="<%=Constantes.DB_PASS%>"/>
+
+<%-- HSQLDB
 <c:set var="basedatos" value="hsqldb"/>
 <c:set var="databaseEmpotrado"><% out.print(application.getRealPath("/WEB-INF/db/" + proyecto)); %></c:set>
 <sql:setDataSource var="CatastrofesServer" driver="org.hsqldb.jdbcDriver"
-	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/>
+	url="jdbc:hsqldb:file:${databaseEmpotrado}" user="sa" password=""/> --%>
 <%-- MySQL local
 <c:set var="basedatos" value="mysql"/>
 <sql:setDataSource var="CatastrofesServer" driver="com.mysql.jdbc.Driver"
@@ -17,4 +27,4 @@
 <%-- MySQL servidor
 <c:set var="basedatos" value="mysql"/>
 <sql:setDataSource var="CatastrofesServer" driver="com.mysql.jdbc.Driver"
-	url="jdbc:mysql://shannon.gsi.dit.upm.es:3306/${proyecto}" user="jlmolina" password="NafDuJ4VhG6dcmtP"/>--%>
+	url="jdbc:mysql://localhost:3306/${proyecto}" user="jlmolina" password="NafDuJ4VhG6dcmtP"/> --%>

@@ -359,7 +359,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan="2">
 							<input type="checkbox" name="plantaPorDefecto"><fmt:message key="porDefecto"/>
 						</td>
 					</tr>

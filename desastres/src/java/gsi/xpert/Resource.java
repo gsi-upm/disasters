@@ -9,61 +9,35 @@ import gsi.disasters.StateType;
  * @version 1.0
  */
 public class Resource {
-
-    /**
-     * Resource id
-     **/
+    /** Resource id */
     private int id;
-    /**
-     * assigned Resource id
-     **/
+    /** assigned Resource id */
     private int idAssigned;
-    /**
+    /*
      * TODO: Deprecated! ResourceType resourceType should now be used
      * type of resource (firemen, policemen, ambulance)
-
-    private String type;
      */
-
-    /**
-     * Type of resource (AMBULANCE, POLICE_CAR, FIRE_ENGINE)
-     **/
+    //private String type;
+    /** Type of resource (AMBULANCE, POLICE_CAR, FIRE_ENGINE) */
     private ResourceType type;
-    /**
-     * Name of the resource
-     **/
+    /** Name of the resource */
     private String name;
-    /**
-     * Address (to represent resources in a map)
-     */
+    /** Address (to represent resources in a map) */
     private String address;
-    /**
-     * Longitude
-     */
+    /** Longitude */
     private double longitud;
-    /**
-     * Latitud
-     */
+    /** Latitud */
     private double latitud;
-    /**
-     * Info about the resource
-     */
+    /** Info about the resource */
     private String info;
-    /**
-     * Description for the resource
-     */
+    /** Description for the resource */
     private String description;
-    /**
-     * state of the resource (usually active)
-     */
+    /** state of the resource (usually active) */
     private StateType state;
-    /**
-     * Associate Persons (FIREMAN, POLICEMAN, DOCTOR)
-     */
+    /** Associate Persons (FIREMAN, POLICEMAN, DOCTOR) */
     private int user;
 
-
-    /**
+    /*
      * TODO: Deprecated! Should be changed by the other constructor.
      * @param id
      * @param idAssigned
@@ -74,10 +48,8 @@ public class Resource {
      * @param latitud
      * @param info
      * @param description
-
-    public Resource(int id, String type, String name, String info,
-            String description, int idAssigned) {
-
+     */
+    /* public Resource(int id, String type, String name, String info, String description, int idAssigned) {
         this.id = id;
         this.idAssigned = idAssigned;
         this.type = type;
@@ -87,23 +59,18 @@ public class Resource {
         this.description = description;
         this.state = "active";
         this.user = 1;
-    // System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
-    }
-*/
-
+        // System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
+    }*/
+    
     /**
      * @param id
-     * @param idAssigned
      * @param type
      * @param name
-     * @param address
-     * @param longitud
-     * @param latitud
      * @param info
      * @param description
+     * @param idAssigned
      */
-    public Resource(int id, ResourceType type, String name, String info,
-            String description, int idAssigned) {
+    public Resource(int id, ResourceType type, String name, String info, String description, int idAssigned) {
 
         this.id = id;
         this.idAssigned = idAssigned;
@@ -113,7 +80,7 @@ public class Resource {
         this.description = description;
         this.state = StateType.ACTIVE;
         this.user = 1;
-    // System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
+        // System.out.println("## New Resource: "+this.type+" - "+this.name+" (id:"+this.id+") assigned:"+this.idAssigned+"##");
     }
 
     /**

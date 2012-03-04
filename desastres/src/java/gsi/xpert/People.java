@@ -9,73 +9,48 @@ import gsi.simulator.RandomGenerator;
  * @version 1.0
  */
 public class People {
-
-	/**
-	 * Resource id
-	 **/
+	/** Resource id */
 	private int id;
 
-	/**
-	 * Assigned disaster id
-	 **/
+	/** Assigned disaster id */
 	private int idAssignedDisaster;
 
-	/**
-	 * Type of injured (slight, serious, dead, trapped)
-	 **/
+	/** Type of injured (slight, serious, dead, trapped) */
 	private InjuryDegree type;
 
-	/**
-	 * Name of the resource
-	 **/
+	/** Name of the resource */
 	private String name;
 
-    /**
-	 * Info about the resource
-	 */
-     private String info;
+    /** Info about the resource */
+    private String info;
 
-    /**
-	 * Description for the resource
-	 */
-     private String description;
+    /** Description for the resource */
+    private String description;
 
-	/**
-	 * State of the resource (usually active)
-	 */
-     private StateType state;
+	/** State of the resource (usually active) */
+    private StateType state;
 
-    /**
- 	 * Quantity of people
- 	 */
+    /** Quantity of people */
  	private int quantity;
 
-	/**
-	 * Id of the user who added the injured
-	 */
+	/** Id of the user who added the injured */
 	private int user;
 
-    /**
-     * Health points of people
-     */
+    /** Health points of people */
     private int healthPoints;
 
 	/**
+     * Constructor with Injury Degree and without healthPoints, they're assigned automatically
+	 * 
 	 * @param id
-	 * @param idAssigned
 	 * @param type
 	 * @param name
-	 * @param address
-	 * @param longitud
-	 * @param latitud
 	 * @param info
 	 * @param description
+	 * @param idAssigned
 	 * @param quantity
-     *
-     * Constructor with Injury Degree and without healthPoints, they're assigned automatically
 	 */
-	public People(int id, InjuryDegree type, String name, String info,
-            String description, int idAssigned, int quantity) {
+	public People(int id, InjuryDegree type, String name, String info, String description, int idAssigned, int quantity) {
 		super();
 		this.id = id;
 		this.idAssignedDisaster = idAssigned;
@@ -97,21 +72,17 @@ public class People {
 	}
 
     /**
+     * Constructor with healthPoints, Injury Degree is assigned automatically
+	 * 
 	 * @param id
-	 * @param idAssigned
-	 * @param type
 	 * @param name
-	 * @param address
-	 * @param longitud
-	 * @param latitud
 	 * @param info
 	 * @param description
+	 * @param idAssigned
 	 * @param quantity
-     *
-     * Constructor with healthPoints, Injury Degree is assigned automatically
+	 * @param healthPoints
 	 */
-	public People(int id, String name, String info, String description,
-            int idAssigned, int quantity, int healthPoints) {
+	public People(int id, String name, String info, String description, int idAssigned, int quantity, int healthPoints) {
 		super();
 		this.id = id;
 		this.idAssignedDisaster = idAssigned;
@@ -349,6 +320,4 @@ public class People {
         number += RandomGenerator.randomInteger(0,10);
         return number;
     }
-
-
 }

@@ -1,8 +1,11 @@
 package gsi.project;
 
+import com.mysql.jdbc.Driver;
 import gsi.rest.Connection;
 import java.beans.*;
 import java.io.Serializable;
+import java.sql.*;
+import org.hsqldb.jdbcDriver;
 import org.json.me.*;
 
 /**
@@ -14,8 +17,7 @@ public class UserBean implements Serializable{
 	public static final String ID = "id";
 	public static final String ROL = "rol";
 	public static final String NIVEL_MSG = "nivelMsg";
-
-	private static final String URL = Connection.getURL();
+	
 	private PropertyChangeSupport propertySupport;
 
 	private String nombre, rol;
@@ -37,15 +39,34 @@ public class UserBean implements Serializable{
 		String oldValue = nombre;
 		nombre = value;
 		propertySupport.firePropertyChange(NOMBRE, oldValue, nombre);
-		if(value != null && value.equals("") == false){
-			try{
-				String proyectoAux = Connection.connect(URL + "userProject/" + value);
-				JSONArray proyecto = new JSONArray(proyectoAux);
-				setId(proyecto.getJSONObject(0).getInt("id"));
-				setRol(proyecto.getJSONObject(0).getString("rol"));
-				setNivelMsg(proyecto.getJSONObject(0).getInt("level"));
-			}catch(JSONException ex){
-				System.out.println("Excepcion: " + ex);
+		if(value != null && value.equals("") == false && value.equals(oldValue) == false){
+			if(Constantes.DB.equals("hsqldb")){
+				try{
+					String url = Connection.getURL();
+					String proyectoAux = Connection.connect(url + "userProject/" + value);
+					JSONArray proyecto = new JSONArray(proyectoAux);
+					setId(proyecto.getJSONObject(0).getInt("id"));
+					setRol(proyecto.getJSONObject(0).getString("rol"));
+					setNivelMsg(proyecto.getJSONObject(0).getInt("level"));
+				}catch(JSONException ex){
+					System.out.println("Excepcion: " + ex);
+				}
+			}else{
+				try{
+					Class.forName(Constantes.DB_DRIVER);
+					java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL,Constantes.DB_USER,Constantes.DB_PASS);
+					java.sql.Statement s = conexion.createStatement();
+					ResultSet rs = s.executeQuery(SQLQueries.userProject(value));
+					if(rs.next()){
+						setId(rs.getInt(1));
+						setRol(rs.getString(2));
+						setNivelMsg(rs.getInt(3));
+					}
+					conexion.close();
+				}catch(Exception ex){
+						ex.printStackTrace();
+					System.out.println("Excepcion: " + ex);
+				}
 			}
 		}
 	}

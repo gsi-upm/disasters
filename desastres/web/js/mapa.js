@@ -103,7 +103,7 @@ function initialize(){
 		cambiaIcono('event', seleccionRadio(document.getElementById('catastrofes'), 0));
 		cambiaIcono('people', seleccionRadio(document.getElementById('heridos'), 2), 1);
 	}
-
+	
 	ultimamodif = obtiene_fecha(true);
 	// setTimeout('moveAgents()', 2000);
 	setTimeout('actualizar()', tiempoInicial);

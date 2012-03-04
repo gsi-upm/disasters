@@ -1,5 +1,6 @@
 package gsi.rest;
 
+import gsi.project.Constantes;
 import java.net.*;
 import java.io.*;
 
@@ -8,9 +9,8 @@ import java.io.*;
  * @author julio camarero
  * @version 1.0
  */
-public class Connection {
-	private static final String PROYECTO = "caronte"; // "desastres"
-	private static final String URL_BASE = "http://localhost:8080/" + PROYECTO + "/rest/";
+public class Connection{
+	private static final String URL_BASE = "http://localhost:" + Constantes.SERVER_PORT + "/" + Constantes.PROJECT + "/rest/";
 
 	/**
 	 * Getter
@@ -18,14 +18,6 @@ public class Connection {
 	 */
 	public static String getURL(){
 		return URL_BASE;
-	}
-
-	/**
-	 * Getter
-	 * @return String with the Project name
-	 */
-	public static String getProyecto(){
-		return PROYECTO;
 	}
 
     /**
