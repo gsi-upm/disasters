@@ -8,117 +8,69 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public class Disaster{
-
-	/**
-	 * Disaster id
-	 **/
+	/** Disaster id */
 	private int id;
-	/**
-	 * type of disaster (fire, flood, collapse, lostPerson, injuredPerson)
-	 **/
+	/** type of disaster (fire, flood, collapse, lostPerson, injuredPerson) */
 	private String type;
-	/**
-	 * Address (to represent disasters in a map) 
-	 */
+	/** Address (to represent disasters in a map) */
 	private String address;
-	/**
-	 * Longitude
-	 */
+	/** Longitude */
 	private double longitud;
-	/**
-	 * Latitud
-	 */
+	/** Latitud */
 	private double latitud;
-	/**
-	 * Name of the Disaster
-	 */
+	/** Name of the Disaster */
 	private String name;
-	/**
-	 * Name of the Information
-	 */
+	/** Name of the Information */
 	private String info;
-	/**
-	 * Name of the Description
-	 */
+	/** Name of the Description */
 	private String description;
-	/**
-	 * state of the disaster (active, controlled, erased)
-	 */
+	/** state of the disaster (active, controlled, erased) */
 	private String state;
-	/**
-	 * Size of the Disaster
-	 */
+	/** Size of the Disaster */
 	private String size;
-	/**
-	 * Density of traffic (high, medium, low) 
-	 */
+	/** Density of traffic (high, medium, low) */
 	private String traffic;
-	/**
-	 * Number of slight injuries
-	 */
+	/** Number of slight injuries */
 	private int numSlight;
 	private ArrayList<People> slight;
-	/**
-	 * Number of serious injuries
-	 */
+	/** Number of serious injuries */
 	private int numSerious;
 	private ArrayList<People> serious;
-	/**
-	 * Number of dead people
-	 */
+	/** Number of dead people */
 	private int numDead;
 	private ArrayList<People> dead;
-	/**
-	 * Number of trapped people
-	 */
+	/** Number of trapped people */
 	private int numTrapped;
 	private ArrayList<People> trapped;
-	/**
-	 * Number of policemen cars assigned
-	 */
+	/** Number of policemen cars assigned */
 	private int policemen;
-	/**
-	 * Number of firemen cars assigned
-	 */
+	/** Number of firemen cars assigned */
 	private int firemen;
-	/**
-	 * Number of ambulances assigned
-	 */
+	/** Number of ambulances assigned */
 	private int ambulances;
-	/**
-	 * id of the user who added the disaster
-	 */
+	/** id of the user who added the disaster */
 	private int user;
-	/**
-	 * id police marker already in the map
-	 */
+	/** id police marker already in the map */
 	private int policeMarker;
-	/**
-	 * id police marker already in the map
-	 */
+	/** id police marker already in the map */
 	private int ambulanceMarker;
-	/**
-	 * id police marker already in the map
-	 */
+	/** id police marker already in the map */
 	private int firemenMarker;
 
 	/**
+	 * Constructor sin idAsignada
+	 * 
 	 * @param id
 	 * @param type
-	 * @param address
-	 * @param longitud
-	 * @param latitud
 	 * @param name
 	 * @param info
 	 * @param description
+	 * @param address
+	 * @param longitud
+	 * @param latitud
 	 * @param state
 	 * @param size
 	 * @param traffic
-	 * @param slight
-	 * @param serious
-	 * @param dead
-	 * @param trapped
-	 * Constructor sin idAsignada
 	 */
 	public Disaster(int id, String type, String name, String info, String description, String address, double longitud,
 			double latitud, String state, String size, String traffic){
@@ -147,13 +99,13 @@ public class Disaster{
 		numSerious = 0;
 		numDead = 0;
 		numTrapped = 0;
-		slight = new ArrayList();
+		slight = new ArrayList<People>();
 		slight.add(null);
-		serious = new ArrayList();
+		serious = new ArrayList<People>();
 		serious.add(null);
-		dead = new ArrayList();
+		dead = new ArrayList<People>();
 		dead.add(null);
-		trapped = new ArrayList();
+		trapped = new ArrayList<People>();
 		trapped.add(null);
 	}
 

@@ -6,7 +6,6 @@ package jadex.desastres;
  * @version 1.0
  */
 public class Resource{
-
 	/** Resource id */
 	private int id;
 
@@ -191,7 +190,7 @@ public class Resource{
 	
 	/**
 	 * 
-	 * @return 
+	 * @return Latitud
 	 */
 	public double getLatitud(){
 		return latitud;
@@ -207,7 +206,7 @@ public class Resource{
 	
 	/**
 	 * 
-	 * @return 
+	 * @return Longitud
 	 */
 	public double getLongitud(){
 		return longitud;
@@ -223,7 +222,7 @@ public class Resource{
 	
 	/**
 	 * 
-	 * @return 
+	 * @return Direccion
 	 */
 	public String getAdress(){
 		return address;

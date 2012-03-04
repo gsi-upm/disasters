@@ -14,15 +14,15 @@ public class RandomGenerator {
     /**
      * Random object
      */
-     Random random;
-     /**
-      * Parameters object
-      */
-     Parameters params;
+    Random random;
+    /**
+     * Parameters object
+     */
+    Parameters params;
 
     /**
      * Constructor with parameters.
-     * @param Parameters object, in order to get the value of the seed.
+     * @param params Parameters object, in order to get the value of the seed.
      * @throws java.lang.IllegalArgumentException if parameters are null
      */
     public RandomGenerator(Parameters params) throws IllegalArgumentException {
@@ -38,7 +38,7 @@ public class RandomGenerator {
         }
     }
 
-    /*
+    /**
      * Generates gaussian numbers with a mean and a standard deviation
      * @param mean The mean of the Gaussian
      * @param standardDeviation The standard deviation of the Gaussian
@@ -75,7 +75,7 @@ public class RandomGenerator {
 
     /**
      * Returns the time between two refreshes of the simulator
-     * @return
+     * @return Time between two refreshes of the simulator
      */
     public int refreshPeriod(){
         if(params.IS_CONSTANT){
@@ -88,7 +88,7 @@ public class RandomGenerator {
 
     /**
      * Returns the time between two fire generations
-     * @return
+     * @return Time between two fire generations
      */
     public int fireGeneratePeriod(){
         double mean = params.TIME_BETWEEN_FIRES;
@@ -209,7 +209,7 @@ public class RandomGenerator {
 
     /**
      * Returns a random value for the latitude with the specified limits
-     * @return
+     * @return Random value for the latitude with the specified limits
      */
     public double randomLatitude() {
         return randomDouble(params.MIN_LATITUDE, params.MAX_LATITUDE);
@@ -217,7 +217,7 @@ public class RandomGenerator {
 
     /**
      * Returns a random value for the longitude with the specified limits
-     * @return
+     * @return Random value for the longitude with the specified limits
      */
     public double randomLongitude() {
         return randomDouble(params.MIN_LONGITUDE, params.MAX_LONGITUDE);

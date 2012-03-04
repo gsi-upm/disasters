@@ -46,7 +46,7 @@ public class DirectionsBean {
 	public void sendDirections() throws InterruptedException {
 		try {
 			int ids[] = getResourcesList();
-			HashMap<String, String> hm = new HashMap();
+			HashMap<String, String> hm = new HashMap<String, String>();
 			for (int i = 0; i < ids.length; i++) {
 				int AgentID = new Integer(ids[i]).intValue();
 				//firstly we obtain the Agent current position in the DB

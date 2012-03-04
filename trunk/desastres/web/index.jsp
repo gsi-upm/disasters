@@ -22,10 +22,10 @@
 			<link type="image/vnd.microsoft.icon" rel="icon" href="images/favicon_caronte.ico"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style.css"/>
 			<link type="text/css" rel="stylesheet" href="css/improvisa_style_caronte.css"/>
-			<link type="text/css" rel="stylesheet" href="css/tab-view.css" media="screen"/>
+			<link type="text/css" rel="stylesheet" href="css/tab-view.css"/>
+			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
-			<script type="application/javascript" src="js/jquery-1.6.2.js"></script>
-			<script type="application/javascript" src="js/directionsInfo.js"></script> <!-- Object directionsInfo for agents on roads -->
+			<script type="application/javascript" src="js/jquery-1.7.1.min.js"></script>
 			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=true&amp;region=ES"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
@@ -44,6 +44,7 @@
 			<!--Hora y Fecha -->
 			<script type="application/javascript" src="js/hora_fecha.js"></script>
 			<!-- Formularios, parte grafica y logica -->
+			<script type="application/javascript" src="js/ajax.js"></script>
 			<script type="application/javascript" src="js/tab-view.js"></script>
 			<script type="application/javascript" src="js/forms.js"></script>
 			<!-- jqModal Dependencies -->
@@ -58,10 +59,12 @@
 			<!-- <script type="application/javascript" src="/caronte/dwr/util.js"></script> -->
 			<!-- <script type="application/javascript" src="/caronte/dwr/interface/DirectionsBean.js"></script> -->
 			<!-- <script type="application/javascript" src="/caronte/dwr/engine.js"></script> -->
+			<!-- Object directionsInfo for agents on roads -->
+			<!-- <script type="application/javascript" src="js/directionsInfo.js"></script> -->
 			<!-- Agents movement through roads -->
 			<!-- <script type="application/javascript" src="js/resourcesOnRoads.js"></script> -->
 		</head>
-		<body onload="IniciarReloj24(); initialize(); //dwr.engine.setActiveReverseAjax(true);">
+		<body onload="IniciarReloj24(); initialize();"> <!-- dwr.engine.setActiveReverseAjax(true); -->
 			<table class="tabla_body">
 				<!-- Cabecera con imagen y hora -->
 				<tr>

@@ -56,7 +56,7 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 				if(sintomasAux.equals("") || sintomasAux == null){
 					System.out.println("EE enfermero: No tiene sintomas con los que diagnosticar");
 				}else{
-					ArrayList<String> sintomas = new ArrayList(Arrays.asList(sintomasAux.split(",", 0)));
+					ArrayList<String> sintomas = new ArrayList<String>(Arrays.asList(sintomasAux.split(",", 0)));
 					String listaSintomas = "";
 					for(int i = 0; i < sintomas.size(); i++){
 						listaSintomas += sintomas.get(i);
@@ -201,7 +201,7 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 			String enfermedades[] = new String[texto2.length - 1];
 			String listaEnfermedades = "";
 			for(int i = 1; i < texto2.length; i++){ // desecho el primero
-				ArrayList<String> tratamientos = new ArrayList();
+				ArrayList<String> tratamientos = new ArrayList<String>();
 				enfermedades[i - 1] = texto2[i].substring(1, texto2[i].indexOf("\"", 1)); // el 0 es ", asi que mira desde el 1
 				listaEnfermedades += enfermedades[i - 1];
 

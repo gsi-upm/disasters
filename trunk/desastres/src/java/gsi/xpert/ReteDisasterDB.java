@@ -13,66 +13,39 @@ import org.json.me.*;
  * Launches jess and creates markers
  * @author julio camarero
  * @version 1.0
- **/
+ */
 public class ReteDisasterDB {
-
-	/**
-	 * Object rete
-	 **/
+	/** Object rete */
 	private Rete rete;
-	/**
-	 * Marker in work memory
-	 **/
+	/** Marker in work memory */
 	private WorkingMemoryMarker marker;
-	/**
-	 * Disasters registered
-	 **/
-	private static Hashtable disastersHash;
-	/**
-	 * Resources registered
-	 **/
-	private static Hashtable resourcesHash;
-	/**
-	 * URL for Disasters2.0 application REST interface
-	 **/
+	/** Disasters registered */
+	private static Hashtable<Integer,Disaster> disastersHash;
+	/** Resources registered */
+	private static Hashtable<Integer,Resource> resourcesHash;
+	/** URL for Disasters2.0 application REST interface */
 	private static final String URL_BASE = Connection.getURL();
-	/**
-	 * TimeStamp for the last JSON Request
-	 **/
+	/** TimeStamp for the last JSON Request */
 	private String now;
-	/**
-	 * PrintWriter to show answers in web application
-	 **/
+	/** PrintWriter to show answers in web application */
 	private PrintWriter out;
-	/**
-	 * Quantity to add to calculate the latitude of the police marker
-	 */
+	/** Quantity to add to calculate the latitude of the police marker */
 	private final static double POLICE_MARKER_LATITUDE_DIFFERENCE = 0.0005;
-	/**
-	 * Quantity to add to calculate the longitude of the police marker
-	 */
+	/** Quantity to add to calculate the longitude of the police marker */
 	private final static double POLICE_MARKER_LONGITUDE_DIFFERENCE = 0;
-	/**
-	 * Quantity to add to calculate the latitude of the fireman marker
-	 */
+	/** Quantity to add to calculate the latitude of the fireman marker */
 	private final static double FIREMEN_MARKER_LATITUDE_DIFFERENCE = 0.00025;
-	/**
-	 * Quantity to add to calculate the longitude of the fireman marker
-	 */
+	/** Quantity to add to calculate the longitude of the fireman marker */
 	private final static double FIREMEN_MARKER_LONGITUDE_DIFFERENCE = -0.0005;
-	/**
-	 * Quantity to add to calculate the latitude of the ambulance marker
-	 */
+	/** Quantity to add to calculate the latitude of the ambulance marker */
 	private final static double AMBULANCE_MARKER_LATITUDE_DIFFERENCE = 0.00025;
-	/**
-	 * Quantity to add to calculate the longitude of the ambulance marker
-	 */
+	/** Quantity to add to calculate the longitude of the ambulance marker */
 	private final static double AMBULANCE_MARKER_LONGITUDE_DIFFERENCE = 0.0005;
 
 	/**
 	 * Constructor
 	 * @throws JessException if Jess fails
-	 **/
+	 */
 	public ReteDisasterDB(PrintWriter out) throws JessException {
 		this.out = out;
 		rete = new Rete();
@@ -106,9 +79,9 @@ public class ReteDisasterDB {
 	 * Creates a list of resources from a Database
 	 * @return ArraList with Resources
 	 * @throws JSONException if JSON data are not correct
-	 **/
-	private Hashtable getResources() throws JSONException {
-		resourcesHash = new Hashtable();
+	 */
+	private Hashtable<Integer,Resource> getResources() throws JSONException {
+		resourcesHash = new Hashtable<Integer,Resource>();
 		String freeResources = Connection.connect(URL_BASE + "free");
 		JSONArray resources = new JSONArray(freeResources);
 
@@ -139,7 +112,7 @@ public class ReteDisasterDB {
 	/**
 	 * Stops the engine
 	 * @throws JessException if Jess fails
-	 **/
+	 */
 	public void stop() throws JessException {
 		rete.halt();
 	}
@@ -148,7 +121,7 @@ public class ReteDisasterDB {
 	 * Evaluates a disaster
 	 * @param disaster Disaster to evaluate
 	 * @throws JessException if Jess fails
-	 **/
+	 */
 	private void evaluateDisaster(Disaster disaster) throws JessException {
 		//rete.resetToMark(marcador);
 		System.out.println("Evaluamos desastre...");
@@ -178,10 +151,10 @@ public class ReteDisasterDB {
 	 * Disassociates a resource from a disaster
 	 * @param idResource the resource id in the application
 	 * @param idDisaster the disaster id in the application
-	 **/
+	 */
 	public static void disAssociate(int idResource, int idDisaster) {
-		Disaster dis = (Disaster) disastersHash.get(idDisaster);
-		Resource res = (Resource) resourcesHash.get(idResource);
+		Disaster dis = disastersHash.get(idDisaster);
+		Resource res = resourcesHash.get(idResource);
 		int marker = 0;
 
 		if (res.getType() == ResourceType.POLICE) {
@@ -212,10 +185,10 @@ public class ReteDisasterDB {
 	 * @param idResource the resource id in the application
 	 * @param idDisaster the disaster id in the application
 	 * @throws JSONException if JSON data are not correct
-	 **/
+	 */
 	public static void associate(int idResource, int idDisaster) throws JSONException {
-		Disaster dis = (Disaster) disastersHash.get(idDisaster);
-		Resource res = (Resource) resourcesHash.get(idResource);
+		Disaster dis = disastersHash.get(idDisaster);
+		Resource res = resourcesHash.get(idResource);
 		double latitude;
 		double longitude;
 
@@ -296,7 +269,7 @@ public class ReteDisasterDB {
 	 */
 	public void run() throws JSONException, JessException {
 		//Only the first time
-		disastersHash = new Hashtable();
+		disastersHash = new Hashtable<Integer,Disaster>();
 
 		//All the initial disasters from JSON
 		String events = Connection.connect(URL_BASE + "events");
@@ -352,7 +325,7 @@ public class ReteDisasterDB {
 				continue;
 			}
 
-			Disaster dis = (Disaster) disastersHash.get(newPeople.getIdAssigned());
+			Disaster dis = disastersHash.get(newPeople.getIdAssigned());
 			System.out.println("*** Updating Disaster Victims for " + dis.getName());
 			out.println("*** Updating Disaster Victims for " + dis.getName() + "<br/>");
 
@@ -510,8 +483,8 @@ public class ReteDisasterDB {
 	 * Main method
 	 * @param args main programm parameters. (no expected)
 	 * @throws JessException if Jess fails
-	 **/
-	public static final void main(String[] args) throws JessException, JSONException {
+	 */
+	public static void main(String[] args) throws JessException, JSONException {
 		/*ReteDisasterDB reteBD = new ReteDisasterDB();
 		reteBD.run();*/
 	}

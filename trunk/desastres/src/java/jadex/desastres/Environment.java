@@ -56,19 +56,21 @@ public class Environment{
 	private TimerMove tempoMover;
 	private String ahora;
 	/** Agentes (nombre -> WorldObject) */
-	public HashMap agentes;
-	/** Numero de agentes creados, no tienen por que estar activos
-	 *  No ha sido usado
+	public HashMap<String, WorldObject> agentes;
+	/**
+	 * Numero de agentes creados, no tienen por que estar activos
+	 * No ha sido usado
 	 */
 	protected Integer numAgentes;
 	/** Eventos (id -> WorldObject) */
-	public HashMap disasters;
-	protected HashMap people;
-	protected HashMap resources;
-	protected HashMap associations;
-	protected HashMap activities;
-	/** Numero de eventos creados, no tienen por que estar activos
-	 *  Usado para poder dar un nombre distinto a los eventos en las tablas Hash
+	public HashMap<Integer, Disaster> disasters;
+	protected HashMap<Integer, People> people;
+	protected HashMap<Integer, Resource> resources;
+	protected HashMap<Integer, Association> associations;
+	protected HashMap<Integer, Activity> activities;
+	/**
+	 * Numero de eventos creados, no tienen por que estar activos
+	 * Usado para poder dar un nombre distinto a los eventos en las tablas Hash
 	 */
 	protected Integer numEventos;
 	/** Agentes y Eventos (Pos -> WorldObject) */
@@ -88,12 +90,12 @@ public class Environment{
 	 * Constructor
 	 */
 	public Environment(){
-		this.agentes = new HashMap(); //<String, WorldObject>
-		this.disasters = new HashMap(); //<Integer, Disaster> fuegos, heridos,...
-		this.people = new HashMap(); //<Integer, People>
-		this.resources = new HashMap(); //<Integer, Resource>
-		this.associations = new HashMap(); //<Integer, Association>
-		this.activities = new HashMap(); //<Integer, Activity>
+		this.agentes = new HashMap<String, WorldObject>();
+		this.disasters = new HashMap<Integer, Disaster>();
+		this.people = new HashMap<Integer, People>();
+		this.resources = new HashMap<Integer, Resource>();
+		this.associations = new HashMap<Integer, Association>();
+		this.activities = new HashMap<Integer, Activity>();
 		this.objetos = new MultiCollection();
 		this.pcs = new SimplePropertyChangeSupport(this);
 		this.numAgentes = 0;
@@ -177,7 +179,7 @@ public class Environment{
 				}
 
 				people.put(nuevo.getId(), nuevo);
-				Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
+				Disaster dis = disasters.get(nuevo.getIdAssigned());
 				if(instancia.getString("type").equals("healthy") == false){
 					System.out.println("- Herido: " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
 				}
@@ -203,11 +205,11 @@ public class Environment{
 						continue;
 					} // cuando ya existia y tengo que actualizar el desastres borrando sus heridos
 					else{
-						People antiguo = (People) people.get(nuevo.getId());
+						People antiguo = people.get(nuevo.getId());
 						int idDesastre = antiguo.getIdAssigned();
 						people.remove(antiguo.getId());
 						System.out.println("- ENV: Voy a desasociar el herido " + nuevo.getId() + " del desastre " + idDesastre);
-						//Disaster extraido = (Disaster) disasters.get(idDesastre);
+						//Disaster extraido = disasters.get(idDesastre);
 						//disasters.remove(idDesastre);
 
 						/*Disaster insertado = new Disaster(
@@ -225,8 +227,8 @@ public class Environment{
 						disasters.put(insertado.getId(), insertado);
 					} * /
 				}else{
-					People antiguo = (People) people.get(nuevo.getId());
-					Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
+					People antiguo = people.get(nuevo.getId());
+					Disaster dis = disasters.get(nuevo.getIdAssigned());
 					if(!people.containsKey(nuevo.getId())){
 						System.out.println("- Herido " + nuevo.getName() + " con estado " + nuevo.getType());
 					}else{
@@ -283,8 +285,8 @@ public class Environment{
 					instancia.getInt("idInjured"),
 					instancia.getInt("idDisaster"),
 					instancia.getString("state"));
-				People herido = (People) people.get(nuevo.getIdInjured());
-				Disaster emergencia = (Disaster) disasters.get(nuevo.getIdDisaster());
+				People herido = people.get(nuevo.getIdInjured());
+				Disaster emergencia = disasters.get(nuevo.getIdDisaster());
 				associations.put(nuevo.getId(), nuevo);
 				
 				if(herido.getType().equals("slight")){
@@ -308,7 +310,7 @@ public class Environment{
 					instancia.getInt("idDisaster"),
 					instancia.getString("type"),
 					instancia.getString("state"));
-				Disaster emergencia = (Disaster) disasters.get(nuevo.getIdDisaster());
+				Disaster emergencia = disasters.get(nuevo.getIdDisaster());
 				activities.put(nuevo.getId(), nuevo);
 				System.out.println("- Nueva aactividad '" + nuevo.getType() + "' en emergencia '" + emergencia.getName() + "' (id:" + nuevo.getId() + ")");
 			}
@@ -362,7 +364,7 @@ public class Environment{
 
 				if(disasters.containsKey(nuevo.getId())){
 					// si ya existia actualizo el desastre existente
-					//Disaster viejo = (Disaster) disasters.get(nuevo.getId());
+					//Disaster viejo = disasters.get(nuevo.getId());
 
 					// si se ha eliminado lo borro directamente
 					if(nuevo.getState().equals("erased")){
@@ -392,7 +394,7 @@ public class Environment{
 					instancia.getString("state"));
 				
 				if(disasters.containsKey(nuevo.getId())){
-					//People antiguo = (People) people.get(nuevo.getId());
+					//People antiguo = people.get(nuevo.getId());
 					
 					if(nuevo.getState().equals("erased")){
 						people.remove(nuevo.getId());
@@ -411,11 +413,11 @@ public class Environment{
 						continue;
 					} // cuando ya existia y tengo que actualizar el desastres borrando sus heridos
 					else{
-						People antiguo = (People) people.get(nuevo.getId());
+						People antiguo = people.get(nuevo.getId());
 						int idDesastre = antiguo.getIdAssigned();
 						people.remove(antiguo.getId());
 						System.out.println("- ENV: Voy a desasociar el herido " + nuevo.getId() + " del desastre " + idDesastre);
-						Disaster extraido = (Disaster) disasters.get(idDesastre);
+						Disaster extraido = disasters.get(idDesastre);
 						disasters.remove(idDesastre);
 
 						Disaster insertado = new Disaster(
@@ -433,8 +435,8 @@ public class Environment{
 						disasters.put(insertado.getId(), insertado);
 					}
 				}else{
-					People antiguo = (People) people.get(nuevo.getId());
-					Disaster dis = (Disaster) disasters.get(nuevo.getIdAssigned());
+					People antiguo = people.get(nuevo.getId());
+					Disaster dis = disasters.get(nuevo.getIdAssigned());
 					if(!people.containsKey(nuevo.getId())){
 						System.out.println("- Herido " + nuevo.getName() + " con estado " + nuevo.getType());
 					}else{
@@ -501,8 +503,8 @@ public class Environment{
 					instancia.getInt("idInjured"),
 					instancia.getInt("idDisaster"),
 					instancia.getString("state"));
-				People herido = (People) people.get(nuevo.getIdInjured());
-				Disaster emergencia = (Disaster) disasters.get(nuevo.getIdDisaster());
+				People herido = people.get(nuevo.getIdInjured());
+				Disaster emergencia = disasters.get(nuevo.getIdDisaster());
 				if(nuevo.getState().equals("erased")){
 					associations.remove(nuevo.getId());
 					System.out.println("- Asociacion eliminada entre herido '" + herido.getName() + "' y emergencia '" + emergencia.getName() + "' (id:" + nuevo.getId() + ")");
@@ -535,9 +537,9 @@ public class Environment{
 					instancia.getString("state"));
 				String nombre = "";
 				if(disasters.containsKey(nuevo.getIdDisaster())){
-					nombre = ((Disaster)disasters.get(nuevo.getIdDisaster())).getName();
+					nombre = disasters.get(nuevo.getIdDisaster()).getName();
 				}else if(people.containsKey(nuevo.getIdDisaster())){
-					nombre = ((People)people.get(nuevo.getIdDisaster())).getName();
+					nombre = people.get(nuevo.getIdDisaster()).getName();
 				}
 				if(nuevo.getState().equals("erased")){
 					activities.remove(nuevo.getId());
@@ -561,7 +563,7 @@ public class Environment{
 	 * @param tipo
 	 * @param nombre
 	 * @param pos
-	 * @return 
+	 * @return Instancia de entorno
 	 */
 	public static Environment getInstance(String tipo, String nombre, Position pos){
 		// La primera vez que se llama a este metodo (el agente Environment), instance vale null
@@ -777,96 +779,96 @@ public class Environment{
 	 * Devuelve un agente dado su nombre (el nombre de los agentes es unico).
 	 * 
 	 * @param name
-	 * @return 
+	 * @return Agente
 	 */
 	public synchronized WorldObject getAgent(String name){
 		assert agentes.containsKey(name);
-		return (WorldObject)agentes.get(name);
+		return agentes.get(name);
 	}
 
 	/**
 	 * Elimina un agente dado su nombre (el nombre de los agentes es unico).
 	 * 
 	 * @param name
-	 * @return 
+	 * @return Agente eliminado
 	 */
 	public synchronized WorldObject removeAgent(String name){
 		assert agentes.containsKey(name);
-		return (WorldObject)agentes.remove(name);
+		return agentes.remove(name);
 	}
 
 	/**
 	 * Devuelve la posicion de un agente dado su nombre (el nombre de los agentes es unico).
 	 * 
 	 * @param name
-	 * @return 
+	 * @return Posicion del agente
 	 */
 	public synchronized Position getAgentPosition(String name){
 		assert agentes.containsKey(name);
-		return ((WorldObject)agentes.get(name)).getPosition();
+		return agentes.get(name).getPosition();
 	}
 
 	/**
 	 * Devuelve un evento dado su id (el id de los eventos es unico).
 	 * 
 	 * @param id
-	 * @return 
+	 * @return Desastre
 	 */
 	public synchronized Disaster getEvent(int id){
 		assert disasters.containsKey(id);
-		return (Disaster)disasters.get(id);
+		return disasters.get(id);
 	}
 
 	/**
 	 * Elimina un evento dado su nombre (el nombre de los eventos es unico).
 	 * 
-	 * @param name
-	 * @return 
+	 * @param id
+	 * @return Evento eliminado
 	 */
-	public synchronized WorldObject removeEvent(String name){
-		assert disasters.containsKey(name);
-		return (WorldObject)disasters.remove(name);
+	public synchronized Disaster removeEvent(int id){
+		assert disasters.containsKey(id);
+		return disasters.remove(id);
 	}
 
 	/**
 	 * Devuelve la posicion de un evento dado su nombre (concretamente su id).
 	 * 
-	 * @param name
-	 * @return 
+	 * @param id
+	 * @return Posicion del evento
 	 */
-	public synchronized Position getEventPosition(String name){
-		assert disasters.containsKey(name);
-		return ((WorldObject)disasters.get(name)).getPosition();
+	public synchronized Position getEventPosition(int id){
+		assert disasters.containsKey(id);
+		return new Position(disasters.get(id).getLatitud(), disasters.get(id).getLongitud());
 	}
 
 	/**
 	 * Devuelve todos los objetos que haya en una posicion.
 	 * 
 	 * @param pos
-	 * @return 
+	 * @return Todos los objetos de la posicion
 	 */
 	protected WorldObject[] getWorldObjects(Position pos){
-		Collection col = (Collection) objetos.get(pos);
-		return (WorldObject[])col.toArray(new WorldObject[col.size()]);
+		Collection col = objetos.getCollection(pos);
+		return (WorldObject[])col.toArray();
 
 	}
 
 	/**
 	 * Devuelve todos los agentes.
-	 * @return
+	 * @return Todos los agentes
 	 */
 	protected WorldObject[] getAgentes(){
-		Collection col = (Collection) agentes.values();
-		return (WorldObject[])col.toArray(new WorldObject[col.size()]);
+		Collection<WorldObject> col = (Collection<WorldObject>) agentes.values();
+		return col.toArray(new WorldObject[col.size()]);
 	}
 
 	/**
 	 * Devuelve todos los eventos.
-	 * @return
+	 * @return Todos los eventos
 	 */
 	protected WorldObject[] getEventos(){
-		Collection col = (Collection) disasters.values();
-		return (WorldObject[])col.toArray(new WorldObject[col.size()]);
+		Collection<Disaster> col = (Collection<Disaster>) disasters.values();
+		return col.toArray(new WorldObject[col.size()]);
 	}
 
 	/**
@@ -890,7 +892,7 @@ public class Environment{
 	 * Puesto que de momento solo tenemos Calasparra en la lista, no hace falta especificar la ciudad.
 	 * 
 	 * @param proyecto
-	 * @return 
+	 * @return Posicion aleatoria
 	 */
 	//protected Position getRandomPosition(Location loc){
 	public Position getRandomPosition(String proyecto){
@@ -948,7 +950,7 @@ public class Environment{
 	 * Imprime un String por pantalla y lo envia para mostrar en la web.
 	 *
 	 * @param valor String a imprimir.
-	 * @param cat nivel del mensaje (0 todos los usuarios, 1 todos los conectados,...).
+	 * @param nivel Nivel del mensaje (0 todos los usuarios, 1 todos los conectados,...).
 	 */
 	public final void printout(String valor, int nivel){
 		Connection.connect(Environment.URL + "message/" + valor + "/" + nivel);

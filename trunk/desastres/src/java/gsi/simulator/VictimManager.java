@@ -44,7 +44,7 @@ public class VictimManager {
 
     /**
      * Generates a new slight victim
-     * @return
+     * @return Slight victim
      */
     public static Person generateSlightVictim(int id, Parameters param) {
         RandomGenerator generator = new RandomGenerator(param);
@@ -52,8 +52,8 @@ public class VictimManager {
     }
 
     /**
-     * Generates a new slight victim
-     * @return
+     * Generates a new serious victim
+     * @return Serious victim
      */
     public static Person generateSeriousVictim(int id, Parameters param) {
         RandomGenerator generator = new RandomGenerator(param);

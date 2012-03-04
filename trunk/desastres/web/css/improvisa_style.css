@@ -225,23 +225,6 @@ form table img{
 	padding: 0px;
 }
 
-.jqmWindow{
-	display: none;
-	position: fixed;
-	top: 12%;
-	left: 60%;
-	margin-left: -300px;
-	width: 250px;
-	background-color: #EEEEEE;
-	color: #333333;
-	border: 1px solid #333333;
-	padding: 12px;
-}
-
-.jqmOverlay {
-	background-color: #000000;
-}
-
 .plano_residencia{
 	border: 1px solid black;
 	/*margin: 50px;*/

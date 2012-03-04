@@ -6,62 +6,36 @@ package jadex.desastres;
  * @version 1.0
  */
 public class People{
-
-	/**
-	 * Resource id
-	 **/
+	/** Resource id */
 	private int id;
-	/**
-	 * assigned Resource id
-	 **/
+	/** assigned Resource id */
 	private int idAssigned;
-	/**
-	 * type of injured (slight, serious, dead, trapped)
-	 **/
+	/** type of injured (slight, serious, dead, trapped) */
 	private String type;
-	/**
-	 * Name of the resource
-	 **/
+	/** Name of the resource */
 	private String name;
-	/**
-	 * Info about the resource
-	 */
+	/** Info about the resource */
 	private String info;
-	/**
-	 * Description for the resource
-	 */
+	/** Description for the resource */
 	private String description;
-	/**
-	 * state of the resource (usually active)
-	 */
+	/** state of the resource (usually active) */
 	private String state;
-	/**
-	 * Size of the Disaster
-	 */
-	/**
-	 * id of the user who added the injured
-	 */
+	/** Size of the Disaster */
 	private int quantity;
-	/**
-	 * id of the user who added the injured
-	 */
+	/** id of the user who added the injured */
 	private int user;
-	/**
-	 * true si hay alguna ambulancia yendo a por el
-	 */
+	/** true si hay alguna ambulancia yendo a por el */
 	private boolean atendido;
 
 	/**
 	 * @param id
-	 * @param idAssigned
 	 * @param type
 	 * @param name
-	 * @param address
-	 * @param longitud
-	 * @param latitud
 	 * @param info
 	 * @param description
+	 * @param idAssigned
 	 * @param quantity
+	 * @param state
 	 */
 	public People(int id, String type, String name, String info, String description, int idAssigned, int quantity, String state){
 		super();

@@ -11,11 +11,11 @@ public class Disaster {
 
 	/**
 	 * Disaster id
-	 **/
+	 */
 	private int id;
 	/**
 	 * Type of disaster (fire, flood, collapse, lostPerson, injuredPerson)
-	 **/
+	 */
 	private DisasterType type;
 	/**
 	 * Address (to represent disasters in a map)
@@ -214,7 +214,7 @@ public class Disaster {
 	}
 
 	/**
-	 * @param longitud the longitud to set
+	 * @param longitude The longitud to set
 	 */
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
@@ -228,7 +228,7 @@ public class Disaster {
 	}
 
 	/**
-	 * @param latitud the latitud to set
+	 * @param latitude The latitud to set
 	 */
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
@@ -350,7 +350,7 @@ public class Disaster {
 
 	/**
 	 * Sets the list of slight victims
-	 * @param the list of slight victims
+	 * @param slight The list of slight victims
 	 */
 	public void setSlight(List<Person> slight) {
 		this.slight = slight;
@@ -381,7 +381,7 @@ public class Disaster {
 
 	/**
 	 * Sets the list of serious victims
-	 * @param the list of serious victims
+	 * @param serious The list of serious victims
 	 */
 	public void setSerious(List<Person> serious) {
 		this.serious = serious;
@@ -412,7 +412,7 @@ public class Disaster {
 
 	/**
 	 * Sets the list of dead
-	 * @param the list of dead
+	 * @param dead The list of dead
 	 */
 	public void setDead(List<Person> dead) {
 		this.dead = dead;
@@ -443,7 +443,7 @@ public class Disaster {
 
 	/**
 	 * Sets the list of trapped
-	 * @param the list of trapped
+	 * @param trapped The list of trapped
 	 */
 	public void setTrapped(List<Person> trapped) {
 		this.trapped = trapped;
@@ -502,7 +502,7 @@ public class Disaster {
 	}
 
 	/**
-	 * @param number of ambulances assigned
+	 * @param ambulanceMarker Number of ambulances assigned
 	 */
 	public void setAmbulanceMarker(int ambulanceMarker) {
 		this.ambulanceMarker = ambulanceMarker;
@@ -516,7 +516,7 @@ public class Disaster {
 	}
 
 	/**
-	 * @param number of firmen assigned
+	 * @param firemenMarker Number of firmen assigned
 	 */
 	public void setFiremenMarker(int firemenMarker) {
 		this.firemenMarker = firemenMarker;
@@ -530,7 +530,7 @@ public class Disaster {
 	}
 
 	/**
-	 * @param number of policemen assigned
+	 * @param policeMarker Number of policemen assigned
 	 */
 	public void setPoliceMarker(int policeMarker) {
 		this.policeMarker = policeMarker;

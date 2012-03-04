@@ -17,9 +17,9 @@ public class EventsManagement {
     private static final String DELETE = "delete/";
     private static final String LIST = "events/";
 
-     /**
+    /**
      * Method used to remove the blanks in a String (useful for URLs)
-     * @param String with the original text
+     * @param string String with the original text
      * @return the String without blanks
      */
     public static String removeBlanks(String string){
@@ -37,7 +37,7 @@ public class EventsManagement {
     }
 
 
-    /*
+    /**
      * List all the events in the app
      * @return a String with all the events, in a JSON notation.
      */
@@ -56,7 +56,7 @@ public class EventsManagement {
     }
 
 
-    /*
+    /**
      * Inserts a fire into the database.
      *
      * @param lat Latitude
@@ -210,23 +210,22 @@ public class EventsManagement {
             ex.printStackTrace();
         }
     }
-    /**
+    
+    /*
      * Tests
 
-
     public static void main(String[] args) {
-
-    try {
-    System.out.println(listAllEvents());
-    //Draw a fire and put it out
-    int id = insertFire(40, -4.2, "Info", "huge", null);
-    // System.out.println(id);
-    insertResourcesOrVictims("serious","nombre",3,40,-4.1,id);
-    Thread.sleep(5000); //Waits 5 seconds
-    System.out.println("Wake up...");
-    delete(id); //End
-    } catch (Exception e) {
-    e.printStackTrace();
-    }
-    }  */
+        try {
+            System.out.println(listAllEvents());
+            //Draw a fire and put it out
+            int id = insertFire(40, -4.2, "Info", "huge", null);
+            // System.out.println(id);
+            insertResourcesOrVictims("serious","nombre",3,40,-4.1,id);
+            Thread.sleep(5000); //Waits 5 seconds
+            System.out.println("Wake up...");
+            delete(id); //End
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    } */
 }

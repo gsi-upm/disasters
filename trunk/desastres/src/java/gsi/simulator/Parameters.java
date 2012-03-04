@@ -1,8 +1,6 @@
 package gsi.simulator;
 
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -14,23 +12,23 @@ import java.util.Properties;
  */
 public class Parameters {
 
-    /*
+    /**
      * Defines if the simulation is going to refresh constantly (is in real time).
      */
     public final boolean IS_CONSTANT;
-    /*
+    /**
      * Seed for the number generation.
      */
     public final long SEED;
-    /*
+    /**
      * If 'constant' is true, we need to know what the value of the period of simulation is.
      */
     public final int PERIOD;
-    /*
+    /**
      * Mean of the time beetween new and random fires.
      */
     public final double TIME_BETWEEN_FIRES;
-    /*
+    /**
      * Standard deviation of the gaussian generating new fires.
      */
     public final double DEVIATION_FOR_FIRES;
@@ -60,7 +58,7 @@ public class Parameters {
      */
     public final int LENGTH;
 
-    /*
+    /**
      * Default parameters value
      */
     public final boolean DEFAULT_IS_CONSTANT = true;
@@ -80,7 +78,7 @@ public class Parameters {
     public final int DEFAULT_MIN_DEAD_VICTIMS = 0;
     public final int DEFAULT_MAX_DEAD_VICTIMS = 10;
     public final int DEFAULT_LENGTH = 60;
-    /*
+    /**
      * Tags to read parameteres from file
      */
     private final String IS_CONSTANT_TAG = "is constant";
@@ -155,8 +153,7 @@ public class Parameters {
      * @throws IllegalArgumentException If object FileInputStream has a wrong
      * format or some of the final parameters is out of range.
      */
-    public Parameters(String file)
-            throws IOException, NumberFormatException, IllegalArgumentException {
+    public Parameters(String file) throws IOException, NumberFormatException, IllegalArgumentException {
         FileInputStream in = null;
         // All attributes are firstly initialized to 'default'. If the value
         // read from file is right, they will get it. They will remain default
@@ -248,19 +245,28 @@ public class Parameters {
     /**
      * Constructor from explicit values
      *
-     * @param constant           Defines if the simulation is going to refresh constantly.
-     * @param seed               to get a repetitive behaviour at random number sequences
-     * @param period          how often we refesh the simulator
-     * @param timeBeetwenFires   Mean of the time beetween new and random fires.
-     * @param deviationForFires  Standard deviation of the gaussian generating new fires.
+     * @param constant          Defines if the simulation is going to refresh constantly.
+     * @param seed              To get a repetitive behaviour at random number sequences
+     * @param period            How often we refesh the simulator
+     * @param timeBetweenFires  Mean of the time beetween new and random fires.
+     * @param deviationForFires Standard deviation of the gaussian generating new fires.
+	 * @param trappedToVictim
+	 * @param minFireStrength
+	 * @param maxFireStrength
+	 * @param minTrappedVictims
+	 * @param maxTrappedVictims
+	 * @param minSlightVictims
+	 * @param maxSlightVictims
+	 * @param minSeriousVictims
+	 * @param maxSeriousVictims
+	 * @param minDeadVictims
+	 * @param maxDeadVictims
+	 * @param length
      * @throws IllegalArgumentException if any value is out of range
      */
-    public Parameters(boolean constant, long seed, int period,
-            double timeBetweenFires, double deviationForFires,
-            double trappedToVictim, int minFireStrength, int maxFireStrength,
-            int minTrappedVictims, int maxTrappedVictims,
-            int minSlightVictims, int maxSlightVictims,
-            int minSeriousVictims, int maxSeriousVictims,
+    public Parameters(boolean constant, long seed, int period, double timeBetweenFires, double deviationForFires,
+            double trappedToVictim, int minFireStrength, int maxFireStrength, int minTrappedVictims, int maxTrappedVictims,
+            int minSlightVictims, int maxSlightVictims, int minSeriousVictims, int maxSeriousVictims,
             int minDeadVictims, int maxDeadVictims, int length) throws IllegalArgumentException {
         this.IS_CONSTANT = constant;
         this.SEED = seed;

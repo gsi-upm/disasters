@@ -2,8 +2,6 @@ package gsi.disasters;
 
 import gsi.simulator.VictimManager;
 
-
-
 /**
  *
  * @author Luis Delgado
@@ -63,7 +61,7 @@ public class Person {
 
     /**
      * Sets the person's identifier
-     * @param the person's identifier
+     * @param id The person's identifier
      */
     public void setId(int id) {
         this.id = id;

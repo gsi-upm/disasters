@@ -1,7 +1,7 @@
 /*
- * $Header: /cvsroot/securityfilter/securityfilter/src/example/org/securityfilter/example/realm/TrivialSecurityRealm.java,v 1.3 2003/10/25 10:49:04 maxcooper Exp $
- * $Revision: 1.3 $
- * $Date: 2003/10/25 10:49:04 $
+ * $Header: /cvsroot/securityfilter/securityfilter/src/share/org/securityfilter/realm/SimpleSecurityRealmBase.java,v 1.7 2003/01/06 00:17:25 maxcooper Exp $
+ * $Revision: 1.7 $
+ * $Date: 2003/01/06 00:17:25 $
  *
  * ====================================================================
  * The SecurityFilter Software License, Version 1.1
@@ -52,80 +52,195 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-
 package security;
 
-import org.securityfilter.example.Constants;
-import org.securityfilter.realm.SimpleSecurityRealmBase;
+import com.mysql.jdbc.Driver;
+import gsi.project.*;
+import gsi.rest.Connection;
+import java.security.*;
+import java.sql.*;
+import java.util.Date;
+import org.hsqldb.jdbcDriver;
+import org.json.me.*;
+import org.securityfilter.realm.*;
 
 /**
- * Trivial implementation of the SecurityRealmInterface.
+ * Security realm base class.
+ * This class insulates you from having to create or process Principal objects.
+ * You can implement a realm by overriding the two methods that neither take or
+ * return a Principal object and this class does the conversions for you.
  *
- * There is one user: username is 'username', password is 'password'
- * And this user is in one role: 'inthisrole'
- *
- * @author Max Cooper (max@maxcooper.com)
- * @version $Revision: 1.3 $ $Date: 2003/10/25 10:49:04 $
+ * @author Max Cooper (max@maxcooper.com) / Modificado por Juan Luis Molina
+ * @version $Revision: 1.7 $ $Date: 2003/01/06 00:17:25 $
  */
-public class MySecurityRealm extends SimpleSecurityRealmBase {
+public class MySecurityRealm implements SecurityRealmInterface{
+	public static final String LOGIN_SUBMIT_PATTERN = "j_security_check";
+	public static final String FORM_USERNAME = "j_username";
+	public static final String FORM_PASSWORD = "j_password";
+	
+	/**
+	 * Authenticate a user.
+	 *
+	 * @param username a username
+	 * @param password a plain text password, as entered by the user
+	 * @return true if the username/password combination is valid, false otherwise
+	 */
+	public boolean booleanAuthenticate(String username, String password){
+		boolean autenticado = false;
+		String pass = MD5(password);
+		
+		if(Constantes.DB.equals("hsqldb")){
+			try{
+				String url = Connection.getURL();
+				String usuarioAux = Connection.connect(url + "user/" + username + "/" + pass);
+				JSONArray usuario = new JSONArray(usuarioAux);
+				
+				if(usuario.length() == 1){
+					autenticado = true;
+					String tipoUsuario = usuario.getJSONObject(0).getString("user_type");
+					String latitud = usuario.getJSONObject(0).getString("latitud");
+					String longitud = usuario.getJSONObject(0).getString("longitud");
+					String descripcion = usuario.getJSONObject(0).getString("real_name");
+					String informacion = usuario.getJSONObject(0).getString("email");
+					String planta = usuario.getJSONObject(0).getString("planta");
+					Connection.connect(url + "insertar/" + tipoUsuario + "/" + username + "/" +
+						descripcion + "/" + informacion + "/" + latitud + "/" + longitud + "/" + planta);
+				}
+			}catch (Exception ex){
+				System.out.println("Excepcion: " + ex);
+			}
+		}else{
+			try{
+				Class.forName(Constantes.DB_DRIVER);
+				java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL,Constantes.DB_USER,Constantes.DB_PASS);
+				Statement s = conexion.createStatement();
+				ResultSet rs = s.executeQuery(SQLQueries.user(username, pass));
+				if(rs.next()){
+					autenticado = true;
+					String date = new java.sql.Timestamp(new Date().getTime()).toString();
+					String tipoUsuario = rs.getString(2);
+					String descripcion = rs.getString(3);
+					String informacion = rs.getString(4);
+					float latitud = rs.getFloat(5);
+					float longitud = rs.getFloat(6);
+					int planta = rs.getInt(7);
+					
+					ResultSet rs2 = s.executeQuery(SQLQueries.preInsertar(username));
+					int estado = 1;
+					if(rs2.next()){
+						int id2 = rs2.getInt(1);
+						estado = rs2.getInt(2);
+						s.executeUpdate(SQLQueries.postPreInsertar(date, id2));
+					}
+					s.executeUpdate(SQLQueries.insertar(tipoUsuario, username, descripcion, informacion, latitud, longitud, estado, date, planta));
+				}
+				conexion.close();
+			}catch(Exception ex){
+				ex.printStackTrace();
+				System.out.println("Excepcion: " + ex);
+			}
+		}
+		return autenticado;
+	}
+	
+	/**
+	 * Devuelde el hash MD5 de la contrasenna del usuario
+	 * 
+	 * @param valor Contrasenna del usuario
+	 * @return Contrasenna codificada
+	 */
+	private String MD5(String valor){
+		String hash = "";
+		try{
+			MessageDigest md5 = MessageDigest.getInstance("MD5");
+			md5.update(valor.getBytes("UTF-8"));
+			byte[] valorHash = md5.digest();
+			int[] valorHash2 = new int[16];
+			for(int i = 0; i < valorHash.length; i++){
+				valorHash2[i] = new Integer(valorHash[i]);
+				if(valorHash2[i] < 0){
+					valorHash2[i] += 256;
+				}
+				hash += (Integer.toHexString(valorHash2[i]));
+			}
+		}catch(Exception ex){}
 
-   private String exampleProperty;
+		return hash;
+	}
 
-   /**
-    * Authenticate a user.
-    *
-    * Implement this method in a subclass to avoid dealing with Principal objects.
-    *
-    * @param username a username
-    * @param password a plain text password, as entered by the user
-    *
-    * @return null if the user cannot be authenticated, otherwise a Pricipal object is returned
-    */
-   public boolean booleanAuthenticate(String username, String password) {
-       if (username == null  || password==null)
-           return false;
-      if (username.equals("user") && password.equals("pass"))
-          return true;
-      return false;
-   }
+	/**
+	 * Test for role membership.
+     *
+     * @param username The name of the user
+     * @param rolename name of a role to test for membership
+     * @return true if the user is in the role, false otherwise
+     */
+	public boolean isUserInRole(String username, String rolename){
+		boolean rol = false;
+		
+		if(Constantes.DB.equals("hsqldb")){
+			try{
+				String url = Connection.getURL();
+				String rolUsuarioAux = Connection.connect(url + "userRole/" + username);
+				JSONArray rolUsuario = new JSONArray(rolUsuarioAux);
+				
+				if(rolUsuario.getJSONObject(0).getString("user_type").equals(rolename)){
+					rol = true;
+				}
+			}catch(JSONException ex){
+				System.out.println("Excepcion: " + ex);
+			}
+		}else{
+			try{
+				Class.forName(Constantes.DB_DRIVER);
+				java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL,Constantes.DB_USER,Constantes.DB_PASS);
+				Statement s = conexion.createStatement();
+				ResultSet rs = s.executeQuery(SQLQueries.userRole(username));
+				if(rs.next()){
+					if(rs.getString(2).equals(rolename)){
+						rol = true;
+					}
+				}
+				conexion.close();
+			}catch(Exception ex){
+				ex.printStackTrace();
+				System.out.println("Excepcion: " + ex);
+			}
+		}
+		return rol;
+	}
 
-   /**
-    * Test for role membership.
-    *
-    * Implement this method in a subclass to avoid dealing with Principal objects.
-    *
-    * @param username The name of the user
-    * @param role name of a role to test for membership
-    * @return true if the user is in the role, false otherwise
-    */
-   public boolean isUserInRole(String username, String role) {
-       if (username==null)
-           return false;
-      if (username.equals("user"))
-          return true;
-      return false;
-   }
-
-   /**
-    * Setter for exampleProperty to deomonstrate setting realm properties from config file.
-    *
-    * This has no effect other than printing a message when the property is set.
-    *
-    * @param value example property value
-    */
-   public void setExampleProperty(String value) {
-      exampleProperty = value;
-      System.out.println(this.getClass().getName() + ": exampleProperty set to \'" + value + "\'");
-   }
-
-   /**
-    * Getter for exampleProperty.
-    *
-    * @return the value of exampleProperty
-    */
-   public String getExampleProperty() {
-      return exampleProperty;
-   }
+	/**
+	 * Authenticate a user.
+	 *
+	 * @param username a username
+	 * @param password a plain text password, as entered by the user
+	 * @return a Principal object representing the user if successful, false otherwise
+	 */
+	public Principal authenticate(String username, String password){
+		if(booleanAuthenticate(username, password)){
+			return new SimplePrincipal(username);
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * Test for role membership.
+	 *
+	 * Use Principal.getName() to get the username from the principal object.
+	 *
+	 * @param principal Principal object representing a user
+	 * @param rolename name of a role to test for membership
+	 * @return true if the user is in the role, false otherwise
+	 */
+	public boolean isUserInRole(Principal principal, String rolename){
+		String username = null;
+		if(principal != null){
+			username = principal.getName();
+		}
+		return isUserInRole(username, rolename);
+	}
 }
 
 // ----------------------------------------------------------------------------

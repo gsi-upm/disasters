@@ -16,7 +16,7 @@
     <!-- Restlet adapter -->
     <servlet>
         <servlet-name>RestletServlet</servlet-name>
-        <servlet-class>com.noelios.restlet.ext.servlet.ServerServlet</servlet-class>
+        <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RestletServlet</servlet-name>
@@ -27,7 +27,7 @@
     <servlet>
         <servlet-name>dwr-invoker</servlet-name>
         <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
-        <init-param>
+        <!--<init-param>
             <param-name>debug</param-name>
             <param-value>true</param-value>
         </init-param>
@@ -35,7 +35,7 @@
             <param-name>pollAndCometEnabled</param-name>
             <param-value>true</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>1</load-on-startup>-->
     </servlet>
     <servlet-mapping>
         <servlet-name>dwr-invoker</servlet-name>
