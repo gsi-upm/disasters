@@ -11,9 +11,9 @@
 	<c:when test="${param.action == 'info'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET info = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET INFO = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -22,9 +22,9 @@
 	<c:when test="${param.action == 'state'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = ?), modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = ?), MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -33,9 +33,9 @@
 	<c:when test="${param.action == 'latitud'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET latitud = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET LATITUD = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -44,9 +44,9 @@
 	<c:when test="${param.action == 'longitud'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET longitud = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET LONGITUD = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -55,9 +55,9 @@
 	<c:when test="${param.action == 'latlong'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET latitud = ?, longitud = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET LATITUD = ?, LONGITUD = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.latitud}"/>
 				<sql:param value="${param.longitud}"/>
 				<sql:param value="${param.id}"/>
@@ -67,9 +67,9 @@
 	<c:when test="${param.action == 'quantity'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET cantidad = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET CANTIDAD = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -78,9 +78,9 @@
 	<c:when test="${param.action == 'traffic'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET traffic = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET TRAFFIC = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -89,9 +89,9 @@
 	<c:when test="${param.action == 'size'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET size = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET SIZE = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -100,9 +100,9 @@
 	<c:when test="${param.action == 'idAssigned'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET idAssigned = ?, modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET IDASSIGNED = ?, MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${param.value}"/>
 				<sql:param value="${param.id}"/>
 			</sql:update>
@@ -111,14 +111,14 @@
 	<c:when test="${param.action == 'add'}">
 		<c:catch var="errorInsert">
 			<sql:query var="eventos" dataSource="${CatastrofesServer}">
-				SELECT cantidad FROM catastrofes WHERE id = ?
+				SELECT CANTIDAD FROM CATASTROFES WHERE ID = ?
 				<sql:param value="${param.id}"/>
 			</sql:query>
 			<c:forEach var="evento" items="${eventos.rows}">
 				<sql:update dataSource="${CatastrofesServer}">
-					UPDATE catastrofes
-					SET cantidad = ?, modificado = <%=modif%>
-					WHERE id = ?
+					UPDATE CATASTROFES
+					SET CANTIDAD = ?, MODIFICADO = <%=modif%>
+					WHERE ID = ?
 					<sql:param value="${evento.cantidad+1}"/>
 					<sql:param value="${param.id}"/>
 				</sql:update>
@@ -128,14 +128,14 @@
 	<c:when test="${param.action == 'remove'}">
 		<c:catch var="errorInsert">
 			<sql:query var="eventos" dataSource="${CatastrofesServer}">
-				SELECT cantidad FROM catastrofes WHERE id = ?
+				SELECT CANTIDAD FROM CATASTROFES WHERE ID = ?
 				<sql:param value="${param.id}"/>
 			</sql:query>
 			<c:forEach var="evento" items="${eventos.rows}">
 				<sql:update dataSource="${CatastrofesServer}">
-					UPDATE catastrofes
-					SET cantidad = ?, modificado = <%=modif%>
-					WHERE id = ?
+					UPDATE CATASTROFES
+					SET CANTIDAD = ?, MODIFICADO = <%=modif%>
+					WHERE ID = ?
 					<sql:param value="${evento.cantidad-1}"/>
 					<sql:param value="${param.id}"/>
 				</sql:update>
@@ -145,7 +145,7 @@
 	<c:when test="${param.action == 'message'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO mensajes(creador, mensaje, nivel, fecha)
+				INSERT INTO MENSAJES(CREADOR, MENSAJE, NIVEL, FECHA)
 				VALUES(1, ?, ?, <%=modif%>)
 				<sql:param value="${param.mensaje}"/>
 				<sql:param value="${param.nivel}"/>

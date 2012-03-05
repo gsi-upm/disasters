@@ -10,31 +10,31 @@
 <c:choose>
 	<c:when test="${param.action eq 'id'}">
 		<sql:update dataSource="${CatastrofesServer}">
-			UPDATE catastrofes
-			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'), modificado = <%=modif%>
-			WHERE id = ?
+			UPDATE CATASTROFES
+			SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
+			WHERE ID = ?
 			<sql:param value="${param.id}"/>
 		</sql:update>
 	</c:when>
 	<c:when test="${param.action eq 'events'}">
 		<sql:update dataSource="${CatastrofesServer}">
-			UPDATE catastrofes
-			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'), modificado = <%=modif%>
-			WHERE marcador = 'event'
+			UPDATE CATASTROFES
+			SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
+			WHERE MARCADOR = 'event'
 		</sql:update>
 	</c:when>
 	<c:when test="${param.action eq 'all'}">
 		<sql:update dataSource="${CatastrofesServer}" >
-			UPDATE catastrofes
-			SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'), modificado = <%=modif%>
+			UPDATE CATASTROFES
+			SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
 		</sql:update>
 	</c:when>
 	<c:when test="${param.action eq 'healthy'}">
 		<sql:update dataSource="${CatastrofesServer}" >
-			UPDATE catastrofes
-			SET tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'healthy'),
-				estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'), modificado = <%=modif%>
-			WHERE id = ?
+			UPDATE CATASTROFES
+			SET tipo = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'healthy'),
+				ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'), MODIFICADO = <%=modif%>
+			WHERE ID = ?
 			<sql:param value="${param.id}"/>
 		</sql:update>
 	</c:when>

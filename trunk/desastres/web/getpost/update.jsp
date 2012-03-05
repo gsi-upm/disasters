@@ -10,14 +10,14 @@
 
 <c:if test="${param.accion == 'modificar' || param.accion == 'cambioTipo' || param.accion == 'eliminar'}">
 	<sql:update dataSource="${CatastrofesServer}">
-		UPDATE catastrofes
-		SET marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
-			tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
-			cantidad = ?, nombre = ?, descripcion = ?, info = ?, latitud = ?,
-			longitud = ?, direccion = ?, size = ?, traffic = ?, planta = ?,
-			estado = (SELECT id FROM tipos_estados WHERE tipo_estado = ?),
-			idAssigned = ?, fecha = ?, modificado = <%=modif%>, usuario = ?
-		WHERE id = ?
+		UPDATE CATASTROFES
+		SET MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = ?),
+			TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = ?),
+			CANTIDAD = ?, NOMBRE = ?, DESCRIPCION = ?, INFO = ?, LATITUD = ?,
+			LONGITUD = ?, DIRECCION = ?, SIZE = ?, TRAFFIC = ?, PLANTA = ?,
+			ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = ?),
+			IDASSIGNED = ?, FECHA = ?, MODIFICADO = <%=modif%>, USUARIO = ?
+		WHERE ID = ?
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
 		<sql:param value="${param.cantidad}"/>
@@ -39,9 +39,9 @@
 </c:if>
 <%--<c:if test="${param.idAssigned != 0 && param.accion != 'eliminarAsociacion'}">
 	<sql:update dataSource="${CatastrofesServer}">
-		INSERT INTO asociaciones_heridos_emergencias(id_herido, id_emergencia, estado)
-		VALUES(?,?,(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
-		<sql:param value="${param.id}"/>
+		INSERT INTO ASOCIACIONES_HERIDOS_EMERGENCIAS(ID_HERIDO, ID_EMERGENCIA, ESTADO)
+		VALUES(?,?,(SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'))
+		<sql:param value="${param.ID}"/>
 		<sql:param value="${param.idAssigned}"/>
 	</sql:update>
 </c:if>--%>
@@ -50,50 +50,50 @@
 		<c:when test="${param.accion == 'eliminar'}">
 			<c:if test="${param.marcador == 'people'}">
 				<sql:update dataSource="${CatastrofesServer}">
-					UPDATE asociaciones_heridos_emergencias
-					SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					WHERE id_herido = ?
-					AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+					UPDATE ASOCIACIONES_HERIDOS_EMERGENCIAS
+					SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					WHERE ID_HERIDO = ?
+					AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 					<sql:param value="${param.id}"/>
 				</sql:update>
 				<%--<sql:update dataSource="${CatastrofesServer}">
-					UPDATE sintomas
-					SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					WHERE id_herido = ?
-					AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+					UPDATE SINTOMAS
+					SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					WHERE ID_HERIDO = ?
+					AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 					<sql:param value="${param.id}"/>
 				</sql:update>--%>
 			</c:if>
 			<c:if test="${param.marcador == 'event'}">
 				<sql:update dataSource="${CatastrofesServer}">
-					UPDATE asociaciones_heridos_emergencias
-					SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					WHERE id_emergencia = ?
+					UPDATE ASOCIACIONES_HERIDOS_EMERGENCIAS
+					SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					WHERE ID_EMERGENCIA = ?
 					<sql:param value="${param.id}"/>
 				</sql:update>
 			</c:if>
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE actividades
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-				WHERE id_emergencia = ?
+				UPDATE ACTIVIDADES
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+				WHERE ID_EMERGENCIA = ?
 				<sql:param value="${param.id}"/>
 			</sql:update>
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
-				WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
-				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-				WHERE u.id = a.id_usuario
-					AND a.estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+				UPDATE CATASTROFES
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active')
+				WHERE marcador = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'resource')
+				AND nombre NOT IN (SELECT DISTINCT NOMBRE_USUARIO FROM USUARIOS U, ACTIVIDADES A
+				WHERE U.ID = ID_USUARIO
+					AND ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'))
 			</sql:update>
 		</c:when>
 		<c:when test="${param.accion == 'eliminarAsociacion'}">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE asociaciones_heridos_emergencias
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-				WHERE id_herido = ?
-				AND id_emergencia = ?
-				AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+				UPDATE ASOCIACIONES_HERIDOS_EMERGENCIAS
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+				WHERE ID_HERIDO = ?
+				AND ID_EMERGENCIA = ?
+				AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 				<sql:param value="${param.id_herido}"/>
 				<sql:param value="${param.id_emergencia}"/>
 			</sql:update>
@@ -101,17 +101,17 @@
 		<c:when test="${param.accion == 'asociar'}">
 			<c:if test="${param.fecha == null}">
 				<sql:update dataSource="${CatastrofesServer}">
-					INSERT INTO asociaciones_heridos_emergencias(id_herido,id_emergencia,estado)
-					VALUES(?,?,(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					INSERT INTO ASOCIACIONES_HERIDOS_EMERGENCIAS(ID_HERIDO, ID_EMERGENCIA, ESTADO)
+					VALUES(?,?,(SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'))
 					<sql:param value="${param.id_herido}"/>
 					<sql:param value="${param.id_emergencia}"/>
 				</sql:update>
 			</c:if>
 			<c:if test="${param.fecha != null}">
 				<sql:update dataSource="${CatastrofesServer}">
-					INSERT INTO asociaciones_heridos_emergencias(id_herido, id_emergencia, estado)
-					VALUES((SELECT id FROM catastrofes WHERE fecha = ?), ?,
-						(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					INSERT INTO ASOCIACIONES_HERIDOS_EMERGENCIAS(ID_HERIDO, ID_EMERGENCIA, ESTADO)
+					VALUES((SELECT ID FROM CATASTROFES WHERE FECHA = ?), ?,
+						(SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'))
 					<sql:param value="${param.fecha}"/>
 					<sql:param value="${param.id_emergencia}"/>
 				</sql:update>
@@ -119,42 +119,42 @@
 		</c:when>
 		<c:when test="${param.accion == 'cambioTipo'}">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE actividades
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-				WHERE id_emergencia = ?
+				UPDATE ACTIVIDADES
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+				WHERE ID_EMERGENCIA = ?
 				<sql:param value="${param.id}"/>
 			</sql:update>
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active')
+				WHERE ID = ?
 				<sql:param value="${param.id}"/>
 			</sql:update>
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active')
-				WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
-				AND nombre NOT IN (SELECT DISTINCT u.nombre_usuario FROM usuarios u, actividades a
-					WHERE u.id = a.id_usuario
-					AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+				UPDATE CATASTROFES
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active')
+				WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'resource')
+				AND NOMBRE NOT IN (SELECT DISTINCT NOMBRE_USUARIO FROM USUARIOS U, ACTIVIDADES A
+					WHERE U.ID = ID_USUARIO
+					AND ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'))
 			</sql:update>
 		</c:when>
 		<%--<c:when test="${param.accion == 'annadirSintoma'}">
 			<c:if test="${param.fecha == null}">
 				<sql:update dataSource="${CatastrofesServer}">
-					INSERT INTO sintomas(id_herido,id_sintoma,estado)
-					VALUES(?, (SELECT id FROM tipos_sintomas WHERE tipo = ?),
-						(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					INSERT INTO SINTOMAS(ID_HERIDO,ID_SINTOMA,ESTADO)
+					VALUES(?, (SELECT ID FROM TIPOS_SINTOMAS WHERE TIPO = ?),
+						(SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'))
 					<sql:param value="${param.id_herido}"/>
 					<sql:param value="${param.tipo_sintoma}"/>
 				</sql:update>
 			</c:if>
 			<c:if test="${param.fecha != null}">
 				<sql:update dataSource="${CatastrofesServer}">
-					INSERT INTO sintomas(id_herido, id_sintoma, estado)
-					VALUES((SELECT id FROM catastrofes WHERE fecha = ?),
-						(SELECT id FROM tipos_sintomas WHERE tipo = ?),
-						(SELECT id FROM tipos_estados WHERE tipo_estado = 'active'))
+					INSERT INTO SINTOMAS(ID_HERIDO, ID_SINTOMA, ESTADO)
+					VALUES((SELECT ID FROM CATASTROFES WHERE FECHA = ?),
+						(SELECT ID FROM TIPOS_SINTOMAS WHERE TIPO = ?),
+						(SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'))
 					<sql:param value="${param.fecha}"/>
 					<sql:param value="${param.tipo_sintoma}"/>
 				</sql:update>
@@ -162,11 +162,11 @@
 		</c:when>
 		<c:when	test="${param.accion == 'eliminarSintoma'}">
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE sintomas
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-				WHERE id_herido = ?
-				AND id_sintoma = (SELECT id FROM tipos_sintomas WHERE tipo = ?)
-				AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+				UPDATE SINTOMAS
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+				WHERE ID_HERIDO = ?
+				AND ID_SINTOMA = (SELECT ID FROM tipos_sintomas WHERE TIPO = ?)
+				AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 				<sql:param value="${param.id_herido}"/>
 				<sql:param value="${param.tipo_sintoma}"/>
 			</sql:update>
@@ -175,9 +175,9 @@
 </c:if>
 <c:if test="${param.accion == 'cerrarSesion'}">
 	<sql:update dataSource="${CatastrofesServer}">
-		UPDATE catastrofes
-		SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'), modificado = <%=modif%>
-		WHERE nombre = ?
+		UPDATE CATASTROFES
+		SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
+		WHERE NOMBRE = ?
 		<sql:param value="${param.nombre}"/>
 	</sql:update>
 </c:if>

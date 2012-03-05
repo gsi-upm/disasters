@@ -7,10 +7,10 @@
 
 <c:if test="${param.accion != 'crear'}">
 	<sql:update dataSource="${CatastrofesServer}">
-		INSERT INTO historial(id_usuario,tipo,id_tipo,id_emergencia,evento)
-		VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
-			(SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
-			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?), ?, ?)
+		INSERT INTO HISTORIAL(ID_USUARIO,TIPO,ID_TIPO,ID_EMERGENCIA,EVENTO)
+		VALUES((SELECT ID FROM USUARIOS WHERE NOMBRE_USUARIO = ?),
+			(SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = ?),
+			(SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = ?), ?, ?)
 		<sql:param value="${param.usuario}"/>
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
@@ -20,11 +20,11 @@
 </c:if>
 <c:if test="${param.accion == 'crear'}">
 	<sql:update dataSource="${CatastrofesServer}">
-		INSERT INTO historial(id_usuario,tipo,id_tipo,id_emergencia,evento)
-		VALUES((SELECT id FROM usuarios WHERE nombre_usuario = ?),
-			(SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
-			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
-			(SELECT id FROM catastrofes WHERE fecha = ?), ?)
+		INSERT INTO HISTORIAL(ID_USUARIO,TIPO,ID_TIPO,ID_EMERGENCIA,EVENTO)
+		VALUES((SELECT ID FROM USUARIOS WHERE NOMBRE_USUARIO = ?),
+			(SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = ?),
+			(SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = ?),
+			(SELECT ID FROM CATASTROFES WHERE FECHA = ?), ?)
 		<sql:param value="${param.usuario}"/>
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>

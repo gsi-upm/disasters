@@ -92,10 +92,12 @@ function initialize2(){
 		numeroMarcadores(plantaResidencia);
 	}
 
-	if(localizacion == true){
-		// PRUEBAAA!!! ***********************************************************************
-		coordenadasUsuario(); // navigator.geolocation.getCurrentPosition(coordenadasUsuario);
-		//************************************************************************************
+	/*if(localizacion == true){
+		navigator.geolocation.getCurrentPosition(coordenadasUsuario); // coordenadasUsuario();
+	}*/
+	
+	if(userName != '' && usuario_actual_tipo != 'citizen'){
+		numeroMarcadores(0, true);
 	}
 }
 
@@ -109,13 +111,11 @@ function actualizar2(){
 		numeroMarcadores(plantaResidencia);
 	}
 
-	contador++;
+	/*contador++;
 	if(localizacion == true && nivelMsg > 0 && contador >= 3){
 		contador = 0;
-		// PRUEBAAA!!! ***********************************************************************
-		coordenadasUsuario(); // navigator.geolocation.getCurrentPosition(coordenadasUsuario);
-		//************************************************************************************
-	}
+		navigator.geolocation.getCurrentPosition(coordenadasUsuario); // coordenadasUsuario();
+	}*/
 }
 
 /**

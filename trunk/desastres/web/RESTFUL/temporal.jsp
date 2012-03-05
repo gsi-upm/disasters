@@ -58,30 +58,30 @@
 		<c:choose>
 			<c:when test="${param.action == 'user'}">
 				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT u.id, u.nombre_usuario, u.nombre_real, u.correo, u.latitud, u.longitud, u.planta, t.tipo
+					SELECT u.id, tipo nombre_usuario, nombre_real, correo, latitud, longitud, planta
 					FROM usuarios u, tipos_usuarios t
-					WHERE u.nombre_usuario = ?
-					AND u.password = ?
-					AND u.tipo_usuario = t.id
+					WHERE nombre_usuario = ?
+					AND password = ?
+					AND tipo_usuario = t.id
 					<sql:param value="${param.nombre_usuario}"/>
 					<sql:param value="${param.password}"/>
 				</sql:query>
 			</c:when>
 			<c:when test="${param.action == 'userProject'}">
 				<sql:query var="proyectos" dataSource="${CatastrofesServer}">
-					SELECT u.id, t.tipo, t.nivel
+					SELECT u.id, tipo, nivel
 					FROM usuarios u, tipos_usuarios t
-					WHERE u.nombre_usuario = ?
-					AND u.tipo_usuario = t.id
+					WHERE nombre_usuario = ?
+					AND tipo_usuario = t.id
 					<sql:param value="${param.nombre_usuario}"/>
 				</sql:query>
 			</c:when>
 			<c:when test="${param.action == 'userRole'}">
 				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT u.id, u.nombre_usuario, u.nombre_real, u.correo, u.latitud, u.longitud, t.tipo
+					SELECT u.id, tipo, nombre_usuario, nombre_real, correo, latitud, longitud
 					FROM usuarios u, tipos_usuarios t
-					WHERE u.nombre_usuario = ?
-					AND u.tipo_usuario = t.id
+					WHERE nombre_usuario = ?
+					AND tipo_usuario = t.id
 					<sql:param value="${param.nombre_usuario}"/>
 				</sql:query>
 			</c:when>

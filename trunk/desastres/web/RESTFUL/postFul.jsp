@@ -84,11 +84,11 @@
 
 <c:catch var="errorUpdate">
 	<sql:update dataSource="${CatastrofesServer}">
-		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
-			longitud, direccion, size, traffic, planta, estado, idAssigned, fecha, usuario)
-		VALUES((SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
-			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-			(SELECT id FROM tipos_estados WHERE tipo_estado = ?), ?, ?, ?)
+		INSERT INTO CATASTROFES(MARCADOR, TIPO, CANTIDAD, NOMBRE, DESCRIPCION, INFO, LATITUD,
+			LONGITUD, DIRECCION, SIZE, TRAFFIC, PLANTA, ESTADO, IDASSIGNED, FECHA, USUARIO)
+		VALUES((SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = ?),
+			(SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+			(SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = ?), ?, ?, ?)
 		<sql:param value="${item}"/>
 		<sql:param value="${param.type}"/>
 		<sql:param value="${number}"/>
@@ -109,7 +109,7 @@
 </c:catch>
 
 <sql:query var="eventos" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes ORDER BY id DESC LIMIT 1
+	SELECT ID FROM CATASTROFES ORDER BY ID DESC LIMIT 1
 </sql:query>
 
 <c:forEach var="evento" items="${eventos.rows}">

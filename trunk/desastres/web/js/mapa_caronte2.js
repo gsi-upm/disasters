@@ -4,10 +4,8 @@
  * @param pos Posicion devuelta
  */
 function coordenadasUsuario(pos){
-	// PRUEBAAA!!! ****************************************************************************************
-	var latitud = (38.232272 + (2*Math.random()-1)*0.0001).toFixed(6); // pos.coords.latitude.toFixed(6);
-	var longitud = (-1.698925 + (2*Math.random()-1)*0.0001).toFixed(6); // pos.coords.longitude.toFixed(6);
-	//*****************************************************************************************************
+	var latitud = pos.coords.latitude.toFixed(6); // (38.232272 + (2*Math.random()-1)*0.0001).toFixed(6);
+	var longitud = pos.coords.longitude.toFixed(6); // (-1.698925 + (2*Math.random()-1)*0.0001).toFixed(6); 
 
 	if(nivelMsg == null || nivelMsg == 0){
 		var icono = new google.maps.MarkerImage('markers/resources/user_no.png');
@@ -32,9 +30,13 @@ function coordenadasUsuario(pos){
  * Indica el numero de agentes, emergencias y heridos en la residencia
  * 
  * @param planta Planta de la residencia
+ * @param inicio True si es la carga de inicio
  */
-function numeroMarcadores(planta){
-	if(activeTabIndex['dhtmlgoodies_tabView1'] == 2){
+function numeroMarcadores(planta, inicio){
+	if(inicio == null){
+		inicio = false;
+	}
+	if(inicio){
 		$.getJSON('getpost/info_caronte.jsp',{
 			'marcadores':'lateral'
 		}, function(data){
@@ -46,8 +48,6 @@ function numeroMarcadores(planta){
 			document.getElementById('numBomberos').innerHTML = '(' + data.firemen + ')';
 			document.getElementById('numAmbulancias').innerHTML = '(' + data.ambulance + ')';
 		});
-	}
-	if(activeTabIndex['dhtmlgoodies_tabView2'] == 1){
 		$.getJSON('getpost/info_caronte.jsp',{
 			'marcadores':'plano',
 			'planta':planta
@@ -62,6 +62,36 @@ function numeroMarcadores(planta){
 			document.getElementById('numMuertos').innerHTML = '(' + data.dead + ')';
 			document.getElementById('numAtrapados').innerHTML = '(' + data.trapped + ')';
 		});
+	}else{	
+		if(activeTabIndex['dhtmlgoodies_tabView1'] == 2){
+			$.getJSON('getpost/info_caronte.jsp',{
+				'marcadores':'lateral'
+			}, function(data){
+				document.getElementById('numEnfermeros').innerHTML = '(' + data.nurse + ')';
+				document.getElementById('numGerocultores').innerHTML = '(' + data.gerocultor + ')';
+				document.getElementById('numAuxiliares').innerHTML = '(' + data.assistant + ')';
+				document.getElementById('numOtros').innerHTML = '(' + data.otherStaff + ')';
+				document.getElementById('numPolicias').innerHTML = '(' + data.police + ')';
+				document.getElementById('numBomberos').innerHTML = '(' + data.firemen + ')';
+				document.getElementById('numAmbulancias').innerHTML = '(' + data.ambulance + ')';
+			});
+		}
+		if(activeTabIndex['dhtmlgoodies_tabView2'] == 1){
+			$.getJSON('getpost/info_caronte.jsp',{
+				'marcadores':'plano',
+				'planta':planta
+			}, function(data){
+				document.getElementById('numFuegos').innerHTML = '(' + data.fire + ')';
+				document.getElementById('numInundaciones').innerHTML = '(' + data.flood + ')';
+				document.getElementById('numDerrumbamientos').innerHTML = '(' + data.collapse + ')';
+				document.getElementById('numPerdidos').innerHTML = '(' + data.lostPerson + ')';
+				document.getElementById('numSanos').innerHTML = '(' + data.healthy + ')';
+				document.getElementById('numLeves').innerHTML = '(' + data.slight + ')';
+				document.getElementById('numGraves').innerHTML = '(' + data.serious + ')';
+				document.getElementById('numMuertos').innerHTML = '(' + data.dead + ')';
+				document.getElementById('numAtrapados').innerHTML = '(' + data.trapped + ')';
+			});
+		}
 	}
 }
 

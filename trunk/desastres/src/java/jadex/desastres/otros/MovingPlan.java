@@ -2,11 +2,11 @@ package jadex.desastres.otros;
 
 import jadex.base.fipa.SFipa;
 import jadex.bdi.runtime.*;
-import roads.*;
+//import roads.*;
 
 public class MovingPlan extends Plan{
     //Plan attributes.
-    DirectionsBean dirn;
+    //DirectionsBean dirn;
 
     public MovingPlan(){
         // Initialization code.

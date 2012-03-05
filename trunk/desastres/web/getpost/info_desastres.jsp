@@ -7,69 +7,69 @@
 <%@include file="../jspf/database.jspf"%>
 
 <sql:query var="eventos" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'event')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="controlled" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
-	AND estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'controlled')
+	SELECT ID FROM CATASTROFES
+	WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'event')
+	AND ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'controlled')
 </sql:query>
 <sql:query var="fires" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'fire')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'fire')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="floods" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'flood')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'flood')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="collapses" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'collapse')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'collapse')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="resources" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'resource')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="policemen" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'police')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'police')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="firemen" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'firemen')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'firemen')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="ambulance" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'ambulance')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'ambulance')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="slight" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'slight')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'slight')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="serious" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'serious')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'serious')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="dead" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'dead')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'dead')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <sql:query var="trapped" dataSource="${CatastrofesServer}">
-	SELECT id FROM catastrofes
-	WHERE tipo = (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = 'trapped')
-	AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+	SELECT ID FROM CATASTROFES
+	WHERE TIPO = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'trapped')
+	AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 </sql:query>
 <fmt:bundle basename="fmt.eji8n">
 	<p><fmt:message key="actualmentehay"/> ${eventos.rowCount} <fmt:message key="desastres"/>. (${controlled.rowCount} <fmt:message key="controlados"/>):</p>
@@ -91,5 +91,5 @@
 		<li><img src="markers/people/muerto${dead.rowCount}.png" height="25px" alt=""/> ${dead.rowCount} <fmt:message key="muertos"/></li>
 		<li><img src="markers/people/trapped${trapped.rowCount}.png" height="25px" alt=""/> ${trapped.rowCount} <fmt:message key="atrapados"/></li>
 	</ul>
-	<span id="hideConsole" class="pulsable" onclick="$('#console').slideUp()"><fmt:message key="ocultar"/></span>
+	<span ID="hideConsole" class="pulsable" onclick="$('#console').slideUp()"><fmt:message key="ocultar"/></span>
 </fmt:bundle>

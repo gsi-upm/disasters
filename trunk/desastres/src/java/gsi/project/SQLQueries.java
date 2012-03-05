@@ -6,34 +6,34 @@ package gsi.project;
  */
 public class SQLQueries{
 	public static String user(String username, String pass){
-		return "SELECT u.id, t.tipo, u.nombre_real, u.correo, u.latitud, u.longitud, u.planta FROM usuarios u, tipos_usuarios t " +
-			"WHERE u.nombre_usuario = '" + username + "' AND u.password = '" + pass + "' AND u.tipo_usuario = t.id";
+		return "SELECT U.ID, TIPO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD, PLANTA FROM USUARIOS U, TIPOS_USUARIOS T " +
+			"WHERE NOMBRE_USUARIO = '" + username + "' AND PASSWORD = '" + pass + "' AND TIPO_USUARIO = T.ID";
 	}
 	
 	public static String preInsertar(String username){
-		return "SELECT id, estado FROM catastrofes WHERE nombre = '" + username + "' AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')";
+		return "SELECT ID, ESTADO FROM CATASTROFES WHERE NOMBRE = '" + username + "' AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')";
 	}
 	
 	public static String postPreInsertar(String date, int id2){
-		return "UPDATE catastrofes SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'), modificado = '" + date + "' WHERE id = " + id2;
+		return "UPDATE CATASTROFES SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = '" + date + "' WHERE ID = " + id2;
 	}
 	
 	public static String insertar(String tipoUsuario, String username, String descripcion, String informacion, float latitud, float longitud, int estado, String date, int planta){
-		return "INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud, longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta) " +
-			"VALUES((SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource'), (SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = '" + tipoUsuario + "'), 1, '" +
+		return "INSERT INTO CATASTROFES(MARCADOR, TIPO, CANTIDAD, NOMBRE, DESCRIPCION, INFO, LATITUD, LONGITUD, DIRECCION, ESTADO, SIZE, TRAFFIC, IDASSIGNED, FECHA, USUARIO, PLANTA) " +
+			"VALUES((SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'resource'), (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = '" + tipoUsuario + "'), 1, '" +
 			username + "', '" + descripcion + "', '" + informacion + "', " + latitud + ", " + longitud + ", '', " + estado + ", '', '', 0, '" + date + "', 1, " + planta + ")";
 	}
 	
 	public static String userRole(String username){
-		return "SELECT u.id, t.tipo FROM usuarios u, tipos_usuarios t WHERE u.nombre_usuario = '" + username + "' AND u.tipo_usuario = t.id";
+		return "SELECT U.ID, TIPO FROM USUARIOS U, TIPOS_USUARIOS T WHERE NOMBRE_USUARIO = '" + username + "' AND TIPO_USUARIO = T.ID";
 	}
 	
 	public static String userProject(String username){
-		return "SELECT u.id, tipo, nivel FROM usuarios u, tipos_usuarios t WHERE nombre_usuario = '" + username + "' AND tipo_usuario = t.id";
+		return "SELECT U.ID, TIPO, NIVEL FROM USUARIOS U, TIPOS_USUARIOS T WHERE NOMBRE_USUARIO = '" + username + "' AND TIPO_USUARIO = T.ID";
 	}
 	
 	public static String registrar(String usuario, String contra, String nombre, String email){
-		return "INSERT INTO usuarios(nombre_usuario, password, tipo_usuario, nombre_real, correo, latitud, longitud, localizacion, proyecto) " +
-			"VALUES('" + usuario + "', '" + contra + "', (SELECT id FROM tipos_usuarios WHERE tipo = 'citizen'), '" + nombre + "', '" + email + "', 0.0, 0.0, FALSE, 'caronte')";
+		return "INSERT INTO USUARIOS(NOMBRE_USUARIO, PASSWORD, TIPO_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD, LOCALIZACION, PROYECTO) " +
+			"VALUES('" + usuario + "', '" + contra + "', (SELECT ID FROM TIPOS_USUARIOS WHERE TIPO = 'citizen'), '" + nombre + "', '" + email + "', 0.0, 0.0, FALSE, 'caronte')";
 	}
 }

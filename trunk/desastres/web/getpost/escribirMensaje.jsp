@@ -6,7 +6,7 @@
 <%@include file="../jspf/database.jspf"%>
 
 <sql:update dataSource="${CatastrofesServer}">
-	INSERT INTO mensajes(creador, mensaje, nivel)
+	INSERT INTO MENSAJES(CREADOR, MENSAJE, NIVEL)
 	VALUES(?, ?, ?)
 	<sql:param value="${param.creador}"/>
 	<sql:param value="${param.mensaje}"/>
