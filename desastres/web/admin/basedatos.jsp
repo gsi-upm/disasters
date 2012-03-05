@@ -22,59 +22,59 @@
 			AND c.usuario = u.id
 		</sql:query>
 		<sql:query var="asociaciones" dataSource="${CatastrofesServer}">
-			SELECT * FROM asociaciones_heridos_emergencias
+			SELECT * FROM ASOCIACIONES_HERIDOS_EMERGENCIAS
 		</sql:query>
 		<sql:query var="actividades" dataSource="${CatastrofesServer}">
-			SELECT * FROM actividades
+			SELECT * FROM ACTIVIDADES
 		</sql:query>
 		<%--<sql:query var="sintomas" dataSource="${CatastrofesServer}">
-			SELECT * FROM sintomas
+			SELECT * FROM SINTOMAS
 		</sql:query>--%>
 		<sql:query var="mensajes" dataSource="${CatastrofesServer}">
-			SELECT * FROM mensajes
+			SELECT * FROM MENSAJES
 		</sql:query>
 		<sql:query var="historial" dataSource="${CatastrofesServer}">
-			SELECT * FROM historial
+			SELECT * FROM HISTORIAL
 		</sql:query>
 		<sql:query var="usuarios" dataSource="${CatastrofesServer}">
-			SELECT * FROM usuarios
+			SELECT * FROM USUARIOS
 		</sql:query>
 		<sql:query var="tipos_estados" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_estados
+			SELECT * FROM TIPOS_ESTADOS
 		</sql:query>
 		<sql:query var="tipos_marcadores" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_marcadores
+			SELECT * FROM TIPOS_MARCADORES
 		</sql:query>
 		<sql:query var="tipos_catastrofes" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.id_marcador, c.tipo_catastrofe, c.descripcion, m.tipo_marcador
-			FROM tipos_catastrofes c, tipos_marcadores m
-			WHERE c.id_marcador = m.id
+			SELECT C.ID, ID_MARCADOR, TIPO_CATASTROFE, C.DESCRIPCION, TIPO_MARCADOR
+			FROM TIPOS_CATASTROFES C, TIPOS_MARCADORES M
+			WHERE ID_MARCADOR = M.ID
 		</sql:query>
 		<sql:query var="tipos_usuarios" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_usuarios
+			SELECT * FROM TIPOS_USUARIOS
 		</sql:query>
 		<sql:query var="tipos_actividades" dataSource="${CatastrofesServer}">
-			SELECT a.id, a.tipo, a.tipo_emergencia, a.tipo_marcador, a.estado_emergencia, a.descripcion,
-				m.tipo_marcador tipomarcador, c.tipo_catastrofe, e.tipo_estado
-			FROM tipos_actividades a, tipos_marcadores m, tipos_catastrofes c, tipos_estados e
-			WHERE (a.tipo_marcador = m.id OR (a.tipo_marcador IS NULL AND m.id = 1)) /* ID forzado solo muestre 1 */
-			AND (a.tipo_emergencia = c.id OR (a.tipo_emergencia IS NULL AND c.id = 1)) /* ID forzado solo muestre 1 */
-			AND a.estado_emergencia = e.id
+			SELECT A.ID, A.TIPO, A.TIPO_EMERGENCIA, A.TIPO_MARCADOR, ESTADO_EMERGENCIA, A.DESCRIPCION,
+				M.TIPO_MARCADOR tipomarcador, C.TIPO_CATASTROFE, E.TIPO_ESTADO
+			FROM TIPOS_ACTIVIDADES A, TIPOS_MARCADORES M, TIPOS_CATASTROFES C, TIPOS_ESTADOS E
+			WHERE (A.TIPO_MARCADOR = M.ID OR (A.TIPO_MARCADOR IS NULL AND M.ID = 1)) /* ID forzado solo muestre 1 */
+			AND (A.TIPO_EMERGENCIA = C.ID OR (A.TIPO_EMERGENCIA IS NULL AND C.ID = 1)) /* ID forzado solo muestre 1 */
+			AND ESTADO_EMERGENCIA = E.ID
 		</sql:query>
 		<sql:query var="tipos_eventos" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_eventos
+			SELECT * FROM TIPOS_EVENTOS
 		</sql:query>
 		<sql:query var="tipos_sintomas" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_sintomas
+			SELECT * FROM TIPOS_SINTOMAS
 		</sql:query>
 		<sql:query var="asociaciones_emergencias" dataSource="${CatastrofesServer}">
-			SELECT * FROM asociaciones_emergencias_con_tipos_usuarios
+			SELECT * FROM ASOCIACIONES_EMERGENCIAS_CON_TIPOS_USUARIOS
 		</sql:query>
 		<sql:query var="asociaciones_usuarios" dataSource="${CatastrofesServer}">
-			SELECT * FROM asociaciones_usuarios_con_tipos_usuarios
+			SELECT * FROM ASOCIACIONES_USUARIOS_CON_TIPOS_USUARIOS
 		</sql:query>
 		<sql:query var="asociaciones_actividades" dataSource="${CatastrofesServer}">
-			SELECT * FROM asociaciones_actividades_con_tipos_usuarios
+			SELECT * FROM ASOCIACIONES_ACTIVIDADES_CON_TIPOS_USUARIOS
 		</sql:query>
 
 		<p>CATASTROFES</p>

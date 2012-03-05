@@ -7,9 +7,9 @@
 <%@include file="../jspf/database.jspf"%>
 
 <sql:query var="datos" dataSource="${CatastrofesServer}">
-	SELECT latitud, longitud, localizacion
-	FROM usuarios
-	WHERE nombre_usuario = ?
+	SELECT LATITUD, LONGITUD, LOCALIZACION
+	FROM USUARIOS
+	WHERE NOMBRE_USUARIO = ?
 	<sql:param value="${param.nombre}"/>
 </sql:query>
 

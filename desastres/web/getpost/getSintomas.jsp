@@ -9,25 +9,23 @@
 <c:choose>
 	<c:when test="${param.tipo eq 'todosSintomas'}">
 		<sql:query var="sintomas" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_sintomas
+			SELECT * FROM TIPOS_SINTOMAS
 		</sql:query>
 	</c:when>
 	<c:when test="${param.tipo eq 'sintomasNO'}">
 		<sql:query var="sintomas" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_sintomas
-			WHERE id NOT IN (SELECT DISTINCT id_sintoma FROM sintomas
-				WHERE id_herido = ?
-				AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
+			SELECT * FROM TIPOS_SINTOMAS
+			WHERE ID NOT IN (SELECT DISTINCT ID_SINTOMA FROM SINTOMAS
+				WHERE ID_HERIDO = ?
+				AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'))
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.tipo eq 'sintomasSI'}">
 		<sql:query var="sintomas" dataSource="${CatastrofesServer}">
-			SELECT t.id, t.tipo, t.descripcion
-			FROM sintomas s, tipos_sintomas t
-			WHERE t.id = s.id_sintoma
-			AND s.id_herido = ?
-			AND s.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+			SELECT T.ID, TIPO, DESCRIPCION FROM SINTOMAS S, TIPOS_SINTOMAS T
+			WHERE T.ID = ID_SINTOMA AND ID_HERIDO = ?
+			AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 			<sql:param value="${param.iden}"/>
 		</sql:query>
 	</c:when>

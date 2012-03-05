@@ -228,6 +228,16 @@ function generateBuilding(type, mensaje, latitud, longitud){
 			google.maps.event.addListener(infoWindow, 'closeclick', function(){
 				rectangulo.setMap(null);
 			});
+			
+			google.maps.event.addListener(rectangulo, 'click', function(){
+				if(infoWindow != null){
+					infoWindow.close();
+					if(infoWinMarker != 'building'){
+						limpiarLateral(infoWinMarker);
+					}
+				}
+				rectangulo.setMap(null);
+			});
 		}
 	});
 	

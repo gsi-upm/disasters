@@ -11,17 +11,17 @@
 		<c:choose>
 			<c:when test="${param.nivel gt 1}">
 				<sql:query var="emergencias" dataSource="${CatastrofesServer}">
-					SELECT id, nombre FROM catastrofes
-					WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
-					AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+					SELECT ID, NOMBRE FROM CATASTROFES
+					WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'event')
+					AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 				</sql:query>
 			</c:when>
 			<c:otherwise>
 				<sql:query var="emergencias" dataSource="${CatastrofesServer}">
-					SELECT id, nombre FROM catastrofes
-					WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
-					AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					AND planta < 0
+					SELECT ID, NOMBRE FROM CATASTROFES
+					WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'event')
+					AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					AND PLANTA < 0
 				</sql:query>
 			</c:otherwise>
 		</c:choose>
@@ -30,28 +30,28 @@
 		<c:choose>
 			<c:when test="${param.nivel gt 1}">
 				<sql:query var="emergencias" dataSource="${CatastrofesServer}">
-					SELECT id, nombre FROM catastrofes
-					WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
-					AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					AND id NOT IN (
-						SELECT DISTINCT id_emergencia
-						FROM asociaciones_heridos_emergencias a
-						WHERE id_herido = ?
-						AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
+					SELECT ID, NOMBRE FROM CATASTROFES
+					WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'event')
+					AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					AND ID NOT IN (
+						SELECT DISTINCT ID_EMERGENCIA
+						FROM ASOCIACIONES_HERIDOS_EMERGENCIAS
+						WHERE ID_HERIDO = ?
+						AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'))
 					<sql:param value="${param.iden}"/>
 				</sql:query>
 			</c:when>
 			<c:otherwise>
 				<sql:query var="emergencias" dataSource="${CatastrofesServer}">
-					SELECT id, nombre FROM catastrofes
-					WHERE marcador = (SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'event')
-					AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					AND id NOT IN (
-						SELECT DISTINCT id_emergencia
-						FROM asociaciones_heridos_emergencias a
-						WHERE id_herido = ?
-						AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'))
-					AND planta < 0
+					SELECT ID, NOMBRE FROM CATASTROFES
+					WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'event')
+					AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					AND ID NOT IN (
+						SELECT DISTINCT ID_EMERGENCIA
+						FROM ASOCIACIONES_HERIDOS_EMERGENCIAS
+						WHERE ID_HERIDO = ?
+						AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'))
+					AND PLANTA < 0
 					<sql:param value="${param.iden}"/>
 				</sql:query>
 			</c:otherwise>
@@ -61,22 +61,22 @@
 		<c:choose>
 			<c:when test="${param.nivel gt 1}">
 				<sql:query var="emergencias" dataSource="${CatastrofesServer}">
-					SELECT c.id, c.nombre FROM catastrofes c, asociaciones_heridos_emergencias a
-					WHERE c.id = a.id_emergencia
-					AND a.id_herido = ?
-					AND c.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+					SELECT C.ID, NOMBRE FROM CATASTROFES C, ASOCIACIONES_HERIDOS_EMERGENCIAS A
+					WHERE C.ID = ID_EMERGENCIA
+					AND ID_HERIDO = ?
+					AND C.ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					AND A.ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 					<sql:param value="${param.iden}"/>
 				</sql:query>
 			</c:when>
 			<c:otherwise>
 				<sql:query var="emergencias" dataSource="${CatastrofesServer}">
-					SELECT c.id, c.nombre FROM catastrofes c, asociaciones_heridos_emergencias a
-					WHERE c.id = a.id_emergencia
-					AND a.id_herido = ?
-					AND c.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					AND a.estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
-					AND planta < 0
+					SELECT C.ID, NOMBRE FROM CATASTROFES c, ASOCIACIONES_HERIDOS_EMERGENCIAS A
+					WHERE C.ID = ID_EMERGENCIA
+					AND ID_HERIDO = ?
+					AND C.ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					AND A.ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
+					AND PLANTA < 0
 					<sql:param value="${param.iden}"/>
 				</sql:query>
 			</c:otherwise>

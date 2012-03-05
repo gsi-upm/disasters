@@ -9,290 +9,289 @@
 <c:choose>
 	<c:when test="${param.action == 'all'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.marcador = m.id
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND MARCADOR = M.ID
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'events'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'event'
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'event'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'eventsModified'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'event'
-			AND c.tipo = t.id
-			AND c.estado = e.id
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'event'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'resources'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'resource'
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'resource'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'resourcesModified'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'resource'
-			AND c.tipo = t.id
-			AND c.estado = e.id
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'resource'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'people'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'people'
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'people'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'peopleModified'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'people'
-			AND c.tipo = t.id
-			AND c.estado = e.id
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'people'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'id'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.id = ?
-			AND c.marcador = m.id
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE C.ID = ?
+			AND MARCADOR = M.ID
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.id}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'item'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.marcador = m.id
-			AND m.tipo_marcador = ?
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MARCADOR = M.ID
+			AND TIPO_MARCADOR = ?
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.item}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'type'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.marcador = m.id
-			AND c.tipo = t.id
-			AND t.tipo_catastrofe = ?
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MARCADOR = M.ID
+			AND TIPO = T.ID
+			AND TIPO_CATASTROFE = ?
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.type}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'year'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.fecha > ?
-			AND c.modificado < ?
-			AND c.marcador = m.id
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE FECHA > ?
+			AND MODIFICADO < ?
+			AND MARCADOR = M.ID
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'eventsByYear'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.fecha < ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'event'
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND FECHA < ?
+			AND MARCADOR = M.ID
+			AND TIPOS_MARCADOR = 'event'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'peopleByYear'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.modificado > ?
-			AND c.fecha < ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'people'
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND FECHA < ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'people'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'resourcesByYear'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE modificado > ?
-			AND c.fecha < ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'resource'
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MODIFICADO > ?
+			AND FECHA < ?
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'resource'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.year1}"/>
 			<sql:param value="${param.year2}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'associated'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.marcador = m.id
-			AND c.tipo = t.id
-			AND t.tipo_catastrofe = ?
-			AND c.idAssigned = ?
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MARCADOR = M.ID
+			AND TIPO = T.ID
+			AND TIPO_CATASTROFE = ?
+			AND IDASSIGNED = ?
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.type}"/>
 			<sql:param value="${param.id}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'free'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT * FROM resources
-			WHERE estado != 'erased'
+			SELECT * FROM RESOURCES WHERE ESTADO != 'erased'
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'healthy'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.marcador = m.id
-			AND m.tipo_marcador = 'people'
-			AND c.tipo = t.id
-			AND t.tipo_catastrofe = 'healthy'
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'people'
+			AND TIPO = T.ID
+			AND TIPO_CATASTROFE = 'healthy'
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'unhealthy'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.marcador = m.id
-			AND m.tipo_marcador = 'people'
-			AND c.tipo = t.id
-			AND t.tipo_catastrofe != 'healthy'
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'people'
+			AND TIPO = T.ID
+			AND TIPO_CATASTROFE != 'healthy'
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'slight'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
-			WHERE c.marcador = m.id
-			AND m.tipo_marcador = 'people'
-			AND c.tipo = t.id
-			AND t.tipo_catastrofe = 'slight'
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			WHERE MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'people'
+			AND TIPO = T.ID
+			AND TIPO_CATASTROFE = 'slight'
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'person'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT c.id, c.cantidad, c.nombre, c.descripcion, c.info, c.latitud, c.longitud,
-				c.direccion, c.size, c.traffic, c.planta, c.idAssigned, c.fecha, c.modificado,
-				c.usuario, m.tipo_marcador, t.tipo_catastrofe, e.tipo_estado
-			FROM catastrofes c, tipos_marcadores m, tipos_catastrofes t, tipos_estados e
+			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
 			WHERE c.id = ?
-			AND c.marcador = m.id
-			AND m.tipo_marcador = 'people'
-			AND c.tipo = t.id
-			AND c.estado = e.id
-			AND e.tipo_estado != 'erased'
+			AND MARCADOR = M.ID
+			AND TIPO_MARCADOR = 'people'
+			AND TIPO = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 			<sql:param value="${param.id}"/>
 		</sql:query>
 	</c:when>

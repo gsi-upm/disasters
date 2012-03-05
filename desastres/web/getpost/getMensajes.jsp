@@ -18,13 +18,13 @@
 		<c:when test="${basedatos == 'mysql'}">
 			<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 				SELECT * FROM (
-					(SELECT * FROM mensajes WHERE nivel <= ? AND fecha >= <%=hace5min%>)
+					(SELECT * FROM MENSAJES WHERE NIVEL <= ? AND FECHA >= <%=hace5min%>)
 					UNION
-					(SELECT * FROM mensajes
-					 WHERE nivel <= ? AND fecha < <%=hace5min%> AND fecha >= <%=hace30min%>
-					 ORDER BY fecha DESC
-					 LIMIT 5)) msgs
-				ORDER BY id ASC
+					(SELECT * FROM MENSAJES
+					 WHERE NIVEL <= ? AND FECHA < <%=hace5min%> AND FECHA >= <%=hace30min%>
+					 ORDER BY FECHA DESC
+					 LIMIT 5)) MSGS
+				ORDER BY ID ASC
 				<sql:param value="${param.nivel}"/>
 				<sql:param value="${param.nivel}"/>
 			</sql:query>
@@ -32,12 +32,12 @@
 		<c:otherwise>
 			<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 				SELECT * FROM (
-					(SELECT * FROM mensajes WHERE nivel <= ? AND fecha >= <%=hace5min%>)
+					(SELECT * FROM MENSAJES WHERE NIVEL <= ? AND FECHA >= <%=hace5min%>)
 					UNION
-					(SELECT TOP 5 * FROM mensajes
-					 WHERE nivel <= ? AND fecha < <%=hace5min%> AND fecha >= <%=hace30min%>
-					 ORDER BY fecha DESC))
-				ORDER BY id ASC
+					(SELECT TOP 5 * FROM MENSAJES
+					 WHERE NIVEL <= ? AND FECHA < <%=hace5min%> AND FECHA >= <%=hace30min%>
+					 ORDER BY FECHA DESC))
+				ORDER BY ID ASC
 				<sql:param value="${param.nivel}"/>
 				<sql:param value="${param.nivel}"/>
 			</sql:query>
@@ -47,15 +47,13 @@
 </c:if>
 <c:if test="${param.action == 'notFirst'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
-		SELECT * FROM mensajes
-		WHERE nivel <= ? AND fecha > ?
+		SELECT * FROM MENSAJES WHERE NIVEL <= ? AND FECHA > ?
 		<sql:param value="${param.nivel}"/>
 		<sql:param value="${param.fecha}"/>
 	</sql:query>
 </c:if><c:if test="${param.action == 'idCreado'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
-		SELECT id FROM catastrofes
-		WHERE fecha = ?
+		SELECT ID FROM CATASTROFES WHERE FECHA = ?
 		<sql:param value="${param.fecha}"/>
 	</sql:query>
 </c:if>

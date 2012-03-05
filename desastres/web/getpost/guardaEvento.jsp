@@ -7,11 +7,11 @@
 
 <c:catch var="errorUpdate">
 	<sql:update dataSource="${CatastrofesServer}">
-		INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
-			longitud, direccion, size, traffic, planta, estado, idAssigned, fecha, usuario)
-		VALUES((SELECT id FROM tipos_marcadores WHERE tipo_marcador = ?),
-			(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-			(SELECT id FROM tipos_estados WHERE tipo_estado = ?), ?, ?, ?)
+		INSERT INTO CATASTROFES(MARCADOR, TIPO, CANTIDAD, NOMBRE, DESCRIPCION, INFO, LATITUD,
+			LONGITUD, DIRECCION, SIZE, TRAFFIC, PLANTA, ESTADO, IDASSIGNED, FECHA, USUARIO)
+		VALUES((SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = ?),
+			(SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+			(SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = ?), ?, ?, ?)
 		<sql:param value="${param.marcador}"/>
 		<sql:param value="${param.tipo}"/>
 		<sql:param value="${param.cantidad}"/>

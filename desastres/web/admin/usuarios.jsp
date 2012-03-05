@@ -19,10 +19,10 @@
 	</head>
 	<body>
 		<sql:query var="usuarios" dataSource="${CatastrofesServer}">
-			SELECT * FROM usuarios
+			SELECT * FROM USUARIOS
 		</sql:query>
 		<sql:query var="tipos_usuarios" dataSource="${CatastrofesServer}">
-			SELECT * FROM tipos_usuarios
+			SELECT * FROM TIPOS_USUARIOS
 		</sql:query>
 		<p>USUARIOS</p>
 		<div id="tabla_info">
