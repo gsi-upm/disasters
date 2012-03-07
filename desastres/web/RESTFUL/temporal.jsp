@@ -12,24 +12,24 @@
 		<% String modif = "'" + new Timestamp(new Date().getTime()).toString() + "'"; %>
 		<c:set var="estado" value="1"/>
 		<sql:query var="conectados" dataSource="${CatastrofesServer}">
-			SELECT id, estado FROM catastrofes
-			WHERE nombre = ? AND estado != (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased')
+			SELECT ID, ESTADO FROM CATASTROFES
+			WHERE NOMBRE = ? AND ESTADO != (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased')
 			<sql:param value="${param.name}"/>
 		</sql:query>
 		<c:forEach var="conect" items="${conectados.rows}">
 			<c:set var="estado" value="${conect.estado}"/>
 			<sql:update dataSource="${CatastrofesServer}">
-				UPDATE catastrofes
-				SET estado = (SELECT id FROM tipos_estados WHERE tipo_estado = 'erased'), modificado = <%=modif%>
-				WHERE id = ?
+				UPDATE CATASTROFES
+				SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
+				WHERE ID = ?
 				<sql:param value="${conect.id}"/>
 			</sql:update>
 		</c:forEach>
 		<sql:update dataSource="${CatastrofesServer}">
-			INSERT INTO catastrofes(marcador, tipo, cantidad, nombre, descripcion, info, latitud,
-				longitud, direccion, estado, size, traffic, idAssigned, fecha, usuario, planta)
-			VALUES((SELECT id FROM tipos_marcadores WHERE tipo_marcador = 'resource'),
-				(SELECT id FROM tipos_catastrofes WHERE tipo_catastrofe = ?),
+			INSERT INTO CATASTROFES(MARCADOR, TIPO, CANTIDAD, NOMBRE, DESCRIPCION, INFO, LATITUD,
+				LONGITUD, DIRECCION, ESTADO, SIZE, TRAFFIC, IDASSIGNED, FECHA, USUARIO, PLANTA)
+			VALUES((SELECT id FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'resource'),
+				(SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = ?),
 				1, ?, ?, ?, ?, ?, '', ?, '', '', 0, <%=modif%>, 1, ?)
 			<sql:param value="${param.type}"/>
 			<sql:param value="${param.name}"/>
@@ -44,8 +44,8 @@
 	<%--<c:when test="${param.action == 'registrar'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO usuarios(nombre_usuario, password, tipo_usuario, nombre_real,
-					correo, latitud, longitud, localizacion, proyecto)
+				INSERT INTO USUARIOS(NOMBRE_USUARIO, PASSWORD, TIPO_USUARIO, NOMBRE_REAL,
+					CORREO, LATITUD, LONGITUD, LOCALIZACION, PROYECTO)
 				VALUES(?, ?, 11, ?, ?, 0.0, 0.0, FALSE, 'caronte')
 				<sql:param value="${param.user}"/>
 				<sql:param value="${param.pass}"/>
@@ -58,30 +58,30 @@
 		<c:choose>
 			<c:when test="${param.action == 'user'}">
 				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT u.id, tipo nombre_usuario, nombre_real, correo, latitud, longitud, planta
-					FROM usuarios u, tipos_usuarios t
-					WHERE nombre_usuario = ?
-					AND password = ?
-					AND tipo_usuario = t.id
+					SELECT U.ID, TIPO, NOMBRE_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD, PLANTA
+					FROM USUARIOS U, TIPOS_USUARIOS T
+					WHERE NOMBRE_USUARIO = ?
+					AND PASSWORD = ?
+					AND TIPO_USUARIO = T.ID
 					<sql:param value="${param.nombre_usuario}"/>
 					<sql:param value="${param.password}"/>
 				</sql:query>
 			</c:when>
 			<c:when test="${param.action == 'userProject'}">
 				<sql:query var="proyectos" dataSource="${CatastrofesServer}">
-					SELECT u.id, tipo, nivel
-					FROM usuarios u, tipos_usuarios t
-					WHERE nombre_usuario = ?
-					AND tipo_usuario = t.id
+					SELECT U.ID, TIPO, NIVEL
+					FROM USUARIOS U, TIPOS_USUARIOS T
+					WHERE NOMBRE_USUARIO = ?
+					AND TIPO_USUARIO = T.ID
 					<sql:param value="${param.nombre_usuario}"/>
 				</sql:query>
 			</c:when>
 			<c:when test="${param.action == 'userRole'}">
 				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT u.id, tipo, nombre_usuario, nombre_real, correo, latitud, longitud
-					FROM usuarios u, tipos_usuarios t
-					WHERE nombre_usuario = ?
-					AND tipo_usuario = t.id
+					SELECT U.ID, TIPO, NOMBRE_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD
+					FROM USUARIOS U, TIPOS_USUARIOS T
+					WHERE NOMBRE_USUARIO = ?
+					AND TIPO_USUARIO = T.ID
 					<sql:param value="${param.nombre_usuario}"/>
 				</sql:query>
 			</c:when>

@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -118,8 +119,8 @@
 				<table class="tabla_menu">
 					<tr>
 						<td colspan="2">
-							<label for="cantidad"><fmt:message key="numerounidades"/>:</label>
-							<select name="cantidad" onchange="cambiaIcono(marcador.value,seleccionRadio(this.form,1),cantidad.value);">
+							<label for="cantidad1"><fmt:message key="numerounidades"/>:</label>
+							<select name="cantidad" id="cantidad1" onchange="cambiaIcono(marcador.value,seleccionRadio(this.form,1),cantidad.value);">
 								<option value="1" selected="selected">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -210,8 +211,8 @@
 				<table class="tabla_menu">
 					<tr>
 						<td colspan="2">
-							<label for="cantidad"><fmt:message key="numeropersonas"/>:</label>
-							<select name="cantidad" onchange="cambiaIcono(marcador.value,seleccionRadio(this.form,2),cantidad.value);">
+							<label for="cantidad2"><fmt:message key="numeropersonas"/>:</label>
+							<select name="cantidad" id="cantidad2" onchange="cambiaIcono(marcador.value,seleccionRadio(this.form,2),cantidad.value);">
 								<option value="1" selected="selected">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>

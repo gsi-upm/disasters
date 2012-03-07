@@ -648,11 +648,7 @@ function cambiarPlanta(num){
 		}
 	}
 
-	document.getElementById('prueba').innerHTML = '';
 	for(var i in marcadores_definitivos){
-		document.getElementById('prueba').innerHTML += i + ' ';
-	}
-	for(i in marcadores_definitivos){
 		marcadores_definitivos[i].marker.setMap(null);
 		if((num == -2 || marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2) &&
 				(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true)){

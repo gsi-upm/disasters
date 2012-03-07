@@ -351,7 +351,7 @@
 					<traffic>${evento.traffic}</traffic>
 					<floor>${evento.planta}</floor>
 					<state>${evento.tipo_estado}</state>
-					<idAssigned>${evento.idAssigned}</idAssigned>
+					<idAssigned>${evento.idassigned}</idAssigned>
 					<date>${evento.fecha}</date>
 					<modified>${evento.modificado}</modified>
 					<user>${evento.usuario}</user>
@@ -377,7 +377,7 @@
 					<json:property name="traffic" value="${evento.traffic}"/>
 					<json:property name="floor" value="${evento.planta}"/>
 					<json:property name="state" value="${evento.tipo_estado}"/>
-					<json:property name="idAssigned" value="${evento.idAssigned}"/>
+					<json:property name="idAssigned" value="${evento.idassigned}"/>
 					<json:property name="date" value="${evento.fecha}"/>
 					<json:property name="modified" value="${evento.modificado}"/>
 					<json:property name="user" value="${evento.usuario}"/>

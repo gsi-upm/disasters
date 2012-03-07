@@ -1,7 +1,8 @@
 package gsi.project;
 
 /**
- *
+ * Queries SQL usadas en la autenticacion y en el registro de usuarios
+ * 
  * @author Juan Luis Molina
  */
 public class SQLQueries{

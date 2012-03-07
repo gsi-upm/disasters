@@ -74,22 +74,22 @@
 <fmt:bundle basename="fmt.eji8n">
 	<p><fmt:message key="actualmentehay"/> ${eventos.rowCount} <fmt:message key="desastres"/>. (${controlled.rowCount} <fmt:message key="controlados"/>):</p>
 	<ul>
-		<li><img src="markers/events/fuego.png" height="25px" alt=""/> ${fires.rowCount} <fmt:message key="incendios"/></li>
-		<li><img src="markers/events/agua.png" height="25px" alt=""/> ${floods.rowCount} <fmt:message key="inundaciones"/></li>
-		<li><img src="markers/events/casa.png" height="30px" alt=""/> ${collapses.rowCount} <fmt:message key="derrumbamientos"/></li>
+		<li><img src="markers/events/fuego.png" height="25" alt=""/> ${fires.rowCount} <fmt:message key="incendios"/></li>
+		<li><img src="markers/events/agua.png" height="25" alt=""/> ${floods.rowCount} <fmt:message key="inundaciones"/></li>
+		<li><img src="markers/events/casa.png" height="30" alt=""/> ${collapses.rowCount} <fmt:message key="derrumbamientos"/></li>
 	</ul>
 	<p><fmt:message key="hay"/> ${resources.rowCount} <fmt:message key="recursostrabajando"/></p>
 	<ul>
-		<li><img src="markers/resources/policia${policemen.rowCount}.png" height="25px" alt=""/> ${policemen.rowCount} <fmt:message key="policias"/></li>
-		<li><img src="markers/resources/bombero${firemen.rowCount}.png" height="25px" alt=""/> ${firemen.rowCount} <fmt:message key="bomberos"/></li>
-		<li><img src="markers/resources/ambulancia${ambulance.rowCount}.png" height="25px" alt=""/> ${ambulance.rowCount} <fmt:message key="ambulancias"/></li>
+		<li><img src="markers/resources/policia${policemen.rowCount}.png" height="25" alt=""/> ${policemen.rowCount} <fmt:message key="policias"/></li>
+		<li><img src="markers/resources/bombero${firemen.rowCount}.png" height="25" alt=""/> ${firemen.rowCount} <fmt:message key="bomberos"/></li>
+		<li><img src="markers/resources/ambulancia${ambulance.rowCount}.png" height="25" alt=""/> ${ambulance.rowCount} <fmt:message key="ambulancias"/></li>
 	</ul>
 	<p><fmt:message key="hay"/> ${heridos.rowCount} <fmt:message key="victimas"/></p>
 	<ul>
-		<li><img src="markers/people/leve${slight.rowCount}.png" height="25px" alt=""/> ${slight.rowCount} <fmt:message key="leves"/></li>
-		<li><img src="markers/people/grave${serious.rowCount}.png" height="25px" alt=""/> ${serious.rowCount} <fmt:message key="graves"/></li>
-		<li><img src="markers/people/muerto${dead.rowCount}.png" height="25px" alt=""/> ${dead.rowCount} <fmt:message key="muertos"/></li>
-		<li><img src="markers/people/trapped${trapped.rowCount}.png" height="25px" alt=""/> ${trapped.rowCount} <fmt:message key="atrapados"/></li>
+		<li><img src="markers/people/leve${slight.rowCount}.png" height="25" alt=""/> ${slight.rowCount} <fmt:message key="leves"/></li>
+		<li><img src="markers/people/grave${serious.rowCount}.png" height="25" alt=""/> ${serious.rowCount} <fmt:message key="graves"/></li>
+		<li><img src="markers/people/muerto${dead.rowCount}.png" height="25" alt=""/> ${dead.rowCount} <fmt:message key="muertos"/></li>
+		<li><img src="markers/people/trapped${trapped.rowCount}.png" height="25" alt=""/> ${trapped.rowCount} <fmt:message key="atrapados"/></li>
 	</ul>
 	<span ID="hideConsole" class="pulsable" onclick="$('#console').slideUp()"><fmt:message key="ocultar"/></span>
 </fmt:bundle>

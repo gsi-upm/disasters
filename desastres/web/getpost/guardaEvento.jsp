@@ -31,7 +31,7 @@
 	</sql:update>
 	
 	<%-- Uncomment this code in order to enable Twitter service for new disasters.
-	DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR --%>
+		DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR --%>
 	<%--
 		Twitter twitt = new Twitter("your_username_here","your_password_here");
 		StreetLocator st = new StreetLocator();

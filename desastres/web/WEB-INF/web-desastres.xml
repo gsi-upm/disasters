@@ -104,8 +104,7 @@
         <error-code>500</error-code>
         <location>/error/500.jsp</location>
     </error-page>-->
-    <!-- Security -->
-    <security-role>
+	<security-role>
         <description>Administrador</description>
         <role-name>administrador</role-name>
     </security-role>
@@ -113,6 +112,7 @@
         <display-name>no_acceso</display-name>
         <web-resource-collection>
             <web-resource-name>sin_acceso</web-resource-name>
+            <description/>
             <url-pattern>/jspf/*</url-pattern>
             <url-pattern>/error/*</url-pattern>
         </web-resource-collection>

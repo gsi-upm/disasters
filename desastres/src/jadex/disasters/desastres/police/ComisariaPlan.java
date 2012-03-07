@@ -1,0 +1,19 @@
+package disasters.desastres.police;
+
+import jadex.bdi.runtime.Plan;
+
+/**
+ * Plan de la POLICIA para esperar un aviso en la comisaria.
+ *
+ * @author Juan Luis Molina
+ *
+ */
+public class ComisariaPlan extends Plan{
+
+	/**
+	 * Cuerpo del plan.
+	 */
+	public void body(){
+		waitFor(1000);
+	}
+}

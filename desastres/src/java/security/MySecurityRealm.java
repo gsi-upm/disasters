@@ -70,13 +70,11 @@ import org.securityfilter.realm.*;
  * You can implement a realm by overriding the two methods that neither take or
  * return a Principal object and this class does the conversions for you.
  *
- * @author Max Cooper (max@maxcooper.com) / Modificado por Juan Luis Molina
+ * @author Max Cooper (max@maxcooper.com)
+ * @author Juan Luis Molina
  * @version $Revision: 1.7 $ $Date: 2003/01/06 00:17:25 $
  */
 public class MySecurityRealm implements SecurityRealmInterface{
-	public static final String LOGIN_SUBMIT_PATTERN = "j_security_check";
-	public static final String FORM_USERNAME = "j_username";
-	public static final String FORM_PASSWORD = "j_password";
 	
 	/**
 	 * Authenticate a user.

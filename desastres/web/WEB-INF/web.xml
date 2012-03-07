@@ -22,7 +22,6 @@
         <servlet-name>RestletServlet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
-    <!-- Catch all requests -->
     <!-- DWR -->
     <!--<servlet>
         <servlet-name>dwr-invoker</servlet-name>
@@ -41,7 +40,6 @@
         <servlet-name>dwr-invoker</servlet-name>
         <url-pattern>/dwr/*</url-pattern>
     </servlet-mapping>-->
-    <!-- Simulator -->
     <servlet>
         <servlet-name>RegistroServlet</servlet-name>
         <servlet-class>gsi.project.RegistroServlet</servlet-class>
@@ -88,8 +86,7 @@
         <error-code>500</error-code>
         <location>/error/500.jsp</location>
     </error-page>-->
-    <!-- Security -->
-    <security-role>
+	<security-role>
         <description>Administrador</description>
         <role-name>administrador</role-name>
     </security-role>
