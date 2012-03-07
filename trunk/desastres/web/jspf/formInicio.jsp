@@ -1,18 +1,19 @@
-<%@page import="security.MySecurityRealm"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="security.SecurityConstants"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <fmt:bundle basename="fmt.eji8n">
 	<h2><fmt:message key="iniciarsesion"/></h2>
-	<form id="loginform" action="<%=response.encodeURL(MySecurityRealm.LOGIN_SUBMIT_PATTERN)%>" method="post">
+	<form id="<%=SecurityConstants.LOGIN_FORM_ID%>" action="<%=response.encodeURL(SecurityConstants.LOGIN_FORM_ACTION)%>" method="POST">
 		<table>
 			<tr><td id="regMsg" class="verde" colspan="2"></td></tr>
 			<tr>
 				<td><fmt:message key="usuario"/>:</td>
-				<td><input type="text" id="username" name="<%=MySecurityRealm.FORM_USERNAME%>" size="26"/></td>
+				<td><input type="text" id="username" name="<%=SecurityConstants.LOGIN_USERNAME_FIELD%>" size="26"/></td>
 			</tr>
 			<tr>
 				<td><fmt:message key="contrasenna"/>:</td>
-				<td><input type="password" id="pwd" name="<%=MySecurityRealm.FORM_PASSWORD%>" size="26"/></td>
+				<td><input type="password" id="pwd" name="<%=SecurityConstants.LOGIN_PASSWORD_FIELD%>" size="26"/></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" name="Submit" id="submit_butt" value="<fmt:message key="aceptar"/>"/></td>

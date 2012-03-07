@@ -1,7 +1,8 @@
 package gsi.project;
 
 /**
- *
+ * Constantes del proyecto, servidor y base de datos
+ * 
  * @author Juan Luis Molina
  */
 public class Constantes {

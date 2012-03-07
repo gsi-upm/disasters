@@ -12,6 +12,9 @@
 		<script type="application/javascript" src="../js/jquery-1.7.1.min.js"></script>
 		<script type="application/javascript" src="usuarios.js"></script>
 		<style type="text/css">
+			table, th, td{
+				border: 1px solid black;
+			}
 			#tabla_edit, #tabla_crear{
 				display: none;
 			}
@@ -26,7 +29,7 @@
 		</sql:query>
 		<p>USUARIOS</p>
 		<div id="tabla_info">
-			<table border="1">
+			<table>
 				<tr>
 					<th>id</th><th>nombre_usuario</th><th>password</th><th>tipo_usuario</th><th>nombre_real</th>
 					<th>correo</th><th>latitud</th><th>longitud</th><th>localizacion</th><th>proyecto</th><th></th>
@@ -54,7 +57,7 @@
 			<input type="button" value="Nuevo" onclick="nuevo()"/>
 		</div>
 		<div id="tabla_edit">
-			<table border="1">
+			<table>
 				<tr>
 					<th>id</th><th>nombre_usuario</th><th>password</th><th>tipo_usuario</th><th>nombre_real</th>
 					<th>correo</th><th>latitud</th><th>longitud</th><th>localizacion</th><th>proyecto</th><th></th>
@@ -90,7 +93,7 @@
 			</table>
 		</div>
 		<div id="tabla_crear">
-			<table border="1">
+			<table>
 				<tr>
 					<th>nombre_usuario</th><th>password</th><th>tipo_usuario</th><th>nombre_real</th>
 					<th>correo</th><th>latitud</th><th>longitud</th><th>localizacion</th><th></th>

@@ -1,9 +1,1 @@
 Manifest-Version: 1.0
-Extension-Name: Security Filter
-Specification-Title: Security Filter
-Specification-Vendor: SecurityFilter.org
-Specification-Version: 1.1
-Implementation-Title: Security Filter
-Implementation-Vendor: SecurityFilter.org
-Implementation-Vendor-Id: org.securityfilter
-Implementation-Version: 2.0

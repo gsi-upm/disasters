@@ -8,18 +8,32 @@
 
 <c:choose>
 	<c:when test="${param.accion == 'modificar'}">
-		<sql:update dataSource="${CatastrofesServer}">
-			UPDATE usuarios
-			SET tipo_usuario = ?, nombre_real = ?, correo = ?, latitud = ?, longitud = ?, localizacion = ?
-			WHERE id = ?
-			<sql:param value="${param.tipo_usuario}"/>
-			<sql:param value="${param.nombre_real}"/>
-			<sql:param value="${param.correo}"/>
-			<sql:param value="${param.latitud}"/>
-			<sql:param value="${param.longitud}"/>
-			<sql:param value="${param.localizacion}"/>
-			<sql:param value="${param.id}"/>
-		</sql:update>
+		<c:if test="${param.localizacion == true}">
+			<sql:update dataSource="${CatastrofesServer}">
+				UPDATE USUARIOS
+				SET TIPO_USUARIO = ?, NOMBRE_REAL = ?, CORREO = ?, LATITUD = ?, LONGITUD = ?, LOCALIZACION IS TRUE
+				WHERE ID = ?
+				<sql:param value="${param.tipo_usuario}"/>
+				<sql:param value="${param.nombre_real}"/>
+				<sql:param value="${param.correo}"/>
+				<sql:param value="${param.latitud}"/>
+				<sql:param value="${param.longitud}"/>
+				<sql:param value="${param.id}"/>
+			</sql:update>
+		</c:if>
+		<c:if test="${param.localizacion == false}">
+			<sql:update dataSource="${CatastrofesServer}">
+				UPDATE USUARIOS
+				SET TIPO_USUARIO = ?, NOMBRE_REAL = ?, CORREO = ?, LATITUD = ?, LONGITUD = ?, LOCALIZACION IS FALSE
+				WHERE ID = ?
+				<sql:param value="${param.tipo_usuario}"/>
+				<sql:param value="${param.nombre_real}"/>
+				<sql:param value="${param.correo}"/>
+				<sql:param value="${param.latitud}"/>
+				<sql:param value="${param.longitud}"/>
+				<sql:param value="${param.id}"/>
+			</sql:update>
+		</c:if>
 	</c:when>
 	<c:when test="${param.accion == 'crear'}">
 		<c:set var="password">
@@ -43,7 +57,7 @@
 			%>
 		</c:set>
 		<sql:update dataSource="${CatastrofesServer}">
-			INSERT INTO usuarios(nombre_usuario, password, tipo_usuario, nombre_real, correo, latitud, longitud, localizacion, proyecto)
+			INSERT INTO USUARIRIOS(NOMBRE_USUARIO, PASSWORD, TIPO_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD, LOCALIZACION, PROYECTO)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, 'caronte')
 			<sql:param value="${param.nombre_usuario}"/>
 			<sql:param value="${password}"/>
@@ -57,8 +71,7 @@
 	</c:when>
 	<c:when test="${param.accion == 'eliminar'}">
 		<sql:update dataSource="${CatastrofesServer}">
-			DELETE FROM usuarios
-			WHERE id = ?
+			DELETE FROM USUARIOS WHERE ID = ?
 			<sql:param value="${param.id}"/>
 		</sql:update>		
 	</c:when>
