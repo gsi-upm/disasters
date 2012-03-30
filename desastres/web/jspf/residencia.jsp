@@ -9,7 +9,8 @@
 		<span id="planta-1" class="pulsable" onclick="cambiarPlanta(-1)"><fmt:message key="exterior"/></span> -
 		<span id="planta0" class="pulsable" onclick="cambiarPlanta(0)"><fmt:message key="planta"/> 0</span> -
 		<span id="planta1" class="pulsable" onclick="cambiarPlanta(1)"><fmt:message key="planta"/> 1</span> -
-		<span id="planta2" class="pulsable" onclick="cambiarPlanta(2)"><fmt:message key="planta"/> 2</span>
+		<span id="planta2" class="pulsable" onclick="cambiarPlanta(2)"><fmt:message key="planta"/> 2</span> -
+		<span id="planta3" class="pulsable" onclick="cambiarPlanta(3)"><fmt:message key="planta"/> 3</span>
 	</form>
 	<div id="dhtmlgoodies_tabView2">
 		<div class="dhtmlgoodies_aTab">
