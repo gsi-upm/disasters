@@ -6,7 +6,7 @@ const proyecto = 'caronte';
  * @return Centro y zoom
  */
 function mapInit(){
-	var center = new google.maps.LatLng(38.232272, -1.698925); // Calasparra, Murcia (geriatrico)
+	var center = new google.maps.LatLng(38.5238697889187, -0.1703082025051117); //Villajoyosa, Alicante, Valencia, España
 	var zoom = 21;
 	return {'center':center, 'zoom':zoom};
 }
@@ -26,9 +26,9 @@ function initialize2(){
 	if(userName != '' && nivelMsg > 1){
 		plantaResidencia = 0;
 		var url = 'markers/residencia/planta'+ plantaResidencia + '.png';
-		var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(38.232140, -1.699210), new google.maps.LatLng(38.232440, -1.698640));
-		residencia = new google.maps.GroundOverlay(url, bounds, {clickable: false});
-
+                var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(38.5231, -0.170724), new google.maps.LatLng(38.5239796, -0.16964));//Suroeste, Noreste
+                residencia = new google.maps.GroundOverlay(url, bounds, {clickable: false});
+                
 		google.maps.event.addListener(map, 'zoom_changed', function(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
@@ -134,15 +134,17 @@ function buildingInit(){
  * @type Tipo de edificio a mostrar
  */
 function showBuilding(type){
+    // Villajoyosa, Alicante, Valencia, España
 	if(type == 'hospital'){
-		generateBuilding('hospital', 'Centro de salud', 38.228138, -1.706449); // Calasparra, Murcia
+		generateBuilding('hospital', 'Centro de salud', 38.506902, -0.231121);
+                generateBuilding('hospital', 'Cruz Roja', 38.505762, -0.229287);
 	}else if(type == 'firemenStation'){
-		generateBuilding('firemenStation', 'Parque de bomberos', 38.111020, -1.865018); // Caravaca de la Cruz, Murcia
-		generateBuilding('firemenStation', 'Parque de bomberos TEMPORAL', 38.216020, -1.723060); // TEMPORAL
+		generateBuilding('firemenStation', 'Parque de bomberos', 38.505609, -0.233229);
 	}else if(type == 'policeStation'){
-		generateBuilding('policeStation', 'Ayuntamiento y Polic&iacute;a municipal', 38.231125, -1.697560); // Calasparra, Murcia
+		generateBuilding('policeStation', 'Ayuntamiento y Polic&iacute;a municipal', 38.510397,-0.231851); 
+                generateBuilding('policeStation', 'Guardia Civil', 38.504637, -0.2373557);
 	}else if(type == 'geriatricCenter'){
-		generateBuilding('geriatricCenter', 'Residencia Virgen de la Esperanza', 38.232272, -1.698925); // Calasparra, Murcia
+		generateBuilding('geriatricCenter', 'Residencia Ballesol Costa Blanca Senior Resort', 38.5238697889187, -0.1703082025051117); 
 	}
 }
 

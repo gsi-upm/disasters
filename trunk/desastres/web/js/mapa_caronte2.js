@@ -4,7 +4,7 @@
  * @param pos Posicion devuelta
  */
 function coordenadasUsuario(pos){
-	var latitud = pos.coords.latitude.toFixed(6); // (38.232272 + (2*Math.random()-1)*0.0001).toFixed(6);
+        var latitud = pos.coords.latitude.toFixed(6); // (38.232272 + (2*Math.random()-1)*0.0001).toFixed(6);
 	var longitud = pos.coords.longitude.toFixed(6); // (-1.698925 + (2*Math.random()-1)*0.0001).toFixed(6); 
 
 	if(nivelMsg == null || nivelMsg == 0){
