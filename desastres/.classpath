@@ -4,137 +4,40 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="lib/jadex/jadex-2.0-rc6-standalone-launch-reference.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-applib-bdi-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-applications-bdi-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-applications-bdibpmn-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-applications-bpmn-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-applications-gpmn-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-applications-micro-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-bridge-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-commons-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-javaparser-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-application-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-application-opengl-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-bdi-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-bdibpmn-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-bpmn-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-gpmn-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-micro-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-nuggets-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-platform-base-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-platform-standalone-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-platform-standalone-launch-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-rules-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-rules-applications-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-rules-tools-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-runtimetools-2.0-rc6.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-standalone-launch-reference.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jadex/jadex-xml-2.0-rc6.jar">
+	<classpathentry kind="lib" path="lib/jadex/jadex-applib-bdi-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-applications-bdi-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-applications-bdibpmn-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-applications-bpmn-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-applications-gpmn-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-applications-micro-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-bridge-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-commons-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-javaparser-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-application-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-base-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-bdi-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-bdibpmn-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-bpmn-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-component-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-extension-agr-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-extension-envsupport-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-extension-envsupport-opengl-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-gpmn-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-kernel-micro-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-nuggets-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-platform-base-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-platform-standalone-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-platform-standalone-launch-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-rules-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-rules-applications-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-rules-tools-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-runtimetools-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-tools-bdi-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-tools-bpmn-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-tools-comanalyzer-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jadex/jadex-xml-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit-3.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit-4.10.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -195,11 +98,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jtwitter.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/junit.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>

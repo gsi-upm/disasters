@@ -2,31 +2,30 @@ package disasters;
 
 /**
  * Class that represents an activity
+ * 
  * @author Juan Luis Molina
  * @version 1.0
  */
 public class Activity{
 	/** Activity id */
 	private int id;
-	
 	/** User id */
 	private int idUser;
-	
 	/** Disaster or emergency id */
 	private int idDisaster;
-	
 	/** Type of activity */
 	private String type;
-	
 	/** State of the activity */
 	private String state;
 
 	/**
-	 * @param id
-	 * @param idUser
-	 * @param idDisaster
-	 * @param type
-	 * @param state
+	 * Constructor de la actividad
+	 * 
+	 * @param id Identificador de la actividad
+	 * @param idUser Identificador del usuario
+	 * @param idDisaster Identificador del evento
+	 * @param type Tipo de evento
+	 * @param state Estado de la actividad
 	 */
 	public Activity(int id, int idUser, int idDisaster, String type, String state){
 		super();
@@ -38,70 +37,90 @@ public class Activity{
 	}
 
 	/**
-	 * @return the id
+	 * Getter del ID
+	 * 
+	 * @return Identificador
 	 */
 	public int getId(){
 		return id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * Setter del ID
+	 * 
+	 * @param id Identificador
 	 */
 	public void setId(int id){
 		this.id = id;
 	}
 
 	/**
-	 * @return the idUser
+	 * Getter del ID del usuario
+	 * 
+	 * @return ID de usuario
 	 */
 	public int getIdUser(){
 		return idUser;
 	}
 
 	/**
-	 * @param idUser the idUser to set
+	 * Setter del ID del usuario
+	 * 
+	 * @param idUser ID de usuario
 	 */
 	public void setIdInjured(int idUser){
 		this.idUser = idUser;
 	}
 	
 	/**
-	 * @return the idDisaster
+	 * Getter del ID del evento
+	 * 
+	 * @return ID de evento
 	 */
 	public int getIdDisaster(){
 		return idDisaster;
 	}
 
 	/**
-	 * @param idDisaster the idDisaster to set
+	 * Setter del ID del evento
+	 * 
+	 * @param idDisaster ID de evento
 	 */
 	public void setIdDisaster(int idDisaster){
 		this.idDisaster = idDisaster;
 	}
 	
 	/**
-	 * @return the type
+	 * Getter del tipo de evento
+	 * 
+	 * @return Tipo de evento
 	 */
 	public String getType(){
 		return type;
 	}
 
 	/**
-	 * @param type the type to set
+	 * Setter del tipo de evento
+	 * 
+	 * @param type Tipo de evento
 	 */
 	public void setType(String type){
 		this.type = type;
 	}
 	
 	/**
-	 * @return the state
+	 * Getter del estado de la actividad
+	 * 
+	 * @return Estado de la actividad
 	 */
 	public String getState(){
 		return state;
 	}
 
 	/**
-	 * @param state the state to set
+	 * Setter del estado de la actividad
+	 * 
+	 * @param state Estado de la actividad
 	 */
 	public void setState(String state){
 		this.state = state;

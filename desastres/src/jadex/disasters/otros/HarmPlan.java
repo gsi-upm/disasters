@@ -1,6 +1,7 @@
 package disasters.otros;
 
-import disasters.*;
+import disasters.Disaster;
+import disasters.desastres.Environment;
 import jadex.bdi.runtime.Plan;
 import java.net.*;
 import java.io.*;

@@ -1,6 +1,7 @@
 package disasters.desastres.police;
 
-import disasters.*;
+import disasters.Position;
+import disasters.desastres.Environment;
 import jadex.bdi.runtime.Plan;
 
 /**
@@ -18,12 +19,12 @@ public class PatrullaPlan extends Plan{
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		//Creamos una nueva posicion aleatoria
-		Position newPos = (Position)env.getRandomPosition("disasters");
+		Position newPos = (Position)env.getRandomPosition();
 		
 		System.out.println("++ police: Estoy patrullando porque no hay desastres activos... ");
 		try{
 			env.go(getComponentName(), newPos);
-			env.pinta(env.getAgent(getComponentName()).getId(), 0, newPos.getX(), newPos.getY());
+			env.pinta(env.getAgent(getComponentName()).getId(), 0, newPos.getLat(), newPos.getLng());
 		}catch(Exception e){
 			System.out.println("++ police: Error metodo andar: " + e);
 		}

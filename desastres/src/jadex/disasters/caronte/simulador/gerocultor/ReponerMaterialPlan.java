@@ -1,6 +1,6 @@
 package disasters.caronte.simulador.gerocultor;
 
-import disasters.Environment;
+import disasters.caronte.Entorno;
 import jadex.bdi.runtime.Plan;
 
 /**
@@ -8,14 +8,14 @@ import jadex.bdi.runtime.Plan;
  *
  * @author Lorena Lopez Lebon
  */
-public class ReponerMaterialPlan extends Plan {
+public class ReponerMaterialPlan extends Plan{
 
-	public void body() {
-		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+	public void body(){
+		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 
-		env.printout("GG gerocultor: reponiendo el material usado", 0);
+		env.printout("GG gerocultor: reponiendo el material usado", 2, 0);
 		waitFor(1000);
 		getBeliefbase().getBelief("material").setFact(true);
-		env.printout("GG gerocultor: material repuesto", 0);
+		env.printout("GG gerocultor: material repuesto", 2, 0);
 	}
 }

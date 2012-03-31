@@ -1,6 +1,6 @@
 package disasters.caronte.simulador.nurse;
 
-import disasters.Environment;
+import disasters.caronte.Entorno;
 import jadex.bdi.runtime.Plan;
 
 /**
@@ -11,11 +11,11 @@ import jadex.bdi.runtime.Plan;
 public class ReponerMaterialPlan extends Plan{
 
 	public void body(){
-		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		
-		env.printout("EE enfermero: reponiendo el material usado", 0);
+		env.printout("EE enfermero: reponiendo el material usado", 2, 0);
 		waitFor(1000);
 		getBeliefbase().getBelief("material").setFact(true);
-		env.printout("EE enfermero: material repuesto", 0);
+		env.printout("EE enfermero: material repuesto", 2, 0);
 	}
 }

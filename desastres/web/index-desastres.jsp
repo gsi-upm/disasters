@@ -26,7 +26,7 @@
 			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
 			<script type="application/javascript" src="js/jquery-1.7.1.min.js"></script>
-			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
+			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=false"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
 				var usuario_actual = ${usuario.id};

@@ -98,7 +98,7 @@ form table img{
 	height: 487px;
 }
 
-#messages{
+#messages, #accion{
 	font-family: Courier, monospace;
 	font-size: 12px;
 	width: 254px;
@@ -108,6 +108,10 @@ form table img{
 	background-color: #EFEFEF;
 	color: #000000;
 	overflow: auto;
+}
+
+#accion{
+	background-color: #FFDFDF;
 }
 
 #close_messages, #open_messages{

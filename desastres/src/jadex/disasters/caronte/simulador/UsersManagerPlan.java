@@ -1,6 +1,7 @@
 package disasters.caronte.simulador;
 
-import disasters.*;
+import disasters.Connection;
+import disasters.caronte.Entorno;
 import jadex.bdi.runtime.*;
 import jadex.bridge.IComponentIdentifier;
 import java.sql.Timestamp;
@@ -14,17 +15,17 @@ import org.json.me.*;
 public class UsersManagerPlan extends Plan{
 
 	public void body(){
-		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		boolean primera = (Boolean)getBeliefbase().getBelief("primera").getFact();
 		String ahora = (String)getBeliefbase().getBelief("ahora").getFact();
 
 		try{
 			String logueados;
 			if(primera){
-				logueados = Connection.connect(Environment.URL + "users");
+				logueados = Connection.connect(Entorno.URL + "users");
 				getBeliefbase().getBelief("primera").setFact(false);
 			}else{
-				logueados = Connection.connect(Environment.URL + "users/modified/" + ahora);
+				logueados = Connection.connect(Entorno.URL + "users/modified/" + ahora);
 			}
 
 			ahora = new Timestamp(new Date().getTime()).toString();
@@ -36,20 +37,20 @@ public class UsersManagerPlan extends Plan{
 				String nombre = instancia.getString("name");
 				IComponentIdentifier id = env.getListado(nombre);
 				if(instancia.getString("state").equals("active") && !env.containsListado(nombre)){
-					env.printout("- ENV: New user " + instancia.getString("name"), 5);
+					env.printout("- ENV: New user " + instancia.getString("name"), 2, 5);
 					String tipoUsuario = instancia.getString("type");
 					env.putListado(nombre,null); // se vuelve a llamar por el agente para introducir el id
 
 					IGoal sp = createGoal("cms_create_component");
 					if(!tipoUsuario.equals("citizen")){
-						sp.getParameter("type").setValue("jadex/desastres/caronte/simulador/" + tipoUsuario + "/" + tipoUsuario + ".agent.xml");
+						sp.getParameter("type").setValue("disasters/caronte/simulador/" + tipoUsuario + "/" + tipoUsuario + ".agent.xml");
 					}else{
-						sp.getParameter("type").setValue("jadex/desastres/caronte/simulador/usuarios/ciudadano.agent.xml");
+						sp.getParameter("type").setValue("disasters/caronte/simulador/usuarios/ciudadano.agent.xml");
 					}
 					sp.getParameter("name").setValue(nombre);
 					dispatchSubgoalAndWait(sp);
 				}else if (instancia.getString("state").equals("erased") && env.containsListado(nombre)){
-					env.printout("- ENV: User " + instancia.getString("name") + " has logged out", 5);
+					env.printout("- ENV: User " + instancia.getString("name") + " has logged out", 2, 5);
 
 					IGoal sp = createGoal("cms_destroy_component");
 					sp.getParameter("componentidentifier").setValue(id);

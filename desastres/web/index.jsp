@@ -26,7 +26,7 @@
 			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
 			<script type="application/javascript" src="js/jquery-1.7.1.min.js"></script>
-			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=true&amp;region=ES"></script>
+			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=true&amp;region=ES"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
 				var usuario_actual = ${usuario.id};
@@ -64,7 +64,7 @@
 			<!-- Agents movement through roads -->
 			<!-- <script type="application/javascript" src="js/resourcesOnRoads.js"></script> -->
 		</head>
-		<body onload="IniciarReloj24(); initialize();"> <!-- dwr.engine.setActiveReverseAjax(true); -->
+		<body onload="IniciarReloj24(); initialize(); if(document.getElementById('username')!=null){document.getElementById('username').focus();}"> <!-- dwr.engine.setActiveReverseAjax(true); -->
 			<table class="tabla_body">
 				<!-- Cabecera con imagen y hora -->
 				<tr>
@@ -98,25 +98,26 @@
 						</c:if>
 					</td>
 					<td id="fila_mapa">
-						<c:if test="${usuario.nombre == null}">
-							<div class="div_vacio"></div>
-							<div id="contenedor_mapa">
-								<div id="map_canvas"></div>
-							</div>
-						</c:if>
-						<c:if test="${usuario.nombre != null}">
-							<c:if test="${usuario.rol != 'citizen'}">
+						<c:choose>
+							<c:when test="${usuario.nombre != null && usuario.rol != 'citizen'}">
 								<c:import url="jspf/residencia.jsp"/>
-							</c:if>
-							<c:if test="${usuario.rol == 'citizen'}">
+							</c:when>
+							<c:otherwise>
 								<div class="div_vacio"></div>
 								<div id="contenedor_mapa">
 									<div id="map_canvas"></div>
 								</div>
-							</c:if>
-						</c:if>
+							</c:otherwise>
+						</c:choose>
 					</td>
 					<td id="right">
+						<div id="accion">
+							<p id="pregunta"></p>
+							<p>
+								<input type="button" name="pregOK" value="Aceptar" onclick="responder(1)"/>
+								<input type="button" name="pregNO" value="Cancelar" onclick="responder(0)"/>
+							</p>
+						</div>
 						<div id="open_messages" class="pulsable"><fmt:message key="mostrar"/></div>
 						<div id="close_messages" class="pulsable"><fmt:message key="ocultar"/></div>
 						<div id="messages">

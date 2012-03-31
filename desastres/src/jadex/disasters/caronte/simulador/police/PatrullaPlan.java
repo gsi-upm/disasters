@@ -1,6 +1,7 @@
 package disasters.caronte.simulador.police;
 
-import disasters.*;
+import disasters.Position;
+import disasters.caronte.Entorno;
 import jadex.bdi.runtime.Plan;
 
 /**
@@ -15,18 +16,18 @@ public class PatrullaPlan extends Plan{
 	 */
 	public void body(){
 		//Obtenemos un objeto de la clase entorno para poder usar sus metodos.
-		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		//Necesito mi posicion y la nueva posicion a la que andara si no hay desastre que atender
 
 		Position oldPos = (Position)getBeliefbase().getBelief("pos").getFact();
 
 		//Creamos una nueva posicion aleatoria
-		Position newPos = (Position)env.getRandomPosition("caronte");
+		Position newPos = (Position)env.getRandomPosition();
 		
-		env.printout("PP police: Estoy patrullando porque no hay desastres activos... ",0);
+		env.printout("PP police: Estoy patrullando porque no hay desastres activos... ", 2, 0);
 		try{
 			env.go(getComponentName(), newPos);
-			env.pinta(env.getAgent(getComponentName()).getId(), 0, newPos.getX(), newPos.getY());
+			env.pinta(env.getAgent(getComponentName()).getId(), 0, newPos.getLat(), newPos.getLng());
 
 		}catch (Exception e){
 			System.out.println("PP police: Error metodo andar: " + e);

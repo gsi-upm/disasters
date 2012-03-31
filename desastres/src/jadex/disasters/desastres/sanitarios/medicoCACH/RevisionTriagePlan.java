@@ -1,6 +1,7 @@
 package disasters.desastres.sanitarios.medicoCACH;
 
 import disasters.*;
+import disasters.desastres.Environment;
 import jadex.bdi.runtime.IGoal;
 
 /**

@@ -1,4 +1,5 @@
 function mostrarMensajes(){
+	$('#accion').hide();
 	$('#open_messages').hide();
 
 	$('#close_messages').click(function(){
@@ -26,7 +27,7 @@ function mostrarMensajes(){
 		$.each(data, function(entryIndex, entry){
 			var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
 			// var fecha = entry.fecha.split(' ')[1].split(':',2).join(':'); // HH:MM
-			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>').split('&quot;').join('"');
+			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>').split('&quot;').join('"').split('&apos;').join('\'').split('&amp;').join('&');
 			msgs.innerHTML += '<p>(' + fecha + ') ' + mensaje + '</p>';
 		});
 		if(tamanno > 0){
@@ -41,15 +42,32 @@ function mostrarMensajes2(){
 	var msgs = document.getElementById('messages');
 	$.getJSON('getpost/getMensajes.jsp',{
 		'action':'notFirst',
+		'receptor':usuario_actual,
 		'nivel':nivelMsg,
 		'fecha':ultimamodif
 	}, function(data){
 		var tamanno = data.length;
 		$.each(data, function(entryIndex, entry){
+			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>').split('&quot;').join('"').split('&apos;').join('\'').split('&amp;').join('&');
 			var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
 			// var fecha = entry.fecha.split(' ')[1].split(':',2).join(':'); // HH:MM
-			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>').split('&quot;').join('"');
-			msgs.innerHTML += '<p>(' + fecha + ') ' + mensaje + '</p>';
+			if(entry.tipo_receptor == '0'){ // Si el mensaje es tipo pregunta (tipo_receptor = 0)
+				if(mensaje != 'CANCEL'){
+					document.getElementById('pregunta').innerHTML = mensaje;
+					msgs.style.height = '365px';
+					$('#accion').slideDown();
+				}else{
+					$('#accion').slideUp();
+					msgs.style.height = '508px';
+					document.getElementById('pregunta').innerHTML = '';
+				}
+			}else{
+				if(entry.tipo_receptor == '1'){
+					msgs.innerHTML += '<p class="importante">(' + fecha + ') ' + mensaje + '</p>';
+				}else{
+					msgs.innerHTML += '<p>(' + fecha + ') ' + mensaje + '</p>';
+				}
+			}
 		});
 		if(tamanno > 0){
 			msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
@@ -158,8 +176,9 @@ function escribirMensaje(evento, accion, nivel){
 	}
 	$.post('getpost/escribirMensaje.jsp', {
 		'creador':usuario_actual,
-		'mensaje':mensaje,
-		'nivel':nivel
+		'tipo_receptor':2,
+		'receptor':nivel,
+		'mensaje':mensaje
 	});
 }
 
@@ -184,5 +203,19 @@ function registrarHistorial(usuario, marcador, tipo, emergencia, accion){
 		'tipo':tipo,
 		'emergencia':emergencia,
 		'evento':evento
+	});
+}
+
+function responder(respuesta){
+	$('#accion').slideUp();
+	document.getElementById('messages').style.height = '508px';
+	document.getElementById('pregunta').innerHTML = '';
+	
+	var mensaje = (respuesta == 1) ? 'OK' : 'NO';
+	$.post('getpost/escribirMensaje.jsp', {
+		'creador':usuario_actual,
+		'tipo_receptor':0,
+		'receptor':0,
+		'mensaje':mensaje
 	});
 }

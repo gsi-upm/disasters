@@ -1,6 +1,7 @@
 package disasters.caronte.simulador.centralEmergencias;
 
-import disasters.*;
+import disasters.EnviarMensajePlan;
+import disasters.caronte.Entorno;
 
 /**
  * Plan de la central que espera que un agente ha solucionado un desastre
@@ -14,15 +15,15 @@ public class EsperaSolucionPlan extends EnviarMensajePlan{
 	 * Cuerpo del plan
 	 */
 	public void body(){
-		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 
-		env.printout("CC central: esperando una solucion...", 0);
+		env.printout("CC central: esperando una solucion...", 2, 0);
 		String recibido = esperarYEnviarRespuesta("terminado", "Terminado recibido");
 
 		//env.printout("CC central: Ack mandado", 0);
-		env.printout("CC central: Emergencia solucionada", 0);
+		env.printout("CC central: Emergencia solucionada", 2, 0);
 
-		env.printout("CC central: Mandando mensaje al coordinador", 0);
+		env.printout("CC central: Mandando mensaje al coordinador", 2, 0);
 		String resultado = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "go");
 		//env.printout("CC central: Respuesta recibida del coordinador: " + resultado, 0);
 	}

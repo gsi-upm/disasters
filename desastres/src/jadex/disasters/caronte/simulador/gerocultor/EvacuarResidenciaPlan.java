@@ -1,6 +1,7 @@
 package disasters.caronte.simulador.gerocultor;
 
 import disasters.*;
+import disasters.caronte.Entorno;
 import org.json.me.*;
 
 /**
@@ -10,26 +11,26 @@ import org.json.me.*;
  */
 public class EvacuarResidenciaPlan extends EnviarMensajePlan{
 
-	Environment env;
+	Entorno env;
 
 	public void body(){
-		env = (Environment)getBeliefbase().getBelief("env").getFact();
+		env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		Position posResi = (Position)getBeliefbase().getBelief("residencia").getFact();
 
 		int idDes = (Integer)getBeliefbase().getBelief("idEmergencia").getFact();
 		Disaster des = env.getEvent(idDes);
 		double dif = 0.0006;
 
-		env.printout("GG gerocultor: evacuando la residencia", 0);
+		env.printout("GG gerocultor: evacuando la residencia", 2, 0);
 
 		try{
-			String sanosAux = Connection.connect(Environment.URL + "healthy");
+			String sanosAux = Connection.connect(Entorno.URL + "healthy");
 			JSONArray sanos = new JSONArray(sanosAux);
-			String levesAux = Connection.connect(Environment.URL + "slight");
+			String levesAux = Connection.connect(Entorno.URL + "slight");
 			JSONArray leves = new JSONArray(levesAux);
 
 			int numeroEvacuadosSanos = Math.round(2*sanos.length()/3);
-			env.printout("GG gerocultor: de " + sanos.length() + " residentes sanos me encargo de evacuar a " + numeroEvacuadosSanos, 0);
+			env.printout("GG gerocultor: de " + sanos.length() + " residentes sanos me encargo de evacuar a " + numeroEvacuadosSanos, 2, 0);
 			// del resto de sanos se encarga el auxiliar
 
 			for(int i = 0; i < numeroEvacuadosSanos; i++){
@@ -37,10 +38,10 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan{
 				evacuar(sano, 0);
 			}
 
-			env.printout("GG gerocultor: todos los residentes a cargo del gerocultor evacuados!!", 0);
+			env.printout("GG gerocultor: todos los residentes a cargo del gerocultor evacuados!!", 2, 0);
 
 			String recibido = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
-			env.printout("GG gerocultor: llevo a los residentes de vuelta", 0);
+			env.printout("GG gerocultor: llevo a los residentes de vuelta", 2, 0);
 
 			for(int i = 0; i < leves.length(); i++){
 				JSONObject leve = leves.getJSONObject(i);
@@ -62,7 +63,7 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan{
 			System.out.println("Error al andar: " + ex);
 		}
 
-		env.printout("GG gerocultor: todos los residentes de vuelta en la residencia!!", 0);
+		env.printout("GG gerocultor: todos los residentes de vuelta en la residencia!!", 2, 0);
 	}
 
 	/**
@@ -85,7 +86,7 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan{
 			Position posSano2 = new Position(new Double(persona.getString("latitud")), new Double(persona.getString("longitud")) - dif2);
 			Position posAnt = (Position) getBeliefbase().getBelief("pos").getFact();
 			env.andar(getComponentName(), posAnt, posSano1, env.getAgent(getComponentName()).getId(), 0);
-			env.printout("GG gerocultor: " + msg + " " + id, 0);
+			env.printout("GG gerocultor: " + msg + " " + id, 2, 0);
 			env.andar(getComponentName(), posSano1, posSano2, env.getAgent(getComponentName()).getId(), id);
 		}catch (Exception ex){
 			System.out.println("Excepcion en evacuar: " + ex);

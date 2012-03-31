@@ -18,10 +18,11 @@
 		<c:when test="${basedatos == 'mysql'}">
 			<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 				SELECT * FROM (
-					(SELECT * FROM MENSAJES WHERE NIVEL <= ? AND FECHA >= <%=hace5min%>)
+					(SELECT * FROM MENSAJES
+					 WHERE TIPO_RECEPTOR = 2 AND RECEPTOR <= ? AND FECHA >= <%=hace5min%>)
 					UNION
 					(SELECT * FROM MENSAJES
-					 WHERE NIVEL <= ? AND FECHA < <%=hace5min%> AND FECHA >= <%=hace30min%>
+					 WHERE TIPO_RECEPTOR = 2 AND RECEPTOR <= ? AND FECHA < <%=hace5min%> AND FECHA >= <%=hace30min%>
 					 ORDER BY FECHA DESC
 					 LIMIT 5)) MSGS
 				ORDER BY ID ASC
@@ -32,10 +33,11 @@
 		<c:otherwise>
 			<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 				SELECT * FROM (
-					(SELECT * FROM MENSAJES WHERE NIVEL <= ? AND FECHA >= <%=hace5min%>)
+					(SELECT * FROM MENSAJES
+					 WHERE TIPO_RECEPTOR = 2 AND RECEPTOR <= ? AND FECHA >= <%=hace5min%>)
 					UNION
 					(SELECT TOP 5 * FROM MENSAJES
-					 WHERE NIVEL <= ? AND FECHA < <%=hace5min%> AND FECHA >= <%=hace30min%>
+					 WHERE TIPO_RECEPTOR = 2 AND RECEPTOR <= ? AND FECHA < <%=hace5min%> AND FECHA >= <%=hace30min%>
 					 ORDER BY FECHA DESC))
 				ORDER BY ID ASC
 				<sql:param value="${param.nivel}"/>
@@ -47,11 +49,13 @@
 </c:if>
 <c:if test="${param.action == 'notFirst'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
-		SELECT * FROM MENSAJES WHERE NIVEL <= ? AND FECHA > ?
+		SELECT * FROM MENSAJES WHERE ((TIPO_RECEPTOR != 2 AND RECEPTOR = ?) OR (TIPO_RECEPTOR = 2 AND RECEPTOR <= ?)) AND FECHA > ?
+		<sql:param value="${param.receptor}"/>
 		<sql:param value="${param.nivel}"/>
 		<sql:param value="${param.fecha}"/>
 	</sql:query>
-</c:if><c:if test="${param.action == 'idCreado'}">
+</c:if>
+<c:if test="${param.action == 'idCreado'}">
 	<sql:query var="mensajes" dataSource="${CatastrofesServer}">
 		SELECT ID FROM CATASTROFES WHERE FECHA = ?
 		<sql:param value="${param.fecha}"/>
@@ -63,8 +67,9 @@
 		<json:object>
 			<json:property name="id" value="${mensaje.id}"/>
 			<json:property name="creador" value="${mensaje.creador}"/>
+			<json:property name="tipo_receptor" value="${mensaje.tipo_receptor}"/>
+			<json:property name="receptor" value="${mensaje.receptor}"/>
 			<json:property name="mensaje" value="${mensaje.mensaje}"/>
-			<json:property name="nivel" value="${mensaje.nivel}"/>
 			<json:property name="fecha" value="${mensaje.fecha}"/>
 		</json:object>
 	</c:forEach>

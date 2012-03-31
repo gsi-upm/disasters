@@ -1,6 +1,7 @@
 package disasters.desastres.ambulance;
 
 import disasters.*;
+import disasters.desastres.Environment;
 
 /**
  * Plan de la AMBULANCIA para recoger heridos.

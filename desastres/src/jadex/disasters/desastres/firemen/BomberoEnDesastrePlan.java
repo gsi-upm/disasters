@@ -1,6 +1,7 @@
 package disasters.desastres.firemen;
 
 import disasters.*;
+import disasters.desastres.Environment;
 
 /**
  * Plan de BOMBEROS

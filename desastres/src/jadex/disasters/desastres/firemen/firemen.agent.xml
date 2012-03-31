@@ -8,13 +8,14 @@
 	name="firemen" package="disasters.desastres.firemen">
 
 	<imports>
+		<import>disasters.Position</import>
+		<import>disasters.desastres.Environment</import>
 		<import>jadex.base.fipa.*</import>
 		<import>jadex.bdi.planlib.df.DF</import>
 		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.runtime.*</import>
 		<import>jadex.bridge.service.*</import>
 		<import>jadex.commons.*</import>
-		<import>jadex.desastres.*</import>
 		<import>java.util.logging.*</import>
 	</imports>
 

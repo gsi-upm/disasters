@@ -1,5 +1,5 @@
 <!--
-	<H3>Agente manager sanitario</H3>
+	<h3>Agente manager sanitario</h3>
 
 	Usado para lanzar los agentes sanitarios
 -->
@@ -10,7 +10,6 @@
 	<imports>
 		<import>jadex.bdi.planlib.*</import>
 		<import>jadex.bdi.planlib.cms.*</import>
-		<import>jadex.desastres.*</import>
 		<import>java.util.logging.*</import>
 	</imports>
 

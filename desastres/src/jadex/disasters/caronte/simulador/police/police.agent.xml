@@ -4,18 +4,18 @@
   Agente que patrulla y acude a los desastres en Calasparra
 -->
 <agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-	name="police" package="disasters.caronte.simulador.police">
-
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+		name="police" package="disasters.caronte.simulador.police">
 	<imports>
-		<import>jadex.base.fipa.*</import>
+		<import>disasters.*</import>
+		<import>disasters.caronte.Entorno</import>
+		<import>jadex.base.fipa.IDF</import>
+		<import>jadex.base.fipa.SFipa</import>
 		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bdi.runtime.*</import>
-		<import>jadex.bridge.fipa.ComponentIdentifier</import>
-		<import>jadex.commons.*</import>
-		<import>jadex.commons.service.*</import>
-		<import>jadex.desastres.*</import>
+		<import>jadex.bridge.service.RequiredServiceInfo</import>
+		<import>jadex.bridge.service.SServiceProvider</import>
+		<import>jadex.commons.future.IFuture</import>
 	</imports>
 
 	<capabilities>
@@ -25,20 +25,17 @@
 
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, en el centro de Calasparra -->
-		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.POLICIA, $scope.getAgentName(), $beliefbase.Comisaria)</fact>
+		<belief name="env" class="Entorno">
+			<fact>Entorno.getInstance(Entorno.POLICIA, $scope.getAgentName(), $beliefbase.Comisaria)</fact>
 		</belief>
-		
 		<!-- Definimos el centro de Calasparra -->
 		<belief name="Comisaria" class="Position">
 			<fact>new Position(38.231125, -1.697560)</fact> <!-- comisaria centro de Calasparra-->
 		</belief>
-		
 		<!-- Posicion del agente -->
 		<belief name="pos" class="Position">
 			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
-
 		<!-- desastre que esta atendiendo-->
 		<belief name="idEmergencia" class="Integer"> <!-- evaluationmode="dynamic"> -->
 			<fact>0</fact>
@@ -49,12 +46,10 @@
 		<achievegoalref name="rp_initiate">
 			<concrete ref="procap.rp_initiate"/>
 		</achievegoalref>
-
 		<achievegoalref name="df_search">
 			<concrete ref="dfcap.df_search"/>
 		</achievegoalref>
-
-		<maintaingoalref name="df_keep_registered">
+		<maintaingoalref name="df_register">
 			<concrete ref="dfcap.df_register"/>
 		</maintaingoalref>
 		<!-- Objetivo: patrullar por el mapa indefinidamente -->
@@ -121,27 +116,24 @@
 		</messageevent>
 	</events>
 
+	<properties>
+		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
+	</properties>
+
  	<!-- Inicialmente activamos el objetivo con nombre patrullar -->
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_keep_registered">
+				<initialgoal ref="df_register">
 					<parameter ref="description">
 						<value>
 							$properties.dfservice.createDFComponentDescription(null,
-								$properties.dfservice.createDFServiceDescription("police_service", "police", "GSI DIT UPM"))
+								$properties.dfservice.createDFServiceDescription("police-service", "police", "GSI DIT UPM"))
  						</value>
 					</parameter>
-					<!--<parameter ref="leasetime">
-						<value>20000</value>
-					</parameter>-->
 				</initialgoal>
 				<initialgoal ref="comisaria"/>
 			</goals>
 		</configuration>
 	</configurations>
-
-	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
-	</properties>
 </agent>
