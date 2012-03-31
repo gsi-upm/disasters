@@ -4,8 +4,8 @@
  * @param pos Posicion devuelta
  */
 function coordenadasUsuario(pos){
-        var latitud = pos.coords.latitude.toFixed(6); // (38.232272 + (2*Math.random()-1)*0.0001).toFixed(6);
-	var longitud = pos.coords.longitude.toFixed(6); // (-1.698925 + (2*Math.random()-1)*0.0001).toFixed(6); 
+	var latitud = pos.coords.latitude.toFixed(6); // (38.523387 + (2*Math.random()-1)*0.0001).toFixed(6);
+	var longitud = pos.coords.longitude.toFixed(6); // (-0.170057 + (2*Math.random()-1)*0.0001).toFixed(6); 
 
 	if(nivelMsg == null || nivelMsg == 0){
 		var icono = new google.maps.MarkerImage('markers/resources/user_no.png');
@@ -643,7 +643,7 @@ function cambiarPlanta(num){
 		var url = 'markers/residencia/planta' + num + '.png';
 		var limites = residencia.getBounds();
 		residencia = new google.maps.GroundOverlay(url, limites, {clickable: false});
-		if(map.getZoom() >= 19 && map.getMapTypeId() == roadmap){
+		if(map.getZoom() >= zoomMax && map.getMapTypeId() == roadmap){
 			residencia.setMap(map);
 		}
 	}

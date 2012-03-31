@@ -1,6 +1,7 @@
 package disasters.desastres.sanitarios.ambulancia;
 
 import disasters.*;
+import disasters.desastres.Environment;
 
 /**
  * Es fundamental la primera evaluacion de la gravedad por parte de los medicos o personal sanitario

@@ -1,6 +1,7 @@
 package disasters.caronte.simulador.nurse;
 
 import disasters.*;
+import disasters.caronte.Entorno;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -14,14 +15,14 @@ import org.json.me.*;
  */
 public class AtenderHeridosPlan extends EnviarMensajePlan{
 
-	Environment env;
+	Entorno env;
 
 	/**
 	 * Cuerpo del plan
 	 */
 	public void body(){
-		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
-		env = (Environment)getBeliefbase().getBelief("env").getFact();
+		// Obtenemos un objeto de la clase Entorno para poder usar sus metodos
+		env = (Entorno)getBeliefbase().getBelief("env").getFact();
 
 		Desastre recibido = (Desastre)enviarRespuestaObjeto("ack_aviso_geriatrico", "Aviso recibido");
 		//env.printout("EE enfermero: Ack mandado", 0);
@@ -41,7 +42,7 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 			System.out.println("Error al andar: " + ex);
 		}
 
-		env.printout("EE enfermero: Estoy atendiendo la emergencia: " + idDes, 0);
+		env.printout("EE enfermero: Estoy atendiendo la emergencia: " + idDes, 2, 0);
 
 		People herido = getHerido(des);
 		String desSize = des.getSize();
@@ -50,7 +51,7 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 		if(herido != null){
 			try{
 				int id = herido.getId();
-				String herAux = Connection.connect(Environment.URL + "person/" + id);
+				String herAux = Connection.connect(Entorno.URL + "person/" + id);
 				String sintomasAux = (new JSONArray(herAux)).getJSONObject(0).getString("sintomas");
 
 				if(sintomasAux.equals("") || sintomasAux == null){
@@ -66,7 +67,7 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 							listaSintomas += " y ";
 						}
 					}
-					env.printout("EE enfermero: Sintomas: " + listaSintomas, 0);
+					env.printout("EE enfermero: Sintomas: " + listaSintomas, 2, 0);
 					// FREEBASE!!! *****************************************
 					freebase(sintomas);
 					//******************************************************
@@ -85,42 +86,42 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 					int id = herido.getId();
 					try{
 						Position miPos = (Position)getBeliefbase().getBelief("pos").getFact();
-						String herAux = Connection.connect(Environment.URL + "person/" + id);
+						String herAux = Connection.connect(Entorno.URL + "person/" + id);
 						JSONObject her = (new JSONArray(herAux)).getJSONObject(0);
 						Position posHerido = new Position(new Double(her.getString("latitud")), new Double(her.getString("longitud")));
 						env.andar(getComponentName(), miPos, posHerido, env.getAgent(getComponentName()).getId(), 0);
 					}catch(Exception ex){
 						System.out.println("Error al andar: " + ex);
 					}
-					env.printout("EE enfermero: quitando la asociacion del herido " + id, 0);
+					env.printout("EE enfermero: quitando la asociacion del herido " + id, 2, 0);
 					herido.setAtendido(true);
-					String resultado1 = Connection.connect(Environment.URL + "put/" + id + "/idAssigned/0");
+					String resultado1 = Connection.connect(Entorno.URL + "put/" + id + "/idAssigned/0");
 					des.setSlight();
 
-					env.printout("EE enfermero: curando herido " + id, 0);
-					//String resultado = Connection.connect(Environment.URL + "delete/id/" + id);
-					String resultado = Connection.connect(Environment.URL + "healthy/id/" + id);
+					env.printout("EE enfermero: curando herido " + id, 2, 0);
+					//String resultado = Connection.connect(Entorno.URL + "delete/id/" + id);
+					String resultado = Connection.connect(Entorno.URL + "healthy/id/" + id);
 				}
 
 				if(des.getType().equals("injuredPerson")){
-					env.printout("EE enfermero: Eliminado la emergencia " + idDes, 0);
-					String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
+					env.printout("EE enfermero: Eliminado la emergencia " + idDes, 2, 0);
+					String resultado = Connection.connect(Entorno.URL + "delete/id/" + idDes);
 					getBeliefbase().getBelief("material").setFact(false);
 
-					env.printout("EE enfermero: informando al coordinador de que he terminado...", 0);
+					env.printout("EE enfermero: informando al coordinador de que he terminado...", 2, 0);
 					String recibido2 = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "Fin");
 				}
 			}else{
-				env.printout("EE enfermero: herido " + herido.getId() + " atendido por ambulancia", 0);
+				env.printout("EE enfermero: herido " + herido.getId() + " atendido por ambulancia", 2, 0);
 			}
 		}else{
-			env.printout("EE enfermero: emergencia sin heridos...", 0);
+			env.printout("EE enfermero: emergencia sin heridos...", 2, 0);
 			if(des.getType().equals("injuredPerson")){
-				env.printout("EE enfermero: Eliminado la emergencia " + idDes, 0);
-				String resultado = Connection.connect(Environment.URL + "delete/id/" + idDes);
+				env.printout("EE enfermero: Eliminado la emergencia " + idDes, 2, 0);
+				String resultado = Connection.connect(Entorno.URL + "delete/id/" + idDes);
 				getBeliefbase().getBelief("material").setFact(false);
 
-				env.printout("EE enfermero: informando al coordinador de que he terminado...", 0);
+				env.printout("EE enfermero: informando al coordinador de que he terminado...", 2, 0);
 				String recibido2 = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "Fin");
 			}
 		}
@@ -130,14 +131,14 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 		if(!des.getType().equals("injuredPerson") && (desSize.equals("big") || desSize.equals("huge"))){
 			// Vuelve a su posicion de la residencia
 			try{
-				env.printout("EE enfermero: vuelvo a la residencia", 0);
+				env.printout("EE enfermero: vuelvo a la residencia", 2, 0);
 				env.andar(getComponentName(), (Position)getBeliefbase().getBelief("pos").getFact(), posResi, env.getAgent(getComponentName()).getId(), 0);
 			}catch (Exception ex){
 				System.out.println("Error al andar: " + ex);
 			}
 		}
 
-		env.printout("EE enfermero: Solicitar reposicion de material al auxiliar...",0);
+		env.printout("EE enfermero: Solicitar reposicion de material al auxiliar...", 2, 0);
 		String resultado2 = enviarMensaje("auxiliar", "reponer_material", "medico");
                 
 		//IGoal reponerMaterial = createGoal("reponerMaterial");
@@ -220,7 +221,7 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 				}
 
 			}
-			env.printout("EE enfermero: Posibles enfermedades: " + listaEnfermedades, 0);
+			env.printout("EE enfermero: Posibles enfermedades: " + listaEnfermedades, 2, 0);
 		}catch (Exception ex){
 			System.out.println("Excepcion en AtenderEmergenciaPlan.freebase(): " + ex);
 		}

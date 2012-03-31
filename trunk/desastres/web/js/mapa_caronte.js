@@ -1,4 +1,5 @@
 const proyecto = 'caronte';
+var zoomMax = 17;
 
 /**
  * Devuelve los valores iniciales del centro del mapa y su zoom
@@ -6,8 +7,8 @@ const proyecto = 'caronte';
  * @return Centro y zoom
  */
 function mapInit(){
-	var center = new google.maps.LatLng(38.5238697889187, -0.1703082025051117); //Villajoyosa, Alicante, Valencia, España
-	var zoom = 21;
+	var center = new google.maps.LatLng(38.523390, -0.170110); // Villajoyosa, Alicante
+	var zoom = 19;
 	return {'center':center, 'zoom':zoom};
 }
 
@@ -26,16 +27,16 @@ function initialize2(){
 	if(userName != '' && nivelMsg > 1){
 		plantaResidencia = 0;
 		var url = 'markers/residencia/planta'+ plantaResidencia + '.png';
-                var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(38.5231, -0.170724), new google.maps.LatLng(38.5239796, -0.16964));//Suroeste, Noreste
-                residencia = new google.maps.GroundOverlay(url, bounds, {clickable: false});
-                
+		var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(38.522760, -0.170880), new google.maps.LatLng(38.524040, -0.169240)); // SW, NE
+		residencia = new google.maps.GroundOverlay(url, bounds, {clickable: false});
+		
 		google.maps.event.addListener(map, 'zoom_changed', function(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
 			var newZoom = map.getZoom();
-			if(newZoom >= 19 && tipoMapa == roadmap && plantaResidencia >= 0){
+			if(newZoom >= zoomMax && tipoMapa == roadmap && plantaResidencia >= 0){
 				residencia.setMap(map);
-			}else if(newZoom < 19 && plantaResidencia != -2){
+			}else if(newZoom < zoomMax && plantaResidencia != -2){
 				cambiarPlanta(-2);
 			}
 		});
@@ -43,7 +44,7 @@ function initialize2(){
 		google.maps.event.addListener(map, 'maptypeid_changed', function(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
-			if(map.getZoom() >= 19 && tipoMapa == roadmap && plantaResidencia >= 0){
+			if(map.getZoom() >= zoomMax && tipoMapa == roadmap && plantaResidencia >= 0){
 				residencia.setMap(map);
 			}
 		});
@@ -92,9 +93,9 @@ function initialize2(){
 		numeroMarcadores(plantaResidencia);
 	}
 
-	/*if(localizacion == true){
+	if(localizacion == true){
 		navigator.geolocation.getCurrentPosition(coordenadasUsuario); // coordenadasUsuario();
-	}*/
+	}
 	
 	if(userName != '' && usuario_actual_tipo != 'citizen'){
 		numeroMarcadores(0, true);
@@ -111,11 +112,13 @@ function actualizar2(){
 		numeroMarcadores(plantaResidencia);
 	}
 
-	/*contador++;
-	if(localizacion == true && nivelMsg > 0 && contador >= 3){
+	contador++;
+	if(contador >= 3){
 		contador = 0;
-		navigator.geolocation.getCurrentPosition(coordenadasUsuario); // coordenadasUsuario();
-	}*/
+		if(localizacion == true && nivelMsg > 0){
+			navigator.geolocation.getCurrentPosition(coordenadasUsuario); // coordenadasUsuario();
+		}
+	}
 }
 
 /**
@@ -131,20 +134,20 @@ function buildingInit(){
 /**
  * Muestra en el mapa un tipo de edificio
  * 
- * @type Tipo de edificio a mostrar
+ * @param type Tipo de edificio a mostrar
  */
 function showBuilding(type){
-    // Villajoyosa, Alicante, Valencia, España
+	// Villajoyosa, Alicante
 	if(type == 'hospital'){
-		generateBuilding('hospital', 'Centro de salud', 38.506902, -0.231121);
-                generateBuilding('hospital', 'Cruz Roja', 38.505762, -0.229287);
+		generateBuilding('hospital', 'Centro de salud', 38.506900, -0.231120);
+		generateBuilding('hospital', 'Cruz Roja', 38.505760, -0.229290);
 	}else if(type == 'firemenStation'){
-		generateBuilding('firemenStation', 'Parque de bomberos', 38.505609, -0.233229);
+		generateBuilding('firemenStation', 'Parque de bomberos', 38.505610, -0.233230);
 	}else if(type == 'policeStation'){
-		generateBuilding('policeStation', 'Ayuntamiento y Polic&iacute;a municipal', 38.510397,-0.231851); 
-                generateBuilding('policeStation', 'Guardia Civil', 38.504637, -0.2373557);
+		generateBuilding('policeStation', 'Polic&iacute;a municipal', 38.510400,-0.231850);
+		generateBuilding('policeStation', 'Guardia Civil', 38.504640, -0.237360);
 	}else if(type == 'geriatricCenter'){
-		generateBuilding('geriatricCenter', 'Residencia Ballesol Costa Blanca Senior Resort', 38.5238697889187, -0.1703082025051117); 
+		generateBuilding('geriatricCenter', 'Ballesol Costa Blanca Senior Resort', 38.523850, -0.170180);
 	}
 }
 
@@ -158,7 +161,7 @@ function definirOpciones(evento){
 	var opciones;
 	var icono = new google.maps.MarkerImage(null);
 
-	//MAXIMO DE RECURSOS POR MARCADOR ES 10
+	// MAXIMO DE RECURSOS POR MARCADOR ES 10
 	var cantidad;
 	if(evento.cantidad > 10){
 		cantidad = 10;
@@ -217,6 +220,12 @@ function definirOpciones(evento){
 			icono.url = 'markers/resources/gerocultor' + actuando + '.png';
 		}else if(evento.tipo == 'assistant'){ // es un auxiliar
 			icono.url = 'markers/resources/auxiliar' + actuando + '.png';
+		}else if(evento.tipo == 'coordinator'){ // es un coordinador
+			icono.url = 'markers/resources/coordinador' + actuando + '.png';
+		}else if(evento.tipo == 'orderly'){ // es un celador
+			icono.url = 'markers/resources/celador' + actuando + '.png';
+		}else if(evento.tipo == 'receptionist'){ // es un recepcionista
+			icono.url = 'markers/resources/recepcionista' + actuando + '.png';
 		}else if(evento.tipo == 'otherStaff'){ // otro
 			icono.url = 'markers/resources/otroPersonal' + actuando + '.png';
 		}

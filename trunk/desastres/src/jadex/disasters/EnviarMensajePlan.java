@@ -2,17 +2,19 @@ package disasters;
 
 import jadex.base.fipa.*;
 import jadex.bdi.runtime.*;
-import jadex.bridge.*;
+import jadex.bridge.IComponentIdentifier;
 import jadex.bridge.service.*;
 
 /**
- *
+ * Plan que permite enviar mensajes a otros agentes.
+ * 
  * @author Juan Luis Molina
  */
 public abstract class EnviarMensajePlan extends Plan{
 
 	/**
-	 *
+	 * Envia un mensaje de tipo string y recibe una respuesta.
+	 * 
 	 * @param agente Agente al que se le envia el mensaje
 	 * @param evento Nombre del evento de mensaje
 	 * @param contenido Contenido del mensaje
@@ -38,7 +40,8 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 *
+	 * Envia una respuesta a un mensaje previamente recibido y devuelve el posible ack.
+	 * 
 	 * @param evento Nombre del evento de mensaje de la respuesta a enviar
 	 * @param respuesta Contenido de la respuesta a enviar
 	 * @return Respuesta del emisor
@@ -53,7 +56,8 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 *
+	 * Espera la llegada de un determinado tipo de mensaje, envia una repuesta y muestra el posible ack.
+	 * 
 	 * @param evento Nombre del evento de mensaje que se recibe
 	 * @param respuesta Contenido de la respuesta a enviar
 	 * @return Respuesta del emisor
@@ -68,7 +72,8 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 *
+	 * Envia un mensaje con un objeto y recibe una respuesta.
+	 * 
 	 * @param agente Agente al que se le envia el mensaje
 	 * @param evento Nombre del evento de mensaje
 	 * @param contenido Contenido del mensaje
@@ -85,7 +90,8 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 *
+	 * Envia una respuesta a un mensaje con objeto previamente recibido y devuelve el posible ack.
+	 * 
 	 * @param evento Nombre del evento de mensaje de la respuesta a enviar
 	 * @param respuesta Contenido de la respuesta a enviar
 	 * @return Respuesta del emisor
@@ -100,7 +106,8 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 *
+	 * Busca un agente.
+	 * 
 	 * @param agente Agente a buscar
 	 * @return Agente encontrado
 	 */
@@ -114,7 +121,7 @@ public abstract class EnviarMensajePlan extends Plan{
 			ft.getParameter("description").setValue(ad);
 			dispatchSubgoalAndWait(ft);
 			IDFComponentDescription[] result = (IDFComponentDescription[])ft.getParameterSet("result").getValues();
-			if(result.length>0){
+			if(result.length > 0){
 				a = result[0].getName();
 			}
 		}

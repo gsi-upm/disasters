@@ -217,26 +217,38 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		infoWindow.open(map, marker);
 		
 		if(type == 'geriatricCenter'){
-			var esquina1 = new google.maps.LatLng(38.232440, -1.699160); // desplazado (-0.000095, 0.000120)
-			var esquina2 = new google.maps.LatLng(38.232380, -1.698640);
-			var esquina3 = new google.maps.LatLng(38.232105, -1.698690);
-			var esquina4 = new google.maps.LatLng(38.232165, -1.699210);
-			var opcRect = {paths:[esquina1, esquina2, esquina3, esquina4], strokeColor:'#00FF00', strokeWeight:1, strokeOpacity:0.5, fillOpacity:0};
-			var rectangulo = new google.maps.Polygon(opcRect);
-			rectangulo.setMap(map);
+			var esquina1 = new google.maps.LatLng(38.523950, -0.169880); // -0.000040, 0.000010;
+			var esquina2 = new google.maps.LatLng(38.523480, -0.169650);
+			var esquina3 = new google.maps.LatLng(38.523420, -0.169840);
+			var esquina4 = new google.maps.LatLng(38.523220, -0.169760);
+			var esquina5 = new google.maps.LatLng(38.522940, -0.170070);
+			var esquina6 = new google.maps.LatLng(38.522860, -0.170500);
+			var esquina7 = new google.maps.LatLng(38.523180, -0.170650);
+			var esquina8 = new google.maps.LatLng(38.523390, -0.170530);
+			var esquina9 = new google.maps.LatLng(38.523700, -0.170680);
+			var opcCerc = {
+				paths:[esquina1, esquina2, esquina3, esquina4, esquina5, esquina6, esquina7, esquina8, esquina9],
+				strokeColor: '#00FF00', strokeWeight: 1, strokeOpacity: 0.5, fillOpacity: 0
+			};
+			var cercado = new google.maps.Polygon(opcCerc);
+			cercado.setMap(map);
 			
 			google.maps.event.addListener(infoWindow, 'closeclick', function(){
-				rectangulo.setMap(null);
+				cercado.setMap(null);
 			});
 			
-			google.maps.event.addListener(rectangulo, 'click', function(){
+			google.maps.event.addListener(cercado, 'click', function(){
 				if(infoWindow != null){
 					infoWindow.close();
 					if(infoWinMarker != 'building'){
 						limpiarLateral(infoWinMarker);
 					}
 				}
-				rectangulo.setMap(null);
+				cercado.setMap(null);
+			});
+			
+			google.maps.event.addListener(map, 'click', function(){
+				cercado.setMap(null);
 			});
 		}
 	});

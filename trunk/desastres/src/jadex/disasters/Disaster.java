@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Class that represents a disaster
+ * 
  * @author julio camarero
  * @version 1.0
  */
@@ -12,88 +13,96 @@ public class Disaster{
 	private int id;
 	/** type of disaster (fire, flood, collapse, lostPerson, injuredPerson) */
 	private String type;
-	/** Address (to represent disasters in a map) */
-	private String address;
-	/** Longitude */
-	private double longitud;
-	/** Latitud */
-	private double latitud;
 	/** Name of the Disaster */
 	private String name;
 	/** Name of the Information */
 	private String info;
 	/** Name of the Description */
 	private String description;
-	/** state of the disaster (active, controlled, erased) */
-	private String state;
+	/** Longitude */
+	private double longitud;
+	/** Latitude */
+	private double latitud;
+	/** Address (to represent disasters in a map) */
+	private String address;
+	/** Floor */
+	private int floor;
 	/** Size of the Disaster */
 	private String size;
 	/** Density of traffic (high, medium, low) */
 	private String traffic;
-	/** Number of slight injuries */
-	private int numSlight;
-	private ArrayList<People> slight;
-	/** Number of serious injuries */
-	private int numSerious;
-	private ArrayList<People> serious;
-	/** Number of dead people */
-	private int numDead;
-	private ArrayList<People> dead;
-	/** Number of trapped people */
-	private int numTrapped;
-	private ArrayList<People> trapped;
+	/** state of the disaster (active, controlled, erased) */
+	private String state;
+	/** id of the user who added the disaster */
+	private int user;
 	/** Number of policemen cars assigned */
 	private int policemen;
 	/** Number of firemen cars assigned */
 	private int firemen;
 	/** Number of ambulances assigned */
 	private int ambulances;
-	/** id of the user who added the disaster */
-	private int user;
 	/** id police marker already in the map */
 	private int policeMarker;
 	/** id police marker already in the map */
-	private int ambulanceMarker;
-	/** id police marker already in the map */
 	private int firemenMarker;
+	/** id police marker already in the map */
+	private int ambulanceMarker;
+	/** Number of slight injuries */
+	private int numSlight;
+	/** Number of serious injuries */
+	private int numSerious;
+	/** Number of dead people */
+	private int numDead;
+	/** Number of trapped people */
+	private int numTrapped;
+	/** List of slight injuries */
+	private ArrayList<People> slight;
+	/** List of serious injuries */
+	private ArrayList<People> serious;
+	/** List of dead people */
+	private ArrayList<People> dead;
+	/** List of trapped people */
+	private ArrayList<People> trapped;
 
 	/**
-	 * Constructor sin idAsignada
+	 * Constructor de desastre
 	 * 
-	 * @param id
-	 * @param type
-	 * @param name
-	 * @param info
-	 * @param description
-	 * @param address
-	 * @param longitud
-	 * @param latitud
-	 * @param state
-	 * @param size
-	 * @param traffic
+	 * @param id Identificador
+	 * @param type Tipo
+	 * @param name Nombre
+	 * @param info Informacion
+	 * @param description Descripcion
+	 * @param longitud Longitud
+	 * @param latitud Latitud
+	 * @param address Direccion
+	 * @param floor Planta
+	 * @param size Tamanno
+	 * @param traffic Traffico
+	 * @param state Estado
 	 */
-	public Disaster(int id, String type, String name, String info, String description, String address, double longitud,
-			double latitud, String state, String size, String traffic){
+	public Disaster(int id, String type, String name, String info, String description, double latitud,
+			 double longitud, String address, int floor, String size, String traffic, String state){
 		super();
 		this.id = id;
 		this.type = type;
-		this.address = address;
-		this.longitud = longitud;
-		this.latitud = latitud;
 		this.name = name;
 		this.info = info;
 		this.description = description;
-		this.state = state;
+		this.longitud = longitud;
+		this.latitud = latitud;
+		this.address = address;
+		this.floor = floor;
 		this.size = size;
 		this.traffic = traffic;
+		this.state = state;
 
 		this.user = 1;
 		this.policemen = 0;
 		this.firemen = 0;
 		this.ambulances = 0;
 		this.policeMarker = 0;
-		this.ambulanceMarker = 0;
 		this.firemenMarker = 0;
+		this.ambulanceMarker = 0;
 
 		numSlight = 0;
 		numSerious = 0;
@@ -110,6 +119,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Devuelve el identificador
+	 * 
 	 * @return the id
 	 */
 	public int getId(){
@@ -117,6 +128,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece el identificador
+	 * 
 	 * @param id the id to set
 	 */
 	public void setId(int id){
@@ -124,6 +137,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Devuelve el tipo
+	 * 
 	 * @return the type
 	 */
 	public String getType(){
@@ -131,6 +146,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece el tipo
+	 * 
 	 * @param type the type to set
 	 */
 	public void setType(String type){
@@ -138,48 +155,8 @@ public class Disaster{
 	}
 
 	/**
-	 * @return the address
-	 */
-	public String getAddress(){
-		return address;
-	}
-
-	/**
-	 * @param address the address to set
-	 */
-	public void setAddress(String address){
-		this.address = address;
-	}
-
-	/**
-	 * @return the longitud
-	 */
-	public double getLongitud(){
-		return longitud;
-	}
-
-	/**
-	 * @param longitud the longitud to set
-	 */
-	public void setLongitud(double longitud){
-		this.longitud = longitud;
-	}
-
-	/**
-	 * @return the latitud
-	 */
-	public double getLatitud(){
-		return latitud;
-	}
-
-	/**
-	 * @param latitud the latitud to set
-	 */
-	public void setLatitud(double latitud){
-		this.latitud = latitud;
-	}
-
-	/**
+	 * Devuelve el nombre
+	 * 
 	 * @return the name
 	 */
 	public String getName(){
@@ -187,6 +164,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece el nombre
+	 * 
 	 * @param name the name to set
 	 */
 	public void setName(String name){
@@ -194,6 +173,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Devuelve la informacion
+	 * 
 	 * @return the info
 	 */
 	public String getInfo(){
@@ -201,6 +182,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece la informacion
+	 * 
 	 * @param info the info to set
 	 */
 	public void setInfo(String info){
@@ -208,6 +191,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Devuelve la descripcion
+	 * 
 	 * @return the description
 	 */
 	public String getDescription(){
@@ -215,6 +200,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece la descripcion
+	 * 
 	 * @param description the description to set
 	 */
 	public void setDescription(String description){
@@ -222,20 +209,78 @@ public class Disaster{
 	}
 
 	/**
-	 * @return the state
+	 * Devuelve la latitud
+	 * 
+	 * @return the latitud
 	 */
-	public String getState(){
-		return state;
+	public double getLatitud(){
+		return latitud;
 	}
 
 	/**
-	 * @param state the state to set
+	 * Establece la latitud
+	 * 
+	 * @param latitud the latitud to set
 	 */
-	public void setState(String state){
-		this.state = state;
+	public void setLatitud(double latitud){
+		this.latitud = latitud;
 	}
 
 	/**
+	 * Devuelve la longitud
+	 * 
+	 * @return the longitud
+	 */
+	public double getLongitud(){
+		return longitud;
+	}
+
+	/**
+	 * Establece la longitud
+	 * 
+	 * @param longitud the longitud to set
+	 */
+	public void setLongitud(double longitud){
+		this.longitud = longitud;
+	}
+
+	/**
+	 * Devuelve la direccion
+	 * 
+	 * @return the address
+	 */
+	public String getAddress(){
+		return address;
+	}
+
+	/**
+	 * Establece la direccion
+	 * 
+	 * @param address the address to set
+	 */
+	public void setAddress(String address){
+		this.address = address;
+	}
+	
+	/**
+	 * 
+	 * @return 
+	 */
+	public int getFloor(){
+		return floor;
+	}
+	
+	/**
+	 * 
+	 * @param floor 
+	 */
+	public void setFloor(int floor){
+		this.floor = floor;
+	}
+
+	/**
+	 * Devuelve el tamanno
+	 * 
 	 * @return the size
 	 */
 	public String getSize(){
@@ -243,6 +288,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece el tamanno
+	 * 
 	 * @param size the size to set
 	 */
 	public void setSize(String size){
@@ -250,6 +297,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Devuelve el trafico
+	 * 
 	 * @return the traffic
 	 */
 	public String getTraffic(){
@@ -257,6 +306,8 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece el trafico
+	 * 
 	 * @param traffic the traffic to set
 	 */
 	public void setTraffic(String traffic){
@@ -264,48 +315,26 @@ public class Disaster{
 	}
 
 	/**
-	 * @return the policemen
+	 * Devuelve el estado
+	 * 
+	 * @return the state
 	 */
-	public int getPolicemen(){
-		return policemen;
+	public String getState(){
+		return state;
 	}
 
 	/**
-	 * @param policemen the policemen to set
+	 * Establece el estado
+	 * 
+	 * @param state the state to set
 	 */
-	public void setPolicemen(int policemen){
-		this.policemen = policemen;
+	public void setState(String state){
+		this.state = state;
 	}
 
 	/**
-	 * @return the firemen
-	 */
-	public int getFiremen(){
-		return firemen;
-	}
-
-	/**
-	 * @param firemen the firemen to set
-	 */
-	public void setFiremen(int firemen){
-		this.firemen = firemen;
-	}
-
-	/**
-	 * @return the ambulances
-	 */
-	public int getAmbulances(){
-		return ambulances;
-	}
-
-	/**
-	 * @param ambulances the ambulances to set
-	 */
-	public void setAmbulances(int ambulances){
-		this.ambulances = ambulances;
-	}
-
-	/**
+	 * Devuelve el usuario
+	 * 
 	 * @return the user
 	 */
 	public int getUser(){
@@ -313,37 +342,125 @@ public class Disaster{
 	}
 
 	/**
+	 * Establece el usuario
+	 * 
 	 * @param user the user to set
 	 */
 	public void setUser(int user){
 		this.user = user;
 	}
 
-	public int getAmbulanceMarker(){
-		return ambulanceMarker;
+	/**
+	 * Devuelve los policias
+	 * 
+	 * @return the policemen
+	 */
+	public int getPolicemen(){
+		return policemen;
 	}
 
-	public void setAmbulanceMarker(int ambulanceMarker){
-		this.ambulanceMarker = ambulanceMarker;
+	/**
+	 * Establece los policias
+	 * 
+	 * @param policemen the policemen to set
+	 */
+	public void setPolicemen(int policemen){
+		this.policemen = policemen;
 	}
 
-	public int getFiremenMarker(){
-		return firemenMarker;
+	/**
+	 * Devuelve los bomberos
+	 * 
+	 * @return the firemen
+	 */
+	public int getFiremen(){
+		return firemen;
 	}
 
-	public void setFiremenMarker(int firemenMarker){
-		this.firemenMarker = firemenMarker;
+	/**
+	 * Establece los bomberos
+	 * 
+	 * @param firemen the firemen to set
+	 */
+	public void setFiremen(int firemen){
+		this.firemen = firemen;
 	}
 
+	/**
+	 * Devuelve las ambulancias
+	 * 
+	 * @return the ambulances
+	 */
+	public int getAmbulances(){
+		return ambulances;
+	}
+
+	/**
+	 * Establece las ambulancias
+	 * 
+	 * @param ambulances the ambulances to set
+	 */
+	public void setAmbulances(int ambulances){
+		this.ambulances = ambulances;
+	}
+
+	/**
+	 * Devuelve el marcador de la policia
+	 * 
+	 * @return the police marker
+	 */
 	public int getPoliceMarker(){
 		return policeMarker;
 	}
 
+	/**
+	 * Establece el marcador de la policia
+	 * 
+	 * @param policeMarker the police marker to ser
+	 */
 	public void setPoliceMarker(int policeMarker){
 		this.policeMarker = policeMarker;
 	}
 
 	/**
+	 * Devuelve el marcador de los bomberos
+	 * 
+	 * @return the firemen marker
+	 */
+	public int getFiremenMarker(){
+		return firemenMarker;
+	}
+
+	/**
+	 * Establece el marcador de los bomberos
+	 * 
+	 * @param firemenMarker the firemen marker to set
+	 */
+	public void setFiremenMarker(int firemenMarker){
+		this.firemenMarker = firemenMarker;
+	}
+
+	/**
+	 * Devuelve el marcador de la ambulancia
+	 * 
+	 * @return the ambulance marker
+	 */
+	public int getAmbulanceMarker(){
+		return ambulanceMarker;
+	}
+
+	/**
+	 * Establece el marcador de la ambulancia
+	 * 
+	 * @param ambulanceMarker the ambulance marker to set
+	 */
+	public void setAmbulanceMarker(int ambulanceMarker){
+		this.ambulanceMarker = ambulanceMarker;
+	}
+
+	/**
+	 * Devuelve el ultimo herido leve
+	 * 
 	 * @return the slight
 	 */
 	public People getSlight(){
@@ -351,33 +468,64 @@ public class Disaster{
 	}
 
 	/**
-	 * @param slight the slight to set
+	 * Elimina el ultimo herido leve
 	 */
-	public void setSlight(People slight){
-		boolean existe = false;
-		int index = 0;
-		for(int i = 1; i < numSlight; i++){
-			if(this.slight.get(i).getId() == slight.getId()){
-				existe = true;
-				index = i;
-			}
-		}
-		if(existe){
-			this.slight.add(index, slight);
-		}else{
-			this.slight.add(slight);
-			numSlight++;
-		}
-	}
-
 	public void setSlight(){
-		this.slight.remove(numSlight);
+		slight.remove(numSlight);
 		if(numSlight > 0){
 			numSlight--;
 		}
 	}
 
 	/**
+	 * Establece un herido leve
+	 * 
+	 * @param people the slight to set
+	 */
+	public void addSlight(People people){
+		boolean existe = false;
+		int index = 0;
+		for(int i = 1; i < numSlight; i++){
+			if(slight.get(i).getId() == people.getId()){
+				existe = true;
+				index = i;
+				break;
+			}
+		}
+		if(existe){
+			slight.add(index, people);
+		}else{
+			slight.add(people);
+			numSlight++;
+		}
+	}
+	
+	/**
+	 * Elimina un herido leve
+	 * 
+	 * @param people the slight to remove
+	 */
+	public void removeSlight(People people){
+		int index = -1; // indexOf() devuelve -1 si no existe
+		if(people != null){
+			index = slight.indexOf(people);
+		}
+		if(index != -1){
+			slight.remove(index);
+			if(numSlight > 0){
+				numSlight--;
+			}
+			while(index < slight.size()){
+				slight.set(index, slight.get(index+1));
+				slight.set(index+1, null);
+				index++;
+			}
+		}
+	} 
+
+	/**
+	 * Devuelve el ultimo herido grave
+	 * 
 	 * @return the serious
 	 */
 	public People getSerious(){
@@ -385,33 +533,63 @@ public class Disaster{
 	}
 
 	/**
-	 * @param serious the serious to set
+	 * Elimina el ultimo herido grave
 	 */
-	public void setSerious(People serious){
-		boolean existe = false;
-		int index = 0;
-		for(int i = 1; i < numSerious; i++){
-			if(this.serious.get(i).getId() == serious.getId()){
-				existe = true;
-				index = i;
-			}
-		}
-		if(existe){
-			this.serious.add(index, serious);
-		}else{
-			this.serious.add(serious);
-			numSerious++;
-		}
-	}
-
 	public void setSerious(){
-		this.serious.remove(numSerious);
+		serious.remove(numSerious);
 		if(numSerious > 0){
 			numSerious--;
 		}
 	}
 
 	/**
+	 * Establece un herido grave
+	 * 
+	 * @param people the serious to set
+	 */
+	public void addSerious(People people){
+		boolean existe = false;
+		int index = 0;
+		for(int i = 1; i < numSerious; i++){
+			if(serious.get(i).getId() == people.getId()){
+				existe = true;
+				index = i;
+			}
+		}
+		if(existe){
+			serious.add(index, people);
+		}else{
+			serious.add(people);
+			numSerious++;
+		}
+	}
+	
+	/**
+	 * Elimina un herido grave
+	 * 
+	 * @param people the serious to remove
+	 */
+	public void removeSerious(People people){
+		int index = -1; // indexOf() devuelve -1 si no existe
+		if(people != null){
+			index = serious.indexOf(people);
+		}
+		if(index != -1){
+			serious.remove(index);
+			if(numSerious > 0){
+				numSerious--;
+			}
+			while(index < serious.size()){
+				serious.set(index, serious.get(index+1));
+				serious.set(index+1, null);
+				index++;
+			}
+		}
+	} 
+
+	/**
+	 * Devuelve el ultimo muerto
+	 * 
 	 * @return the dead
 	 */
 	public People getDead(){
@@ -419,33 +597,63 @@ public class Disaster{
 	}
 
 	/**
-	 * @param dead the dead to set
+	 * Elimina el ultimo muerto
 	 */
-	public void setDead(People dead){
-		boolean existe = false;
-		int index = 0;
-		for(int i = 1; i < numDead; i++){
-			if(this.dead.get(i).getId() == dead.getId()){
-				existe = true;
-				index = i;
-			}
-		}
-		if(existe){
-			this.dead.add(index, dead);
-		}else{
-			this.dead.add(dead);
-			numDead++;
-		}
-	}
-
 	public void setDead(){
-		this.dead.remove(numDead);
+		dead.remove(numDead);
 		if(numDead > 0){
 			numDead--;
 		}
 	}
 
 	/**
+	 * Establece un muerto
+	 * 
+	 * @param people the dead to set
+	 */
+	public void addDead(People people){
+		boolean existe = false;
+		int index = 0;
+		for(int i = 1; i < numDead; i++){
+			if(dead.get(i).getId() == people.getId()){
+				existe = true;
+				index = i;
+			}
+		}
+		if(existe){
+			dead.add(index, people);
+		}else{
+			dead.add(people);
+			numDead++;
+		}
+	}
+	
+	/**
+	 * Elimina un muerto
+	 * 
+	 * @param people the dead to remove
+	 */
+	public void removeDead(People people){
+		int index = -1; // indexOf() devuelve -1 si no existe
+		if(people != null){
+			index = dead.indexOf(people);
+		}
+		if(index != -1){
+			dead.remove(index);
+			if(numDead > 0){
+				numDead--;
+			}
+			while(index < dead.size()){
+				dead.set(index, dead.get(index+1));
+				dead.set(index+1, null);
+				index++;
+			}
+		}
+	} 
+
+	/**
+	 * Devuelve el ultimo atrapado
+	 * 
 	 * @return the trapped
 	 */
 	public People getTrapped(){
@@ -453,29 +661,57 @@ public class Disaster{
 	}
 
 	/**
-	 * @param trapped the trapped to set
+	 * Elimina el ultimo atrapado
 	 */
-	public void setTrapped(People trapped){
+	public void setTrapped(){
+		trapped.remove(numTrapped);
+		if(numTrapped > 0){
+			numTrapped--;
+		}
+	}
+
+	/**
+	 * Establece un atrapado
+	 * 
+	 * @param people the trapped to set
+	 */
+	public void addTrapped(People people){
 		boolean existe = false;
 		int index = 0;
 		for(int i = 1; i < numTrapped; i++){
-			if(this.trapped.get(i).getId() == trapped.getId()){
+			if(this.trapped.get(i).getId() == people.getId()){
 				existe = true;
 				index = i;
 			}
 		}
 		if(existe){
-			this.trapped.add(index, trapped);
+			this.trapped.add(index, people);
 		}else{
-			this.trapped.add(trapped);
+			this.trapped.add(people);
 			numTrapped++;
 		}
 	}
-
-	public void setTrapped(){
-		this.trapped.remove(numTrapped);
-		if(numTrapped > 0){
-			numTrapped--;
+	
+	/**
+	 * Elimina un atrapado
+	 * 
+	 * @param people the trapped to remove
+	 */
+	public void removeTrapped(People people){
+		int index = -1; // indexOf() devuelve -1 si no existe
+		if(people != null){
+			index = trapped.indexOf(people);
+		}
+		if(index != -1){
+			trapped.remove(index);
+			if(numTrapped > 0){
+				numTrapped--;
+			}
+			while(index < trapped.size()){
+				trapped.set(index, trapped.get(index+1));
+				trapped.set(index+1, null);
+				index++;
+			}
 		}
 	}
 }

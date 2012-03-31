@@ -1,6 +1,7 @@
 package disasters.desastres.sanitarios.grupoSanitarioOperativo;
 
 import disasters.*;
+import disasters.desastres.Environment;
 
 /**
  * Primeros auxilios sobre aquellas victimas que necesiten de una accion inmediata antes de poder ser trasladados al Area de Rescate

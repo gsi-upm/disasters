@@ -124,7 +124,7 @@ function definirOpciones(evento){
 			}
 		}
 		icono.size = new google.maps.Size(28, 43);
-		icono.anchor = new google.map.Point(13, 43);
+		icono.anchor = new google.maps.Point(13, 43);
 		opciones = {
 			icon: icono,
 			draggable: true // Se pueden arrastrar para asociarlo

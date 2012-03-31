@@ -12,27 +12,27 @@ public class ManagerSanitarioPlan extends Plan{
 		System.out.println("Comienza manager sanitario");
 
 		IGoal sp1 = createGoal("cms_create_component");
-		sp1.getParameter("type").setValue("jadex/desastres/disasters/sanitarios/coordinadorMedico/coordinadorMedico.agent.xml");
+		sp1.getParameter("type").setValue("disasters/desastres/sanitarios/coordinadorMedico/coordinadorMedico.agent.xml");
 		dispatchSubgoalAndWait(sp1);
 		System.out.println("Coordinador medico creado");
 
 		IGoal sp2 = createGoal("cms_create_component");
-		sp2.getParameter("type").setValue("jadex/desastres/disasters/sanitarios/ambulancia/ambulancia.agent.xml");
+		sp2.getParameter("type").setValue("disasters/desastres/sanitarios/ambulancia/ambulancia.agent.xml");
 		dispatchSubgoalAndWait(sp2);
 		System.out.println("Ambulancia creada");
 
 		IGoal sp3 = createGoal("cms_create_component");
-		sp3.getParameter("type").setValue("jadex/desastres/disasters/sanitarios/grupoSanitarioOperativo/grupoSanitarioOperativo.agent.xml");
+		sp3.getParameter("type").setValue("disasters/desastres/sanitarios/grupoSanitarioOperativo/grupoSanitarioOperativo.agent.xml");
 		dispatchSubgoalAndWait(sp3);
 		System.out.println("GSO creado");
 
 		IGoal sp4 = createGoal("cms_create_component");
-		sp4.getParameter("type").setValue("jadex/desastres/disasters/sanitarios/medicoCACH/medicoCACH.agent.xml");
+		sp4.getParameter("type").setValue("disasters/desastres/sanitarios/medicoCACH/medicoCACH.agent.xml");
 		dispatchSubgoalAndWait(sp4);
 		System.out.println("Medico CACH creado");
 
 		IGoal sp5 = createGoal("cms_create_component");
-		sp5.getParameter("type").setValue("jadex/desastres/disasters/sanitarios/coordinadorHospital/coordinadorHospital.agent.xml");
+		sp5.getParameter("type").setValue("disasters/desastres/sanitarios/coordinadorHospital/coordinadorHospital.agent.xml");
 		dispatchSubgoalAndWait(sp5);
 		System.out.println("Coordinador hospital creado");
 

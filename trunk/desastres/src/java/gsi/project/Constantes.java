@@ -6,11 +6,16 @@ package gsi.project;
  * @author Juan Luis Molina
  */
 public class Constantes {
-	public static final String PROJECT = "caronte"; // "caronte o desastres"
+	/** Proyecto (caronte o desastres). */
+	public static final String PROJECT = "caronte";
+	/** Puerto de Tomcat. */
 	public static final int SERVER_PORT = 8080;
-	public static final String DB = "hsqldb"; // "hsqldb o mysql"
+	/** Base de datos (hsqldb o mysql). */
+	public static final String DB = "hsqldb";
+	/** Puerto de la base de datos. */
 	public static final int DB_PORT = 3306;
-	private static final String DB_MODE = "local"; // "local o remote"
+	/** (local o remote). */
+	private static final String DB_MODE = "local";
 	
 	private static final String HSQLDB_DRIVER = "org.hsqldb.jdbcDriver";
 	private static final String HSQLDB_URL = "jdbc:hsqldb:file:";

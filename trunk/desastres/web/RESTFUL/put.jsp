@@ -145,10 +145,11 @@
 	<c:when test="${param.action == 'message'}">
 		<c:catch var="errorInsert">
 			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO MENSAJES(CREADOR, MENSAJE, NIVEL, FECHA)
-				VALUES(1, ?, ?, <%=modif%>)
+				INSERT INTO MENSAJES(CREADOR, TIPO_RECEPTOR, RECEPTOR, MENSAJE, FECHA)
+				VALUES(1, ?, ?, ?, <%=modif%>)
+				<sql:param value="${param.tipo_receptor}"/>
+				<sql:param value="${param.receptor}"/>
 				<sql:param value="${param.mensaje}"/>
-				<sql:param value="${param.nivel}"/>
 			</sql:update>
 		</c:catch>
 	</c:when>

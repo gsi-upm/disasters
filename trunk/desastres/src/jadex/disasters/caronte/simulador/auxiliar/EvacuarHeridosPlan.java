@@ -1,6 +1,7 @@
 package disasters.caronte.simulador.auxiliar;
 
 import disasters.*;
+import disasters.caronte.Entorno;
 import org.json.me.*;
 
 /**
@@ -10,17 +11,17 @@ import org.json.me.*;
 public class EvacuarHeridosPlan extends EnviarMensajePlan{
 
 	public void body(){
-		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		int idDes = (Integer) getBeliefbase().getBelief("idEmergencia").getFact();
 		Disaster des = env.getEvent(idDes);
 		double dif = 0.0006;
 
 		System.out.println("XX auxiliar: evacuando a los heridos");
 		try{
-			String sanosAux = Connection.connect(Environment.URL + "healthy");
+			String sanosAux = Connection.connect(Entorno.URL + "healthy");
 			getBeliefbase().getBelief("sanosEvacuacion").setFact(sanosAux);
 
-			String heridosAux = Connection.connect(Environment.URL + "unhealthy");
+			String heridosAux = Connection.connect(Entorno.URL + "unhealthy");
 			JSONArray heridos = new JSONArray(heridosAux);
 
 			for(int i = heridos.length() - 1; i >= 0; i--){ // TEMPORAL!!
@@ -37,7 +38,7 @@ public class EvacuarHeridosPlan extends EnviarMensajePlan{
 					System.out.println("Error al andar: " + ex);
 				}
 
-				env.printout("XX auxiliar: evacuando al herido " + id, 0);
+				env.printout("XX auxiliar: evacuando al herido " + id, 2, 0);
 
 				try{
 					env.andar(getComponentName(), posHerido1, posHerido2, env.getAgent(getComponentName()).getId(), id);

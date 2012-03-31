@@ -154,13 +154,14 @@
 		</table>--%>
 		<p>MENSAJES</p>
 		<table>
-			<tr><th>ID</th><th>CREADOR</th><th>MENSAJE</th><th>NIVEL</th><th>FECHA</th></tr>
+			<tr><th>ID</th><th>CREADOR</th><th>TIPO_RECEPTOR</th><th>RECEPTOR</th><th>MENSAJE</th><th>FECHA</th></tr>
 			<c:forEach var="mensaje" items="${mensajes.rows}">
 				<tr>
 					<td>${mensaje.id}</td>
 					<td>${mensaje.creador}</td>
+					<td>${mensaje.tipo_receptor}</td>
+					<td>${mensaje.receptor}</td>
 					<td>${mensaje.mensaje}</td>
-					<td>${mensaje.nivel}</td>
 					<td>${mensaje.fecha}</td>
 				</tr>
 			</c:forEach>

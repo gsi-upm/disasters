@@ -8,7 +8,13 @@ import java.net.*;
  * 
  * @author juliocamarero
  */
-public class Connection {
+public class Connection{
+	/**
+	 * Conecta a la URL dada y devuelve en un String el resultado dado por el servidor
+	 * 
+	 * @param source URL a la que realiza la conexion
+	 * @return Respuesta del servidor
+	 */
 	public static String connect(String source){
 		try{
 			URL direccion = new URL(removeBlanks(source));
@@ -20,7 +26,6 @@ public class Connection {
 
 			while((inputLine = dis.readLine()) != null){
 				buff.append(inputLine);
-				// System.out.println(inputLine);
 			}
 
 			String a = buff.toString();
@@ -33,6 +38,12 @@ public class Connection {
 		}
 	}
 
+	/**
+	 * Elimina los espacios cambiandolos por '+'
+	 * 
+	 * @param cadena Texto a formatear
+	 * @return Texto formateado
+	 */
 	public static String removeBlanks(String cadena){
 		String nueva = "";
 		String caracter;

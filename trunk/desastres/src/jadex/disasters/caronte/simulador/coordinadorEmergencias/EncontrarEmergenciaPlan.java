@@ -1,6 +1,7 @@
 package disasters.caronte.simulador.coordinadorEmergencias;
 
 import disasters.*;
+import disasters.caronte.*;
 import jadex.bdi.runtime.IGoal;
 import java.util.*;
 
@@ -23,10 +24,10 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase entorno para poder usar sus metodos
-		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
+		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		Position posResi = (Position)getBeliefbase().getBelief("residencia").getFact();
 
-		env.printout("OO coordinador: Buscando desastre",3);
+		env.printout("OO coordinador: Buscando desastre", 2, 3);
 
 		Disaster des = null;
 		while(des == null){
@@ -37,7 +38,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 
 		//waitFor(10000); // Retardo para asociar heridos
 
-		env.printout("OO coordinador: emergencia encontrada!!", 3);
+		env.printout("OO coordinador: emergencia encontrada!!", 2, 3);
 
 		// EL COORDINADOR SE DESPLAZA HASTA LA EMERGENCIA PARA EVALUARLA
 		/*
@@ -71,9 +72,9 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	 * @param env
 	 * @return 
 	 */
-	private Disaster findDisaster(Environment env){
+	private Disaster findDisaster(Entorno env){
 		//System.out.println("OO coordinador: Comenzamos a buscar la emergencia mas grave...");
-		Iterator it = env.disasters.entrySet().iterator();
+		Iterator it = env.getEvents().entrySet().iterator();
 
 		// waitFor(500);
 		Map.Entry e = null;
@@ -315,8 +316,8 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	 * @param tipo
 	 * @return 
 	 */
-	private String giveMeAgent(Environment env, String tipo){
-		Iterator it = env.agentes.entrySet().iterator();
+	private String giveMeAgent(Entorno env, String tipo){
+		Iterator it = env.getAgents().entrySet().iterator();
 		while(it.hasNext()){
 			Map.Entry e = null;
 			// Hacemos este try para que no salga una excepcion de sinronizacion que no nos influye realmente

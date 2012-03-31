@@ -1,6 +1,7 @@
 package disasters.otros;
 
-import disasters.*;
+import disasters.Disaster;
+import disasters.desastres.Environment;
 import jadex.bdi.runtime.*;
 import java.util.*;
 
@@ -25,7 +26,7 @@ public class SearchDisasterPlan extends Plan{
      * a new goal is created to expand it.
      */
     private synchronized void checkDisasters(){
-        Iterator it = env.disasters.entrySet().iterator();
+        Iterator it = env.getEvents().entrySet().iterator();
         Map.Entry e = null;
         Disaster dis;
 

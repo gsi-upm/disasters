@@ -1,6 +1,7 @@
 package disasters.desastres.police;
 
 import disasters.*;
+import disasters.desastres.Environment;
 
 /**
  * Plan de la POLICIA

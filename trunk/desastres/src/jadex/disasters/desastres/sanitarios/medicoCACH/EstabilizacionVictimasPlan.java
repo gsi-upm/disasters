@@ -1,6 +1,7 @@
 package disasters.desastres.sanitarios.medicoCACH;
 
 import disasters.*;
+import disasters.desastres.Environment;
 
 /**
  * Primeros auxilios sobre aquellas victimas que necesiten de una accion inmediata.

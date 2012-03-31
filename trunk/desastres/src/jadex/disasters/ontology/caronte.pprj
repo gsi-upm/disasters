@@ -28,7 +28,7 @@
 ([caronte_ProjectKB_Class10341] of  String
 
 	(name "beanynizer-output_dir")
-	(string_value "/Users/juanluis/NetBeansProjects/disasters/desastres/src/java/"))
+	(string_value "/Users/juanluis/NetBeansProjects/disasters/desastres/src/jadex/"))
 
 ([caronte_ProjectKB_Class10342] of  String
 
@@ -442,7 +442,7 @@
 ([caronte_ProjectKB_Class423] of  String
 
 	(name "beanynizer-package")
-	(string_value "jadex.desastres"))
+	(string_value "disasters"))
 
 ([CLSES_TAB] of  Widget
 

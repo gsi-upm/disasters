@@ -1,6 +1,7 @@
 package disasters.desastres.sanitarios.grupoSanitarioOperativo;
 
 import disasters.*;
+import disasters.desastres.Environment;
 import jadex.bdi.runtime.Plan;
 
 /**

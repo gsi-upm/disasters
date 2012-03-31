@@ -1,5 +1,7 @@
 package disasters;
 
+import disasters.desastres.Environment;
+
 /** 
  * The Timer class allows a graceful exit when an application
  * is stalled due to a networking timeout. Once the timer is

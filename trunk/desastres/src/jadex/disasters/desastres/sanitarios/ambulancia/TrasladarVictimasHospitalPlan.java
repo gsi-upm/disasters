@@ -1,6 +1,7 @@
 package disasters.desastres.sanitarios.ambulancia;
 
 import disasters.*;
+import disasters.desastres.Environment;
 
 /**
  * Siguiendo las indicaciones del coordinador medico general sobre el lugar al que realizar el traslado

@@ -1,5 +1,8 @@
 package disasters;
 
+import disasters.caronte.Entorno;
+import disasters.desastres.Environment;
+
 /** 
  * The Timer class allows a graceful exit when an application
  * is stalled due to a networking timeout. Once the timer is
@@ -20,11 +23,27 @@ public class TimerJSON extends Thread{
 	private int m_length;
 	/** Time elapsed */
 	private int m_elapsed;
+	
+	private Entorno ent;
 	private Environment env;
 
 	/**
 	 * Creates a timer of a specified length
-	 * @param	length	Length of time before timeout occurs
+	 * @param length Length of time before timeout occurs
+	 */
+	public TimerJSON(int length, Entorno ent){
+		// Assign to member variable
+		m_length = length;
+
+		// Set time elapsed
+		m_elapsed = 0;
+
+		this.ent = ent;
+	}
+	
+	/**
+	 * Creates a timer of a specified length
+	 * @param length Length of time before timeout occurs
 	 */
 	public TimerJSON(int length, Environment env){
 		// Assign to member variable
@@ -69,6 +88,10 @@ public class TimerJSON extends Thread{
 	// Override this to provide custom functionality
 	public void timeout(){
 		System.out.println("## ENV: Actualizando el JSON...");
-		env.actualiza();
+		if(ent != null){
+			ent.actualiza();
+		}else if(env != null){
+			env.actualiza();
+		}
 	}
 }

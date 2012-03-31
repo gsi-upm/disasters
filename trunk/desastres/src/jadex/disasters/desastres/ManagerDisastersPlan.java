@@ -11,30 +11,30 @@ public class ManagerDisastersPlan extends Plan{
 	public void body(){
 		System.out.println("Comienza manager");
 		IGoal sp1 = createGoal("cms_create_component");
-		sp1.getParameter("type").setValue("jadex/desastres/Environment.agent.xml");
+		sp1.getParameter("type").setValue("disasters/desastres/Environment.agent.xml");
 		dispatchSubgoalAndWait(sp1);
 		System.out.println("Entorno creado");
 
 		IGoal sp2 = createGoal("cms_create_component");
-		sp2.getParameter("type").setValue("jadex/desastres/disasters/police/police.agent.xml");
+		sp2.getParameter("type").setValue("disasters/desastres/police/police.agent.xml");
 		dispatchSubgoalAndWait(sp2);
 		System.out.println("Policia creado");
 
 		IGoal sp3 = createGoal("cms_create_component");
-		sp3.getParameter("type").setValue("jadex/desastres/disasters/firemen/firemen.agent.xml");
+		sp3.getParameter("type").setValue("disasters/desastres/firemen/firemen.agent.xml");
 		dispatchSubgoalAndWait(sp3);
 		System.out.println("Bombero creado");
 
 		IGoal sp4 = createGoal("cms_create_component");
-		//sp4.getParameter("type").setValue("jadex/desastres/disasters/ambulance/ambulance.agent.xml");
-		sp4.getParameter("type").setValue("jadex/desastres/disasters/sanitarios/ManagerSanitario.agent.xml");
+		//sp4.getParameter("type").setValue("disasters/desastres/ambulance/ambulance.agent.xml");
+		sp4.getParameter("type").setValue("disasters/desastres/sanitarios/ManagerSanitario.agent.xml");
 		dispatchSubgoalAndWait(sp4);
 		//System.out.println("Ambulancia creada");
 
 		waitFor(3000);
 
 		IGoal sp5 = createGoal("cms_create_component");
-		sp5.getParameter("type").setValue("jadex/desastres/disasters/central/central.agent.xml");
+		sp5.getParameter("type").setValue("disasters/desastres/central/central.agent.xml");
 		dispatchSubgoalAndWait(sp5);
 		System.out.println("Central creada");
 

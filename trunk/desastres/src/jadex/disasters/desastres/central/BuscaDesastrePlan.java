@@ -1,6 +1,8 @@
 package disasters.desastres.central;
 
+import disasters.WorldObject;
 import disasters.*;
+import disasters.desastres.*;
 import jadex.bdi.runtime.IGoal;
 import java.util.*;
 
@@ -80,7 +82,7 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 
 	private Disaster findDisaster(Environment env){
 		//System.out.println("$$ central: Comenzamos a buscar la emergencia mas grave... ");
-		Iterator it = env.disasters.entrySet().iterator();
+		Iterator it = env.getEvents().entrySet().iterator();
 		// waitFor(500);
 		Map.Entry e = null;
 		// Emergencia que va a ser procesada por los agentes
@@ -306,14 +308,14 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 	}
 
 	private String giveMeAgent(Environment env, String tipo){
-		Iterator it = env.agentes.entrySet().iterator();
+		Iterator it = env.getAgents().entrySet().iterator();
 		while(it.hasNext()){
 			Map.Entry e = null;
 			// Hacemos este try para que no salga una excepcion de sinronizacion
 			// que no nos influye realmente
 			try{
 				e = (Map.Entry) it.next();
-			}catch(Exception exc){}
+			}catch(Exception ex){}
 			String nombreAgente;
 			WorldObject agente = (WorldObject)e.getValue();
 			if(agente.getType().equals(tipo)){

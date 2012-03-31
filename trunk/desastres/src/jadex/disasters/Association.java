@@ -2,27 +2,27 @@ package disasters;
 
 /**
  * Class that represents an association
+ * 
  * @author Juan Luis Molina
  * @version 1.0
  */
 public class Association{
 	/** Association id */
 	private int id;
-	
 	/** Person injured id */
 	private int idInjured;
-	
 	/** Disaster or emergency id */
 	private int idDisaster;
-	
 	/** State of the association */
 	private String state;
 
 	/**
-	 * @param id
-	 * @param idInjured
-	 * @param idDisaster
-	 * @param state
+	 * Constructor de la asociacion
+	 * 
+	 * @param id Identificador de la asociacion
+	 * @param idInjured Identificador del herido
+	 * @param idDisaster Identificador de la emergencia
+	 * @param state Estado de la asociacion
 	 */
 	public Association(int id, int idInjured, int idDisaster, String state){
 		super();
@@ -33,56 +33,72 @@ public class Association{
 	}
 
 	/**
-	 * @return the id
+	 * Getter del ID
+	 * 
+	 * @return Identificador
 	 */
 	public int getId(){
 		return id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * Setter del ID
+	 * 
+	 * @param id Identificador
 	 */
 	public void setId(int id){
 		this.id = id;
 	}
 
 	/**
-	 * @return the idInjured
+	 * Getter del ID del herido
+	 * 
+	 * @return ID del herido
 	 */
 	public int getIdInjured(){
 		return idInjured;
 	}
 
 	/**
-	 * @param idInjured the idInjured to set
+	 * Setter del ID del herido
+	 * 
+	 * @param idInjured ID del herido
 	 */
 	public void setIdInjured(int idInjured){
 		this.idInjured = idInjured;
 	}
 	
 	/**
-	 * @return the idDisaster
+	 * Getter del ID de la emergencia
+	 * 
+	 * @return ID de la emergencia
 	 */
 	public int getIdDisaster(){
 		return idDisaster;
 	}
 
 	/**
-	 * @param idDisaster the idDisaster to set
+	 * Setter del ID de la emergencia
+	 * 
+	 * @param idDisaster ID de la emergencia
 	 */
 	public void setIdDisaster(int idDisaster){
 		this.idDisaster = idDisaster;
 	}
 	
 	/**
-	 * @return the state
+	 * Getter del estado de la asociacion
+	 * 
+	 * @return Estado de la asociacion
 	 */
 	public String getState(){
 		return state;
 	}
 
 	/**
-	 * @param state the state to set
+	 * Setter del estado de la asociacion
+	 * 
+	 * @param state Estado de la asociacion
 	 */
 	public void setState(String state){
 		this.state = state;

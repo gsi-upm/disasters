@@ -1,19 +1,19 @@
 <!--
-  <h3>Gerocultor</h3>
+	<h3>Gerocultor</h3>
 -->
 <agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
-	name="gerocultor" package="disasters.caronte.simulador.gerocultor">
-
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+		name="gerocultor" package="disasters.caronte.simulador.gerocultor">
 	<imports>
-		<import>jadex.base.fipa.*</import>
+		<import>disasters.*</import>
+		<import>disasters.caronte.Entorno</import>
+		<import>jadex.base.fipa.IDF</import>
+		<import>jadex.base.fipa.SFipa</import>
 		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bdi.runtime.*</import>
-		<import>jadex.bridge.fipa.ComponentIdentifier</import>
-		<import>jadex.commons.*</import>
-		<import>jadex.commons.service.*</import>
-		<import>jadex.desastres.*</import>
+		<import>jadex.bridge.service.RequiredServiceInfo</import>
+		<import>jadex.bridge.service.SServiceProvider</import>
+		<import>jadex.commons.future.IFuture</import>
 	</imports>
         
 	<capabilities>
@@ -22,21 +22,18 @@
 	</capabilities>
 
 	<beliefs>
-            <!-- Creamos el agente como instancia del Entorno. Por defecto, en la residencia -->
-		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.GEROCULTOR, $scope.getAgentName(), $beliefbase.residencia)</fact>
+		<!-- Creamos el agente como instancia del Entorno. Por defecto, en la residencia -->
+		<belief name="env" class="Entorno">
+			<fact>Entorno.getInstance(Entorno.GEROCULTOR, $scope.getAgentName(), $beliefbase.residencia)</fact>
 		</belief>
-            
-            <!-- Definimos la posicion de la residencia -->
+		<!-- Definimos la posicion de la residencia -->
 		<belief name="residencia" class="Position">
 			<fact>new Position(38.232272, -1.698925)</fact>
 		</belief>
-            
 		<!-- Posicion del agente -->
 		<belief name="pos" class="Position">
 			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
-
 		<!-- ID del desastre que atiende -->
 		<belief name="idEmergencia" class="Integer">
 			<fact>0</fact>
@@ -50,8 +47,8 @@
 		<achievegoalref name="df_search">
 			<concrete ref="dfcap.df_search"/>
 		</achievegoalref>
-		<maintaingoalref name="df_keep_registered">
-			<concrete ref="dfcap.df_keep_registered"/>
+		<maintaingoalref name="df_register">
+			<concrete ref="dfcap.df_register"/>
 		</maintaingoalref>
 		
 		<performgoal name="esperarEmergencia" retry="true" exclude="never"/>
@@ -150,15 +147,19 @@
 		</messageevent>
 	</events>
 
+	<properties>
+		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
+	</properties>
+
  	<!-- Inicialmente activamos el objetivo con nombre vigilarHabitaciones -->
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_keep_registered">
+				<initialgoal ref="df_register">
 					<parameter ref="description">
 						<value>
 							$properties.dfservice.createDFComponentDescription(null,
-								$properties.dfservice.createDFServiceDescription("gerocultor_service", "gerocultor", "GSI DIT UPM"))
+								$properties.dfservice.createDFServiceDescription("gerocultor-service", "gerocultor", "GSI DIT UPM"))
 						</value>
 					</parameter>
 				</initialgoal>
@@ -166,8 +167,4 @@
 			</goals>
 		</configuration>
 	</configurations>
-
-	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
-	</properties>
 </agent>

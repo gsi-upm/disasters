@@ -27,13 +27,11 @@
 				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
 				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
 			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
-			WHERE MODIFICADO > ?
-			AND MARCADOR = M.ID
+			WHERE MARCADOR = M.ID
 			AND TIPO_MARCADOR = 'event'
 			AND TIPO = T.ID
 			AND ESTADO = E.ID
 			AND TIPO_ESTADO != 'erased'
-			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'eventsModified'}">
@@ -52,29 +50,29 @@
 	</c:when>
 	<c:when test="${param.action == 'resources'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
-				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+			SELECT U.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, C.LATITUD, C.LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, C.PLANTA, IDASSIGNED, FECHA, MODIFICADO,
 				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
-			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
-			WHERE MODIFICADO > ?
-			AND MARCADOR = M.ID
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, USUARIOS U, TIPOS_ESTADOS E
+			WHERE MARCADOR = M.ID
 			AND TIPO_MARCADOR = 'resource'
 			AND TIPO = T.ID
+			AND NOMBRE = NOMBRE_USUARIO
 			AND ESTADO = E.ID
 			AND TIPO_ESTADO != 'erased'
-			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'resourcesModified'}">
 		<sql:query var="eventos" dataSource="${CatastrofesServer}">
-			SELECT C.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, LATITUD, LONGITUD,
-				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
+			SELECT U.ID, CANTIDAD, NOMBRE, C.DESCRIPCION, INFO, C.LATITUD, C.LONGITUD,
+				DIRECCION, SIZE, TRAFFIC, C.PLANTA, IDASSIGNED, FECHA, MODIFICADO,
 				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
-			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
+			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, USUARIOS U, TIPOS_ESTADOS E
 			WHERE MODIFICADO > ?
 			AND MARCADOR = M.ID
 			AND TIPO_MARCADOR = 'resource'
 			AND TIPO = T.ID
+			AND NOMBRE = NOMBRE_USUARIO
 			AND ESTADO = E.ID
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
@@ -85,13 +83,11 @@
 				DIRECCION, SIZE, TRAFFIC, PLANTA, IDASSIGNED, FECHA, MODIFICADO,
 				USUARIO, TIPO_MARCADOR, TIPO_CATASTROFE, TIPO_ESTADO
 			FROM CATASTROFES C, TIPOS_MARCADORES M, TIPOS_CATASTROFES T, TIPOS_ESTADOS E
-			WHERE MODIFICADO > ?
-			AND MARCADOR = M.ID
+			WHERE MARCADOR = M.ID
 			AND TIPO_MARCADOR = 'people'
 			AND TIPO = T.ID
 			AND ESTADO = E.ID
 			AND TIPO_ESTADO != 'erased'
-			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'peopleModified'}">
@@ -297,37 +293,49 @@
 	</c:when>
 	<c:when test="${param.action == 'associations'}">
 		<sql:query var="asociaciones" dataSource="${CatastrofesServer}">
-			SELECT a.id, a.id_herido, a.id_emergencia, e.tipo_estado
-			FROM asociaciones_heridos_emergencias a, tipos_estados e
-			WHERE a.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT A.ID, ID_HERIDO, ID_EMERGENCIA, TIPO_ESTADO
+			FROM ASOCIACIONES_HERIDOS_EMERGENCIAS A, TIPOS_ESTADOS E
+			WHERE ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'associationsModified'}">
 		<sql:query var="asociaciones" dataSource="${CatastrofesServer}">
-			SELECT a.id, a.id_herido, a.id_emergencia, e.tipo_estado
-			FROM asociaciones_heridos_emergencias a, tipos_estados e
-			WHERE a.estado = e.id
-			AND a.fecha > ?
+			SELECT A.ID, ID_HERIDO, ID_EMERGENCIA, TIPO_ESTADO
+			FROM ASOCIACIONES_HERIDOS_EMERGENCIAS A, TIPOS_ESTADOS E
+			WHERE ESTADO = E.ID
+			AND FECHA > ?
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'activities'}">
 		<sql:query var="actividades" dataSource="${CatastrofesServer}">
-			SELECT a.id, a.id_usuario, a.id_emergencia, t.tipo, e.tipo_estado
-			FROM actividades a, tipos_actividades t, tipos_estados e
-			WHERE a.id_tipo_actividad = t.id 
-			AND a.estado = e.id
-			AND e.tipo_estado != 'erased'
+			SELECT A.ID, ID_USUARIO, ID_EMERGENCIA, TIPO, TIPO_ESTADO
+			FROM ACTIVIDADES A, TIPOS_ACTIVIDADES T, TIPOS_ESTADOS E
+			WHERE ID_TIPO_ACTIVIDAD = T.ID
+			AND ESTADO = E.ID
+			AND TIPO_ESTADO != 'erased'
 		</sql:query>
 	</c:when>
 	<c:when test="${param.action == 'activitiesModified'}">
 		<sql:query var="actividades" dataSource="${CatastrofesServer}">
-			SELECT a.id, a.id_usuario, a.id_emergencia, t.tipo, e.tipo_estado
-			FROM actividades a, tipos_actividades t, tipos_estados e
-			WHERE a.id_tipo_actividad = t.id 
-			AND a.estado = e.id
-			AND a.fecha > ?
+			SELECT A.ID, ID_USUARIO, ID_EMERGENCIA, TIPO, TIPO_ESTADO
+			FROM ACTIVIDADES A, TIPOS_ACTIVIDADES T, TIPOS_ESTADOS E
+			WHERE ID_TIPO_ACTIVIDAD = T.ID 
+			AND ESTADO = E.ID
+			AND FECHA > ?
+			<sql:param value="${param.fecha}"/>
+		</sql:query>
+	</c:when>
+	<c:when test="${param.action == 'messages'}">
+		<sql:query var="mensajes" dataSource="${CatastrofesServer}">
+			SELECT ID, CREADOR, TIPO_RECEPTOR, RECEPTOR, MENSAJE, FECHA
+			FROM MENSAJES
+			WHERE CREADOR = ?
+			AND TIPO_RECEPTOR = 0
+			AND RECEPTOR = 0
+			AND FECHA > ?
+			<sql:param value="${param.creador}"/>
 			<sql:param value="${param.fecha}"/>
 		</sql:query>
 	</c:when>
@@ -398,6 +406,16 @@
 					<json:property name="idDisaster" value="${actividad.id_emergencia}"/>
 					<json:property name="type" value="${actividad.tipo}"/>
 					<json:property name="state" value="${actividad.tipo_estado}"/>
+				</json:object>
+			</c:forEach>
+			<c:forEach var="mensaje" items="${mensajes.rows}">
+				<json:object>
+					<json:property name="id" value="${mensaje.id}"/>
+					<json:property name="creador" value="${mensaje.creador}"/>
+					<json:property name="tipo_receptor" value="${mensaje.tipo_receptor}"/>
+					<json:property name="receptor" value="${mensaje.receptor}"/>
+					<json:property name="mensaje" value="${mensaje.mensaje}"/>
+					<json:property name="fecha" value="${mensaje.fecha}"/>
 				</json:object>
 			</c:forEach>
 		</json:array>
