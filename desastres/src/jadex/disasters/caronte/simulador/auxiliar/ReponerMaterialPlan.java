@@ -17,10 +17,10 @@ public class ReponerMaterialPlan extends EnviarMensajePlan{
 
 		if(tipoMaterial.equals("incendio")){
 			getBeliefbase().getBelief("material-incendio").setFact(true);
-			env.printout("XX auxiliar: material de incendios repuesto", 2, 0);
+			env.printout("XX auxiliar: material de incendios repuesto", 2, 0, true);
 		}else if(tipoMaterial.equals("medico")){
 			getBeliefbase().getBelief("material-medico").setFact(true);
-			env.printout("XX auxiliar: material medico repuesto", 2, 0);
+			env.printout("XX auxiliar: material medico repuesto", 2, 0, true);
 		}
 	}
 }

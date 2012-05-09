@@ -10,17 +10,19 @@
 	<imports>
 		<import>disasters.Position</import>
 		<import>disasters.caronte.Entorno</import>
+		<import>disasters.caronte.ontology.CaronteOntology</import>
+		<import>disasters.caronte.ontology.Incendio</import>
 		<import>jadex.base.fipa.IDF</import>
 		<import>jadex.base.fipa.SFipa</import>
-		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.planlib.df.DF</import>
 		<import>jadex.bridge.service.RequiredServiceInfo</import>
 		<import>jadex.bridge.service.SServiceProvider</import>
 		<import>jadex.commons.future.IFuture</import>
+		<import>java.util.HashMap</import>
 	</imports>
 
 	<capabilities>
-		<capability name="procap" file="jadex.bdi.planlib.protocols.request.Request"/>
+		<!--<capability name="procap" file="jadex.bdi.planlib.protocols.request.Request"/>-->
 		<capability name="dfcap" file="jadex.bdi.planlib.df.DF"/>
 	</capabilities>
 
@@ -31,36 +33,65 @@
 		<belief name="residencia" class="Position">
 			<fact>new Position(38.232272, -1.698925)</fact>
 		</belief>
-		<belief name="idJefeIntervencion" class="Integer">
+		<belief name="incendioActual" class="int">
 			<fact>0</fact>
 		</belief>
-		<belief name="desastreActual" class="Integer">
+		<belief name="numEpi" class="int">
 			<fact>0</fact>
+		</belief>
+		<belief name="numEsi" class="int">
+			<fact>0</fact>
+		</belief>
+		<beliefset name="epi" class="Integer"/>
+		<beliefset name="esi" class="Integer"/>
+		<belief name="apagando" class="HashMap">
+			<fact>new HashMap()</fact>
 		</belief>
 	</beliefs>
 
 	<goals>
-		<achievegoalref name="rp_initiate">
+		<!--<achievegoalref name="rp_initiate">
 			<concrete ref="procap.rp_initiate"/>
-		</achievegoalref>
+		</achievegoalref>-->
 		<achievegoalref name="df_search">
 			<concrete ref="dfcap.df_search"/>
 		</achievegoalref>
 		<achievegoalref name="df_register">
-			<concrete ref="dfcap.df_keep_registered"/>
+			<concrete ref="dfcap.df_register"/>
 		</achievegoalref>
 		<achievegoalref name="df_deregister">
 			<concrete ref="dfcap.df_deregister"/>
 		</achievegoalref>
-		<achievegoal name="formarEquipoIntervencion"/>
-		<achievegoal name="apagarIncendio"/>
+		
+		<maintaingoal name="formarEquipoIntervencion" retry="true" exclude="never">
+			<maintaincondition>
+				$beliefbase.epi.length &gt;= $beliefbase.numEpi &amp;&amp; $beliefbase.esi.length &gt;= $beliefbase.numEsi
+			</maintaincondition>
+		</maintaingoal>
+		<achievegoal name="apagarIncendio" retry="true" exclude="never">
+			<targetcondition>
+				$beliefbase.incendioActual == 0
+			</targetcondition>
+		</achievegoal>
 	</goals>
 
 	<plans>
+		<plan name="evaluarIncendio-plan">
+			<body class="EvaluarIncendioPlan"/>
+			<trigger>
+				<messageevent ref="atenderIncendio"/>
+			</trigger>
+		</plan>
 		<plan name="formarEquipoIntervencion-plan">
 			<body class="FormarEquipoIntervencionPlan"/>
 			<trigger>
-				<messageevent ref="atenderIncendio"/>
+				<goal ref="formarEquipoIntervencion"/>
+			</trigger>
+		</plan>
+		<plan name="apagarIncendio-plan">
+			<body class="ApagarIncendioPlan"/>
+			<trigger>
+				<goal ref="apagarIncendio"/>
 			</trigger>
 		</plan>
 	</plans>
@@ -70,7 +101,13 @@
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("atenderIncendio")</match>
+			<parameter name="language" class="String" direction="fixed">
+				<value>SFipa.JADEX_XML</value>
+ 			</parameter>
+			<parameter name="ontology" class="String" direction="fixed">
+				<value>CaronteOntology.ONTOLOGY_NAME</value>
+			</parameter>
+			<match>$content instanceof Incendio</match>
 		</messageevent>
 		<messageevent name="ack_atenderIncendio" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
@@ -78,10 +115,21 @@
 			</parameter>
 		</messageevent>
 		
-		<!-- Ejemplo
-		<messageevent name="nombre/ack_nombre" direction="send/receive" type="fipa">
+		<messageevent name="finIncendio" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST/SFipa.INFORM</value>
+				<value>SFipa.REQUEST</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="ack_finIncendio" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_finIncendio")</match>
+		</messageevent>
+		
+		<messageevent name="evaluacionIncendio" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
 			</parameter>
 			<parameter name="language" class="String" direction="fixed">
 				<value>SFipa.JADEX_XML</value>
@@ -89,8 +137,13 @@
 			<parameter name="ontology" class="String" direction="fixed">
 				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("nombre/ack_nombre")</match>
-		</messageevent>-->
+		</messageevent>
+		<messageevent name="ack_evaluacionIncendio" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_evaluacionIncendio")</match>
+		</messageevent>
 	</events>
 
 	<properties>
@@ -108,6 +161,7 @@
  						</value>
 					</parameter>
 				</initialgoal>
+				<initialgoal ref="formarEquipoIntervencion"/>
 				<endgoal ref="df_deregister"/>
 			</goals>
 		</configuration>

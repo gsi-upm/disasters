@@ -38,6 +38,6 @@ public class EstabilizacionVictimasPlan extends EnviarMensajePlan{
 		System.out.println("** Medico CACH: victimas estabilizadas");
 		
 		System.out.println("** Medico CACH: avisando a la ambulancia");
-		enviarMensaje("ambulancia","traslado","go");
+		enviarMensaje("ambulancia", "traslado", "go", true);
 	}
 }

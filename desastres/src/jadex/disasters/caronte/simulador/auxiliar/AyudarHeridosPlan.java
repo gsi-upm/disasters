@@ -37,7 +37,7 @@ public class AyudarHeridosPlan extends EnviarMensajePlan{
 			System.out.println("Error al andar: " + ex);
 		}
 		
-		env.printout("XX auxiliar: Estoy atendiendo la emergencia: " + idDes, 2, 0);
+		env.printout("XX auxiliar: Estoy atendiendo la emergencia: " + idDes, 2, 0, true);
 
 		People herido = getHerido(des);
 		String desSize = des.getSize();
@@ -47,7 +47,7 @@ public class AyudarHeridosPlan extends EnviarMensajePlan{
 			IGoal evacuarHeridos = createGoal("evacuarHeridos");
 			dispatchSubgoalAndWait(evacuarHeridos);
 		}else{
-			env.printout("XX auxiliar: emergencia sin heridos...", 2, 0);
+			env.printout("XX auxiliar: emergencia sin heridos...", 2, 0, true);
 		}
 
 		if(!des.getType().equals("injuredPerson") && (desSize.equals("big") || desSize.equals("huge"))){
@@ -60,7 +60,7 @@ public class AyudarHeridosPlan extends EnviarMensajePlan{
 		if(!des.getType().equals("injuredPerson") && (desSize.equals("big") || desSize.equals("huge"))){
 			// Vuelve a su posicion de la residencia
 			try{
-				env.printout("XX auxiliar: vuelvo a la residencia", 2, 0);
+				env.printout("XX auxiliar: vuelvo a la residencia", 2, 0, true);
 				env.andar(getComponentName(), (Position) getBeliefbase().getBelief("pos").getFact(), posResi, env.getAgent(getComponentName()).getId(), 0);
 			}catch(Exception ex){
 				System.out.println("Error al andar: " + ex);

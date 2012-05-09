@@ -27,19 +27,19 @@ public class MandaAvisoPlan extends EnviarMensajePlan{
 
 		getBeliefbase().getBelief("idEmergencia").setFact(idDes);
 
-		env.printout("CC central: Avisando a agentes... (en espera)...", 2, 0);
+		env.printout("CC central: Avisando a agentes... (en espera)...", 2, 0, true);
 
-		String resultado1 = enviarObjeto("ambulance", "aviso", recibido);
+		String resultado1 = enviarObjeto("ambulance", "aviso", recibido, true);
 		//env.printout("CC central: Respuesta recibida de la ambulancia: " + resultado1, 0);
 
 		if(!des.getType().equals("injuredPerson") && (des.getSize().equals("big") || des.getSize().equals("huge"))){
-			String resultado2 = enviarObjeto("police", "aviso", recibido);
+			String resultado2 = enviarObjeto("police", "aviso", recibido, true);
 			//env.printout("CC central: Respuesta recibida de la policia: " + resultado2, 0);
-			String resultado3 = enviarObjeto("firemen", "aviso", recibido);
+			String resultado3 = enviarObjeto("firemen", "aviso", recibido, true);
 			//env.printout("CC central: Respuesta recibida del bombero: " + resultado3, 0);
 		}
 
-		env.printout("CC central: Agentes avisados!!", 2, 0);
+		env.printout("CC central: Agentes avisados!!", 2, 0, true);
 
 		IGoal esperaSolucion = createGoal("esperaSolucion");
 		dispatchSubgoalAndWait(esperaSolucion);

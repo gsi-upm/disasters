@@ -27,7 +27,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		Position posResi = (Position)getBeliefbase().getBelief("residencia").getFact();
 
-		env.printout("OO coordinador: Buscando desastre", 2, 3);
+		env.printout("OO coordinador: Buscando desastre", 2, 3, true);
 
 		Disaster des = null;
 		while(des == null){
@@ -38,7 +38,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 
 		//waitFor(10000); // Retardo para asociar heridos
 
-		env.printout("OO coordinador: emergencia encontrada!!", 2, 3);
+		env.printout("OO coordinador: emergencia encontrada!!", 2, 3, true);
 
 		// EL COORDINADOR SE DESPLAZA HASTA LA EMERGENCIA PARA EVALUARLA
 		/*
@@ -51,7 +51,7 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 
 		getBeliefbase().getBelief("desastreActual").setFact(des.getId());
 		// lo publicamos en el tablon!
-		env.setTablon(des.getId());
+		//env.setTablon(des.getId());
 
 		// EL COORDINADOR VUELVE HASTA SU POSICION EN LA RESIDENCIA
 		/*

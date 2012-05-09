@@ -41,11 +41,11 @@ public class TriagePlan extends EnviarMensajePlan{
 				IGoal primerosAuxilios = createGoal("primerosAuxilios");
 				dispatchSubgoalAndWait(primerosAuxilios);
 			}else{
-				enviarMensaje("medicoCACH","triage","go");
+				enviarMensaje("medicoCACH", "triage", "go", true);
 			}
 		}else{
 			System.out.println("** Grupo sanitario: desastre sin heridos");
-			enviarMensaje("medicoCACH","triage","go");
+			enviarMensaje("medicoCACH", "triage", "go", true);
 		}
 	}
 }

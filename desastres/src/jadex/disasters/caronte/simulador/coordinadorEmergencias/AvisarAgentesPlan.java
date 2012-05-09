@@ -27,14 +27,14 @@ public class AvisarAgentesPlan extends EnviarMensajePlan{
 
 		Desastre desastre = new Desastre(id,emergencia,herido);
 
-		env.printout("OO coordinador: Avisando al gerocultor...", 2, 3);
-		String resultado2 = enviarObjeto("gerocultor", "aviso_geriatrico", desastre);
+		env.printout("OO coordinador: Avisando al gerocultor...", 2, 3, true);
+		String resultado2 = enviarObjeto("gerocultor", "aviso_geriatrico", desastre, true);
 
-		env.printout("OO coordinador: Avisando al enfermero...", 2, 3);
-		String resultado1 = enviarObjeto("nurse", "aviso_geriatrico", desastre);
+		env.printout("OO coordinador: Avisando al enfermero...", 2, 3, true);
+		String resultado1 = enviarObjeto("nurse", "aviso_geriatrico", desastre, true);
 
-		env.printout("OO coordinador: Avisando al auxiliar...", 2, 3);
-		String resultado3 = enviarObjeto("auxiliar", "aviso_geriatrico", desastre);
+		env.printout("OO coordinador: Avisando al auxiliar...", 2, 3, true);
+		String resultado3 = enviarObjeto("auxiliar", "aviso_geriatrico", desastre, true);
 
 		/*String emergencia = esperarYEnviarRespuesta("estadoEmergencia","ok");
 		Entorno.printout("OO coordinador: estado de la emergencia: " + emergencia, 0);
@@ -48,9 +48,9 @@ public class AvisarAgentesPlan extends EnviarMensajePlan{
 
 		if(((emergencia.equals("big") || emergencia.equals("huge")) && !des.getType().equals("injuredPerson")) ||
 				(!herido.equals("null") && !herido.equals("slight"))){
-			env.printout("OO coordinador: Avisando la central... (en espera)...", 2, 3);
-			String resultado = enviarObjeto("centralEmergencias", "aviso_geriatrico", desastre);
-			env.printout("OO coordinador: Respuesta recibida de central: " + resultado, 2, 3);
+			env.printout("OO coordinador: Avisando la central... (en espera)...", 2, 3, true);
+			String resultado = enviarObjeto("centralEmergencias", "aviso_geriatrico", desastre, true);
+			env.printout("OO coordinador: Respuesta recibida de central: " + resultado, 2, 3, true);
 		}
 
 		//Creamos un nuevo objetivo.

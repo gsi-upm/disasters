@@ -37,7 +37,7 @@ public class UsersManagerPlan extends Plan{
 				String nombre = instancia.getString("name");
 				IComponentIdentifier id = env.getListado(nombre);
 				if(instancia.getString("state").equals("active") && !env.containsListado(nombre)){
-					env.printout("- ENV: New user " + instancia.getString("name"), 2, 5);
+					env.printout("- ENV: New user " + instancia.getString("name"), 2, 5, true);
 					String tipoUsuario = instancia.getString("type");
 					env.putListado(nombre,null); // se vuelve a llamar por el agente para introducir el id
 
@@ -50,7 +50,7 @@ public class UsersManagerPlan extends Plan{
 					sp.getParameter("name").setValue(nombre);
 					dispatchSubgoalAndWait(sp);
 				}else if (instancia.getString("state").equals("erased") && env.containsListado(nombre)){
-					env.printout("- ENV: User " + instancia.getString("name") + " has logged out", 2, 5);
+					env.printout("- ENV: User " + instancia.getString("name") + " has logged out", 2, 5, true);
 
 					IGoal sp = createGoal("cms_destroy_component");
 					sp.getParameter("componentidentifier").setValue(id);

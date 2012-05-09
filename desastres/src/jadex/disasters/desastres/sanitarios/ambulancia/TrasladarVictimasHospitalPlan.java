@@ -73,6 +73,6 @@ public class TrasladarVictimasHospitalPlan extends EnviarMensajePlan{
 			System.out.println("** Ambulancia: Error metodo andar: " + e);
 		}
 
-		enviarMensaje("coordinadorHospital", "hospital", "hospital");
+		enviarMensaje("coordinadorHospital", "hospital", "hospital", true);
 	}
 }

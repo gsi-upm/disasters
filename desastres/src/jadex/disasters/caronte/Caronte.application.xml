@@ -10,10 +10,9 @@
 	<componenttypes>
 		<componenttype name="Entorno" filename="disasters/caronte/Entorno.agent.xml" master="true"/>
 		<componenttype name="Coordinador" filename="disasters/caronte/coordinador/Coordinador.agent.xml"/>
-		<componenttype name="Intervencion" filename="disasters/caronte/intervencionincendios/Intervencion.agent.xml"/>
+		<componenttype name="Intervencion" filename="disasters/caronte/intervencionincendios/IntervencionIncendios.agent.xml"/>
 		<!--<componenttype name="Atencion" filename="disasters/caronte/atencionheridos/Atencion.agent.xml"/>
-		<componenttype name="Evacuacion" filename="disasters/caronte/evacuacion/Evacuacion.agent.xml"/>
-		<componenttype name="Apoyo" filename="disasters/caronte/apoyoexterno/Apoyo.agent.xml"/>-->
+		<componenttype name="Evacuacion" filename="disasters/caronte/evacuacion/EvacuacionResidencia.agent.xml"/>-->
 		<!--<componenttype name="Jefe" filename="disasters/caronte/simulador/jefe/Jefe.agent.xml"/>
 		<componenttype name="Enfermero" filename="disasters/caronte/simulador/enfermero/Enfermero.agent.xml"/>
 		<componenttype name="Gerocultor" filename="disasters/caronte/simulador/gerocultor/Gerocultor.agent.xml"/>
@@ -31,8 +30,7 @@
 				<component type="Coordinador"/>
 				<component type="Intervencion"/>
 				<!--<component type="Atencion"/>
-				<component type="Evacuacion"/>
-				<component type="Apoyo"/>-->
+				<component type="Evacuacion"/>-->
 			</components>
 		</configuration>
 		<configuration name="simulator">
@@ -41,8 +39,7 @@
 				<component type="Coordinador"/>
 				<component type="Intervencion"/>
 				<!--<component type="Atencion"/>
-				<component type="Evacuacion"/>
-				<component type="Apoyo"/>-->
+				<component type="Evacuacion"/>-->
 				<!--<component type="Jefe" number="1"/>
 				<component type="Enfermero" number="1"/>
 				<component type="Gerocultor" number="1"/>

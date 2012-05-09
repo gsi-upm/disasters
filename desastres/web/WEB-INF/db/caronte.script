@@ -170,7 +170,7 @@ INSERT INTO USUARIOS VALUES(7,'celador','1a1dc91c907325c69271ddf0c944bc72',9,'Ce
 INSERT INTO USUARIOS VALUES(8,'ciudadano','1a1dc91c907325c69271ddf0c944bc72',11,'Ciudadano 1','ciudadano@correo.com',38.523414,-0.170175,FALSE,-2,'caronte')
 INSERT INTO USUARIOS VALUES(9,'citizen','1a1dc91c907325c69271ddf0c944bc72',11,'Ciudadano 2','citizen@correo.com',38.523414,-0.170175,FALSE,-2,'caronte')
 INSERT INTO USUARIOS VALUES(10,'coordinador','1a1dc91c907325c69271ddf0c944bc72',2,'Coordinador','coordinador@correo.com',38.523414,-0.170175,FALSE,-2,'caronte')
-INSERT INTO CATASTROFES VALUES(1,1,1,1,'Incendio en la residencia','Fuego en la cocina de la residencia','Explosion de gas',38.523414,-0.170175,'Calle Tramuntana','big','low',0,1,0,'2001-04-03 00:00:01.000000','2008-04-15 13:07:00.500000',1)
+INSERT INTO CATASTROFES VALUES(1,1,1,1,'Incendio en la residencia','Fuego en la cocina de la residencia','Explosion de gas',38.523714,-0.170075,'Calle Tramuntana','big','low',0,1,0,'2001-04-03 00:00:01.000000','2008-04-15 13:07:00.500000',1)
 INSERT INTO CATASTROFES VALUES(2,2,6,1,'Pepe','Anciano de la residencia','',38.523414,-0.170400,'Calle Tramuntana','medio','normal',0,1,0,'2001-04-03 00:00:01.000000','2008-04-15 13:07:00.500000',1)
 INSERT INTO CATASTROFES VALUES(3,2,6,1,'Maria','Anciano de la residencia','',38.523514,-0.170130,'Calle Tramuntana','bajo','normal',0,1,0,'2001-04-03 00:00:01.000000','2008-04-15 13:07:00.500000',1)
 INSERT INTO CATASTROFES VALUES(4,2,6,1,'Manolo','Anciano de la residencia','',38.523314,-0.170165,'Calle Tramuntana','medio','normal',0,1,0,'2001-04-03 00:00:01.000000','2008-04-15 13:07:00.500000',1)
