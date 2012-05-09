@@ -34,32 +34,32 @@ public class AtenderEmergenciaPlan extends EnviarMensajePlan{
 			System.out.println("Error al andar: " + ex);
 		}
 
-		env.printout("GG gerocultor: Estoy atendiendo la emergencia: " + idDes, 2, 0);
+		env.printout("GG gerocultor: Estoy atendiendo la emergencia: " + idDes, 2, 0, true);
 
 		if(!des.getType().equals("injuredPerson")){
 			if(des.getSize().equals("small") || des.getSize().equals("medium")){
 				String resultado = Connection.connect(Entorno.URL + "delete/id/" + idDes);
-				env.printout("GG gerocultor: Eliminado el desastre " + idDes, 2, 0);
+				env.printout("GG gerocultor: Eliminado el desastre " + idDes, 2, 0, true);
 
 				waitFor(2000);
 
-				String respuesta = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "done");
+				String respuesta = enviarMensaje("coordinadorEmergencias", "terminado_geriatrico", "done", true);
 				//env.printout("GG gerocultor: Respuesta recibida del coordinador: " + respuesta, 0);
 
 				String recibido2 = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
 			}else{
-				env.printout("GG gerocultor: emergencia atendida por bomberos", 2, 0);
+				env.printout("GG gerocultor: emergencia atendida por bomberos", 2, 0, true);
 
 				IGoal evacuarResidencia = createGoal("evacuarResidencia");
 				dispatchSubgoalAndWait(evacuarResidencia);
 			}
 		}else{
-			env.printout("GG gerocultor: emergencia de caracter medico", 2, 0);
+			env.printout("GG gerocultor: emergencia de caracter medico", 2, 0, true);
 			String recibido2 = esperarYEnviarRespuesta("fin_emergencia", "Fin recibido");
 		}
 
-		env.printout("GG gerocultor: Solicitar reposicion de material al auxiliar...", 2, 0);
-		String resultado2 = enviarMensaje("auxiliar", "reponer_material", "incendio");
+		env.printout("GG gerocultor: Solicitar reposicion de material al auxiliar...", 2, 0, true);
+		String resultado2 = enviarMensaje("auxiliar", "reponer_material", "incendio", true);
                 
 		//IGoal reponerMaterial = createGoal("reponerMaterial");
 		//dispatchSubgoalAndWait(reponerMaterial);

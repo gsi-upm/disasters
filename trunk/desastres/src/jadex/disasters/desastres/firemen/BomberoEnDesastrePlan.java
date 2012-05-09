@@ -87,7 +87,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan{
 			//Comunicacion con la central...
 			System.out.println("^^ firemen: Mando mensaje de terminado a la central");
 			//String respuesta = enviarMensaje("centralEmergencias","done");
-			String respuesta = enviarMensaje("central", "terminado", "done");
+			String respuesta = enviarMensaje("central", "terminado", "done", true);
 			System.out.println("^^ firemen: Respuesta recibida de central: " + respuesta);
 
 			System.out.println("^^ firemen: Me dirijo al parque de bomberos");

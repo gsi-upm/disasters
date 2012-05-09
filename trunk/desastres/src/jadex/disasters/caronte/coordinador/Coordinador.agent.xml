@@ -10,9 +10,11 @@
 	<imports>
 		<import>disasters.Position</import>
 		<import>disasters.caronte.Entorno</import>
+		<import>disasters.caronte.ontology.CaronteOntology</import>
+		<import>disasters.caronte.ontology.Herido</import>
+		<import>disasters.caronte.ontology.Incendio</import>
 		<import>jadex.base.fipa.IDF</import>
 		<import>jadex.base.fipa.SFipa</import>
-		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.planlib.df.DF</import>
 		<import>jadex.bridge.service.RequiredServiceInfo</import>
 		<import>jadex.bridge.service.SServiceProvider</import>
@@ -20,7 +22,7 @@
 	</imports>
 
 	<capabilities>
-		<capability name="procap" file="jadex.bdi.planlib.protocols.request.Request"/>
+		<!--<capability name="procap" file="jadex.bdi.planlib.protocols.request.Request"/>-->
 		<capability name="dfcap" file="jadex.bdi.planlib.df.DF"/>
 	</capabilities>
 
@@ -31,29 +33,31 @@
 		<belief name="residencia" class="Position">
 			<fact>new Position(38.232272, -1.698925)</fact>
 		</belief>
-		<belief name="idJefeIntervencion" class="Integer">
+		<belief name="idDirectorActuacion" class="int">
 			<fact>0</fact>
 		</belief>
-		<belief name="desastreActual" class="Integer">
+		<belief name="emergenciaActual" class="int">
 			<fact>0</fact>
 		</belief>
 	</beliefs>
 
 	<goals>
-		<achievegoalref name="rp_initiate">
+		<!--<achievegoalref name="rp_initiate">
 			<concrete ref="procap.rp_initiate"/>
-		</achievegoalref>
+		</achievegoalref>-->
 		<achievegoalref name="df_search">
 			<concrete ref="dfcap.df_search"/>
 		</achievegoalref>
 		<achievegoalref name="df_register">
-			<concrete ref="dfcap.df_keep_registered"/>
+			<concrete ref="dfcap.df_register"/>
 		</achievegoalref>
 		<achievegoalref name="df_deregister">
 			<concrete ref="dfcap.df_deregister"/>
 		</achievegoalref>
+		
 		<performgoal name="encontrarEmergencia" retry="true" exclude="never"/>
 		<achievegoal name="avisarAgentes"/>
+		<achievegoal name="esperarSolucion"/>
 	</goals>
 
 	<plans>
@@ -69,12 +73,25 @@
 				<goal ref="avisarAgentes"/>
 			</trigger>
 		</plan>
+		<plan name="comprobarFin-plan">
+			<body class="ComprobarFinPlan"/>
+			<trigger>
+				<messageevent ref="finIncendio"/>
+				<messageevent ref="finHerido"/>
+			</trigger>
+		</plan>
 	</plans>
 
 	<events>
 		<messageevent name="atenderIncendio" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="language" class="String" direction="fixed">
+				<value>SFipa.JADEX_XML</value>
+ 			</parameter>
+			<parameter name="ontology" class="String" direction="fixed">
+				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
 		</messageevent>
 		<messageevent name="ack_atenderIncendio" direction="receive" type="fipa">
@@ -88,6 +105,12 @@
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
+			<parameter name="language" class="String" direction="fixed">
+				<value>SFipa.JADEX_XML</value>
+ 			</parameter>
+			<parameter name="ontology" class="String" direction="fixed">
+				<value>CaronteOntology.ONTOLOGY_NAME</value>
+			</parameter>
 		</messageevent>
 		<messageevent name="ack_atenderHerido" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
@@ -96,10 +119,57 @@
 			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_atenderHerido")</match>
 		</messageevent>
 		
-		<!-- Ejemplo
-		<messageevent name="nombre/ack_nombre" direction="send/receive" type="fipa">
+		<messageevent name="evacuarCentro" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
-				<value>SFipa.REQUEST/SFipa.INFORM</value>
+				<value>SFipa.REQUEST</value>
+			</parameter>
+		</messageevent>
+		<messageevent name="ack_evacuarCentro" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_evacuarCentro")</match>
+		</messageevent>
+		
+		<messageevent name="finIncendio" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("finIncendio")</match>
+		</messageevent>
+		<messageevent name="ack_finIncendio" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+		
+		<messageevent name="finHerido" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("finHerido")</match>
+		</messageevent>
+		<messageevent name="ack_finHerido" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+		
+		<messageevent name="finEvacuacion" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("finEvacuacion")</match>
+		</messageevent>
+		<messageevent name="ack_finEvacuacion" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+		
+		<messageevent name="evaluacionIncendio" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
 			</parameter>
 			<parameter name="language" class="String" direction="fixed">
 				<value>SFipa.JADEX_XML</value>
@@ -107,8 +177,43 @@
 			<parameter name="ontology" class="String" direction="fixed">
 				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("nombre/ack_nombre")</match>
-		</messageevent>-->
+			<match>$content instanceof Incendio</match>
+		</messageevent>
+		<messageevent name="ack_evaluacionIncendio" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+		
+		<messageevent name="evaluacionHerido" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<parameter name="language" class="String" direction="fixed">
+				<value>SFipa.JADEX_XML</value>
+ 			</parameter>
+			<parameter name="ontology" class="String" direction="fixed">
+				<value>CaronteOntology.ONTOLOGY_NAME</value>
+			</parameter>
+			<match>$content instanceof Herido</match>
+		</messageevent>
+		<messageevent name="ack_evaluacionHerido" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
+		
+		<messageevent name="vueltaCentro" direction="receive" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.REQUEST</value>
+			</parameter>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("vueltaCentro")</match>
+		</messageevent>
+		<messageevent name="ack_vueltaCentro" direction="send" type="fipa">
+			<parameter name="performative" class="String" direction="fixed">
+				<value>SFipa.INFORM</value>
+			</parameter>
+		</messageevent>
 	</events>
 
 	<properties>

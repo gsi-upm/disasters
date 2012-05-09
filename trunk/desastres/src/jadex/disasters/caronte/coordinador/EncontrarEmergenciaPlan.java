@@ -4,7 +4,7 @@ import disasters.*;
 import disasters.caronte.*;
 import jadex.bdi.runtime.IGoal;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.*;
 import org.json.me.*;
 
 /**
@@ -19,42 +19,63 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
+		Disaster des = buscarEventos(env);
 		
-		Disaster des = null;
-		People[] per;
-		while(des == null){
-			des = buscarEventos(env);
-		}
-		env.setTablon(des.getId());
-		
-		Resource jefeIntervencion = jefeIntervencion(env, des);
-		int idJI = jefeIntervencion.getId();
-		getBeliefbase().getBelief("idJefeIntervencion").setFact(idJI);
-		
-		env.printout("Confirmar emergencia '" + des.getName() + "' (id:" + des.getId() + ") en la planta " + des.getFloor() + " creada por (id:" + des.getUser() + ")", 0, idJI);
-		String fecha = new Timestamp(new Date().getTime()).toString();
-		boolean confirmado = false;
-		
-		try{
-			JSONArray respuesta = new JSONArray();
-			while(confirmado == false){
-				String respuestaAux = Connection.connect(Entorno.URL + "mensajes/coor/" + idJI + "/" + fecha);
-				respuesta = new JSONArray(respuestaAux);
-				if(respuesta.isNull(0) == false){
-					confirmado = true;
-				}else{
-					waitFor(2000);
-				}
-			}
+		if(des != null){
+			env.setTablonEventos(des.getId());
+			getBeliefbase().getBelief("emergenciaActual").setFact(des.getId());
 			
-			String accion = respuesta.getJSONObject(0).getString("mensaje");
-			if(accion.equals("OK")){
-				IGoal avisarAgentes = createGoal("avisarAgentes");
-				dispatchSubgoalAndWait(avisarAgentes);
+			Resource directorActuacion = directorActuacion(env, des);
+			int idDA = directorActuacion.getId();
+			
+			env.printout("Confirmar emergencia '" + des.getName() + "' (id:" + des.getId() + ") en la planta " +
+					des.getFloor() + " creada por (id:" + des.getUser() + ")", 0, idDA, true);
+			String fecha = new Timestamp(new Date().getTime()).toString();
+			boolean confirmado = false;
+			boolean cancelado = false;
+		
+			try{
+				JSONArray respuesta = new JSONArray();
+				int contador = 0;
+				while(confirmado == false && cancelado == false){
+					String respuestaAux = Connection.connect(Entorno.URL + "mensajes/coor/" + idDA + "/" + fecha);
+					respuesta = new JSONArray(respuestaAux);
+					if(respuesta.isNull(0) == false){
+						confirmado = true;
+					}else{
+						contador++;
+						waitFor(2500);
+					}
+					
+					if(contador == 8){ // Mucho tiempo sin contestar
+						cancelado = true;
+						env.printout("CANCEL", 0, idDA, true);
+						env.leaveResource(idDA);
+						env.addInactiveResource(idDA);
+						getBeliefbase().getBelief("idDirectorActuacion").setFact(0);
+						env.removeTablonEventos(des.getId());
+						getBeliefbase().getBelief("emergenciaActual").setFact(0);
+					}
+				}
+			
+				if(confirmado){
+					String accion = respuesta.getJSONObject(0).getString("mensaje");
+					if(accion.equals("OK")){
+						IGoal avisarAgentes = createGoal("avisarAgentes");
+						dispatchSubgoalAndWait(avisarAgentes);
+					}else if(accion.equals("NO")){
+						env.leaveResource(idDA);
+						env.addInactiveResource(idDA);
+						getBeliefbase().getBelief("idDirectorActuacion").setFact(0);
+						env.removeTablonEventos(des.getId());
+						getBeliefbase().getBelief("emergenciaActual").setFact(0);
+					}
+				}
+			}catch(JSONException ex){
+				System.out.println(ex);
 			}
-		}catch(JSONException ex){
-			System.out.println(ex);
 		}
+		waitFor(2500);
 	}
 	
 	/**
@@ -64,12 +85,11 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	 */
 	private Disaster buscarEventos(Entorno env){
 		Disaster atender = null;
-		Disaster[] emergencias = env.getEventos();
+		Disaster[] emergencias = env.getEventosSin();
 		
 		if(emergencias.length > 0){
 			atender = emergencias[0];
-			People[] heridos = env.getHeridos();
-			Association[] asociaciones = env.getAsociaciones();
+			Association[] asociaciones = env.getAssociationsArray();
 			
 			for(int i = 1; i < emergencias.length; i++){
 				if(masGrave(emergencias[i], atender)){ // la nueva tiene mas gravedad
@@ -134,33 +154,33 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	}
 	
 	/**
-	 * Busca al jefe de intervencion.
+	 * Busca al director de actuacion.
 	 * 
 	 * @param env Entorno
 	 * @param des Emergencia
-	 * @return Jefe de intervencion
+	 * @return Director de actuacion
 	 */
-	private Resource jefeIntervencion(Entorno env, Disaster des){
-		Resource[] agentes = null;
-		while(agentes == null){
-			agentes = env.getRecursos();
-			if(agentes == null){
-				waitFor(2000);
+	private Resource directorActuacion(Entorno env, Disaster des){
+		Resource directorActuacion = null;
+		Resource[] agentes = env.getFreeResources();
+		
+		if(agentes.length > 0){
+			directorActuacion = agentes[0];
+			for(int i = 1; i < agentes.length; i++){
+				double distDirector = distancia(directorActuacion.getLatitud(), directorActuacion.getLongitud(), des.getLatitud(), des.getLongitud());
+				double distAgente = distancia(agentes[i].getLatitud(), agentes[i].getLongitud(), des.getLatitud(), des.getLongitud());
+				boolean mejorPlanta = mejorPlanta(agentes[i].getFloor(), directorActuacion.getFloor(), des.getFloor());
+				if((agentes[i].getType().equals("coordinator") && directorActuacion.getType().equals("coordinator") == false) ||
+						(((agentes[i].getType().equals("coordinator") && directorActuacion.getType().equals("coordinator")) ||
+						(agentes[i].getType().equals("coordinator") == false && directorActuacion.getType().equals("coordinator") == false)) &&
+						distAgente < distDirector && mejorPlanta)){
+					directorActuacion = agentes[i];
+				}
 			}
+			env.useResource(directorActuacion.getId(), "DA");
+			getBeliefbase().getBelief("idDirectorActuacion").setFact(directorActuacion.getId());
 		}
 		
-		Resource jefeIntervencion = agentes[0];
-		for(int i = 1; i < agentes.length; i++){
-			double distJefe = distancia(jefeIntervencion.getLatitud(), jefeIntervencion.getLongitud(), des.getLatitud(), des.getLongitud());
-			double distAgente = distancia(agentes[i].getLatitud(), agentes[i].getLongitud(), des.getLatitud(), des.getLongitud());
-			boolean mejorPlanta = mejorPlanta(agentes[i].getFloor(), jefeIntervencion.getFloor(), des.getFloor());
-			if((agentes[i].getType().equals("coordinator") && jefeIntervencion.getType().equals("coordinator") == false) ||
-					(((agentes[i].getType().equals("coordinator") && jefeIntervencion.getType().equals("coordinator")) ||
-					(agentes[i].getType().equals("coordinator") == false && jefeIntervencion.getType().equals("coordinator") == false)) &&
-					distAgente < distJefe && mejorPlanta)){
-				jefeIntervencion = agentes[i];
-			}
-		}
-		return jefeIntervencion;
+		return directorActuacion;
 	}
 }

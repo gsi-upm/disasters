@@ -36,7 +36,7 @@ public class EvacuarHeridosPlan extends EnviarMensajePlan{
 					System.out.println("Error al andar: " + ex);
 				}
 
-				env.printout("EE enfermero: evacuando al herido " + id, 2, 0);
+				env.printout("EE enfermero: evacuando al herido " + id, 2, 0, true);
 
 				try{
 					env.andar(getComponentName(), posHerido1, posHerido2, env.getAgent(getComponentName()).getId(), id);

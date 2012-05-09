@@ -13,9 +13,9 @@ public class ReponerMaterialPlan extends Plan{
 	public void body(){
 		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 
-		env.printout("GG gerocultor: reponiendo el material usado", 2, 0);
+		env.printout("GG gerocultor: reponiendo el material usado", 2, 0, true);
 		waitFor(1000);
 		getBeliefbase().getBelief("material").setFact(true);
-		env.printout("GG gerocultor: material repuesto", 2, 0);
+		env.printout("GG gerocultor: material repuesto", 2, 0, true);
 	}
 }

@@ -34,7 +34,7 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 		Position posicionDesastre = new Position(des.getLatitud(), des.getLongitud());
 		String estadoHerido = recibido.getEstadoHeridos();
 
-		env.printout("AA ambulance: Estoy destinado al desastre " + idDes + " con herido " + estadoHerido, 2, 0);
+		env.printout("AA ambulance: Estoy destinado al desastre " + idDes + " con herido " + estadoHerido, 2, 0, true);
 
 		//sacamos el herido
 		People herido = getHerido(des);
@@ -49,10 +49,10 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 		if(herido != null){ // Leves atendidos por el enfermero de la residencia
 			while((herido = getHerido(des)) != null){
 				id = herido.getId();
-				env.printout("AA ambulance: Tengo herido " + id, 2, 0);
+				env.printout("AA ambulance: Tengo herido " + id, 2, 0, true);
 
 				//deasociar los heridos del desastre
-				env.printout("AA ambulance: quitando la asociacion del herido " + id, 2, 0);
+				env.printout("AA ambulance: quitando la asociacion del herido " + id, 2, 0, true);
 				String resultado1 = Connection.connect(Entorno.URL + "put/" + id + "/idAssigned/0");
 				if(herido.getType().equals("slight")){
 					des.setSlight();
@@ -72,12 +72,12 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 					env.andar(getComponentName(), posicionActual, posHerido1, env.getAgent(getComponentName()).getId(), 0);
 					env.andar(getComponentName(), posHerido1, posicionHospital, env.getAgent(getComponentName()).getId(), id);
 					if(!herido.getType().equals("dead")){
-						env.printout("AA ambulance: curando herido " + id, 2, 0);
+						env.printout("AA ambulance: curando herido " + id, 2, 0, true);
 						String resultado = Connection.connect(Entorno.URL + "healthy/id/" + id);
-						env.printout("AA ambulance: llevando de vuelta a " + id + " a la residencia", 2, 0);
+						env.printout("AA ambulance: llevando de vuelta a " + id + " a la residencia", 2, 0, true);
 						env.andar(getComponentName(), posicionHospital, posHerido2, env.getAgent(getComponentName()).getId(), id);
 					}else{
-						env.printout("AA ambulance: depositando muerto " + id, 2, 0);
+						env.printout("AA ambulance: depositando muerto " + id, 2, 0, true);
 						String resultado = Connection.connect(Entorno.URL + "delete/id/" + id);
 					}
 				}catch (Exception ex){
@@ -85,13 +85,13 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 				}
 			}
 		} else {
-			env.printout("AA ambulance: Desastre sin heridos", 2, 0);
+			env.printout("AA ambulance: Desastre sin heridos", 2, 0, true);
 		}
 
 		// La ambulancia regresa a su hospital correspondiente.
 		try{
 			env.andar(getComponentName(), posicionActual, posicionHospital, env.getAgent(getComponentName()).getId(), 0);
-			env.printout("AA ambulance: de vuelta en el hospital", 2, 0);
+			env.printout("AA ambulance: de vuelta en el hospital", 2, 0, true);
 		}catch(Exception e){
 			System.out.println("AA ambulance: Error metodo andar: " + e);
 		}

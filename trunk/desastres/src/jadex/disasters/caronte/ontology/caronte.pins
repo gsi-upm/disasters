@@ -1,0 +1,57 @@
+; Fri May 04 20:16:06 CEST 2012
+; 
+;+ (version "3.4.8")
+;+ (build "Build 629")
+
+([descripcion] of  BEANYNIZER-SLOT
+)
+
+([Evento] of  BEANYNIZER-CLASS
+
+	(BEANYNIZER-ISINTERFACE FALSE))
+
+([gravedad] of  BEANYNIZER-SLOT
+)
+
+([Herido] of  BEANYNIZER-CLASS
+
+	(BEANYNIZER-ISINTERFACE FALSE))
+
+([id] of  BEANYNIZER-SLOT
+)
+
+([Incendio] of  BEANYNIZER-CLASS
+
+	(BEANYNIZER-ISINTERFACE FALSE))
+
+([info] of  BEANYNIZER-SLOT
+)
+
+([latitud] of  BEANYNIZER-SLOT
+)
+
+([longitud] of  BEANYNIZER-SLOT
+)
+
+([movilidad] of  BEANYNIZER-SLOT
+)
+
+([numHeridos] of  BEANYNIZER-SLOT
+)
+
+([Persona] of  BEANYNIZER-CLASS
+
+	(BEANYNIZER-ISINTERFACE FALSE))
+
+([planta] of  BEANYNIZER-SLOT
+)
+
+([posicion] of  BEANYNIZER-SLOT
+)
+
+([Posicion] of  BEANYNIZER-CLASS
+
+	(BEANYNIZER-ISINTERFACE FALSE))
+
+([tipo] of  BEANYNIZER-SLOT
+)

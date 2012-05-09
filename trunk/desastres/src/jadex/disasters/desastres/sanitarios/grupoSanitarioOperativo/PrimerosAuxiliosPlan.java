@@ -36,6 +36,6 @@ public class PrimerosAuxiliosPlan extends EnviarMensajePlan{
 		}
 
 		System.out.println("** Grupo sanitario: heridos estabilizados");
-		enviarMensaje("medicoCACH","triage","go");
+		enviarMensaje("medicoCACH", "triage", "go", true);
 	}
 }

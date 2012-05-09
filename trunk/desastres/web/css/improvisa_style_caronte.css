@@ -33,6 +33,25 @@ ul:hover li #checkboxAsoc, ul:hover li #listaSintomas{
 	margin-right: -2px;
 }
 
+#planta0{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#planoResidencia{
+	height: 490px;
+}
+
+.plano_residencia{
+	border: 1px solid black;
+	/*margin: 50px;*/
+}
+
+.plano_residencia td{
+	border: solid black 1px;
+	/*padding: 10px;*/
+}
+
 #messages{
 	margin-top: 21px;
 	height: 508px;

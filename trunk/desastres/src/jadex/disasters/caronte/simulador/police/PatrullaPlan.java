@@ -24,7 +24,7 @@ public class PatrullaPlan extends Plan{
 		//Creamos una nueva posicion aleatoria
 		Position newPos = (Position)env.getRandomPosition();
 		
-		env.printout("PP police: Estoy patrullando porque no hay desastres activos... ", 2, 0);
+		env.printout("PP police: Estoy patrullando porque no hay desastres activos... ", 2, 0, true);
 		try{
 			env.go(getComponentName(), newPos);
 			env.pinta(env.getAgent(getComponentName()).getId(), 0, newPos.getLat(), newPos.getLng());

@@ -33,7 +33,7 @@ public class LlegaDesastrePlan extends EnviarMensajePlan{
 		//Espero a que se borre el desastre (lo borra el bombero) para irme a otra cosa...
 		Disaster des = env.getEvent(idDes);
 		Position positionDesastre = new Position(des.getLatitud(), des.getLongitud());
-		env.printout("PP police: Estoy destinado al desastre " + idDes, 2, 0);
+		env.printout("PP police: Estoy destinado al desastre " + idDes, 2, 0, true);
 
 		try{
 			env.andar(getComponentName(), oldPos, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
@@ -43,14 +43,14 @@ public class LlegaDesastrePlan extends EnviarMensajePlan{
 
 		String recibido2 = esperarYEnviarRespuesta("terminado", "Terminado recibido");
 
-		env.printout("PP police: Desastre " + idDes + " solucionado", 2, 0);
-		env.printout("PP police: Vuelvo a la comisaria", 2, 0);
+		env.printout("PP police: Desastre " + idDes + " solucionado", 2, 0, true);
+		env.printout("PP police: Vuelvo a la comisaria", 2, 0, true);
 		
 		try{
 			env.andar(getComponentName(), oldPos, posicionComisaria, env.getAgent(getComponentName()).getId(), 0);
 		}catch (Exception e){
 			System.out.println("PP police: Error metodo andar: " + e);
 		}
-		env.printout("PP police: En la comisaria", 2, 0);
+		env.printout("PP police: En la comisaria", 2, 0, true);
 	}
 }

@@ -42,7 +42,7 @@ form table img{
 
 #fila_mapa{
 	width: 100%;
-	min-width: 670px;
+	min-width: 700px;
 }
 
 #dhtmlgoodies_tabView1{
@@ -86,16 +86,6 @@ form table img{
 
 #opcionesMapa{
 	float: right;
-}
-
-#planta0{
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-#planoResidencia{
-	width: 611px;
-	height: 487px;
 }
 
 #messages, #accion{
@@ -227,16 +217,6 @@ form table img{
 	margin-top: 5px;
 	margin-bottom: 0px;
 	padding: 0px;
-}
-
-.plano_residencia{
-	border: 1px solid black;
-	/*margin: 50px;*/
-}
-
-.plano_residencia td{
-	border: solid black 1px;
-	/*padding: 10px;*/
 }
 
 .div_vacio{

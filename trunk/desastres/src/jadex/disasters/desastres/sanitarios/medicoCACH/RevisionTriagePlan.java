@@ -45,7 +45,7 @@ public class RevisionTriagePlan extends EnviarMensajePlan{
 				dispatchSubgoalAndWait(estabilizarVictimas);
 			}else{
 				System.out.println("** Medico CACH: avisando a la ambulancia");
-				enviarMensaje("ambulancia", "traslado", "go");
+				enviarMensaje("ambulancia", "traslado", "go", true);
 			}
 		}else{
 			System.out.println("** Medico CACH: desastre sin heridos");

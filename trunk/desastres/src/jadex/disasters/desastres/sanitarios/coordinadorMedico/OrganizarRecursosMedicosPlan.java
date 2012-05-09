@@ -19,7 +19,7 @@ public class OrganizarRecursosMedicosPlan extends EnviarMensajePlan{
 
 		//String resultado1 = enviarMensaje("ambulancia","aviso_coor","go");
 		//System.out.println("** Coordinador medico: Respuesta recibida de la ambulancia: " + resultado1);
-		String resultado2 = enviarMensaje("grupoSanitarioOperativo","aviso_coor","go");
+		String resultado2 = enviarMensaje("grupoSanitarioOperativo", "aviso_coor", "go", true);
 		System.out.println("** Coordinador medico: Respuesta recibida del gso: " + resultado2);
 		//String resultado3 = enviarMensaje("medicoCACH","go");
 		//System.out.println("** coordinador medico: Respuesta recibida del medico CACH: " + resultado3);

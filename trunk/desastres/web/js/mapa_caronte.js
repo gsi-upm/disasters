@@ -27,7 +27,7 @@ function initialize2(){
 	if(userName != '' && nivelMsg > 1){
 		plantaResidencia = 0;
 		var url = 'markers/residencia/planta'+ plantaResidencia + '.png';
-		var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(38.522760, -0.170880), new google.maps.LatLng(38.524040, -0.169240)); // SW, NE
+		var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(38.522780, -0.170930), new google.maps.LatLng(38.524040, -0.169530)); // SW, NE
 		residencia = new google.maps.GroundOverlay(url, bounds, {clickable: false});
 		
 		google.maps.event.addListener(map, 'zoom_changed', function(){

@@ -18,9 +18,10 @@ public abstract class EnviarMensajePlan extends Plan{
 	 * @param agente Agente al que se le envia el mensaje
 	 * @param evento Nombre del evento de mensaje
 	 * @param contenido Contenido del mensaje
+	 * @param respuesta True si espera una respuesta
 	 * @return Respuesta del mensaje enviado
 	 */
-	protected String enviarMensaje(String agente, String evento, String contenido){
+	protected String enviarMensaje(String agente, String evento, String contenido, boolean respuesta){
 		IComponentIdentifier a = buscarAgente(agente);
 
 		/*IGoal query = createGoal("procap.rp_initiate");
@@ -35,8 +36,13 @@ public abstract class EnviarMensajePlan extends Plan{
 		msg.getParameterSet(SFipa.RECEIVERS).addValue(a);
 		//IMessageEvent answer = sendMessageAndWait(msg);
 		sendMessage(msg);
-		IMessageEvent answer = waitForMessageEvent("ack_" + evento);
-		return ((String)answer.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
+		
+		String respondido = null;
+		if(respuesta){
+			IMessageEvent answer = waitForMessageEvent("ack_" + evento);
+			respondido = ((String)answer.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
+		}
+		return respondido;
 	}
 
 	/**
@@ -77,16 +83,22 @@ public abstract class EnviarMensajePlan extends Plan{
 	 * @param agente Agente al que se le envia el mensaje
 	 * @param evento Nombre del evento de mensaje
 	 * @param contenido Contenido del mensaje
+	 * @param respuesta True si espera una respuesta
 	 * @return Respuesta del mensaje enviado
 	 */
-	protected String enviarObjeto(String agente, String evento, Object contenido){
+	protected String enviarObjeto(String agente, String evento, Object contenido, boolean respuesta){
 		IComponentIdentifier a = buscarAgente(agente);
 		IMessageEvent msg = createMessageEvent(evento);
 		msg.getParameter(SFipa.CONTENT).setValue(contenido);
 		msg.getParameterSet(SFipa.RECEIVERS).addValue(a);
 		sendMessage(msg);
-		IMessageEvent answer = waitForMessageEvent("ack_" + evento);
-		return ((String)answer.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
+		
+		String respondido = null;
+		if(respuesta){
+			IMessageEvent answer = waitForMessageEvent("ack_" + evento);
+			respondido = ((String)answer.getParameter(SFipa.CONTENT).getValue()).split(":",2)[1];
+		}
+		return respondido;
 	}
 
 	/**

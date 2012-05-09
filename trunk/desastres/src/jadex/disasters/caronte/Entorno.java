@@ -24,7 +24,7 @@ public class Entorno{
 	/** Agente atencion de heridos. */
 	public static final String ATENCION_HERIDOS = "AtencionHeridos";
 	/** Agente evacuacion. */
-	public static final String EVACUACION = "Evacuacion";
+	public static final String EVACUACION = "EvacuacionResidencia";
 	/** Agente apoyo externo. */
 	public static final String APOYO_EXTERNO = "ApoyoExterno";
 	private static TimerJSON temporizador;
@@ -36,8 +36,11 @@ public class Entorno{
 	private HashMap<Integer,Resource> resources;
 	private HashMap<Integer,Association> associations;
 	private HashMap<Integer,Activity> activities;
-	/** Emergencia que se debe atender. */
-	private int tablon;
+	private HashMap<Integer,String> usedResources;
+	private ArrayList<Integer> inactiveResources;
+	/** Emergencias que se deben atender. */
+	private ArrayList<Integer> tablonEventos;
+	private ArrayList<Integer> tablonHeridos;
 	private static Entorno instance;
 	
 	// Los nombres de los agentes
@@ -86,6 +89,10 @@ public class Entorno{
 		resources = new HashMap<Integer,Resource>();
 		associations = new HashMap<Integer,Association>();
 		activities = new HashMap<Integer,Activity>();
+		usedResources = new HashMap<Integer,String>();
+		inactiveResources = new ArrayList<Integer>();
+		tablonEventos = new ArrayList<Integer>();
+		tablonHeridos = new ArrayList<Integer>();
 		
 		agentes = new HashMap<String,WorldObject>();
 		objetos = new MultiCollection();
@@ -296,7 +303,7 @@ public class Entorno{
 					instancia.getString("state"),
 					instancia.getInt("idAssigned"));
 				
-				if(disasters.containsKey(nuevo.getId())){
+				if(people.containsKey(nuevo.getId())){
 					if(nuevo.getState().equals("erased")){
 						people.remove(nuevo.getId());
 						System.out.println("- Herido " + nuevo.getName() + " curado (id:" + nuevo.getId() + ")");
@@ -364,7 +371,7 @@ public class Entorno{
 						System.out.println("- El usuario " + nuevo.getName() + " ha cerrado sesion");
 					}else{
 						resources.put(nuevo.getId(), nuevo);
-						System.out.println("- El usuario: " + nuevo.getName() + " ha actualizado sus datos");
+						System.out.println("- El usuario " + nuevo.getName() + " ha actualizado sus datos");
 					}
 				}else{
 					resources.put(nuevo.getId(), nuevo);
@@ -421,18 +428,25 @@ public class Entorno{
 					instancia.getInt("idDisaster"),
 					instancia.getString("type"),
 					instancia.getString("state"));
+				
 				String nombre = "";
 				if(disasters.containsKey(nuevo.getIdDisaster())){
-					nombre = disasters.get(nuevo.getIdDisaster()).getName();
+					nombre = "emergencia '" + disasters.get(nuevo.getIdDisaster()).getName() + "'";
 				}else if(people.containsKey(nuevo.getIdDisaster())){
-					nombre = people.get(nuevo.getIdDisaster()).getName();
+					nombre = "herido '" + people.get(nuevo.getIdDisaster()).getName() + "'";
 				}
-				if(nuevo.getState().equals("erased")){
+				
+				if(activities.containsKey(nuevo.getId())){
 					activities.remove(nuevo.getId());
-					System.out.println("- Actividad '" + nuevo.getType() + "' terminada en emergencia '" + nombre + "' (id:" + nuevo.getId() + ")");
+					System.out.println("- Actividad '" + nuevo.getType() + "' terminada en " + nombre + " (id:" + nuevo.getId() + ")");
 				}else{
-					activities.put(nuevo.getId(), nuevo);
-					System.out.println("- Nueva actividad '" + nuevo.getType() + "' en emergencia '" + nombre + "' (id:" + nuevo.getId() + ")");
+					if(nuevo.getState().equals("erased")){
+						activities.put(nuevo.getId(), nuevo);
+						System.out.println("- Actividad '" + nuevo.getType() + "' realizada en 'id:" + nuevo.getIdDisaster() + "' (id:" + nuevo.getId() + ")");
+					}else{
+						activities.put(nuevo.getId(), nuevo);
+						System.out.println("- Nueva actividad '" + nuevo.getType() + "' en " + nombre + " (id:" + nuevo.getId() + ")");
+					}
 				}
 			}
 		}catch(JSONException e){
@@ -463,7 +477,7 @@ public class Entorno{
 	 * Borra la instancia del entorno (y para el temporizador).
 	 */
 	public static void clearInstance(){
-		temporizador.reset();
+		//temporizador.reset();
 		temporizador = null;
 		instance = null;
 		System.out.println("Entorno detenido");
@@ -629,7 +643,7 @@ public class Entorno{
 	 * 
 	 * @return Todos los eventos
 	 */
-	public Disaster[] getEventos(){
+	public Disaster[] getEventsArray(){
 		Collection<Disaster> col = disasters.values();
 		return col.toArray(new Disaster[col.size()]);
 	}
@@ -639,7 +653,7 @@ public class Entorno{
 	 * 
 	 * @return Todos los heridos
 	 */
-	public People[] getHeridos(){
+	public People[] getPeopleArray(){
 		Collection<People> col = people.values();
 		return col.toArray(new People[col.size()]);
 	}
@@ -649,7 +663,7 @@ public class Entorno{
 	 * 
 	 * @return Todos los recursos
 	 */
-	public Resource[] getRecursos(){
+	public Resource[] getResourcesArray(){
 		Collection<Resource> col = resources.values();
 		return col.toArray(new Resource[col.size()]);
 	}
@@ -659,7 +673,7 @@ public class Entorno{
 	 * 
 	 * @return Todos los eventos
 	 */
-	public Association[] getAsociaciones(){
+	public Association[] getAssociationsArray(){
 		Collection<Association> col = associations.values();
 		return col.toArray(new Association[col.size()]);
 	}
@@ -669,18 +683,18 @@ public class Entorno{
 	 * 
 	 * @return Todos los eventos
 	 */
-	public Activity[] getActividades(){
+	public Activity[] getActivitiesArray(){
 		Collection<Activity> col = activities.values();
 		return col.toArray(new Activity[col.size()]);
 	}
 
 	/**
-	 * Devuelve la emergencia que se debe atender.
+	 * Devuelve la lista de emergencias que se deben atender.
 	 * 
 	 * @return the tablon
 	 */
-	public int getTablon(){
-		return tablon;
+	public ArrayList<Integer> getTablonEventos(){
+		return tablonEventos;
 	}
 
 	/**
@@ -688,8 +702,104 @@ public class Entorno{
 	 * 
 	 * @param tablon the tablon to set
 	 */
-	public void setTablon(int tablon){
-		this.tablon = tablon;
+	public void setTablonEventos(int idEmergencia){
+		tablonEventos.add(idEmergencia);
+	}
+	
+	/**
+	 * Elimina la emergencia atendida.
+	 * 
+	 * @param tablon the tablon to remove
+	 */
+	public void removeTablonEventos(Integer idEmergencia){
+		tablonEventos.remove(idEmergencia);
+		tablonEventos.trimToSize();
+	}
+	
+	/**
+	 * Devuelve la lista de emergencias que se deben atender.
+	 * 
+	 * @return the tablon
+	 */
+	public ArrayList<Integer> getTablonHeridos(){
+		return tablonHeridos;
+	}
+
+	/**
+	 * Establece la emergencia que se debe atender.
+	 * 
+	 * @param tablon the tablon to set
+	 */
+	public void setTablonHeridos(int idEmergencia){
+		tablonHeridos.add(idEmergencia);
+	}
+	
+	/**
+	 * Elimina la emergencia atendida.
+	 * 
+	 * @param tablon the tablon to remove
+	 */
+	public void removeTablonHeridos(Integer idEmergencia){
+		tablonHeridos.remove(idEmergencia);
+		tablonHeridos.trimToSize();
+	}
+	
+	public Disaster[] getEventosSin(){
+		HashMap<Integer,Disaster> disastersAux = (HashMap<Integer,Disaster>) disasters.clone();
+		ArrayList<Integer> tablonAux = (ArrayList<Integer>) tablonEventos.clone();
+		for(int i = 0; i < tablonAux.size(); i++){
+			disastersAux.remove(tablonAux.get(i));
+		}
+		Collection<Disaster> col = disastersAux.values();
+		return col.toArray(new Disaster[col.size()]);
+	}
+	
+	public People[] getHeridosSin(){
+		HashMap<Integer,People> peopleAux = (HashMap<Integer,People>) people.clone();
+		ArrayList<Integer> tablonAux = (ArrayList<Integer>) tablonHeridos.clone();
+		for(int i = 0; i < tablonAux.size(); i++){
+			peopleAux.remove(i);
+		}
+		Collection<People> col = peopleAux.values();
+		return col.toArray(new People[col.size()]);
+	}
+	
+	public synchronized boolean useResource(int id, String equipo){
+		boolean usado = usedResources.containsKey(id);
+		if(usado == false){
+			usedResources.put(id, equipo);
+			if(inactiveResources.contains(id)){
+				removeInactiveResource(id);
+			}
+		}
+		return !usado;
+	}
+	
+	public synchronized void leaveResource(int id){
+		usedResources.remove(id);
+	}
+	
+	public synchronized void addInactiveResource(Integer id){
+		inactiveResources.add(id);
+	}
+	
+	public synchronized void removeInactiveResource(Integer id){
+		inactiveResources.remove(id);
+	}
+	
+	public Resource[] getFreeResources(){
+		HashMap<Integer,Resource> recursosLibres = (HashMap<Integer,Resource>) resources.clone();
+		Integer[] keySet = usedResources.keySet().toArray(new Integer[usedResources.size()]);
+		for(int i = 0; i < keySet.length; i++){
+			recursosLibres.remove(keySet[i]);
+		}
+		if(recursosLibres.size() > inactiveResources.size()){ // Si hay recursos libres que no estan inactivos
+			for(Integer i : inactiveResources){               // entonces elimina a los inactivos
+				recursosLibres.remove(i);
+			}
+		}
+		Collection<Resource> col = recursosLibres.values();
+		return col.toArray(new Resource[col.size()]);
 	}
 
 	/**
@@ -698,10 +808,13 @@ public class Entorno{
 	 * @param valor String a imprimir
 	 * @param tipo Tipo de receptor (0 oculto, 1 directo y 2 a grupo)
 	 * @param receptor ID del receptor (Si tipo=2 --> 0 todos los usuarios, 1 todos los conectados,...)
+	 * @param println true para mostrarlo en el terminal
 	 */
-	public final void printout(String valor, int tipo, int receptor){
+	public final void printout(String valor, int tipo, int receptor, boolean println){
 		Connection.connect(Entorno.URL + "message/" + tipo + "/" + receptor + "/" + valor);
-		System.out.println(valor);
+		if(println){
+			System.out.println(valor);
+		}
 	}
 	
 	// SIMULADOR ************************************************************ //
