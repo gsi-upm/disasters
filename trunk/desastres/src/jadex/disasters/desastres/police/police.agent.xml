@@ -12,7 +12,6 @@
 		<import>disasters.desastres.Environment</import>
 		<import>jadex.base.fipa.*</import>
 		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bdi.planlib.protocols.request.Request</import>
 		<import>jadex.bdi.runtime.*</import>
 		<import>jadex.bridge.service.*</import>
 		<import>jadex.commons.*</import>
@@ -20,7 +19,6 @@
 	</imports>
 
 	<capabilities>
-		<capability name="procap" file="Request"/>
 		<capability name="dfcap" file="DF"/>
 	</capabilities>
 
@@ -48,17 +46,15 @@
 	</beliefs>
 
 	<goals>
-		<achievegoalref name="rp_initiate">
-			<concrete ref="procap.rp_initiate"/>
-		</achievegoalref>
-
 		<achievegoalref name="df_search">
 			<concrete ref="dfcap.df_search"/>
 		</achievegoalref>
-
-		<maintaingoalref name="df_keep_registered">
+		<achievegoalref name="df_register">
 			<concrete ref="dfcap.df_register"/>
-		</maintaingoalref>
+		</achievegoalref>
+		<achievegoalref name="df_deregister">
+			<concrete ref="dfcap.df_deregister"/>
+		</achievegoalref>
 		<!-- Objetivo: patrullar por el mapa indefinidamente -->
 		<performgoal name="patrulla" retry="true" exclude="never"/>
 		<performgoal name="comisaria" retry="true" exclude="never"/>
@@ -107,18 +103,16 @@
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_keep_registered">
+				<initialgoal ref="df_register">
 					<parameter ref="description">
 						<value>
 							$properties.dfservice.createDFComponentDescription(null,
 								$properties.dfservice.createDFServiceDescription("police_service", "police", "GSI DIT UPM"))
  						</value>
 					</parameter>
-					<!--<parameter ref="leasetime">
-						<value>20000</value>
-					</parameter>-->
 				</initialgoal>
 				<initialgoal ref="patrulla"/>
+				<endgoal ref="df_deregister"/>
 			</goals>
 		</configuration>
 	</configurations>

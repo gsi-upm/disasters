@@ -6,7 +6,8 @@
 	name="coordinadorMedico" package="disasters.desastres.sanitarios.coordinadorMedico">
 
 	<imports>
-		<import>disasters.*</import>
+		<import>disasters.Position</import>
+		<import>disasters.desastres.Environment</import>
 		<import>jadex.base.fipa.*</import>
 		<import>jadex.bdi.planlib.df.DF</import>
 		<import>jadex.bdi.planlib.protocols.request.Request</import>

@@ -1,4 +1,4 @@
-function mostrarMensajes(){
+$(document).ready(function(){
 	$('#accion').hide();
 	$('#open_messages').hide();
 
@@ -17,7 +17,9 @@ function mostrarMensajes(){
 		document.getElementById('opcionesMapa').style.marginRight = '0px';
 		return false;
 	});
+});
 
+function mostrarMensajes(){
 	var msgs = document.getElementById('messages');
 	$.getJSON('getpost/getMensajes.jsp',{
 		'action':'firstTime',
@@ -27,7 +29,7 @@ function mostrarMensajes(){
 		$.each(data, function(entryIndex, entry){
 			var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
 			// var fecha = entry.fecha.split(' ')[1].split(':',2).join(':'); // HH:MM
-			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>').split('&quot;').join('"').split('&apos;').join('\'').split('&amp;').join('&');
+			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>');//.split('&quot;').join('"').split('&apos;').join('\'').split('&amp;').join('&');
 			msgs.innerHTML += '<p>(' + fecha + ') ' + mensaje + '</p>';
 		});
 		if(tamanno > 0){
@@ -48,7 +50,7 @@ function mostrarMensajes2(){
 	}, function(data){
 		var tamanno = data.length;
 		$.each(data, function(entryIndex, entry){
-			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>').split('&quot;').join('"').split('&apos;').join('\'').split('&amp;').join('&');
+			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>');//.split('&quot;').join('"').split('&apos;').join('\'').split('&amp;').join('&');
 			var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
 			// var fecha = entry.fecha.split(' ')[1].split(':',2).join(':'); // HH:MM
 			if(entry.tipo_receptor == '0'){ // Si el mensaje es tipo pregunta (tipo_receptor = 0)

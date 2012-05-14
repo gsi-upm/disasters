@@ -18,11 +18,12 @@ public class AuxiliarHeridoPlan extends CarontePlan{
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
 		int idHerido = (Integer) getBeliefbase().getBelief("heridoActual").getFact();
+		int tipoEmergencia = (Integer) getBeliefbase().getBelief("tipoEmergencia").getFact();
 		Integer[] epa = (Integer[]) getBeliefbase().getBeliefSet("epa").getFacts();
 		HashMap<Integer,Integer> atendiendo = (HashMap<Integer,Integer>) getBeliefbase().getBelief("atendiendo").getFact();
 		
 		Disaster her = env.getEvent(idHerido);
-		HashMap<Integer,Disaster> incendios = env.getEvents();
+		HashMap<Integer,People> incendios = env.getPeople();
 		
 		if(incendios.containsKey(idHerido) == false){
 			System.out.println("Mensaje de final de herido");

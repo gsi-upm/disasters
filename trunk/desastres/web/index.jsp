@@ -64,7 +64,7 @@
 			<!-- Agents movement through roads -->
 			<!-- <script type="application/javascript" src="js/resourcesOnRoads.js"></script> -->
 		</head>
-		<body onload="IniciarReloj24(); initialize(); if(document.getElementById('username')!=null){document.getElementById('username').focus();}"> <!-- dwr.engine.setActiveReverseAjax(true); -->
+		<body onload="IniciarReloj24(); initialize();"> <!-- dwr.engine.setActiveReverseAjax(true); -->
 			<table class="tabla_body">
 				<!-- Cabecera con imagen y hora -->
 				<tr>
@@ -83,10 +83,10 @@
 							<!-- and if the user is autenticated, we show the username and logout button -->
 							<fmt:message key="eres"/> <span id="signeduser">${usuario.nombre}</span>
 							<br/>
-							<c:url var="logout" value="logout.jsp"/>
-							<a href="${logout}" onclick="$.post('getpost/update.jsp',{'accion':'cerrarSesion','nombre':'${usuario.nombre}'})">
-								<fmt:message key="cerrarsesion"/>
-							</a>
+							<c:url var="logout" value="logout.jsp">
+								<c:param name="nombre" value="${usuario.nombre}"/>
+							</c:url>
+							<a href="${logout}"><fmt:message key="cerrarsesion"/></a>
 							<c:if test="${usuario.rol != 'citizen'}">
 								<!-- if the user is in role 'administrator' or 'agent' -->
 								<c:import url="jspf/menu_caronte_admin.jsp"/>

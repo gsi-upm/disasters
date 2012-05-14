@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	<h3>Desastres 2.0.</h3>
+
+	Lanza los agentes de Desastres 2.0.
+-->
+<applicationtype xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-application-2.0.xsd"
+		name="Desastres" package="disasters.desastres">
+	<componenttypes>
+		<componenttype name="Environment" filename="disasters/desastres/Environment.agent.xml" master="true"/>
+		<componenttype name="Central" filename="disasters/desastres/central/central.agent.xml"/>
+		<componenttype name="Firemen" filename="disasters/desastres/firemen/firemen.agent.xml"/>
+		<componenttype name="Ambulance" filename="disasters/desastres/ambulance/ambulance.agent.xml"/>
+		<componenttype name="Police" filename="disasters/desastres/police/police.agent.xml"/>
+		<componenttype name="Ambulancia" filename="disasters/desastres/sanitarios/ambulancia/ambulancia.agent.xml"/>
+		<componenttype name="CoordinadorHospital" filename="disasters/desastres/sanitarios/coordinadorHospital/coordinadorHospital.agent.xml"/>
+		<componenttype name="CoordinadorMedico" filename="disasters/desastres/sanitarios/coordinadorMedico/coordinadorMedico.agent.xml"/>
+		<componenttype name="GrupoSanitarioOperativo" filename="disasters/desastres/sanitarios/grupoSanitarioOperativo/grupoSanitarioOperativo.agent.xml"/>
+		<componenttype name="MedicoCACH" filename="disasters/desastres/sanitarios/medicoCACH/medicoCACH.agent.xml"/>
+	</componenttypes>
+	
+	<configurations>
+		<configuration name="default">
+			<components>
+				<component type="Environment"/>
+				<component type="Police"/>
+				<component type="Firemen"/>
+				<component type="Ambulance"/>
+				<component type="Central"/>
+			</components>
+		</configuration>
+		<configuration name="sanitarios">
+			<components>
+				<component type="Environment"/>
+				<component type="Police"/>
+				<component type="Firemen"/>
+				<component type="CoordinadorMedico"/>
+				<component type="Ambulancia"/>
+				<component type="GrupoSanitarioOperativo"/>
+				<component type="MedicoCACH"/>
+				<component type="CoordinadorHospital"/>
+				<component type="Central"/>
+			</components>
+		</configuration>
+	</configurations>
+</applicationtype>

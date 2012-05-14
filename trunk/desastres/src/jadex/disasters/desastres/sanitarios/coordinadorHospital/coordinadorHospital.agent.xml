@@ -83,7 +83,7 @@
 					<parameter ref="description">
 						<value>
 							$properties.dfservice.createDFComponentDescription(null,
-								$properties.getProperty("dfservice.createDFServiceDescription("coordinadorHospital_service", "coordinadorHospital", "GSI DIT UPM"))
+								$properties.dfservice.createDFServiceDescription("coordinadorHospital_service", "coordinadorHospital", "GSI DIT UPM"))
  						</value>
 					</parameter>
 					<!--<parameter ref="leasetime">

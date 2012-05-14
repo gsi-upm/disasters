@@ -31,24 +31,28 @@ var geriatricIndex = 0;
 var localizacion = (navigator.geolocation != null);
 var residencia; // marcador de la imagen de la residencia
 var plantaResidencia = -1;
-var emergenciasAsociadas = new Array(new Array(), new Array());
-var sintomas = new Array(new Array(), new Array());
+var emergenciasAsociadas = new Array();
+//var sintomas = new Array();
 var verSanos = false;
 var limpiar = true;
 var noActualizar = 0;
-var centroAux = new Array();
-var puntoAux;
 var markerId;
 
 const roadmap = google.maps.MapTypeId.ROADMAP;
 
 var infoWindow;
-var infoWinMarker = '';
+var infoWinMarker;
+
+// variables userName, usuario_actual, usuario_actual_tipo, nivelMsg e idioma definidas en index.jsp
 
 /**
  * Funcion que se ejecuta para iniciar el mapa cuando se abre el navegador 
  */
 function initialize(){
+	if(document.getElementById('username') != null){
+		document.getElementById('username').focus();
+	}
+	
 	localizador = new google.maps.Geocoder();
 	var centro = mapInit(); // en mapa_xxx.js
 	var myOptions = {
@@ -71,6 +75,7 @@ function initialize(){
 			if(infoWinMarker != 'building'){
 				limpiarLateral(infoWinMarker);
 			}
+			infoWinMarker = null;
 		}
 	});
 
@@ -209,26 +214,17 @@ function generateBuilding(type, mensaje, latitud, longitud){
 	});
 	
 	google.maps.event.addListener(marker, 'click', function(){
-		if(infoWindow != null){
+		if(infowWindow != null){
 			infoWindow.close();
 		}
 		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + mensaje + '</div>'});
 		infoWinMarker = 'building';
 		infoWindow.open(map, marker);
 		
-		if(type == 'geriatricCenter'){
-			var esquina1 = new google.maps.LatLng(38.523950, -0.169880); // -0.000040, 0.000010;
-			var esquina2 = new google.maps.LatLng(38.523480, -0.169650);
-			var esquina3 = new google.maps.LatLng(38.523420, -0.169840);
-			var esquina4 = new google.maps.LatLng(38.523220, -0.169760);
-			var esquina5 = new google.maps.LatLng(38.522940, -0.170070);
-			var esquina6 = new google.maps.LatLng(38.522860, -0.170500);
-			var esquina7 = new google.maps.LatLng(38.523180, -0.170650);
-			var esquina8 = new google.maps.LatLng(38.523390, -0.170530);
-			var esquina9 = new google.maps.LatLng(38.523700, -0.170680);
+		/*if(type == 'geriatricCenter'){
+			var esquinas = esquinasResidencia(latitud, longitud); // en mapa_xxx.js
 			var opcCerc = {
-				paths:[esquina1, esquina2, esquina3, esquina4, esquina5, esquina6, esquina7, esquina8, esquina9],
-				strokeColor: '#00FF00', strokeWeight: 1, strokeOpacity: 0.5, fillOpacity: 0
+				paths:esquinas, strokeColor: '#00FF00', strokeWeight: 1, strokeOpacity: 0.5, fillOpacity: 0
 			};
 			var cercado = new google.maps.Polygon(opcCerc);
 			cercado.setMap(map);
@@ -240,9 +236,11 @@ function generateBuilding(type, mensaje, latitud, longitud){
 			google.maps.event.addListener(cercado, 'click', function(){
 				if(infoWindow != null){
 					infoWindow.close();
+					infoWindow = null;
 					if(infoWinMarker != 'building'){
 						limpiarLateral(infoWinMarker);
 					}
+					infoWinMarker = null;
 				}
 				cercado.setMap(null);
 			});
@@ -250,7 +248,7 @@ function generateBuilding(type, mensaje, latitud, longitud){
 			google.maps.event.addListener(map, 'click', function(){
 				cercado.setMap(null);
 			});
-		}
+		}*/
 	});
 	
 	marker.setMap(map);
@@ -359,29 +357,29 @@ function guardar(puntero){
 		async: false
 	});
 
-	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
-		if(emergenciasAsociadas[0][i][1] == true){
+	for(var i = 0; i < emergenciasAsociadas.length; i++){
+		if(emergenciasAsociadas[i].valor == true){
 			$.ajax({
 				type: 'POST',
 				url: 'getpost/update.jsp',
 				data: {
 					'accion':'asociar',
 					'fecha':puntero.fecha,
-					'id_emergencia':emergenciasAsociadas[0][i][0]
+					'id_emergencia':emergenciasAsociadas[i].id
 				},
 				async: false
 			});
 		}
 	}
-	/*for(i = 0; i < sintomas[0].length; i++){
-		if(sintomas[0][i][1] == true){
+	/*for(i = 0; i < sintomas.length; i++){
+		if(sintomas[i].valor == true){
 			$.ajax({
 				type: 'POST',
 				url: 'getpost/update.jsp',
 				data: {
 					'accion':'annadirSintoma',
 					'fecha':puntero.fecha,
-					'tipo_sintoma':sintomas[0][i][0]
+					'tipo_sintoma':sintomas[i].tipo
 				},
 				async: false
 			});
@@ -502,10 +500,10 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 		'usuario':usuario_actual
 	});
 	
-	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
-		if(emergenciasAsociadas[0][i][1] != emergenciasAsociadas[1][i][1]){
+	for(var i = 0; i < emergenciasAsociadas.length; i++){
+		if(emergenciasAsociadas[i].valor != emergenciasAsociadas[i].valorBD){
 			var accion2;
-			if(emergenciasAsociadas[0][i][1] == true){
+			if(emergenciasAsociadas[i].valor == true){
 				accion2 = 'asociar';
 			}else{
 				accion2 = 'eliminarAsociacion';
@@ -513,14 +511,14 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 			$.post('getpost/update.jsp',{
 				'accion':accion2,
 				'id_herido':id,
-				'id_emergencia':emergenciasAsociadas[0][i][0]
+				'id_emergencia':emergenciasAsociadas[i].id
 			});
 		}
 	}
-	/*for(i = 0; i < sintomas[0].length; i++){
-		if(sintomas[0][i][1] != sintomas[1][i][1]){
+	/*for(i = 0; i < sintomas.length; i++){
+		if(sintomas[i].valor != sintomas[i].valorBD){
 			var accion3;
-			if(sintomas[0][i][1] == true){
+			if(sintomas[i].valor == true){
 				accion3 = 'annadirSintoma';
 			}else{
 				accion3 = 'eliminarSintoma';
@@ -528,17 +526,17 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 			$.post('getpost/update.jsp',{
 				'accion':accion3,
 				'id_herido':id,
-				'tipo_sintoma':sintomas[0][i][0]
+				'tipo_sintoma':sintomas[i].tipo
 			});
 		}
 	}*/
 
 	if(puntero.cantidad-cantidad > 0 && tipo != 'healthy'){
-		for(i = 0; i < emergenciasAsociadas[0].length; i++){
-			emergenciasAsociadas[0][i][1] = emergenciasAsociadas[1][i][1];
+		for(i = 0; i < emergenciasAsociadas.length; i++){
+			emergenciasAsociadas[i].valor = emergenciasAsociadas[i].valorBD;
 		}
-		/*for(i = 0; i < sintomas[0].length; i++){
-			sintomas[0][i][1] = sintomas[1][i][1];
+		/*for(i = 0; i < sintomas.length; i++){
+			sintomas[i].valor = sintomas[i].valorBD;
 		}*/
 		crearCatastrofe(puntero.marcador, puntero.tipo, puntero.cantidad-1, puntero.nombre, puntero.info, puntero.descripcion, puntero.direccion,
 			puntero.longitud+0.00001, puntero.latitud-0.000005, puntero.estado, puntero.size, puntero.traffic, puntero.idAssigned, puntero.planta);

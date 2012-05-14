@@ -101,8 +101,8 @@ public class Environment{
 					instancia.getString("name"),
 					instancia.getString("info"),
 					instancia.getString("description"),
-					new Double(instancia.getLong("latitud")),
-					new Double(instancia.getLong("longitud")),
+					new Double(instancia.getString("latitud")),
+					new Double(instancia.getString("longitud")),
 					instancia.getString("address"),
 					instancia.getInt("floor"),
 					instancia.getString("size"),
@@ -124,7 +124,7 @@ public class Environment{
 					instancia.getString("description"),
 					new Double(instancia.getString("latitud")),
 					new Double(instancia.getString("longitud")),
-					instancia.getString("adreess"),
+					instancia.getString("address"),
 					instancia.getInt("floor"),
 					instancia.getString("size"),
 					instancia.getString("traffic"),
@@ -139,15 +139,15 @@ public class Environment{
 						System.out.println("- Herido: " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
 					}
 					
-					/*if(nuevo.getType().equals("slight")){
-						dis.setSlight(nuevo);
+					if(nuevo.getType().equals("slight")){
+						dis.addSlight(nuevo);
 					}else if(nuevo.getType().equals("serious")){
-						dis.setSerious(nuevo);
+						dis.addSerious(nuevo);
 					}else if(nuevo.getType().equals("dead")){
-						dis.setDead(nuevo);
+						dis.addDead(nuevo);
 					}else if(nuevo.getType().equals("trapped")){
-						dis.setTrapped(nuevo);
-					}*/
+						dis.addTrapped(nuevo);
+					}
 					
 					/* --- ANTIGUO ---
 					if(nuevo.getState().equals("erased")){
@@ -308,34 +308,59 @@ public class Environment{
 					instancia.getString("description"),
 					new Double(instancia.getString("latitud")),
 					new Double(instancia.getString("longitud")),
-					instancia.getString("adreess"),
+					instancia.getString("address"),
 					instancia.getInt("floor"),
 					instancia.getString("size"),
 					instancia.getString("traffic"),
 					instancia.getString("state"),
 					instancia.getInt("idAssigned"));
 				
-				if(disasters.containsKey(nuevo.getId())){
-					//People antiguo = people.get(nuevo.getId());
-					
+				People antiguo = people.get(nuevo.getId());
+				if(people.containsKey(nuevo.getId())){
 					if(nuevo.getState().equals("erased")){
 						people.remove(nuevo.getId());
 						System.out.println("- Herido " + nuevo.getName() + " curado (id:" + nuevo.getId() + ")");
 					}else{
 						people.put(nuevo.getId(), nuevo);
-						System.out.println("- Herido " + nuevo.getName() + " actualizado con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
+						//System.out.println("- Herido " + nuevo.getName() + " actualizado con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
 					}
 				}else{
 					people.put(nuevo.getId(), nuevo);
 					System.out.println("- Herido " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
 				}
 				
+				if(nuevo.getIdAssigned() != antiguo.getIdAssigned() || antiguo.getType().equals(nuevo.getType()) == false){
+					int idDesastre = antiguo.getIdAssigned();
+					Disaster extraido = disasters.get(idDesastre);
+					System.out.println("- ENV: Desasociando el herido " + nuevo.getId() + " del desastre " + idDesastre);
+					if(extraido != null){
+						if(antiguo.getType().equals("slight")){
+							extraido.removeSlight(antiguo);
+						}else if(antiguo.getType().equals("serious")){
+							extraido.removeSerious(antiguo);
+						}else if(antiguo.getType().equals("dead")){
+							extraido.removeDead(antiguo);
+						}else if(antiguo.getType().equals("trapped")){
+							extraido.removeTrapped(antiguo);
+						}
+					}
+					
+					if(nuevo.getIdAssigned() != 0 && disasters.containsKey(nuevo.getIdAssigned())){
+						Disaster dis = disasters.get(nuevo.getIdAssigned());
+						if(nuevo.getType().equals("slight")){
+							dis.addSlight(nuevo);
+						}else if(nuevo.getType().equals("serious")){
+							dis.addSerious(nuevo);
+						}else if(nuevo.getType().equals("dead")){
+							dis.addDead(nuevo);
+						}else if(nuevo.getType().equals("trapped")){
+							dis.addTrapped(nuevo);
+						}
+					}
+				}
+				
 				/*if(nuevo.getIdAssigned() == 0){
-					if(!people.containsKey(nuevo.getId())){
-						continue;
-					} // cuando ya existia y tengo que actualizar el desastres borrando sus heridos
-					else{
-						People antiguo = people.get(nuevo.getId());
+					if(people.containsKey(nuevo.getId())){
 						int idDesastre = antiguo.getIdAssigned();
 						people.remove(antiguo.getId());
 						System.out.println("- ENV: Voy a desasociar el herido " + nuevo.getId() + " del desastre " + idDesastre);
@@ -351,14 +376,13 @@ public class Environment{
 							extraido.getLatitud(),
 							extraido.getLongitud(),
 							extraido.getAddress(),
-							extraido.Floor(),
+							extraido.getFloor(),
 							extraido.getSize(),
 							extraido.getTraffic(),
 							extraido.getState());
 						disasters.put(insertado.getId(), insertado);
 					}
 				}else{
-					People antiguo = people.get(nuevo.getId());
 					Disaster dis = disasters.get(nuevo.getIdAssigned());
 					if(!people.containsKey(nuevo.getId())){
 						System.out.println("- Herido " + nuevo.getName() + " con estado " + nuevo.getType());
@@ -368,23 +392,23 @@ public class Environment{
 					people.put(nuevo.getId(), nuevo);
 					if(antiguo.getType().equals(nuevo.getType()) == false && nuevo.getIdAssigned() != 0){
 						if(nuevo.getType().equals("slight")){
-							dis.setSlight(nuevo);
+							dis.addSlight(nuevo);
 						}else if(nuevo.getType().equals("serious")){
-							dis.setSerious(nuevo);
+							dis.addSerious(nuevo);
 						}else if(nuevo.getType().equals("dead")){
-							dis.setDead(nuevo);
+							dis.addDead(nuevo);
 						}else if(nuevo.getType().equals("trapped")){
-							dis.setTrapped(nuevo);
+							dis.addTrapped(nuevo);
 						}
 
 						if(antiguo.getType().equals("slight")){
-							dis.setSlight(antiguo);
+							dis.removeSlight(antiguo);
 						}else if(antiguo.getType().equals("serious")){
-							dis.setSerious(antiguo);
+							dis.removeSerious(antiguo);
 						}else if(antiguo.getType().equals("dead")){
-							dis.setDead(antiguo);
+							dis.removeDead(antiguo);
 						}else if(antiguo.getType().equals("trapped")){
-							dis.setTrapped(antiguo);
+							dis.removeTrapped(antiguo);
 						}
 					}
 				}*/

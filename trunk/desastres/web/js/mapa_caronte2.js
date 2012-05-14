@@ -1,3 +1,6 @@
+var centroAux = new Array();
+var puntoAux;
+
 /**
  * Obtiene las coordenadas del usuario y actualiza su posicion
  * 
@@ -231,9 +234,9 @@ function cargarLateral(evento){
 		//document.getElementById('sintomas').style.display = 'block';
 
 		document.getElementById('checkboxAsoc').innerHTML = '';
-		emergenciasAsociadas = [new Array(), new Array()];
+		emergenciasAsociadas = new Array();
 		//document.getElementById('listaSintomas').innerHTML = '';
-		//sintomas = [new Array(), new Array()];
+		//sintomas = new Array();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -245,31 +248,11 @@ function cargarLateral(evento){
 			},
 			success: function(data){
 				$.each(data, function(entryIndex, entry){
+					var checked = (entry.valor == 'true') ? ' checked="checked"' : '';
 					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
-						'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)" checked="checked"/>' +
+						'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"' + checked + '/>' +
 						entry.id + ' - ' + entry.nombre + '</li>';
-					emergenciasAsociadas[0].push([entry.id, true]);
-					emergenciasAsociadas[1].push([entry.id, true]);
-				});
-			},
-			async: false
-		});
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: 'getpost/getAsociaciones.jsp',
-			data: {
-				'tipo':'emergencias',
-				'iden': evento.id,
-				'nivel':nivelMsg
-			},
-			success: function(data){
-				$.each(data, function(entryIndex, entry){
-					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
-						'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"/>' +
-						entry.id + ' - ' + entry.nombre + '</li>';
-					emergenciasAsociadas[0].push([entry.id, false]);
-					emergenciasAsociadas[1].push([entry.id, false]);
+					emergenciasAsociadas.push({'id':entry.id, 'valor':entry.valor, 'valorBD':entry.valor});
 				});
 				if(document.getElementById('checkboxAsoc').innerHTML == ''){
 					document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
@@ -288,31 +271,12 @@ function cargarLateral(evento){
 				'iden': evento.id
 			},
 			success: function(data){
+				var checked = (entry.valor == 'true') ? ' checked="checked"' : '';
 				$.each(data, function(entryIndex, entry){
 					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
-						'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)" checked="checked"/>' +
+						'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"' + checked + '/>' +
 						entry.descripcion + '</li>';
-					sintomas[0].push([entry.tipo, true]);
-					sintomas[1].push([entry.tipo, true]);
-				});
-			},
-			async: false
-		});
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: 'getpost/getSintomas.jsp',
-			data: {
-				'tipo':'sintomasNO',
-				'iden': evento.id
-			},
-			success: function(data){
-				$.each(data, function(entryIndex, entry){
-					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
-						'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"/>' +
-						entry.descripcion + '</li>';
-					sintomas[0].push([entry.tipo, false]);
-					sintomas[1].push([entry.tipo, false]);
+					sintomas.push({'tipo':entry.tipo, 'valor':entry.valor, 'valorBD':entry.valor});
 				});
 			},
 			async: false
@@ -348,10 +312,10 @@ function cargarLateral(evento){
 				}
 			}
 		}
-		lateral.nombre.value = evento.nombre;
-		lateral.info.value = evento.info;
-		lateral.descripcion.value = evento.descripcion;
-		lateral.direccion.value = evento.direccion;
+		lateral.nombre.value = String(evento.nombre);
+		lateral.info.value = String(evento.info);
+		lateral.descripcion.value = String(evento.descripcion);
+		lateral.direccion.value = String(evento.direccion);
 		lateral.iden.value = evento.id;
 		if(usuario_actual_tipo != 'citizen'){
 			for(i = 0; i < 5; i++){
@@ -448,9 +412,9 @@ function limpiarLateral(marcador, async){
 				lateral.peso[0].selected = 'selected';
 				lateral.movilidad[0].selected = 'selected';
 				document.getElementById('checkboxAsoc').innerHTML = '';
-				emergenciasAsociadas = [new Array(), new Array()];
+				emergenciasAsociadas = new Array();
 				//document.getElementById('listaSintomas').innerHTML = '';
-				//sintomas = [new Array(), new Array()];
+				//sintomas = new Array();
 				if(async == null){
 					async = false;
 				}
@@ -459,7 +423,7 @@ function limpiarLateral(marcador, async){
 					dataType: 'json',
 					url: 'getpost/getAsociaciones.jsp',
 					data: {
-						'tipo':'todasEmergencias',
+						'tipo':'emergencias',
 						'nivel':nivelMsg
 					},
 					success: function(data){
@@ -467,8 +431,7 @@ function limpiarLateral(marcador, async){
 							document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
 								'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"/>' +
 								entry.id +' - ' + entry.nombre + '</li>';
-							emergenciasAsociadas[0].push([entry.id, false]);
-							emergenciasAsociadas[1].push([entry.id, false]);
+							emergenciasAsociadas.push({'id':entry.id, 'valor':false, 'valorBD':false});
 						});
 						if(document.getElementById('checkboxAsoc').innerHTML == ''){
 							document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
@@ -483,15 +446,14 @@ function limpiarLateral(marcador, async){
 					dataType: 'json',
 					url: 'getpost/getSintomas.jsp',
 					data: {
-						'tipo':'todosSintomas'
+						'tipo':'sintomas'
 					},
 					success: function(data){
 						$.each(data, function(entryIndex, entry){
 							document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
 								'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"/>' +
 								entry.descripcion + '</li>';
-							sintomas[0].push([entry.tipo, false]);
-							sintomas[1].push([entry.tipo, false]);
+							sintomas.push({'tipo':entry.tipo, 'valor':false, 'valorBD':false});
 						});
 					},
 					async: async
@@ -515,9 +477,9 @@ function limpiarLateral(marcador, async){
  * @param valor 
  */
 function asociarEmergencia(id, valor){
-	for(var i = 0; i < emergenciasAsociadas[0].length; i++){
-		if(emergenciasAsociadas[0][i][0] == id){
-			emergenciasAsociadas[0][i][1] = valor;
+	for(var i = 0; i < emergenciasAsociadas.length; i++){
+		if(emergenciasAsociadas[i].id == id){
+			emergenciasAsociadas[i].valor = valor;
 		}
 	}
 }
@@ -529,9 +491,9 @@ function asociarEmergencia(id, valor){
  * @param valor 
  */
 function annadirSintoma(tipo, valor){
-	for(var i = 0; i < sintomas[0].length; i++){
-		if(sintomas[0][i][0] == tipo){
-			sintomas[0][i][1] = valor;
+	for(var i = 0; i < sintomas.length; i++){
+		if(sintomas[i].tipo == tipo){
+			sintomas[i].valor = valor;
 		}
 	}
 }
@@ -626,9 +588,11 @@ function cambiarPlanta(num){
 	residencia.setMap(null);
 	if(infoWindow != null){
 		infoWindow.close();
+		infoWindow = null;
 		if(infoWinMarker != 'building'){
 			limpiarLateral(infoWinMarker);
 		}
+		infoWinMarker = null;
 	}
 	document.getElementById('planta' + plantaResidencia).style.fontWeight = 'normal';
 	document.getElementById('planta' + plantaResidencia).style.textDecoration = 'none';

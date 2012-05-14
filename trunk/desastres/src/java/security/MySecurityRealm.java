@@ -54,13 +54,11 @@
  */
 package security;
 
-import com.mysql.jdbc.Driver;
 import gsi.project.*;
 import gsi.rest.Connection;
 import java.security.*;
 import java.sql.*;
 import java.util.Date;
-import org.hsqldb.jdbcDriver;
 import org.json.me.*;
 import org.securityfilter.realm.*;
 
@@ -104,7 +102,7 @@ public class MySecurityRealm implements SecurityRealmInterface{
 					Connection.connect(url + "insertar/" + tipoUsuario + "/" + username + "/" +
 						descripcion + "/" + informacion + "/" + latitud + "/" + longitud + "/" + planta);
 				}
-			}catch (Exception ex){
+			}catch(Exception ex){
 				System.out.println("Excepcion: " + ex);
 			}
 		}else{
@@ -134,7 +132,6 @@ public class MySecurityRealm implements SecurityRealmInterface{
 				}
 				conexion.close();
 			}catch(Exception ex){
-				ex.printStackTrace();
 				System.out.println("Excepcion: " + ex);
 			}
 		}
@@ -201,7 +198,6 @@ public class MySecurityRealm implements SecurityRealmInterface{
 				}
 				conexion.close();
 			}catch(Exception ex){
-				ex.printStackTrace();
 				System.out.println("Excepcion: " + ex);
 			}
 		}
