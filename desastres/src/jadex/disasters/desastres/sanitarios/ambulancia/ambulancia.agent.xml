@@ -35,7 +35,7 @@
 		</belief>
 
 		<!-- Poscion del agente evaluada dinamicamente -->
-		<belief name="pos" class="Position">
+		<belief name="pos" class="Position" evaluationmode="dynamic">
 			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
 	</beliefs>

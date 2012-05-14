@@ -63,10 +63,10 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 
 		System.out.println("$$ central: Avisando a agentes... (en espera)...");
 
-		//String resultado1 = enviarMensaje("ambulance","aviso","go");
-		//System.out.println("$$ central: Respuesta recibida de ambulance: " + resultado1);
-		String resultado1 = enviarMensaje("coordinadorMedico", "aviso", "go", true);
-		System.out.println("$$ central: Respuesta recibida del coordinador medico: " + resultado1);
+		String resultado1 = enviarMensaje("ambulance", "aviso", "go", true);
+		System.out.println("$$ central: Respuesta recibida de ambulance: " + resultado1);
+		//String resultado1 = enviarMensaje("coordinadorMedico", "aviso", "go", true);
+		//System.out.println("$$ central: Respuesta recibida del coordinador medico: " + resultado1);
 		String resultado2 = enviarMensaje("police", "aviso", "go", true);
 		System.out.println("$$ central: Respuesta recibida de police: " + resultado2);
 		String resultado3 = enviarMensaje("firemen", "aviso", "go", true);

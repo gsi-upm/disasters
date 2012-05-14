@@ -24,6 +24,7 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 		if(des != null){
 			env.setTablonEventos(des.getId());
 			getBeliefbase().getBelief("emergenciaActual").setFact(des.getId());
+			getBeliefbase().getBelief("tipoEmergencia").setFact("incendio");
 			
 			Resource directorActuacion = directorActuacion(env, des);
 			int idDA = directorActuacion.getId();
@@ -74,6 +75,13 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 			}catch(JSONException ex){
 				System.out.println(ex);
 			}
+		}else{
+			People her = buscarHeridos(env);
+			if(her != null){
+				env.setTablonEventos(her.getId());
+				getBeliefbase().getBelief("emergenciaActual").setFact(her.getId());
+				getBeliefbase().getBelief("tipoEmergencia").setFact("herido");
+			}
 		}
 		waitFor(2500);
 	}
@@ -108,6 +116,32 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 					}
 					if(num1 > num2){ // la nueva tiene mas heridos
 						atender = emergencias[i];
+					}
+				}
+			}
+		}
+		
+		return atender;
+	}
+	
+	/**
+	 * Busca un evento para atender entre las emergencias y heridos.
+	 * 
+	 * @param env Entorno
+	 */
+	private People buscarHeridos(Entorno env){
+		People atender = null;
+		People[] heridos = env.getHeridosSin();
+		
+		if(heridos.length > 0){
+			atender = heridos[0];
+			
+			for(int i = 1; i < heridos.length; i++){
+				if(masGrave(heridos[i], atender)){ // el nuevo tiene mas gravedad
+					atender = heridos[i];
+				}else if(heridos[i].getType().equals(atender.getType())){
+					if(heridos[i].getQuantity() > atender.getQuantity()){ // el nuevo tiene mas heridos
+						atender = heridos[i];
 					}
 				}
 			}

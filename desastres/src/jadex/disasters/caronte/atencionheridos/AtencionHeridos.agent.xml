@@ -12,6 +12,7 @@
 		<import>disasters.caronte.Entorno</import>
 		<import>disasters.caronte.ontology.CaronteOntology</import>
 		<import>disasters.caronte.ontology.Herido</import>
+		<import>disasters.caronte.ontology.Incendio</import>
 		<import>jadex.base.fipa.IDF</import>
 		<import>jadex.base.fipa.SFipa</import>
 		<import>jadex.bdi.planlib.df.DF</import>
@@ -35,6 +36,9 @@
 		</belief>
 		<belief name="heridoActual" class="int">
 			<fact>0</fact>
+		</belief>
+		<belief name="tipoEmergencia" class="String">
+			<fact>""</fact>
 		</belief>
 		<belief name="numEpa" class="int">
 			<fact>0</fact>
@@ -103,7 +107,7 @@
 			<parameter name="ontology" class="String" direction="fixed">
 				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
-			<match>$content instanceof Herido</match>
+			<match>$content instanceof Herido || $content instanceof Incendio</match>
 		</messageevent>
 		<messageevent name="ack_atenderHerido" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">

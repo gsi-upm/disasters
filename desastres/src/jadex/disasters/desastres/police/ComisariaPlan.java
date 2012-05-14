@@ -14,6 +14,6 @@ public class ComisariaPlan extends Plan{
 	 * Cuerpo del plan.
 	 */
 	public void body(){
-		waitFor(1000);
+		waitFor(2500);
 	}
 }

@@ -18,7 +18,7 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		// Posicion actual de la ambulancia, que le permite recoger al herido.
-		Position posicionActual = (Position) getBeliefbase().getBelief("pos").getFact();
+		Position posicionActual; // = (Position) getBeliefbase().getBelief("pos").getFact();
 
 		// Posicion del hospital que le corresponde
 		Position posicionHospital = (Position) getBeliefbase().getBelief("hospital").getFact();
@@ -47,9 +47,10 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 		}
 
 		try{
+			posicionActual = env.getAgentPosition("ambulance");
 			env.andar(getComponentName(), posicionActual, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
 		}catch(Exception e){
-			System.out.println("**ambulance: Error metodo andar: " + e);
+			System.out.println("** ambulance: Error metodo andar: " + e);
 		}
 
 		int id = 0;
@@ -74,6 +75,7 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 
 		// La ambulancia regresa a su hospital correspondiente.
 		try{
+			posicionActual = env.getAgentPosition("ambulance");
 			env.andar(getComponentName(), posicionActual, posicionHospital, env.getAgent(getComponentName()).getId(), id);
 			if(herido != null){
 				//y deposita al herido

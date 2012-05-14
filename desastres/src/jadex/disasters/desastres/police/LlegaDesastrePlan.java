@@ -19,7 +19,7 @@ public class LlegaDesastrePlan extends EnviarMensajePlan{
 		//Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment) getBeliefbase().getBelief("env").getFact();
 		//Obtengo mi posicion
-		Position oldPos = (Position) getBeliefbase().getBelief("pos").getFact();
+		Position oldPos; // = (Position) getBeliefbase().getBelief("pos").getFact();
 
 		Position posicionComisaria = (Position) getBeliefbase().getBelief("Comisaria").getFact();
 
@@ -36,6 +36,7 @@ public class LlegaDesastrePlan extends EnviarMensajePlan{
 		System.out.println("++ police: Estoy destinado al desastre " + idDes);
 
 		try{
+			oldPos = env.getAgentPosition("police");
 			env.andar(getComponentName(), oldPos, positionDesastre, env.getAgent(getComponentName()).getId(), 0);
 		}catch(Exception e){
 			System.out.println("++ police: Error metodo andar: " + e);
@@ -50,6 +51,7 @@ public class LlegaDesastrePlan extends EnviarMensajePlan{
 		System.out.println("++ police: Vuelvo a la comisaria");
 		
 		try{
+			oldPos = env.getAgentPosition("police");
 			env.andar(getComponentName(), oldPos, posicionComisaria, env.getAgent(getComponentName()).getId(), 0);
 		}catch (Exception e){
 			System.out.println("++ police: Error metodo andar: " + e);

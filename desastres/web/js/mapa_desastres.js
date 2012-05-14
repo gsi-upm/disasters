@@ -135,61 +135,78 @@ function definirOpciones(evento){
 }
 
 function comportamientoMarcador(evento, caracter, opciones){
-	var marker = new google.maps.Marker (new google.maps.LatLng(evento.latitud, evento.longitud), opciones);
+	var opts = {
+		position: new google.maps.LatLng(evento.latitud, evento.longitud),
+		icon: opciones.icon,
+		draggable: opciones.draggable
+	};
+	var marker = new google.maps.Marker(opts);
 	// Annadimos el comportamiento
 	if(caracter == temporal){ // aqui hay que guardar los datos
-		var content = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>' +
-			'<span id="guardar" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</span>'+ ' - ' +
-			'<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_temporales[' + evento.id + '], temporal); return false;">Modificar</span>'+ ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_temporales[' + evento.id + '], temporal); return false;">Eliminar</span>';
+		var content = evento.nombre + '<br/>' + evento.info + '<br/>' + evento.descripcion + '<br/>' +
+			'<span id="guardar" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + '])">Guardar</span>'+ ' - ' +
+			'<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_temporales[' + evento.id + '], temporal)">Modificar</span>'+ ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_temporales[' + evento.id + '], temporal)">Eliminar</span>';
 		
 		google.maps.event.addListener(marker, 'click', function(){
-			infoWindow.close();
+			if(infoWindow != null){
+				infoWindow.close();
+			}
 			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + content + '</div>'});
 			infoWindow.open(map, marker);
 		});
 
 		google.maps.event.addListener(marker, 'dragstart', function(){
-			infoWindow.close();
+			if(infoWindow != null){
+				infoWindow.close();
+			}
 		});
 
 		google.maps.event.addListener(marker, 'dragend', function(){
 			var asociada = asociar(evento.id, evento.marker);
 			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">Es necesario guardar para poder asociar recursos.<br/>' +
 				marcadores_definitivos[asociada].nombre + '<br/>' +
-				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + ']); return false;">Guardar</span>' + ' - ' +
-				'<span id="cancelar" class="pulsable azul" onclick="infoWin2.close();">Cancelar</span>"+"</div>'});
+				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar(marcadores_temporales[' + evento.id + '])">Guardar</span>' + ' - ' +
+				'<span id="cancelar" class="pulsable azul" onclick="infoWin2.close()">Cancelar</span>"+"</div>'});
 			infoWindow.open(map, marker);
 		});
 	}else if(caracter == definitivo){ // aqui podemos realizar modificaciones a los ya existentes
 		google.maps.event.addListener(marker, 'click', function(){
 			var small = evento.nombre + '<br/>' + evento.descripcion;
-			var links1;
+			var links;
 			if(nivelMsg > 1){
-				links1 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos['+evento.id+'], definitivo); return false;">Modificar</span>'+' - '+
-					'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos['+evento.id+'], definitivo); return false;">Eliminar</span>'+' - '+
-					'<span id="ver_mas1" class="pulsable azul" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</span>';
+				links = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos['+evento.id+'], definitivo)">Modificar</span>'+' - '+
+					'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos['+evento.id+'], definitivo)">Eliminar</span>'+' - '+
+					'<span id="ver_mas" class="pulsable azul" onclick="verMas('+evento.id+')">Ver m&aacute;s</span>';
 			}else{
-				links1 = '<span id="ver_mas1" class="pulsable azul" onclick="verMas('+evento.id+');return false;">Ver m&aacute;s</span>';
+				links = '<span id="ver_mas" class="pulsable azul" onclick="verMas('+evento.id+')">Ver m&aacute;s</span>';
 			}
 
-			infoWindow.close();
-			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 +
-				'</div><div id="bocadillo_links2"></div></div>'});
+			if(infoWindow != null){
+				infoWindow.close();
+			}
+			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links + '</div></div>'});
 			infoWindow.open(map, marker);
 		});
 
 		google.maps.event.addListener(marker, 'dragstart', function(){
-			infoWindow.close();
+			if(infoWindow != null){
+				infoWindow.close();
+			}
 		});
 
 		google.maps.event.addListener(marker, 'dragend', function(){
 			var asociada = asociar(evento.id, evento.marker);
-			infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>' +
-				marcadores_definitivos[asociada].nombre+'<br/>'+
-				'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar_asociacion(' + asociada + ',' + evento.id + '); return false;">Guardar</span>' + ' - ' +
-				'<span id="cancelar" class="pulsable azul" onclick="cancelar_asignacion(' + evento.id + '); return false;">Cancelar</span></div>'});
-			infoWindow.open(map, marker);
+			if(asociada != null){
+				infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">Asociado a cat&aacute;strofe:<br/>' +
+					marcadores_definitivos[asociada].nombre+'<br/>'+
+					'<span id="guardar_asociacion" class="pulsable azul" onclick="guardar_asociacion(' + asociada + ',' + evento.id + ')">Guardar</span>' + ' - ' +
+					'<span id="cancelar" class="pulsable azul" onclick="cancelar_asignacion(' + evento.id + ')">Cancelar</span></div>'});
+				infoWindow.open(map, marker);
+			}else{
+				cancelar_asignacion(evento.id);
+			}
+			
 		});
 	}
 

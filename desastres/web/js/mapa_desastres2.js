@@ -33,33 +33,29 @@ function visualize(selected, type){
 function verMas(id){
 	var evento = marcadores_definitivos[id];
 	var complete = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>Direccion: ' + evento.direccion + '<br/>';
-	var links2;
+	var links;
 	if(nivelMsg > 1){
-		links2 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Modificar</span>' + ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Eliminar</span>' + ' - ' +
-			'<span id="ver_mas2" class="pulsable azul" onclick="verMenos(' + evento.id + ');return false;">Ver menos</span>';
+		links = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo)">Modificar</span>' + ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo)">Eliminar</span>' + ' - ' +
+			'<span id="ver_menos" class="pulsable azul" onclick="verMenos(' + evento.id + ')">Ver menos</span>';
 	}else{
-		links2 = '<span id="ver_mas2" class="pulsable azul" onclick="verMenos(' + evento.id + ');return false;">Ver menos</span>';
+		links = '<span id="ver_menos" class="pulsable azul" onclick="verMenos(' + evento.id + ')">Ver menos</span>';
 	}
-	infoWindow.close();
-	infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links2 + '</div></div>'});
-	infoWindow.open(map, marcadores_definitivos[id].marker);
+	infoWindow.setContent('<div id="bocadillo">' + complete + '<div id="bocadillo_links">' + links + '</div></div>');
 }
 
 function verMenos(id){
 	var evento = marcadores_definitivos[id];
-	var small = evento.nombre + '<br/>' + evento.descripcion ;
-	var links1;
+	var small = evento.nombre + '<br/>' + evento.descripcion;
+	var links;
 	if(nivelMsg > 1){
-		links1 = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Modificar</span>' + ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo); return false;">Eliminar</span>' + ' - ' +
-			'<span id="ver_mas1" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
+		links = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo)">Modificar</span>' + ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo)">Eliminar</span>' + ' - ' +
+			'<span id="ver_mas" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
 	}else{
-		links1 = '<span id="ver_mas1" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
+		links = '<span id="ver_mas" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
 	}
-	infoWindow.close()
-	infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links1 + '</div></div>'});
-	infoWindow.open(map, marcadores_definitivos[id].marker);
+	infoWindow.setContent('<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links + '</div></div>');
 }
 
 function cargarModificar(puntero, caracter){
@@ -78,7 +74,6 @@ function cargarModificar(puntero, caracter){
 		document.getElementById('traffic-select').style.visibility = 'hidden';
 		if(puntero.marcador == 'resource'){
 			document.getElementById('control').style.visibility = 'hidden';
-			document.getElementById('sintomas').style.visibility = 'hidden';
 		}else{
 			document.getElementById('control').style.visibility = 'visible';
 		}

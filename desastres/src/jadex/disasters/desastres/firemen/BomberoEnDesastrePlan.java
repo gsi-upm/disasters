@@ -19,7 +19,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan{
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		// Posicion actual del bombero, que le permite recoger al herido.
-		Position posicionActual = (Position)getBeliefbase().getBelief("pos").getFact();
+		Position posicionActual; // = (Position)getBeliefbase().getBelief("pos").getFact();
 
 		// Posicion del parque de bomberos que le corresponde
 		Position posicionParque = (Position)getBeliefbase().getBelief("parqueDeBomberos").getFact();
@@ -43,12 +43,12 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan{
 		// Atiendo el desastre un tiempo medio de 4 segundos. Luego, se tiene
 		// que ajustar a la grado del mismo.
 		try{
+			posicionActual = env.getAgentPosition("firemen");
 			env.andar(getComponentName(), posicionActual, destino, env.getAgent(getComponentName()).getId(), 0);
 			// el cuarto parametro del metodo andar es el id del bichito
 			// que queremos transportar. en bombero es siempre 0
 		}catch(Exception ex){
-			System.out.println("^^ firemen: Error metodo andar: " + ex +
-				", name: " + getComponentName() + ", pos: " + posicionActual + ", destino: " + destino + ", id: " + env.getAgent(getComponentName()).getId());
+			System.out.println("^^ firemen: Error metodo andar: " + ex);
 		}
 
 		int id = 0;
@@ -91,7 +91,7 @@ public class BomberoEnDesastrePlan extends EnviarMensajePlan{
 			System.out.println("^^ firemen: Respuesta recibida de central: " + respuesta);
 
 			System.out.println("^^ firemen: Me dirijo al parque de bomberos");
-
+			posicionActual = env.getAgentPosition("firemen");
 			env.andar(getComponentName(), posicionActual, posicionParque, env.getAgent(getComponentName()).getId(), 0);
 			System.out.println("^^ firemen: He vuelto al parque de bomberos");
 		}catch(Exception e){

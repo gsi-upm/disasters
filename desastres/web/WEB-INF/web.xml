@@ -48,6 +48,17 @@
         <servlet-name>RegistroServlet</servlet-name>
         <url-pattern>/registro</url-pattern>
     </servlet-mapping>
+	<!-- Define the pushlet servlet -->
+	<!--<servlet>
+		<servlet-name>pushlet</servlet-name>
+		<servlet-class>nl.justobjects.pushlet.servlet.Pushlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>-->
+	<!-- The pushlet -->
+	<!--<servlet-mapping>
+		<servlet-name>pushlet</servlet-name>
+		<url-pattern>/pushlet.srv</url-pattern>
+	</servlet-mapping>-->
     <!-- Filtering-->
     <filter>
         <filter-name>Security Filter</filter-name>

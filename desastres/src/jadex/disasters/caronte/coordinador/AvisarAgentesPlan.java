@@ -1,5 +1,6 @@
 package disasters.caronte.coordinador;
 
+import disasters.Association;
 import disasters.caronte.*;
 import disasters.caronte.ontology.*;
 
@@ -14,11 +15,20 @@ public class AvisarAgentesPlan extends CarontePlan{
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
-		int idEmergencia = ((Integer) getBeliefbase().getBelief("emergenciaActual").getFact()).intValue();
+		int idEmergencia = ((Integer) getBeliefbase().getBelief("emergenciaActual").getFact());
+		String tipoEmergencia = ((String) getBeliefbase().getBelief("tipoEmergencia").getFact());
 		System.out.println("Avisando agentes");
-		Incendio inc = new Incendio(env.getEvent(idEmergencia), 0);
-		enviarObjeto(Entorno.INTERVENCION_INCENDIOS, "atenderIncendio", inc, true);
-		// Herido herido = new Herido(env.getPeople(idEmergencia));
-		// enviarMensaje(Entorno.ATENCION_HERIDOS, "atenderHerido", msg, true);
+		if(tipoEmergencia.equals("incendio")){
+			Incendio inc = new Incendio(env.getEvent(idEmergencia), 0);
+			System.out.println("Hay un incendio...");
+			enviarObjeto(Entorno.INTERVENCION_INCENDIOS, "atenderIncendio", inc, true);
+			if(env.getEvent(idEmergencia).hasInjured()){
+				System.out.println("con heridos!!");
+				enviarObjeto(Entorno.ATENCION_HERIDOS, "atenderHerido", inc, true);
+			}
+		}else if(tipoEmergencia.equals("herido")){
+			Herido herido = new Herido(env.getPeople(idEmergencia));
+			enviarObjeto(Entorno.ATENCION_HERIDOS, "atenderHerido", herido, true);
+		}
 	}
 }

@@ -39,6 +39,9 @@
 		<belief name="emergenciaActual" class="int">
 			<fact>0</fact>
 		</belief>
+		<belief name="tipoEmergencia" class="String">
+			<fact>""</fact>
+		</belief>
 	</beliefs>
 
 	<goals>

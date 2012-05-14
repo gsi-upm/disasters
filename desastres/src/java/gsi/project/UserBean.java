@@ -1,11 +1,9 @@
 package gsi.project;
 
-import com.mysql.jdbc.Driver;
 import gsi.rest.Connection;
 import java.beans.*;
 import java.io.Serializable;
 import java.sql.*;
-import org.hsqldb.jdbcDriver;
 import org.json.me.*;
 
 /**
@@ -64,7 +62,6 @@ public class UserBean implements Serializable{
 					}
 					conexion.close();
 				}catch(Exception ex){
-						ex.printStackTrace();
 					System.out.println("Excepcion: " + ex);
 				}
 			}

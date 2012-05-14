@@ -56,6 +56,7 @@ function initialize2(){
 				if(infoWinMarker != 'building'){
 					limpiarLateral(infoWinMarker);
 				}
+				infoWinMarker = null;
 			}
 		});
 
@@ -73,15 +74,14 @@ function initialize2(){
 		}
 
 		$.getJSON('getpost/getAsociaciones.jsp', {
-			'tipo':'todasEmergencias',
+			'tipo':'emergencias',
 			'nivel':nivelMsg
 		}, function(data){
 			$.each(data, function(entryIndex, entry) {
 				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
 					'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"/>' +
 					entry.id +' - ' + entry.nombre + '</li>';
-				emergenciasAsociadas[0].push([entry.id, false]);
-				emergenciasAsociadas[1].push([entry.id, false]);
+				emergenciasAsociadas.push({'id':entry.id, 'valor':false, 'valorBD':false});
 			});
 			if(document.getElementById('checkboxAsoc').innerHTML == ''){
 				document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
@@ -139,16 +139,43 @@ function buildingInit(){
 function showBuilding(type){
 	// Villajoyosa, Alicante
 	if(type == 'hospital'){
-		generateBuilding('hospital', 'Centro de salud', 38.506900, -0.231120);
-		generateBuilding('hospital', 'Cruz Roja', 38.505760, -0.229290);
+		generateBuilding('hospital', 'Centro de salud', 38.506900, -0.231120); // Villajoyosa, Alicante
+		generateBuilding('hospital', 'Cruz Roja', 38.505760, -0.229290); // Villajoyosa, Alicante
+		//generateBuilding('hospital', 'Centro de salud', 38.228138, -1.706449); // Calasparra, Murcia
 	}else if(type == 'firemenStation'){
-		generateBuilding('firemenStation', 'Parque de bomberos', 38.505610, -0.233230);
+		generateBuilding('firemenStation', 'Parque de bomberos', 38.505610, -0.233230); // Villajoyosa, Alicante
+		//generateBuilding('firemenStation', 'Parque de bomberos', 38.111020, -1.865018); // Caravaca de la Cruz, Murcia
 	}else if(type == 'policeStation'){
-		generateBuilding('policeStation', 'Polic&iacute;a municipal', 38.510400,-0.231850);
-		generateBuilding('policeStation', 'Guardia Civil', 38.504640, -0.237360);
+		generateBuilding('policeStation', 'Polic&iacute;a municipal', 38.510400,-0.231850); // Villajoyosa, Alicante
+		generateBuilding('policeStation', 'Guardia Civil', 38.504640, -0.237360); // Villajoyosa, Alicante
+		//generateBuilding('policeStation', 'Ayuntamiento y Polic&iacute;a municipal', 38.231125, -1.697560); // Calasparra, Murcia
 	}else if(type == 'geriatricCenter'){
-		generateBuilding('geriatricCenter', 'Ballesol Costa Blanca Senior Resort', 38.523850, -0.170180);
+		generateBuilding('geriatricCenter', 'Ballesol Costa Blanca Senior Resort', 38.523850, -0.170180); // Villajoyosa, Alicante
+		//generateBuilding('geriatricCenter', 'Residencia Virgen de la Esperanza', 38.232272, -1.698925); // Calasparra, Murcia
 	}
+}
+
+function esquinasResidencia(lat, lng){
+	var esquinas;
+	if(lat == 38.523850 && lng == -0.170180){
+		var esquina1 = new google.maps.LatLng(38.523950, -0.169880); // -0.000040, 0.000010
+		var esquina2 = new google.maps.LatLng(38.523480, -0.169650);
+		var esquina3 = new google.maps.LatLng(38.523420, -0.169840);
+		var esquina4 = new google.maps.LatLng(38.523220, -0.169760);
+		var esquina5 = new google.maps.LatLng(38.522940, -0.170070);
+		var esquina6 = new google.maps.LatLng(38.522860, -0.170500);
+		var esquina7 = new google.maps.LatLng(38.523180, -0.170650);
+		var esquina8 = new google.maps.LatLng(38.523390, -0.170530);
+		var esquina9 = new google.maps.LatLng(38.523700, -0.170680);
+		esquinas = [esquina1, esquina2, esquina3, esquina4, esquina5, esquina6, esquina7, esquina8, esquina9];
+	}/*else if(lat == 38.232272 && lng == -1.698925){
+		var esquina1 = new google.maps.LatLng(38.232440, -1.699160); // -0.000095, 0.000120
+		var esquina2 = new google.maps.LatLng(38.232380, -1.698640);
+		var esquina3 = new google.maps.LatLng(38.232105, -1.698690);
+		var esquina4 = new google.maps.LatLng(38.232165, -1.699210);
+		esquinas = [esquina1, esquina2, esquina3, esquina4];
+	}*/
+   return esquinas;
 }
 
 /**
@@ -289,15 +316,15 @@ function comportamientoMarcador(evento, caracter, opciones){
 	// Annadimos el comportamiento
 	google.maps.event.addListener(marker, 'click', function(){
 		var small = evento.nombre + '<br/>' + evento.descripcion;
-		var links1 = '<form id="form_acciones" name="form_acciones" action="#">';
+		var links = '<form id="form_acciones" name="form_acciones" action="#">';
 		if(nivelMsg > 1){
 			if(evento.marcador != 'resource'){
-				links1 += cargarMenuAcciones(marcadores_definitivos[evento.id]); // en mapa_caronte2.js
+				links += cargarMenuAcciones(marcadores_definitivos[evento.id]); // en mapa_caronte2.js
 			}else{
-				links1 += cargarListaActividades(marcadores_definitivos[evento.id]); // en mapa_caronte2.js
+				links += cargarListaActividades(marcadores_definitivos[evento.id]); // en mapa_caronte2.js
 			}
 		}
-		links1 += '</form>';
+		links += '</form>';
 		
 		if(infoWindow != null){
 			infoWindow.close();
@@ -305,8 +332,7 @@ function comportamientoMarcador(evento, caracter, opciones){
 				limpiarLateral(infoWinMarker, true);
 			}
 		}
-		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' +
-			links1 + '</div><div id="bocadillo_links2"></div></div>'});
+		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + small + '<div id="bocadillo_links">' + links + '</div></div>'});
 		infoWinMarker = evento.marcador;
 		infoWindow.open(map, marker);
 		

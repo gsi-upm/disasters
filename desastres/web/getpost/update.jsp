@@ -173,11 +173,3 @@
 		</c:when>--%>
 	</c:choose>
 </c:if>
-<c:if test="${param.accion == 'cerrarSesion'}">
-	<sql:update dataSource="${CatastrofesServer}">
-		UPDATE CATASTROFES
-		SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
-		WHERE NOMBRE = ?
-		<sql:param value="${param.nombre}"/>
-	</sql:update>
-</c:if>

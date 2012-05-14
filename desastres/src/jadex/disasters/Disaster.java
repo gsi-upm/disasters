@@ -485,11 +485,10 @@ public class Disaster{
 	public void addSlight(People people){
 		boolean existe = false;
 		int index = 0;
-		for(int i = 1; i < numSlight; i++){
+		for(int i = 0; i < numSlight; i++){
 			if(slight.get(i).getId() == people.getId()){
 				existe = true;
 				index = i;
-				break;
 			}
 		}
 		if(existe){
@@ -550,7 +549,7 @@ public class Disaster{
 	public void addSerious(People people){
 		boolean existe = false;
 		int index = 0;
-		for(int i = 1; i < numSerious; i++){
+		for(int i = 0; i < numSerious; i++){
 			if(serious.get(i).getId() == people.getId()){
 				existe = true;
 				index = i;
@@ -614,7 +613,7 @@ public class Disaster{
 	public void addDead(People people){
 		boolean existe = false;
 		int index = 0;
-		for(int i = 1; i < numDead; i++){
+		for(int i = 0; i < numDead; i++){
 			if(dead.get(i).getId() == people.getId()){
 				existe = true;
 				index = i;
@@ -678,7 +677,7 @@ public class Disaster{
 	public void addTrapped(People people){
 		boolean existe = false;
 		int index = 0;
-		for(int i = 1; i < numTrapped; i++){
+		for(int i = 0; i < numTrapped; i++){
 			if(this.trapped.get(i).getId() == people.getId()){
 				existe = true;
 				index = i;
@@ -713,5 +712,11 @@ public class Disaster{
 				index++;
 			}
 		}
+	}
+	
+	public boolean hasInjured(){
+		boolean has = slight.size() > 0 || serious.size() > 0 ||
+				dead.size() > 0 || trapped.size() > 0;
+		return has;
 	}
 }

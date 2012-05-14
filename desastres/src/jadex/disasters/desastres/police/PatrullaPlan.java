@@ -29,6 +29,6 @@ public class PatrullaPlan extends Plan{
 			System.out.println("++ police: Error metodo andar: " + e);
 		}
 		
-		waitFor(1000);
+		waitFor(2500);
 	}
 }
