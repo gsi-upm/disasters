@@ -17,20 +17,38 @@ public class AuxiliarHeridoPlan extends CarontePlan{
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
-		int idHerido = (Integer) getBeliefbase().getBelief("heridoActual").getFact();
-		int tipoEmergencia = (Integer) getBeliefbase().getBelief("tipoEmergencia").getFact();
+		int idHerido = (Integer) getBeliefbase().getBelief("herido_actual").getFact();
+		String tipoEmergencia = (String) getBeliefbase().getBelief("tipo_emergencia").getFact();
 		Integer[] epa = (Integer[]) getBeliefbase().getBeliefSet("epa").getFacts();
 		HashMap<Integer,Integer> atendiendo = (HashMap<Integer,Integer>) getBeliefbase().getBelief("atendiendo").getFact();
 		
-		Disaster her = env.getEvent(idHerido);
-		HashMap<Integer,People> incendios = env.getPeople();
+		if(tipoEmergencia.equals("incendio")){
+			boolean hayHerido = false;
+			Association[] asociaciones = env.getAssociationsArray();
+			for(Association i : asociaciones){
+				if(i.getIdDisaster() == idHerido){
+					idHerido = i.getIdInjured();
+					hayHerido = true;
+					break;
+				}
+			}
+			
+			if(hayHerido == false){
+				idHerido = 0;
+			}
+			getBeliefbase().getBelief("herido_actual").setFact(idHerido);
+			getBeliefbase().getBelief("tipo_emergencia").setFact("herido");
+		}
 		
-		if(incendios.containsKey(idHerido) == false){
+		People her = env.getPeople(idHerido);
+		HashMap<Integer,People> heridos = env.getPeople();
+		
+		if(heridos.containsKey(idHerido) == false){
 			System.out.println("Mensaje de final de herido");
-			enviarMensaje(Entorno.COORDINADOR, "finHerido", "fin", true);
-			getBeliefbase().getBelief("numEpa").setFact(0);
+			enviarMensaje(Entorno.COORDINADOR, "fin_herido", "fin", true);
+			getBeliefbase().getBelief("numero_epa").setFact(0);
 			getBeliefbase().getBeliefSet("epa").removeFacts();
-			getBeliefbase().getBelief("heridoActual").setFact(0);
+			getBeliefbase().getBelief("herido_actual").setFact(0);
 		}else{
 			if(atendiendo.keySet().containsAll(Arrays.asList(epa)) == false){
 				for(Integer i : Arrays.asList(epa)){

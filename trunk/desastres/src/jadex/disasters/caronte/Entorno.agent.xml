@@ -9,12 +9,12 @@
 		name="Entorno" package="disasters.caronte">
 	<beliefs>
 		<belief name="env" class="Entorno">
-			<fact>Entorno.getInstance(null, null, null)</fact>
+			<fact>Entorno.getInstance(null, null, null, null)</fact>
 		</belief>
 	</beliefs>
 	
 	<plans>
-		<plan name="terminar-plan">
+		<plan name="terminar_plan">
 			<body class="DetenerEntorno"/>
 		</plan>
 	</plans>
@@ -22,7 +22,7 @@
 	<configurations>
 		<configuration name="default">
 			<plans>
-				<endplan ref="terminar-plan"/>
+				<endplan ref="terminar_plan"/>
 			</plans>
 		</configuration>
 	</configurations>

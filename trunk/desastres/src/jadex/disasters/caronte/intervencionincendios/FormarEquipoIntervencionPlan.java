@@ -14,9 +14,9 @@ public class FormarEquipoIntervencionPlan extends CarontePlan{
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
-		int idIncendio = (Integer) getBeliefbase().getBelief("incendioActual").getFact();
-		int numEpi = (Integer) getBeliefbase().getBelief("numEpi").getFact();
-		//int numEsi = (Integer) getBeliefbase().getBelief("numEsi").getFact();
+		int idIncendio = (Integer) getBeliefbase().getBelief("incendio_actual").getFact();
+		int numEpi = (Integer) getBeliefbase().getBelief("numero_epi").getFact();
+		//int numEsi = (Integer) getBeliefbase().getBelief("numero_esi").getFact();
 		Integer[] epi = (Integer[]) getBeliefbase().getBeliefSet("epi").getFacts();
 		//Integer[] esi = (Integer[]) getBeliefbase().getBeliefSet("esi").getFacts();
 		

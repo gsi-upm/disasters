@@ -8,36 +8,24 @@
 	name="ambulance" package="disasters.desastres.ambulance">
 	
 	<imports>
-		<import>disasters.Position</import>
+		<import>disasters.*</import>
 		<import>disasters.desastres.Environment</import>
-		<import>jadex.base.fipa.*</import>
-		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bdi.runtime.*</import>
-		<import>jadex.bridge.service.*</import>
-		<import>jadex.commons.*</import>
-		<import>java.util.logging.*</import>
+		<import>jadex.base.fipa.SFipa</import>
 	</imports>
-
-	<capabilities>
-		<capability name="dfcap" file="DF"/>
-	</capabilities>
 
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, en un hospital de Calasparra -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.AMBULANCIA, $scope.getAgentName(), $beliefbase.hospital)</fact>
+			<fact>Environment.getInstance(Environment.AMBULANCIA, $scope.getAgentName(), $beliefbase.hospital, $scope.getComponentIdentifier())</fact>
 		</belief>
-		
 		<!-- Definimos la posicion del hospital de Madrid -->
 		<belief name="hospital" class="Position">
 			<fact>new Position(40.418702, -3.670573)</fact> <!-- Gregorio Marannon -->
 		</belief>
-		
 		<!-- Poscion del agente evaluada dinamicamente -->
 		<belief name="pos" class="Position">
 			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
- 		
  		<!-- id del herido que atiendo-->
 		<!--belief name="idHerido" class="Integer" evaluationmode="dynamic">
 			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
@@ -45,19 +33,8 @@
 	</beliefs>
 
 	<goals>
-		<achievegoalref name="df_search">
-			<concrete ref="dfcap.df_search"/>
-		</achievegoalref>
-		<achievegoalref name="df_register">
-			<concrete ref="dfcap.df_register"/>
-		</achievegoalref>
-		<achievegoalref name="df_deregister">
-			<concrete ref="dfcap.df_deregister"/>
-		</achievegoalref>
-		
 		<!-- Objetivo para estar en el hospital a menos que haya heridos que recoger.  -->
 		<performgoal name="hospital" retry="true" exclude="never"/>
-		
 		<!-- Objetivo para ir a recoger heridos -->
 		<achievegoal name="recogeHeridos"/>
 	</goals>
@@ -76,6 +53,12 @@
 			<trigger>
 				<messageevent ref="aviso"/>
 			</trigger>
+		</plan>
+		<plan name="eliminar_plan">
+			<body class="EliminarPlan"/>
+			<parameter name="tipo" class="String">
+				<value>Environment.AMBULANCIA</value>
+			</parameter>
 		</plan>
 	</plans>
 
@@ -96,21 +79,11 @@
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_register">
-					<parameter ref="description">
-						<value>
-							$properties.dfservice.createDFComponentDescription(null,
-								$properties.dfservice.createDFServiceDescription("ambulance_service", "ambulance", "GSI DIT UPM"))
- 						</value>
-					</parameter>
-				</initialgoal>
 				<initialgoal ref="hospital"/>
-				<endgoal ref="df_deregister"/>
 			</goals>
+			<plans>
+				<endplan ref="eliminar_plan"/>
+			</plans>
 		</configuration>
 	</configurations>
-
-	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
-	</properties>
 </agent>

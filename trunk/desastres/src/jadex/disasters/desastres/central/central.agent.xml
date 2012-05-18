@@ -8,37 +8,24 @@
 	name="central" package="disasters.desastres.central">
 
 	<imports>
-		<import>disasters.Position</import>
+		<import>disasters.*</import>
 		<import>disasters.desastres.Environment</import>
-		<import>jadex.base.fipa.*</import>
-		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bdi.runtime.*</import>
-		<import>jadex.bridge.fipa.ComponentIdentifier</import>
-		<import>jadex.bridge.service.*</import>
-		<import>jadex.commons.*</import>
-		<import>java.util.logging.*</import>
+		<import>jadex.base.fipa.SFipa</import>
 	</imports>
-
-	<capabilities>
-		<capability name="dfcap" file="DF"/>
-	</capabilities>
 
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, una posicion en el centro de Madrid -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.CENTRAL, $scope.getAgentName(), $beliefbase.centralMadrid)</fact>
+			<fact>Environment.getInstance(Environment.CENTRAL, $scope.getAgentName(), $beliefbase.centralMadrid, $scope.getComponentIdentifier())</fact>
 		</belief>
-		
 		<!-- Definimos la posicion de la central en Madrid -->
 		<belief name="centralMadrid" class="Position">
 			<fact>new Position(40.45, -3.70)</fact> <!-- Posición aleatoria de la central -->
 		</belief>
-		
 		<!-- Poscion del agente evaluada dinamicamente-->
 		<belief name="pos" class="Position">
 			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
 		</belief>
- 		
  		<!-- id del desastre que tienen que atender-->
 		<belief name="desastreActual" class="Integer"> <!-- evaluationmode="dynamic" -->
 			<fact>0</fact>
@@ -46,22 +33,10 @@
 	</beliefs>
 
 	<goals>
-		<achievegoalref name="df_search">
-			<concrete ref="dfcap.df_search"/>
-		</achievegoalref>
-		<achievegoalref name="df_register">
-			<concrete ref="dfcap.df_register"/>
-		</achievegoalref>
-		<achievegoalref name="df_deregister">
-			<concrete ref="dfcap.df_deregister"/>
-		</achievegoalref>
-		
 		<!-- Objetivo para buscar desastres a menos que se este tratando uno -->
 		<performgoal name="buscaDesastre"/> <!-- retry="true" exclude="never"/> -->
-		
 		<!-- Objetivo para esperar a la finalizacion de un desastre -->
 		<achievegoal name="esperaSolucion"/>
-
 		<achievegoal name="volverABuscar"/>
 	</goals>
 
@@ -73,7 +48,6 @@
 				<goal ref="buscaDesastre"/>
 			</trigger>
 		</plan>
-
 		<!-- Plan para esperar la solucion del Desastre -->
 		<plan name="esperaSolucion-plan">
 			<body class="EsperaSolucionPlan"/>
@@ -81,12 +55,17 @@
 				<goal ref="esperaSolucion"/>
 			</trigger>
 		</plan>
-
 		<plan name="volverABuscar-plan">
 			<body class="VolverABuscarPlan"/>
 			<trigger>
 				<messageevent ref="terminado"/>
 			</trigger>
+		</plan>
+		<plan name="eliminar_plan">
+			<body class="EliminarPlan"/>
+			<parameter name="tipo" class="String">
+				<value>Environment.CENTRAL</value>
+			</parameter>
 		</plan>
 	</plans>
 
@@ -118,21 +97,11 @@
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_register">
-					<parameter ref="description">
-						<value>
-							$properties.dfservice.createDFComponentDescription(null,
-								$properties.dfservice.createDFServiceDescription("central_service", "central", "GSI DIT UPM"))
- 						</value>
-					</parameter>
-				</initialgoal>
 				<initialgoal ref="buscaDesastre"/>
-				<endgoal ref="df_deregister"/>
 			</goals>
+			<plans>
+				<endplan ref="eliminar_plan"/>
+			</plans>
 		</configuration>
 	</configurations>
-
-	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
-	</properties>
 </agent>

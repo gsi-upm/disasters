@@ -8,38 +8,27 @@
 		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"	
 		name="IntervencionIncendios" package="disasters.caronte.intervencionincendios">
 	<imports>
-		<import>disasters.Position</import>
-		<import>disasters.caronte.Entorno</import>
-		<import>disasters.caronte.ontology.CaronteOntology</import>
-		<import>disasters.caronte.ontology.Incendio</import>
-		<import>jadex.base.fipa.IDF</import>
+		<import>disasters.*</import>
+		<import>disasters.caronte.*</import>
+		<import>disasters.caronte.ontology.*</import>
 		<import>jadex.base.fipa.SFipa</import>
-		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bridge.service.RequiredServiceInfo</import>
-		<import>jadex.bridge.service.SServiceProvider</import>
-		<import>jadex.commons.future.IFuture</import>
 		<import>java.util.HashMap</import>
 	</imports>
 
-	<capabilities>
-		<!--<capability name="procap" file="jadex.bdi.planlib.protocols.request.Request"/>-->
-		<capability name="dfcap" file="jadex.bdi.planlib.df.DF"/>
-	</capabilities>
-
 	<beliefs>
 		<belief name="env" class="Entorno">
-			<fact>Entorno.getInstance(Entorno.INTERVENCION_INCENDIOS, $scope.getAgentName(), $beliefbase.residencia)</fact>
+			<fact>Entorno.getInstance(Entorno.INTERVENCION_INCENDIOS, $scope.getAgentName(), $beliefbase.residencia, $scope.getComponentIdentifier())</fact>
 		</belief>
 		<belief name="residencia" class="Position">
 			<fact>new Position(38.232272, -1.698925)</fact>
 		</belief>
-		<belief name="incendioActual" class="int">
+		<belief name="incendio_actual" class="int">
 			<fact>0</fact>
 		</belief>
-		<belief name="numEpi" class="int">
+		<belief name="numero_epi" class="int">
 			<fact>0</fact>
 		</belief>
-		<belief name="numEsi" class="int">
+		<belief name="numero_esi" class="int">
 			<fact>0</fact>
 		</belief>
 		<beliefset name="epi" class="Integer"/>
@@ -50,54 +39,48 @@
 	</beliefs>
 
 	<goals>
-		<!--<achievegoalref name="rp_initiate">
-			<concrete ref="procap.rp_initiate"/>
-		</achievegoalref>-->
-		<achievegoalref name="df_search">
-			<concrete ref="dfcap.df_search"/>
-		</achievegoalref>
-		<achievegoalref name="df_register">
-			<concrete ref="dfcap.df_register"/>
-		</achievegoalref>
-		<achievegoalref name="df_deregister">
-			<concrete ref="dfcap.df_deregister"/>
-		</achievegoalref>
-		
-		<maintaingoal name="formarEquipoIntervencion" retry="true" exclude="never">
+		<maintaingoal name="formar_equipo_intervencion" retry="true" exclude="never">
 			<maintaincondition>
-				$beliefbase.epi.length &gt;= $beliefbase.numEpi &amp;&amp; $beliefbase.esi.length &gt;= $beliefbase.numEsi
+				$beliefbase.epi.length &gt;= $beliefbase.numero_epi &amp;&amp; $beliefbase.esi.length &gt;= $beliefbase.numero_esi
 			</maintaincondition>
 		</maintaingoal>
-		<achievegoal name="apagarIncendio" retry="true" exclude="never">
+		<achievegoal name="apagar_incendio" retry="true" exclude="never">
 			<targetcondition>
-				$beliefbase.incendioActual == 0
+				$beliefbase.incendio_actual == 0
 			</targetcondition>
 		</achievegoal>
 	</goals>
 
 	<plans>
-		<plan name="evaluarIncendio-plan">
+		<plan name="evaluar_incendio_plan">
 			<body class="EvaluarIncendioPlan"/>
 			<trigger>
-				<messageevent ref="atenderIncendio"/>
+				<messageevent ref="atender_incendio"/>
 			</trigger>
 		</plan>
-		<plan name="formarEquipoIntervencion-plan">
+		<plan name="formar_equipo_intervencion_plan">
 			<body class="FormarEquipoIntervencionPlan"/>
 			<trigger>
-				<goal ref="formarEquipoIntervencion"/>
+				<goal ref="formar_equipo_intervencion"/>
 			</trigger>
 		</plan>
-		<plan name="apagarIncendio-plan">
+		<plan name="apagar_incendio_plan">
 			<body class="ApagarIncendioPlan"/>
 			<trigger>
-				<goal ref="apagarIncendio"/>
+				<goal ref="apagar_incendio"/>
 			</trigger>
+		</plan>
+		<plan name="eliminar_plan">
+			<body class="EliminarPlan"/>
+			<parameter name="tipo" class="String">
+				<value>Entorno.INTERVENCION_INCENDIOS</value>
+			</parameter>
 		</plan>
 	</plans>
 
 	<events>
-		<messageevent name="atenderIncendio" direction="receive" type="fipa">
+		<!-- atender incendio -->
+		<messageevent name="atender_incendio" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
@@ -109,25 +92,25 @@
 			</parameter>
 			<match>$content instanceof Incendio</match>
 		</messageevent>
-		<messageevent name="ack_atenderIncendio" direction="send" type="fipa">
+		<messageevent name="ack_atender_incendio" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
 		</messageevent>
-		
-		<messageevent name="finIncendio" direction="send" type="fipa">
+		<!-- fin incendio -->
+		<messageevent name="fin_incendio" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
 		</messageevent>
-		<messageevent name="ack_finIncendio" direction="receive" type="fipa">
+		<messageevent name="ack_fin_incendio" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_finIncendio")</match>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_fin_incendio")</match>
 		</messageevent>
-		
-		<messageevent name="evaluacionIncendio" direction="send" type="fipa">
+		<!-- evaluacion incendio -->
+		<messageevent name="evaluacion_incendio" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
@@ -138,32 +121,22 @@
 				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
 		</messageevent>
-		<messageevent name="ack_evaluacionIncendio" direction="receive" type="fipa">
+		<messageevent name="ack_evaluacion_incendio" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_evaluacionIncendio")</match>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_evaluacion_incendio")</match>
 		</messageevent>
 	</events>
-
-	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
-	</properties>
 
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_register">
-					<parameter ref="description">
-						<value>
-							$properties.dfservice.createDFComponentDescription(null,
-								$properties.dfservice.createDFServiceDescription("intervencionIncendios-service", Entorno.INTERVENCION_INCENDIOS, "GSI DIT UPM"))
- 						</value>
-					</parameter>
-				</initialgoal>
-				<initialgoal ref="formarEquipoIntervencion"/>
-				<endgoal ref="df_deregister"/>
+				<initialgoal ref="formar_equipo_intervencion"/>
 			</goals>
+			<plans>
+				<endplan ref="eliminar_plan"/>
+			</plans>
 		</configuration>
 	</configurations>
 </agent>

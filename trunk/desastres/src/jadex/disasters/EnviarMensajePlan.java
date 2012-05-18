@@ -1,9 +1,11 @@
 package disasters;
 
-import jadex.base.fipa.*;
-import jadex.bdi.runtime.*;
+import disasters.caronte.Entorno;
+import disasters.desastres.Environment;
+import jadex.base.fipa.SFipa;
+import jadex.bdi.runtime.IMessageEvent;
+import jadex.bdi.runtime.Plan;
 import jadex.bridge.IComponentIdentifier;
-import jadex.bridge.service.*;
 
 /**
  * Plan que permite enviar mensajes a otros agentes.
@@ -23,14 +25,6 @@ public abstract class EnviarMensajePlan extends Plan{
 	 */
 	protected String enviarMensaje(String agente, String evento, String contenido, boolean respuesta){
 		IComponentIdentifier a = buscarAgente(agente);
-
-		/*IGoal query = createGoal("procap.rp_initiate");
-		query.getParameter("receiver").setValue(a);
-		query.getParameter("conversation_id").setValue(evento);
-		query.getParameter("action").setValue(contenido);
-		dispatchSubgoalAndWait(query);
-		return (String)query.getParameter("result").getValue();*/
-
 		IMessageEvent msg = createMessageEvent(evento);
 		msg.getParameter(SFipa.CONTENT).setValue(evento + ":" + contenido);
 		msg.getParameterSet(SFipa.RECEIVERS).addValue(a);
@@ -121,21 +115,25 @@ public abstract class EnviarMensajePlan extends Plan{
 	 * Busca un agente.
 	 * 
 	 * @param agente Agente a buscar
-	 * @return Agente encontrado
+	 * @return Identificador del agente
 	 */
 	private IComponentIdentifier buscarAgente(String agente){
+		Object env = getBeliefbase().getBelief("env").getFact();
+		String clase = "";
+		try{
+			Class.forName("disasters.caronte.Entorno");
+			clase = "Entorno"; // Solo llega aqui si Entorno existe
+		}catch(ClassNotFoundException ex){}
+		try{
+			Class.forName("disasters.desastres.Environment");
+			clase = "Environment"; // Solo llega aqui si Environment existe
+		}catch(ClassNotFoundException ex){}
+		
 		IComponentIdentifier a = null;
-		while(a == null){
-			IDF	dfservice = (IDF)SServiceProvider.getService(getServiceContainer(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM).get(this);
-			IDFServiceDescription sd = dfservice.createDFServiceDescription(null, agente, null);
-			IDFComponentDescription ad = dfservice.createDFComponentDescription(null, sd);
-			IGoal ft = createGoal("df_search");
-			ft.getParameter("description").setValue(ad);
-			dispatchSubgoalAndWait(ft);
-			IDFComponentDescription[] result = (IDFComponentDescription[])ft.getParameterSet("result").getValues();
-			if(result.length > 0){
-				a = result[0].getName();
-			}
+		if(clase.equals("Entorno")){ // env instanceof Entorno
+			a = ((Entorno)env).getAgent(agente).getAgentId();
+		}else if(clase.equals("Environment")){ // env instanceof Environment
+			a = ((Environment)env).getAgent(agente).getAgentId();
 		}
 		return a;
 	}

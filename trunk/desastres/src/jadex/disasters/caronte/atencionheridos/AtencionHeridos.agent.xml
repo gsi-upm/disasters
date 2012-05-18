@@ -8,39 +8,27 @@
 		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"	
 		name="AtencionHeridos" package="disasters.caronte.atencionheridos">
 	<imports>
-		<import>disasters.Position</import>
-		<import>disasters.caronte.Entorno</import>
-		<import>disasters.caronte.ontology.CaronteOntology</import>
-		<import>disasters.caronte.ontology.Herido</import>
-		<import>disasters.caronte.ontology.Incendio</import>
-		<import>jadex.base.fipa.IDF</import>
+		<import>disasters.*</import>
+		<import>disasters.caronte.*</import>
+		<import>disasters.caronte.ontology.*</import>
 		<import>jadex.base.fipa.SFipa</import>
-		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bridge.service.RequiredServiceInfo</import>
-		<import>jadex.bridge.service.SServiceProvider</import>
-		<import>jadex.commons.future.IFuture</import>
 		<import>java.util.HashMap</import>
 	</imports>
 
-	<capabilities>
-		<!--<capability name="procap" file="jadex.bdi.planlib.protocols.request.Request"/>-->
-		<capability name="dfcap" file="jadex.bdi.planlib.df.DF"/>
-	</capabilities>
-
 	<beliefs>
 		<belief name="env" class="Entorno">
-			<fact>Entorno.getInstance(Entorno.ATENCION_HERIDOS, $scope.getAgentName(), $beliefbase.residencia)</fact>
+			<fact>Entorno.getInstance(Entorno.ATENCION_HERIDOS, $scope.getAgentName(), $beliefbase.residencia, $scope.getComponentIdentifier())</fact>
 		</belief>
 		<belief name="residencia" class="Position">
 			<fact>new Position(38.232272, -1.698925)</fact>
 		</belief>
-		<belief name="heridoActual" class="int">
+		<belief name="herido_actual" class="int">
 			<fact>0</fact>
 		</belief>
-		<belief name="tipoEmergencia" class="String">
+		<belief name="tipo_emergencia" class="String">
 			<fact>""</fact>
 		</belief>
-		<belief name="numEpa" class="int">
+		<belief name="numero_epa" class="int">
 			<fact>0</fact>
 		</belief>
 		<beliefset name="epa" class="Integer"/>
@@ -50,54 +38,48 @@
 	</beliefs>
 
 	<goals>
-		<!--<achievegoalref name="rp_initiate">
-			<concrete ref="procap.rp_initiate"/>
-		</achievegoalref>-->
-		<achievegoalref name="df_search">
-			<concrete ref="dfcap.df_search"/>
-		</achievegoalref>
-		<achievegoalref name="df_register">
-			<concrete ref="dfcap.df_register"/>
-		</achievegoalref>
-		<achievegoalref name="df_deregister">
-			<concrete ref="dfcap.df_deregister"/>
-		</achievegoalref>
-		
-		<maintaingoal name="formarEquipoAuxilio" retry="true" exclude="never">
+		<maintaingoal name="formar_equipo_auxilio" retry="true" exclude="never">
 			<maintaincondition>
-				$beliefbase.epa.length &gt;= $beliefbase.numEpa
+				$beliefbase.epa.length &gt;= $beliefbase.numero_epa
 			</maintaincondition>
 		</maintaingoal>
-		<achievegoal name="auxiliarHerido" retry="true" exclude="never">
+		<achievegoal name="auxiliar_herido" retry="true" exclude="never">
 			<targetcondition>
-				$beliefbase.heridoActual == 0
+				$beliefbase.herido_actual == 0
 			</targetcondition>
 		</achievegoal>
 	</goals>
 
 	<plans>
-		<plan name="evaluarHerido-plan">
+		<plan name="evaluar_herido_plan">
 			<body class="EvaluarHeridoPlan"/>
 			<trigger>
-				<messageevent ref="atenderHerido"/>
+				<messageevent ref="atender_herido"/>
 			</trigger>
 		</plan>
-		<plan name="formarEquipoAuxilio-plan">
+		<plan name="formar_equipo_auxilio_plan">
 			<body class="FormarEquipoAuxilioPlan"/>
 			<trigger>
-				<goal ref="formarEquipoAuxilio"/>
+				<goal ref="formar_equipo_auxilio"/>
 			</trigger>
 		</plan>
-		<plan name="auxiliarHerido-plan">
+		<plan name="auxiliar_herido_plan">
 			<body class="AuxiliarHeridoPlan"/>
 			<trigger>
-				<goal ref="auxiliarHerido"/>
+				<goal ref="auxiliar_herido"/>
 			</trigger>
+		</plan>
+		<plan name="eliminar_plan">
+			<body class="EliminarPlan"/>
+			<parameter name="tipo" class="String">
+				<value>Entorno.ATENCION_HERIDOS</value>
+			</parameter>
 		</plan>
 	</plans>
 
 	<events>
-		<messageevent name="atenderHerido" direction="receive" type="fipa">
+		<!-- atender herido -->
+		<messageevent name="atender_herido" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
@@ -109,25 +91,25 @@
 			</parameter>
 			<match>$content instanceof Herido || $content instanceof Incendio</match>
 		</messageevent>
-		<messageevent name="ack_atenderHerido" direction="send" type="fipa">
+		<messageevent name="ack_atender_herido" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
 		</messageevent>
-		
-		<messageevent name="finHerido" direction="send" type="fipa">
+		<!-- fin herido -->
+		<messageevent name="fin_herido" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
 		</messageevent>
-		<messageevent name="ack_finHerido" direction="receive" type="fipa">
+		<messageevent name="ack_fin_herido" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_finHerido")</match>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_fin_herido")</match>
 		</messageevent>
-		
-		<messageevent name="evaluacionHerido" direction="send" type="fipa">
+		<!-- evaluacion herido -->
+		<messageevent name="evaluacion_herido" direction="send" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.REQUEST</value>
 			</parameter>
@@ -138,32 +120,22 @@
 				<value>CaronteOntology.ONTOLOGY_NAME</value>
 			</parameter>
 		</messageevent>
-		<messageevent name="ack_evaluacionHerido" direction="receive" type="fipa">
+		<messageevent name="ack_evaluacion_herido" direction="receive" type="fipa">
 			<parameter name="performative" class="String" direction="fixed">
 				<value>SFipa.INFORM</value>
 			</parameter>
-			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_evaluacionHerido")</match>
+			<match>$content instanceof String &amp;&amp; ((String)$content).startsWith("ack_evaluacion_herido")</match>
 		</messageevent>
 	</events>
-
-	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
-	</properties>
 
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_register">
-					<parameter ref="description">
-						<value>
-							$properties.dfservice.createDFComponentDescription(null,
-								$properties.dfservice.createDFServiceDescription("atencionHeridos-service", Entorno.ATENCION_HERIDOS, "GSI DIT UPM"))
- 						</value>
-					</parameter>
-				</initialgoal>
-				<initialgoal ref="formarEquipoAuxilio"/>
-				<endgoal ref="df_deregister"/>
+				<initialgoal ref="formar_equipo_auxilio"/>
 			</goals>
+			<plans>
+				<endplan ref="eliminar_plan"/>
+			</plans>
 		</configuration>
 	</configurations>
 </agent>

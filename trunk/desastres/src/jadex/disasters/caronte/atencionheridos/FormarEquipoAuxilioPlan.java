@@ -14,8 +14,8 @@ public class FormarEquipoAuxilioPlan extends CarontePlan{
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
-		int idHerido = (Integer) getBeliefbase().getBelief("heridoActual").getFact();
-		int numEpa = (Integer) getBeliefbase().getBelief("numEpa").getFact();
+		int idHerido = (Integer) getBeliefbase().getBelief("herido_actual").getFact();
+		int numEpa = (Integer) getBeliefbase().getBelief("numero_epa").getFact();
 		Integer[] epa = (Integer[]) getBeliefbase().getBeliefSet("epa").getFacts();
 		
 		Disaster her = env.getEvent(idHerido);

@@ -2,6 +2,7 @@ package disasters;
 
 import disasters.caronte.Entorno;
 import disasters.desastres.Environment;
+import jadex.bridge.IComponentIdentifier;
 
 public class WorldObject{
 	/** Nombre */
@@ -14,6 +15,8 @@ public class WorldObject{
 	protected String info;
 	/** id */
 	protected int id;
+	/** componentID */
+	protected IComponentIdentifier agentId;
 
 	/**
 	 * Constructor de objeto
@@ -23,22 +26,25 @@ public class WorldObject{
 	 * @param pos Posicion
 	 * @param info Informacion
 	 */
-	public WorldObject(String name, String type, Position pos, String info){
+	public WorldObject(String name, String type, Position pos, String info, IComponentIdentifier agentId){
 		//Comprobamos que el tipo del agente sea correcto.
-		assert type.equals(Entorno.ENFERMERO) || type.equals(Entorno.CELADOR) ||
-				type.equals(Entorno.GEROCULTOR) || type.equals(Entorno.AUXILIAR) ||
-				type.equals(Entorno.RECEPCIONISTA) || type.equals(Entorno.OTRO_PERSONAL) ||
-				type.equals(Entorno.CIUDADANO) || type.equals(Entorno.AMBULANCIA) ||
-				type.equals(Entorno.BOMBERO) || type.equals(Entorno.POLICIA) ||
-				type.equals(Environment.AMBULANCIA) || type.equals(Environment.BOMBERO) ||
-				type.equals(Environment.POLICIA) || type.equals(Environment.AMBULANCIA2) ||
-				type.equals(Environment.INUNDACION) || type.equals(Environment.TERREMOTO) || type.equals(Environment.FUEGO) ||
-				type.equals(Environment.HERIDO_LEVE) || type.equals(Environment.HERIDO_GRAVE) ||
-				type.equals(Environment.HERIDO_ATRAPADO) || type.equals(Environment.HERIDO_MUERTO);
+		boolean ent = false;
+		boolean env = false;
+		try{
+			Class.forName("disasters.caronte.Entorno");
+			ent = Entorno.AGENTES.contains(type);
+		}catch(ClassNotFoundException ex){}
+		try{
+			Class.forName("disasters.desastres.Environment");
+			env = Environment.AGENTES.contains(type) || Environment.EVENTOS.contains(type);
+		}catch(ClassNotFoundException ex){}
+		
+		assert ent || env;
 		this.name = name;
 		this.type = type;
 		this.pos = pos;
 		this.info = info;
+		this.agentId = agentId;
 	}
 
 	/**
@@ -112,5 +118,13 @@ public class WorldObject{
 	 */
 	public void setId(int id){
 		this.id = id;
+	}
+	
+	public IComponentIdentifier getAgentId(){
+		return agentId;
+	}
+
+	public void setAgentId(IComponentIdentifier agentId){
+		this.agentId = agentId;
 	}
 }
