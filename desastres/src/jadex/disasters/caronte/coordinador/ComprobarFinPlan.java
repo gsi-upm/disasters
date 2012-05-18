@@ -21,18 +21,18 @@ public class ComprobarFinPlan extends CarontePlan{
 		IMessageEvent solReq = (IMessageEvent) getReason();
 		String recibido = ((String)solReq.getParameter(SFipa.CONTENT).getValue()).split(":",2)[0];
 		enviarRespuesta("ack_" + recibido, "ok");
-		getBeliefbase().getBelief("emergenciaActual").setFact(0);
+		getBeliefbase().getBelief("emergencia_actual").setFact(0);
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
 		Disaster[] eventos = env.getEventsArray();
 		if(eventos.length == 0){
 			env.printout("No hay mas eventos!!", 2, 1, true);
-			env.leaveResource((Integer) getBeliefbase().getBelief("idDirectorActuacion").getFact());
+			env.leaveResource((Integer) getBeliefbase().getBelief("id_director_actuacion").getFact());
 		}else{
 			env.printout("Faltan por solucionar: " + eventos.toString(), 2, 1, true);
 		}
 		
-		/*int des = ((Integer) getBeliefbase().getBelief("emergenciaActual").getFact()).intValue();
-		int idDA = ((Integer) getBeliefbase().getBelief("idDirectorActuacion").getFact()).intValue();
+		/*int des = ((Integer) getBeliefbase().getBelief("emergencia_actual").getFact()).intValue();
+		int idDA = ((Integer) getBeliefbase().getBelief("idDirector_actuacion").getFact()).intValue();
 		env.printout("Comprobar que el incendio (id:" + des + ") esta apagado", 0, idDA);
 		String fecha = new Timestamp(new Date().getTime()).toString();
 		boolean confirmado = false;

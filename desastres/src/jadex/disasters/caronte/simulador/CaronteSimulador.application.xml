@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	<h3>Caronte (simulador).</h3>
+
+	Lanza los agentes del simulador de Caronte.
+-->
+<applicationtype xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-application-2.0.xsd"
+		name="CaronteSimulador" package="disasters.caronte.simulador">
+	<componenttypes>
+		<componenttype name="Entorno" filename="disasters/caronte/Entorno.agent.xml" master="true"/>
+		<componenttype name="Police" filename="disasters/caronte/simulador/police/police.agent.xml"/>
+		<componenttype name="Firemen" filename="disasters/caronte/simulador/firemen/firemen.agent.xml"/>
+		<componenttype name="Ambulance" filename="disasters/caronte/simulador/ambulance/ambulance.agent.xml"/>
+		<componenttype name="Nurse" filename="disasters/caronte/simulador/nurse/nurse.agent.xml"/>
+		<componenttype name="Gerocultor" filename="disasters/caronte/simulador/gerocultor/gerocultor.agent.xml"/>
+		<componenttype name="Auxiliar" filename="disasters/caronte/simulador/auxiliar/auxiliar.agent.xml"/>
+		<componenttype name="CentralEmergencias" filename="disasters/caronte/simulador/centralEmergencias/centralEmergencias.agent.xml"/>
+		<componenttype name="CoordinadorEmergencias" filename="disasters/caronte/simulador/coordinadorEmergencias/coordinadorEmergencias.agent.xml"/>
+	</componenttypes>
+	
+	<configurations>
+		<configuration name="default">
+			<components>
+				<component type="Entorno"/>
+				<component type="Police"/>
+				<component type="Firemen"/>
+				<component type="Ambulance"/>
+				<component type="Nurse"/>
+				<component type="Gerocultor"/>
+				<component type="Auxiliar"/>
+				<component type="CentralEmergencias"/>
+				<component type="CoordinadorEmergencias"/>
+			</components>
+		</configuration>
+	</configurations>
+</applicationtype>

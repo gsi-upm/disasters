@@ -14,15 +14,15 @@ public class EvaluarIncendioPlan extends CarontePlan{
 	 */
 	public void body(){
 		System.out.println("Evaluando incendio");
-		Incendio inc = (Incendio) enviarRespuestaObjeto("ack_atenderIncendio", "OK");
-		getBeliefbase().getBelief("incendioActual").setFact(inc.getId());
-		getBeliefbase().getBelief("numEpi").setFact(2);
+		Incendio inc = (Incendio) enviarRespuestaObjeto("ack_atender_incendio", "OK");
+		getBeliefbase().getBelief("incendio_actual").setFact(inc.getId());
+		getBeliefbase().getBelief("numero_epi").setFact(1);
 		
 		/***********************************************************************
 		 * POR COMPLETAR
 		 **********************************************************************/
 		
-		IGoal apagarIncendio = createGoal("apagarIncendio");
+		IGoal apagarIncendio = createGoal("apagar_incendio");
 		dispatchSubgoalAndWait(apagarIncendio);
 	}
 }

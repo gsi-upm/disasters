@@ -38,6 +38,17 @@
 	</jsp:scriptlet>
 </c:set>
 
+<c:set var="floor">
+	<jsp:scriptlet>
+		String planta = request.getParameter("floor");
+		int floor = -2;
+		if(planta != null){
+			floor = Integer.parseInt(planta);
+		}
+		out.print(floor);
+	</jsp:scriptlet>
+</c:set>
+
 <c:choose>
 	<c:when test="${param.latitud == null || param.longitud == null}">
 		<jsp:forward page="error.jsp">
@@ -49,7 +60,7 @@
 </c:choose>
 
 <c:choose>
-	<c:when test="${param.type==null}">
+	<c:when test="${param.type == null}">
 		<jsp:forward page="error.jsp">
 			<jsp:param name="action" value="parameter"/>
 			<jsp:param name="parameter" value="type"/>
@@ -100,7 +111,7 @@
 		<sql:param value="${param.address}"/>
 		<sql:param value="${param.size}"/>
 		<sql:param value="${param.traffic}"/>
-		<sql:param value="${param.floor}"/>
+		<sql:param value="${floor}"/>
 		<sql:param value="${param.state}"/>
 		<sql:param value="${idAssigned}"/>
 		<sql:param value="${param.date}"/>

@@ -17,7 +17,7 @@ public class ApagarIncendioPlan extends CarontePlan{
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
-		int idIncendio = (Integer) getBeliefbase().getBelief("incendioActual").getFact();
+		int idIncendio = (Integer) getBeliefbase().getBelief("incendio_actual").getFact();
 		List<Integer> epi = Arrays.asList((Integer[]) getBeliefbase().getBeliefSet("epi").getFacts());
 		List<Integer> esi = Arrays.asList((Integer[]) getBeliefbase().getBeliefSet("esi").getFacts());
 		HashMap<Integer,Integer> apagando = (HashMap<Integer,Integer>) getBeliefbase().getBelief("apagando").getFact();
@@ -30,12 +30,12 @@ public class ApagarIncendioPlan extends CarontePlan{
 		
 		if(incendios.containsKey(idIncendio) == false){
 			System.out.println("Mensaje de final de incendio");
-			enviarMensaje(Entorno.COORDINADOR, "finIncendio", "fin", true);
-			getBeliefbase().getBelief("numEpi").setFact(0);
-			getBeliefbase().getBelief("numEsi").setFact(0);
+			enviarMensaje(Entorno.COORDINADOR, "fin_incendio", "fin", true);
+			getBeliefbase().getBelief("numero_epi").setFact(0);
+			getBeliefbase().getBelief("numero_esi").setFact(0);
 			getBeliefbase().getBeliefSet("epi").removeFacts();
 			getBeliefbase().getBeliefSet("esi").removeFacts();
-			getBeliefbase().getBelief("incendioActual").setFact(0);
+			getBeliefbase().getBelief("incendio_actual").setFact(0);
 		}else{
 			if(apagando.keySet().containsAll(equipos) == false){
 				for(Integer i : equipos){

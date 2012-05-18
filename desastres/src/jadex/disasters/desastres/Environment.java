@@ -1,6 +1,7 @@
 package disasters.desastres;
 
 import disasters.*;
+import jadex.bridge.IComponentIdentifier;
 import jadex.commons.SimplePropertyChangeSupport;
 import jadex.commons.collection.MultiCollection;
 import java.sql.Timestamp;
@@ -26,6 +27,10 @@ public class Environment{
 	public static final String COORDINADOR_HOSPITAL = "coordinadorHospital";
 	public static final String COORDINADOR_MEDICO = "coordinadorMedico";
 	public static final String CENTRAL = "central";
+	private static final String[] AGENTES_AUX = {AMBULANCIA, BOMBERO, POLICIA, AMBULANCIA2};
+	public static final List<String> AGENTES = Arrays.asList(AGENTES_AUX);
+	private static final String[] COMPONENTES_AUX = {GSO, MEDICO_CACH, COORDINADOR_HOSPITAL, COORDINADOR_MEDICO, CENTRAL};
+	public static final List<String> COMPONENTES = Arrays.asList(COMPONENTES_AUX);
 	public static final String APOCALIPSIS = "apocalypse";
 	/** Los nombres de los eventos provocados sobre el mapa */
 	public static final String FUEGO = "fire";
@@ -35,6 +40,8 @@ public class Environment{
 	public static final String HERIDO_GRAVE = "serious";
 	public static final String HERIDO_MUERTO = "dead";
 	public static final String HERIDO_ATRAPADO = "trapped";
+	private static final String[] EVENTOS_AUX = {FUEGO, TERREMOTO, INUNDACION, HERIDO_LEVE, HERIDO_GRAVE, HERIDO_MUERTO, HERIDO_ATRAPADO};
+	public static final List<String> EVENTOS = Arrays.asList(EVENTOS_AUX);
 	
 	public static final String URL = "http://localhost:8080/desastres/rest/";
 	//------- atributos ---
@@ -63,7 +70,7 @@ public class Environment{
 	private static Environment instance;
 	/** Objeto para notificar de cambios */
 	private SimplePropertyChangeSupport pcs;
-
+	
 	//---------------------
 	/**
 	 * Constructor
@@ -459,13 +466,13 @@ public class Environment{
 	 * @param pos Posicion
 	 * @return Instancia de entorno
 	 */
-	public static Environment getInstance(String tipo, String nombre, Position pos){
+	public static Environment getInstance(String tipo, String nombre, Position pos, IComponentIdentifier agentId){
 		// La primera vez que se llama a este metodo (el agente Environment), instance vale null
 		if(instance == null){
 			instance = new Environment();
 		}
 		if(tipo != null && nombre != null){
-			instance.addWorldObject(tipo, nombre, pos, null);
+			instance.addWorldObject(tipo, nombre, pos, null, agentId);
 		}
 		return instance;
 	}
@@ -486,11 +493,12 @@ public class Environment{
 	 * @param name Nombre
 	 * @param position Posicion
 	 * @param info Informacion
+	 * @param agentId Identificador del agente
 	 */
-	public void addWorldObject(String type, String name, Position position, String info){
-		WorldObject wo = new WorldObject(name, type, position, info);
+	public void addWorldObject(String type, String name, Position position, String info, IComponentIdentifier agentId){
+		WorldObject wo = new WorldObject(name, type, position, info, agentId);
 
-		if(type.equals(AMBULANCIA) || type.equals(BOMBERO) || type.equals(POLICIA) || type.equals(AMBULANCIA2)){
+		if(AGENTES.contains(type)){
 			// REST -> cree el recurso
 			System.out.println("LLamada a REST creando agente...");
 			String resultado = Connection.connect(URL + "post/type=" + type + "&name=" + name +
@@ -508,15 +516,38 @@ public class Environment{
 			}catch(JSONException e){
 				System.out.println("Error with JSON: " + e);
 			}
-		}
-		if(type.equals(CENTRAL) || type.equals(GSO) || type.equals(MEDICO_CACH) || type.equals(COORDINADOR_HOSPITAL) || type.equals(COORDINADOR_MEDICO)){
+		}else if(COMPONENTES.contains(type)){
 			System.out.println("Creando agente de tipo " + type);
 			agentes.put(name, wo); // Si es una central, se annade a la tabla de agentes
 			objetos.put(position, wo); // Y tambien a la de elementos del mundo
 			numAgentes++;
 		}
 	}
-
+	
+	/**
+	 * Elimina un objeto del entorno
+	 * 
+	 * @param type Tipo
+	 * @param name Nombre
+	 */
+	public void removeWorldObject(String type, String name){
+		WorldObject wo = getAgent(name);
+		if(AGENTES.contains(type)){
+			System.out.println("Llamada a REST eliminando agente...");
+			Connection.connect(URL + "delete/resource/" + name);
+			
+			System.out.println("Eliminando agente de tipo " + type);
+			agentes.remove(name);
+			objetos.remove(wo.getPosition(), wo);
+			numAgentes--;
+		}else if(COMPONENTES.contains(type)){
+			System.out.println("Eliminando agente de tipo " + type);
+			agentes.remove(name);
+			objetos.remove(wo.getPosition(), wo);
+			numAgentes--;
+		}
+	}
+	
 	/**
 	 * Cambia la posicion de un agente.
 	 * Los eventos no se mueven de posicion.
@@ -830,7 +861,7 @@ public class Environment{
 	public void setTablon(int tablon){
 		this.tablon = tablon;
 	}
-
+	
 	/**
 	 * Imprime un String por pantalla y lo envia para mostrar en la web.
 	 *

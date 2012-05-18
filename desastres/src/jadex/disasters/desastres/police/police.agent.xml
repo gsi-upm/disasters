@@ -8,37 +8,25 @@
 	name="police" package="disasters.desastres.police">
 
 	<imports>
-		<import>disasters.Position</import>
+		<import>disasters.*</import>
 		<import>disasters.desastres.Environment</import>
-		<import>jadex.base.fipa.*</import>
-		<import>jadex.bdi.planlib.df.DF</import>
-		<import>jadex.bdi.runtime.*</import>
-		<import>jadex.bridge.service.*</import>
-		<import>jadex.commons.*</import>
-		<import>java.util.logging.*</import>
+		<import>jadex.base.fipa.SFipa</import>
 	</imports>
-
-	<capabilities>
-		<capability name="dfcap" file="DF"/>
-	</capabilities>
 
 	<beliefs>
 		<!-- Creamos el agente como instancia del Entorno. Por defecto, en el centro de Madrid -->
 		<belief name="env" class="Environment">
-			<fact>Environment.getInstance(Environment.POLICIA, $scope.getAgentName(), $beliefbase.Comisaria)</fact>
+			<fact>Environment.getInstance(Environment.POLICIA, $scope.getAgentName(), $beliefbase.Comisaria, $scope.getComponentIdentifier())</fact>
 		</belief>
-		
 		<!-- Definimos el centro de Madrid -->
 		<belief name="Comisaria" class="Position">
 			<fact>new Position(40.421565, -3.710095)</fact> <!-- comisaria centro de madrid: calle leganitos, 19 -->
 			<!-- Pagina con todas las comisarias: http://www.valledelkas.com/servicios/InformacionCiudadana/comisarias.asp-->
 		</belief>
-		
 		<!-- Posicion del agente evaluada dinamicamente -->
 		<belief name="pos" class="Position">
 			<fact>$beliefbase.env.getAgent($scope.getAgentName()).getPosition()</fact>
 		</belief>
-
 		<!-- desastre que esta atendiendo-->
 		<!--belief name="desastreActual" class="Integer" evaluationmode="dynamic">
 			<fact>$beliefbase.env.getAgentPosition($scope.getAgentName())</fact>
@@ -46,15 +34,6 @@
 	</beliefs>
 
 	<goals>
-		<achievegoalref name="df_search">
-			<concrete ref="dfcap.df_search"/>
-		</achievegoalref>
-		<achievegoalref name="df_register">
-			<concrete ref="dfcap.df_register"/>
-		</achievegoalref>
-		<achievegoalref name="df_deregister">
-			<concrete ref="dfcap.df_deregister"/>
-		</achievegoalref>
 		<!-- Objetivo: patrullar por el mapa indefinidamente -->
 		<performgoal name="patrulla" retry="true" exclude="never"/>
 		<performgoal name="comisaria" retry="true" exclude="never"/>
@@ -84,6 +63,12 @@
 				<messageevent ref="aviso"/>
 			</trigger>
 		</plan>
+		<plan name="eliminar_plan">
+			<body class="EliminarPlan"/>
+			<parameter name="tipo" class="String">
+				<value>Environment.POLICIA</value>
+			</parameter>
+		</plan>
 	</plans>
 
 	<events>
@@ -103,21 +88,11 @@
 	<configurations>
 		<configuration name="default">
 			<goals>
-				<initialgoal ref="df_register">
-					<parameter ref="description">
-						<value>
-							$properties.dfservice.createDFComponentDescription(null,
-								$properties.dfservice.createDFServiceDescription("police_service", "police", "GSI DIT UPM"))
- 						</value>
-					</parameter>
-				</initialgoal>
 				<initialgoal ref="patrulla"/>
-				<endgoal ref="df_deregister"/>
 			</goals>
+			<plans>
+				<endplan ref="eliminar_plan"/>
+			</plans>
 		</configuration>
 	</configurations>
-
-	<properties>
-		<property name="dfservice" class="IFuture">SServiceProvider.getService($scope.getServiceProvider(), IDF.class, RequiredServiceInfo.SCOPE_PLATFORM)</property>
-	</properties>
 </agent>

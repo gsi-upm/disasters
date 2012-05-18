@@ -20,22 +20,30 @@
 		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE CATASTROFES
 			SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
-			WHERE MARCADOR = 'event'
+			WHERE MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'event')
 		</sql:update>
 	</c:when>
 	<c:when test="${param.action eq 'all'}">
-		<sql:update dataSource="${CatastrofesServer}" >
+		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE CATASTROFES
 			SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
 		</sql:update>
 	</c:when>
 	<c:when test="${param.action eq 'healthy'}">
-		<sql:update dataSource="${CatastrofesServer}" >
+		<sql:update dataSource="${CatastrofesServer}">
 			UPDATE CATASTROFES
 			SET tipo = (SELECT ID FROM TIPOS_CATASTROFES WHERE TIPO_CATASTROFE = 'healthy'),
 				ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'active'), MODIFICADO = <%=modif%>
 			WHERE ID = ?
 			<sql:param value="${param.id}"/>
+		</sql:update>
+	</c:when>
+	<c:when test="${param.action eq 'resource'}">
+		<sql:update dataSource="${CatastrofesServer}">
+			UPDATE CATASTROFES
+			SET ESTADO = (SELECT ID FROM TIPOS_ESTADOS WHERE TIPO_ESTADO = 'erased'), MODIFICADO = <%=modif%>
+			WHERE NOMBRE = ? AND MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'resource')
+			<sql:param value="${param.nombre}"/>
 		</sql:update>
 	</c:when>
 </c:choose>

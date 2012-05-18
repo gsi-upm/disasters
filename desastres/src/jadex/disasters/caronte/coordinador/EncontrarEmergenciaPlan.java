@@ -23,8 +23,8 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 		
 		if(des != null){
 			env.setTablonEventos(des.getId());
-			getBeliefbase().getBelief("emergenciaActual").setFact(des.getId());
-			getBeliefbase().getBelief("tipoEmergencia").setFact("incendio");
+			getBeliefbase().getBelief("emergencia_actual").setFact(des.getId());
+			getBeliefbase().getBelief("tipo_emergencia").setFact("incendio");
 			
 			Resource directorActuacion = directorActuacion(env, des);
 			int idDA = directorActuacion.getId();
@@ -53,23 +53,23 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 						env.printout("CANCEL", 0, idDA, true);
 						env.leaveResource(idDA);
 						env.addInactiveResource(idDA);
-						getBeliefbase().getBelief("idDirectorActuacion").setFact(0);
+						getBeliefbase().getBelief("id_director_actuacion").setFact(0);
 						env.removeTablonEventos(des.getId());
-						getBeliefbase().getBelief("emergenciaActual").setFact(0);
+						getBeliefbase().getBelief("emergencia_actual").setFact(0);
 					}
 				}
 			
 				if(confirmado){
 					String accion = respuesta.getJSONObject(0).getString("mensaje");
 					if(accion.equals("OK")){
-						IGoal avisarAgentes = createGoal("avisarAgentes");
+						IGoal avisarAgentes = createGoal("avisar_agentes");
 						dispatchSubgoalAndWait(avisarAgentes);
 					}else if(accion.equals("NO")){
 						env.leaveResource(idDA);
 						env.addInactiveResource(idDA);
-						getBeliefbase().getBelief("idDirectorActuacion").setFact(0);
+						getBeliefbase().getBelief("id_director_actuacion").setFact(0);
 						env.removeTablonEventos(des.getId());
-						getBeliefbase().getBelief("emergenciaActual").setFact(0);
+						getBeliefbase().getBelief("emergencia_actual").setFact(0);
 					}
 				}
 			}catch(JSONException ex){
@@ -79,8 +79,8 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 			People her = buscarHeridos(env);
 			if(her != null){
 				env.setTablonEventos(her.getId());
-				getBeliefbase().getBelief("emergenciaActual").setFact(her.getId());
-				getBeliefbase().getBelief("tipoEmergencia").setFact("herido");
+				getBeliefbase().getBelief("emergencia_actual").setFact(her.getId());
+				getBeliefbase().getBelief("tipo_emergencia").setFact("herido");
 			}
 		}
 		waitFor(2500);
@@ -212,7 +212,7 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 				}
 			}
 			env.useResource(directorActuacion.getId(), "DA");
-			getBeliefbase().getBelief("idDirectorActuacion").setFact(directorActuacion.getId());
+			getBeliefbase().getBelief("id_director_actuacion").setFact(directorActuacion.getId());
 		}
 		
 		return directorActuacion;

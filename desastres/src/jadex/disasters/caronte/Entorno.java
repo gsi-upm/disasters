@@ -3,7 +3,6 @@ package disasters.caronte;
 import disasters.*;
 import jadex.bridge.IComponentIdentifier;
 import jadex.commons.SimplePropertyChangeSupport;
-import jadex.commons.collection.MultiCollection;
 import java.sql.Timestamp;
 import java.util.*;
 import org.json.me.*;
@@ -27,6 +26,8 @@ public class Entorno{
 	public static final String EVACUACION = "EvacuacionResidencia";
 	/** Agente apoyo externo. */
 	public static final String APOYO_EXTERNO = "ApoyoExterno";
+	private static final String[] COMPONENTES_AUX = {COORDINADOR, INTERVENCION_INCENDIOS, ATENCION_HERIDOS, EVACUACION};
+	public static final List<String> COMPONENTES = Arrays.asList(COMPONENTES_AUX);
 	private static TimerJSON temporizador;
 	private final int tiempoJSON = 5000;
 	private String ahora;
@@ -41,6 +42,14 @@ public class Entorno{
 	/** Emergencias que se deben atender. */
 	private ArrayList<Integer> tablonEventos;
 	private ArrayList<Integer> tablonHeridos;
+	
+	/** Agentes (nombre -> WorldObject). */
+	private HashMap<String,WorldObject> agentes;
+	/** Numero de agentes creados, no tienen por que estar activos. */
+	private int numAgentes;
+	/** Objeto para notificar cambios. */
+	private SimplePropertyChangeSupport pcs;
+	
 	private static Entorno instance;
 	
 	// Los nombres de los agentes
@@ -68,15 +77,12 @@ public class Entorno{
 	public static final String BOMBERO = "firemen";
 	/** Agente policia. */
 	public static final String POLICIA = "police";
-	/** Agentes (nombre -> WorldObject). */
-	private HashMap<String,WorldObject> agentes;
-	/** Agentes y Eventos (Pos -> WorldObject). */
-	private MultiCollection objetos;
-	/** Numero de agentes creados, no tienen por que estar activos. */
-	private int numAgentes;
-	/** Objeto para notificar cambios. */
-	private SimplePropertyChangeSupport pcs;
-	private HashMap<String,IComponentIdentifier> listado;
+	/**  */
+	private static final String[] AGENTES_AUX = {ENFERMERO, CELADOR, GEROCULTOR, AUXILIAR,
+		RECEPCIONISTA, OTRO_PERSONAL, CIUDADANO, AMBULANCIA, BOMBERO, POLICIA};
+	public static final List<String> AGENTES = Arrays.asList(AGENTES_AUX);
+	private static final String[] COMPONENTES2_AUX = {COORDINADOR_EMERGENCIAS, CENTRAL_EMERGENCIAS};
+	public static final List<String> COMPONENTES2 = Arrays.asList(COMPONENTES2_AUX);
 
 	//---------------------
 	/**
@@ -95,10 +101,8 @@ public class Entorno{
 		tablonHeridos = new ArrayList<Integer>();
 		
 		agentes = new HashMap<String,WorldObject>();
-		objetos = new MultiCollection();
 		numAgentes = 0;
 		pcs = new SimplePropertyChangeSupport(this);
-		listado = new HashMap<String,IComponentIdentifier>();
 
 		// Esto LA PRIMERA VEZ - recibo el json
 		try{
@@ -462,13 +466,13 @@ public class Entorno{
 	 * @param pos Posicion
 	 * @return Instancia de entorno
 	 */
-	public static Entorno getInstance(String tipo, String nombre, Position pos){
+	public static Entorno getInstance(String tipo, String nombre, Position pos, IComponentIdentifier agentId){
 		// La primera vez que se llama a este metodo (el agente Entorno), instance vale null
 		if(instance == null){
 			instance = new Entorno();
 		}
 		if(tipo != null && nombre != null){
-			instance.addWorldObject(tipo, nombre, pos, null);
+			instance.addWorldObject(tipo, nombre, pos, null, agentId);
 		}
 		return instance;
 	}
@@ -481,6 +485,111 @@ public class Entorno{
 		temporizador = null;
 		instance = null;
 		System.out.println("Entorno detenido");
+	}
+	
+	/**
+	 * Annade un objeto al entorno.
+	 * 
+	 * @param type Tipo
+	 * @param name Nombre
+	 * @param position Posicion
+	 * @param info Informacion
+	 * @param agentId Identificador del agente
+	 */
+	public void addWorldObject(String type, String name, Position position, String info, IComponentIdentifier agentId){
+		WorldObject wo = new WorldObject(name, type, position, info, agentId);
+
+		if(AGENTES.contains(type)){
+			// REST -> cree el recurso
+			System.out.println("LLamada a REST creando agente...");
+			if(info == null){
+				info = "";
+			}
+			String resultado = Connection.connect(URL + "post/type=" + type + "&name=" + name +
+				"&info=" + info + "&latitud=" + position.getLat() + "&longitud=" + position.getLng());
+			try{
+				//JSON -> guardo el id
+				JSONObject idJson = new JSONObject(resultado);
+				int id = idJson.getInt("id");
+				wo.setId(id);
+				System.out.println("Id del objeto creado: " + id);
+				System.out.println("Creando agente del tipo " + type);
+				agentes.put(name, wo); // Si es un pironamo, se annade a la tabla de agentes
+				numAgentes++;
+			}catch(JSONException e){
+				System.out.println("Error con JSON: " + e);
+			}
+		}else if(COMPONENTES.contains(type) || COMPONENTES2.contains(type)){
+			System.out.println("Creando componente del tipo " + type);
+			agentes.put(name, wo);
+			numAgentes++;
+		}
+	}
+	
+	/**
+	 * Elimina un objeto del entorno
+	 * 
+	 * @param type Tipo
+	 * @param name Nombre
+	 */
+	public void removeWorldObject(String type, String name){
+		if(AGENTES.contains(type)){
+			System.out.println("Llamada a REST eliminando agente...");
+			Connection.connect(URL + "delete/resource/" + name);
+		}
+		System.out.println("Eliminando agente de tipo " + type);
+		agentes.remove(name);
+		numAgentes--;
+	}
+	
+	/**
+	 * Devuelve todos los agentes.
+	 * 
+	 * @return Todos los agentes
+	 */
+	public HashMap<String,WorldObject> getAgents(){
+		return agentes;
+	}
+	
+	/**
+	 * Devuelve un agente dado su nombre (el nombre de los agentes es unico).
+	 * 
+	 * @param name Nombre
+	 * @return Agente
+	 */
+	public synchronized WorldObject getAgent(String name){
+		assert agentes.containsKey(name);
+		return agentes.get(name);
+	}
+
+	/**
+	 * Elimina un agente dado su nombre (el nombre de los agentes es unico).
+	 * 
+	 * @param name Nombre
+	 * @return Agente eliminado
+	 */
+	public synchronized WorldObject removeAgent(String name){
+		assert agentes.containsKey(name);
+		return agentes.remove(name);
+	}
+
+	/**
+	 * Devuelve todos los agentes.
+	 * 
+	 * @return Todos los agentes
+	 */
+	public WorldObject[] getAgentes(){
+		Collection<WorldObject> col = agentes.values();
+		return col.toArray(new WorldObject[col.size()]);
+	}
+
+	/**
+	 * Devuelve el numero total de agentes creados.
+	 * 
+	 * @return Numero total de agentes creados
+	 */
+	public int getNumAgentes(){
+		return numAgentes;
 	}
 	
 	/**
@@ -801,7 +910,7 @@ public class Entorno{
 		Collection<Resource> col = recursosLibres.values();
 		return col.toArray(new Resource[col.size()]);
 	}
-
+	
 	/**
 	 * Imprime un String por pantalla y lo envia para mostrar en la web.
 	 *
@@ -819,39 +928,6 @@ public class Entorno{
 	
 	// SIMULADOR ************************************************************ //
 	
-	/**
-	 * Annade un objeto al entorno.
-	 * 
-	 * @param type Tipo
-	 * @param name Nombre
-	 * @param position Posicion
-	 * @param info Informacion
-	 */
-	public void addWorldObject(String type, String name, Position position, String info){
-		WorldObject wo = new WorldObject(name, type, position, info);
-
-		if(type.equals(AMBULANCIA) || type.equals(BOMBERO) || type.equals(POLICIA)|| type.equals(ENFERMERO)
-				|| type.equals(GEROCULTOR) || type.equals(AUXILIAR) || type.equals(OTRO_PERSONAL)){
-			// REST -> cree el recurso
-			System.out.println("LLamada a REST creando agente...");
-			String resultado = Connection.connect(URL + "post/type=" + type + "&name=" + name +
-				"&info=" + info + "&latitud=" + position.getLat() + "&longitud=" + position.getLng());
-			try{
-				//JSON -> guardo el id
-				JSONObject idJson = new JSONObject(resultado);
-				int id = idJson.getInt("id");
-				wo.setId(id);
-				System.out.println("Id del objeto creado: " + id);
-				System.out.println("Creando agente del tipo " + type);
-				agentes.put(name, wo); // Si es un pironamo, se annade a la tabla de agentes
-				objetos.put(position, wo); // Y tambien a la de elementos del mundo
-				numAgentes++;
-			}catch(JSONException e){
-				System.out.println("Error con JSON: " + e);
-			}
-		}
-	}
-
 	/**
 	 * Modifica la posicion de un agente.
 	 * 
@@ -953,14 +1029,11 @@ public class Entorno{
 		
 		// No deben varios agentes tocar las tablas hash a la vez
 		synchronized(this){
-			wo = getAgent(name);        // Obtenemos el agente de la tabla Hash agentes, dado su nombre
-			oldPos = wo.getPosition();  // Obtenemos la posicion del agente antes de desplazarlo
-			objetos.remove(oldPos, wo); // Eliminamos el agente de su posicion (de la coleccion Objetos)
+			wo = getAgent(name);       // Obtenemos el agente de la tabla Hash agentes, dado su nombre
+			oldPos = wo.getPosition(); // Obtenemos la posicion del agente antes de desplazarlo
 			
-			wo.setPosition(pos);  // Actualizamos la posicion al objeto agente
-			objetos.put(pos, wo); // Annadimos el objeto, con la posicion renovada
-			removeAgent(name);    // Actualizamos la tabla Hash de agentes
-			agentes.put(name, wo);
+			wo.setPosition(pos); // Actualizamos la posicion al objeto agente  
+			agentes.put(name, wo); // Actualizamos la tabla Hash de agentes
 		}
 
 		// Avisamos para el modo de evaluacion dinamico de posicion de que hemos variado una poscicion
@@ -1006,107 +1079,5 @@ public class Entorno{
 
 		Position nuevaAleatoria = new Position(marcoInferior + Math.random() * alturaMarco, marcoIzquierdo + Math.random() * anchuraMarco);
 		return nuevaAleatoria;
-	}
-	
-	/**
-	 * Devuelve todos los agentes.
-	 * 
-	 * @return Todos los agentes
-	 */
-	public HashMap<String,WorldObject> getAgents(){
-		return agentes;
-	}
-	
-	/**
-	 * Devuelve un agente dado su nombre (el nombre de los agentes es unico).
-	 * 
-	 * @param name Nombre
-	 * @return Agente
-	 */
-	public synchronized WorldObject getAgent(String name){
-		assert agentes.containsKey(name);
-		return agentes.get(name);
-	}
-
-	/**
-	 * Elimina un agente dado su nombre (el nombre de los agentes es unico).
-	 * 
-	 * @param name Nombre
-	 * @return Agente eliminado
-	 */
-	public synchronized WorldObject removeAgent(String name){
-		assert agentes.containsKey(name);
-		return agentes.remove(name);
-	}
-
-	/**
-	 * Devuelve todos los agentes.
-	 * 
-	 * @return Todos los agentes
-	 */
-	public WorldObject[] getAgentes(){
-		Collection<WorldObject> col = agentes.values();
-		return col.toArray(new WorldObject[col.size()]);
-	}
-	
-	/**
-	 * Devuelve todos los objetos que haya en una posicion.
-	 * 
-	 * @param pos Posicion
-	 * @return Todos los objetos de la posicion
-	 */
-	public WorldObject[] getWorldObjects(Position pos){
-		Collection col = objetos.getCollection(pos);
-		return (WorldObject[]) col.toArray();
-	}
-
-	/**
-	 * Devuelve el numero total de agentes creados.
-	 * 
-	 * @return Numero total de agentes creados
-	 */
-	public int getNumAgentes(){
-		return numAgentes;
-	}
-
-	// LISTADO ************************************************************** //
-
-	/**
-	 * 
-	 * 
-	 * @param nombre Nombre
-	 * @param id Identificador
-	 */
-	public void putListado(String nombre, IComponentIdentifier id){
-		listado.put(nombre,id);
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param nombre Nombre
-	 * @return Identificador
-	 */
-	public IComponentIdentifier getListado(String nombre){
-		return listado.get(nombre);
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param usuario Usuario
-	 */
-	public void removeListado(String usuario){
-		listado.remove(usuario);
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param nombre Nombre
-	 * @return Si esta en el listado
-	 */
-	public boolean containsListado(String nombre){
-		return listado.containsKey(nombre);
 	}
 }

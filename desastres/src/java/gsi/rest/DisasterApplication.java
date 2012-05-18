@@ -133,6 +133,16 @@ public class DisasterApplication extends Application {
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
+		
+		// Delete resource
+		Restlet delResource = new Restlet(getContext()){
+			@Override
+			public void handle(Request request, Response response){
+				String name = (String) request.getAttributes().get("name");
+				String redirector = URL_BASE + "delete.jsp?action=resource&nombre=" + name;
+				response.redirectTemporary(removeBlanks(redirector));
+			}
+		};
 
 		//Post Events in the database
 		Restlet post = new Restlet(getContext()){
@@ -643,6 +653,7 @@ public class DisasterApplication extends Application {
 		router.attach("/delete/id/{id}", delId);
 		router.attach("/delete/events", delEvents);
 		router.attach("/delete/all", delAll);
+		router.attach("/delete/resource/{name}", delResource);
 
 		router.attach("/post/{params}", post);
 
