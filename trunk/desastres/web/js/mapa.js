@@ -320,6 +320,42 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
 	if(proyecto == 'caronte'){
 		guardar(nuevomarcador);
 	}
+        
+        /** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent */
+        if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
+            
+            var type = 'AMBOS'; // Variable que establece si: 
+            // 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (REGISTRAR) <-- valores q toma type
+            // 2) estamos produciendo solo el evento (PRODUCIR)
+            // 3) estamos registrandonos a un evento y produciendo simultaneamente (AMBOS)
+            
+            var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
+            
+            $.ajax({
+                    url:'/caronte/recibeEvento',
+                    type: 'POST',
+                    data: {
+                        'type':type,
+                        'event':tipo,
+                        'size':size,
+                        'description':descTotal,
+                        'name':nombre,
+                        'longitude':longitud,
+                        'floor':planta,
+                        'latitude':latitud,   
+                        'date':fecha
+                    },
+                    success: function(data,status) { 
+                        console.log("Success!!");
+                        console.log("Datos devueltos por RecibeEventoServlet: "+data);
+                        console.log("Mensaje de response code de HTTP enviado por RecibeEvento: "+status);
+                    },
+                    error: function(xhr, desc, err) {
+                    console.log(xhr);
+                    console.log("Desc: " + desc + "\nErr:" + err);
+                    }
+                });
+        }
 }
 
 /**
