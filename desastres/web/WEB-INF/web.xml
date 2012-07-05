@@ -22,6 +22,14 @@
         <servlet-name>RestletServlet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>RecibeEvento</servlet-name>
+        <servlet-class>gsi.envioOCP.RecibeEvento</servlet-class>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>RecibeEvento</servlet-name>
+        <url-pattern>/recibeEvento</url-pattern>
+    </servlet-mapping>
     <!-- DWR -->
     <!--<servlet>
         <servlet-name>dwr-invoker</servlet-name>
@@ -48,14 +56,14 @@
         <servlet-name>RegistroServlet</servlet-name>
         <url-pattern>/registro</url-pattern>
     </servlet-mapping>
-	<!-- Define the pushlet servlet -->
-	<!--<servlet>
+    <!-- Define the pushlet servlet -->
+    <!--<servlet>
 		<servlet-name>pushlet</servlet-name>
 		<servlet-class>nl.justobjects.pushlet.servlet.Pushlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>-->
-	<!-- The pushlet -->
-	<!--<servlet-mapping>
+    <!-- The pushlet -->
+    <!--<servlet-mapping>
 		<servlet-name>pushlet</servlet-name>
 		<url-pattern>/pushlet.srv</url-pattern>
 	</servlet-mapping>-->
@@ -97,7 +105,7 @@
         <error-code>500</error-code>
         <location>/error/500.jsp</location>
     </error-page>-->
-	<security-role>
+    <security-role>
         <description>Administrador</description>
         <role-name>administrador</role-name>
     </security-role>
@@ -113,4 +121,6 @@
             <role-name>*</role-name>
         </auth-constraint>
     </security-constraint>
-</web-app>
+
+    --&gt;
+    </web-app>
