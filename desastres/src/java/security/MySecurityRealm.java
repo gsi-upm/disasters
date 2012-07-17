@@ -56,7 +56,7 @@ package security;
 
 import gsi.project.*;
 import gsi.rest.Connection;
-import java.security.*;
+import java.security.Principal;
 import java.sql.*;
 import java.util.Date;
 import org.json.me.*;
@@ -83,11 +83,11 @@ public class MySecurityRealm implements SecurityRealmInterface{
 	 */
 	public boolean booleanAuthenticate(String username, String password){
 		boolean autenticado = false;
-		String pass = MD5(password);
+		String pass = HashAlgorithm.SHA256(password, username);
 		
 		if(Constantes.DB.equals("hsqldb")){
 			try{
-				String url = Connection.getURL();
+				String url = Connection.URL_BASE;
 				String usuarioAux = Connection.connect(url + "user/" + username + "/" + pass);
 				JSONArray usuario = new JSONArray(usuarioAux);
 				
@@ -102,13 +102,13 @@ public class MySecurityRealm implements SecurityRealmInterface{
 					Connection.connect(url + "insertar/" + tipoUsuario + "/" + username + "/" +
 						descripcion + "/" + informacion + "/" + latitud + "/" + longitud + "/" + planta);
 				}
-			}catch(Exception ex){
-				System.out.println("Excepcion: " + ex);
+			}catch(JSONException ex){
+				System.out.println("JSONExcepcion: " + ex);
 			}
 		}else{
 			try{
 				Class.forName(Constantes.DB_DRIVER);
-				java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL,Constantes.DB_USER,Constantes.DB_PASS);
+				java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL, Constantes.DB_USER, Constantes.DB_PASS);
 				Statement s = conexion.createStatement();
 				ResultSet rs = s.executeQuery(SQLQueries.user(username, pass));
 				if(rs.next()){
@@ -131,36 +131,13 @@ public class MySecurityRealm implements SecurityRealmInterface{
 					s.executeUpdate(SQLQueries.insertar(tipoUsuario, username, descripcion, informacion, latitud, longitud, estado, date, planta));
 				}
 				conexion.close();
-			}catch(Exception ex){
-				System.out.println("Excepcion: " + ex);
+			}catch(ClassNotFoundException ex){
+				System.out.println("ClassNotFoundExcepcion: " + ex);
+			}catch(SQLException ex){
+				System.out.println("SQLExcepcion: " + ex);
 			}
 		}
 		return autenticado;
-	}
-	
-	/**
-	 * Devuelde el hash MD5 de la contrasenna del usuario
-	 * 
-	 * @param valor Contrasenna del usuario
-	 * @return Contrasenna codificada
-	 */
-	private String MD5(String valor){
-		String hash = "";
-		try{
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			md5.update(valor.getBytes("UTF-8"));
-			byte[] valorHash = md5.digest();
-			int[] valorHash2 = new int[16];
-			for(int i = 0; i < valorHash.length; i++){
-				valorHash2[i] = new Integer(valorHash[i]);
-				if(valorHash2[i] < 0){
-					valorHash2[i] += 256;
-				}
-				hash += (Integer.toHexString(valorHash2[i]));
-			}
-		}catch(Exception ex){}
-
-		return hash;
 	}
 
 	/**
@@ -175,7 +152,7 @@ public class MySecurityRealm implements SecurityRealmInterface{
 		
 		if(Constantes.DB.equals("hsqldb")){
 			try{
-				String url = Connection.getURL();
+				String url = Connection.URL_BASE;
 				String rolUsuarioAux = Connection.connect(url + "userRole/" + username);
 				JSONArray rolUsuario = new JSONArray(rolUsuarioAux);
 				
@@ -188,7 +165,7 @@ public class MySecurityRealm implements SecurityRealmInterface{
 		}else{
 			try{
 				Class.forName(Constantes.DB_DRIVER);
-				java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL,Constantes.DB_USER,Constantes.DB_PASS);
+				java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL, Constantes.DB_USER, Constantes.DB_PASS);
 				Statement s = conexion.createStatement();
 				ResultSet rs = s.executeQuery(SQLQueries.userRole(username));
 				if(rs.next()){
@@ -197,8 +174,10 @@ public class MySecurityRealm implements SecurityRealmInterface{
 					}
 				}
 				conexion.close();
-			}catch(Exception ex){
-				System.out.println("Excepcion: " + ex);
+			}catch(ClassNotFoundException ex){
+				System.out.println("ClassNotFoundExcepcion: " + ex);
+			}catch(SQLException ex){
+				System.out.println("SQLExcepcion: " + ex);
 			}
 		}
 		return rol;

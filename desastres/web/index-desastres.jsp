@@ -25,8 +25,8 @@
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css"/>
 			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
-			<script type="application/javascript" src="js/jquery-1.7.1.min.js"></script>
-			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=false"></script>
+			<script type="application/javascript" src="js/jquery-1.7.2.min.js"></script>
+			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.8&amp;sensor=false"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
 				var usuario_actual = ${usuario.id};
@@ -120,14 +120,13 @@
 			</table>
 			<%--
 				int[] rscs = recursos.getResourcesList();
-				for (int i = 0; i < rscs.length; i++) {
+				for(int i = 0; i < rscs.length; i++){
 					String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\"/>";
 					out.println(st);
 					String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\"/>";
 					out.println(ed);
 				}
 			--%>
-			
 			<c:if test="${param.alert == true}">
 				<script type="application/javascript">
 					window.alert('Fin de la simulación');

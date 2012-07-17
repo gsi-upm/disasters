@@ -10,8 +10,8 @@ import java.net.MalformedURLException;
  * This class provides an interface for using the REST API.
  * @author al.lopezf
  */
-public class EventsManagement {
-    private static final String URL_BASE = Connection.getURL();
+public class EventsManagement{
+    private static final String URL_BASE = Connection.URL_BASE;
     private static final String POST = "post/";
     private static final String PUT = "put/";
     private static final String DELETE = "delete/";
@@ -23,16 +23,16 @@ public class EventsManagement {
      * @return the String without blanks
      */
     public static String removeBlanks(String string){
-        String newString = "";
-        String newChar;
-            for (int i=0;i<string.length();i++){
-                newChar = string.substring(i,i+1);
-
-                if(newChar.equals(" ")){newString=newString.concat("+");}
-                else{newString=newString.concat(newChar);}
-
-            }
-
+		String newString = "";
+		String newChar;
+		for(int i = 0; i < string.length(); i++){
+			newChar = string.substring(i, i+1);
+			if(newChar.equals(" ")){
+				newString=newString.concat("+");
+			}else{
+				newString=newString.concat(newChar);
+			}
+		}
         return newString;
     }
 
@@ -41,15 +41,15 @@ public class EventsManagement {
      * List all the events in the app
      * @return a String with all the events, in a JSON notation.
      */
-    public static String listAllEvents() {
+    public static String listAllEvents(){
         WebFile web;
         String response = "error";
-        try {
+        try{
             web = new WebFile(URL_BASE + LIST);
             response = (String) web.getContent();
-        } catch (MalformedURLException ex) {
+        }catch(MalformedURLException ex){
             ex.printStackTrace();
-        } catch (IOException ex) {
+        }catch(IOException ex){
             ex.printStackTrace();
         }
         return response.trim();
@@ -195,7 +195,7 @@ public class EventsManagement {
      */
     public static void delete(int id) {
         WebFile web;
-        String content = "";
+        String content;
         String URL = "";
         try {
             URL += URL_BASE + DELETE + "id/" + id;

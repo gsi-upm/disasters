@@ -1,12 +1,12 @@
 function registro(){
 	borrarRegistro();
-	document.getElementById('loginform').style.display = 'none';
+	document.getElementById('loginForm').style.display = 'none';
 	document.getElementById('registro').style.display = 'block';
 }
 
 function cancelarRegistro(){
 	borrarRegistro();
-	document.getElementById('loginform').style.display = 'block';
+	document.getElementById('loginForm').style.display = 'block';
 	document.getElementById('registro').style.display = 'none';
 }
 
@@ -14,7 +14,7 @@ function registrar(user, pass1, pass2, nombre, email){
 	limpiarRegistro();
 	if(user != '' && pass1 != '' && pass2 != '' && nombre != '' && email != ''){
 		if(pass1 == pass2){
-			$.get('/caronte/registro',{
+			$.post('/caronte/registro',{
 				'user':user,
 				'pass':pass1,
 				'nombre':nombre,
@@ -22,7 +22,7 @@ function registrar(user, pass1, pass2, nombre, email){
 			}, function(data) {
 				if(data == 'ok'){
 					document.getElementById('regMsg').innerHTML = 'REGISTRO CORRECTO!';
-					document.getElementById('loginform').style.display = 'block';
+					document.getElementById('loginForm').style.display = 'block';
 					document.getElementById('registro').style.display = 'none';
 					document.getElementById('username').value = user;
 					document.getElementById('pwd').value = pass1;
@@ -56,7 +56,7 @@ function borrarRegistro(){
 	document.getElementById('registro').user.value = '';
 	document.getElementById('registro').pass1.value = '';
 	document.getElementById('registro').pass2.value = '';
-	document.getElementById('registro').name.value = '';
+	document.getElementById('registro').nombre.value = '';
 	document.getElementById('registro').email.value = '';
 	document.getElementById('regMsg').innerHTML = '';
 	limpiarRegistro();

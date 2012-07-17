@@ -12,25 +12,9 @@ function actualizar2(){}
 
 function buildingInit(){
 	var formBuild = document.getElementById('buildings');
-	if(formBuild.hospital.checked){
-		showBuilding('hospital'); // para mostrar los edificios
-	}
-	if(formBuild.firemenStation.checked){
-		showBuilding('firemenStation');
-	}
-	if(formBuild.policeStation.checked){
-		showBuilding('policeStation');
-	}
-}
-
-function showBuilding(type){
-	if(type == 'hospital'){
-		generateBuilding('hospital','Hospital Gregorio Marañon', 40.418702, -3.670573);
-	}else if(type == 'firemenStation'){
-		generateBuilding('firemenStation','Parque de Bomberos', 40.414691, -3.706996);
-	}else if(type == 'policeStation'){
-		generateBuilding('policeStation','Comisar&iacute;a central', 40.421565, -3.710095);
-	}
+	generateBuilding('hospital','Hospital Gregorio Marañon', 40.418702, -3.670573, formBuild.hospital.checked);
+	generateBuilding('firemenStation','Parque de Bomberos', 40.414691, -3.706996, formBuild.firemenStation.checked);
+	generateBuilding('policeStation','Comisar&iacute;a central', 40.421565, -3.710095, formBuild.policeStation.checked);
 }
 
 function definirOpciones(evento){

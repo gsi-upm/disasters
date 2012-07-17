@@ -1,10 +1,10 @@
 package gsi.project;
 
 import java.io.*;
-import java.security.MessageDigest;
 import java.sql.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
+import security.HashAlgorithm;
 
 /**
  *
@@ -24,18 +24,18 @@ public class RegistroServlet extends HttpServlet{
 		PrintWriter out = response.getWriter();
 		
 		String usuario = request.getParameter("user");
-		String contraAux = request.getParameter("pass");
+		String pass = request.getParameter("pass");
+		String contra = HashAlgorithm.SHA256(pass, usuario);
 		String nombre = request.getParameter("nombre");
 		String email = request.getParameter("email");
-		String contra = MD5(contraAux);
 		
 		String url = Constantes.DB_URL;
 		if(Constantes.DB.equals("hsqldb")){
-			url += this.getServletContext().getRealPath("/WEB-INF/db/" + Constantes.PROJECT);
+			url += getServletContext().getRealPath("/WEB-INF/db/" + Constantes.PROJECT);
 		}
 		try{
 			Class.forName(Constantes.DB_DRIVER);
-			java.sql.Connection conexion = DriverManager.getConnection(url,Constantes.DB_USER,Constantes.DB_PASS);
+			Connection conexion = DriverManager.getConnection(url, Constantes.DB_USER, Constantes.DB_PASS);
 			Statement s = conexion.createStatement();
 			ResultSet rs = s.executeQuery(SQLQueries.userRole(usuario)); // para ver si existe
 			if(rs.next()){
@@ -45,34 +45,11 @@ public class RegistroServlet extends HttpServlet{
 				out.print("ok");
 			}
 			conexion.close();
-		}catch(Exception ex){
-			System.out.println("Excepcion: " + ex);
+		}catch(ClassNotFoundException ex){
+			System.out.println("ClassNotFoundExcepcion: " + ex);
+		}catch(SQLException ex){
+			System.out.println("SQLExcepcion: " + ex);
 		}
-	}
-
-	/**
-	 * Devuelde el hash MD5 de la contrasenna del usuario
-	 * 
-	 * @param valor Contrasenna del usuario
-	 * @return Contrasenna codificada
-	 */
-	private String MD5(String valor){
-		String hash = "";
-		try{
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			md5.update(valor.getBytes("UTF-8"));
-			byte[] valorHash = md5.digest();
-			int[] valorHash2 = new int[16];
-			for(int i = 0; i < valorHash.length; i++){
-				valorHash2[i] = new Integer(valorHash[i]);
-				if(valorHash2[i] < 0){
-					valorHash2[i] += 256;
-				}
-				hash += (Integer.toHexString(valorHash2[i]));
-			}
-		}catch(Exception ex){}
-		
-		return hash;
 	}
 	
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

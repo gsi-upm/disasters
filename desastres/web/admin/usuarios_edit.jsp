@@ -1,6 +1,6 @@
 <%@page contentType="applicacion/x-sql" pageEncoding="UTF-8"%>
 <%@page isELIgnored="false"%>
-<%@page import="java.security.MessageDigest"%>
+<%@page import="security.HashAlgorithm"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
@@ -38,22 +38,9 @@
 	<c:when test="${param.accion == 'crear'}">
 		<c:set var="password">
 			<%
+				String usuario = request.getParameter("nombre_usuario");
 				String password = request.getParameter("password");
-				String hash = "";
-				try{
-					MessageDigest md5 = MessageDigest.getInstance("MD5");
-					md5.update(password.getBytes("UTF-8"));
-					byte[] valorHash = md5.digest();
-					int[] valorHash2 = new int[16];
-					for(int i = 0; i < valorHash.length; i++){
-						valorHash2[i] = new Integer(valorHash[i]);
-						if(valorHash2[i] < 0){
-							valorHash2[i] += 256;
-						}
-						hash += (Integer.toHexString(valorHash2[i]));
-					}
-				}catch(Exception ex){}
-				out.print(hash);
+				out.print(HashAlgorithm.SHA256(password, usuario));
 			%>
 		</c:set>
 		<sql:update dataSource="${CatastrofesServer}">

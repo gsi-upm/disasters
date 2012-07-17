@@ -37,11 +37,11 @@ public class UserBean implements Serializable{
 		String oldValue = nombre;
 		nombre = value;
 		propertySupport.firePropertyChange(NOMBRE, oldValue, nombre);
-		if(value != null && value.equals("") == false && value.equals(oldValue) == false){
+		if(value != null && value.equals(oldValue) == false){
 			if(Constantes.DB.equals("hsqldb")){
 				try{
-					String url = Connection.getURL();
-					String proyectoAux = Connection.connect(url + "userProject/" + value);
+					String url = Connection.URL_BASE;
+					String proyectoAux = Connection.connect(url + "userRole/" + value);
 					JSONArray proyecto = new JSONArray(proyectoAux);
 					setId(proyecto.getJSONObject(0).getInt("id"));
 					setRol(proyecto.getJSONObject(0).getString("rol"));
@@ -52,17 +52,20 @@ public class UserBean implements Serializable{
 			}else{
 				try{
 					Class.forName(Constantes.DB_DRIVER);
-					java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL,Constantes.DB_USER,Constantes.DB_PASS);
+					java.sql.Connection conexion = DriverManager.getConnection(Constantes.DB_URL,
+							Constantes.DB_USER, Constantes.DB_PASS);
 					java.sql.Statement s = conexion.createStatement();
-					ResultSet rs = s.executeQuery(SQLQueries.userProject(value));
+					ResultSet rs = s.executeQuery(SQLQueries.userRole(value));
 					if(rs.next()){
 						setId(rs.getInt(1));
 						setRol(rs.getString(2));
 						setNivelMsg(rs.getInt(3));
 					}
 					conexion.close();
-				}catch(Exception ex){
-					System.out.println("Excepcion: " + ex);
+				}catch(ClassNotFoundException ex){
+					System.out.println("ClassNotFoundExcepcion: " + ex);
+				}catch(SQLException ex){
+					System.out.println("SQLExcepcion: " + ex);
 				}
 			}
 		}

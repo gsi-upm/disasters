@@ -24,8 +24,8 @@
 					modif + " WHERE NOMBRE = '" + request.getParameter("nombre") +
 					"' AND MARCADOR = (SELECT ID FROM TIPOS_MARCADORES WHERE TIPO_MARCADOR = 'resource')");
 				conexion.close();
-			}catch(Exception ex){
-				System.out.println("Excepcion: " + ex);
+			}catch(ClassNotFoundException ex){
+				System.out.println("ClassNotFoundExcepcion: " + ex);
 			}
 			
 			response.sendRedirect("index.jsp");

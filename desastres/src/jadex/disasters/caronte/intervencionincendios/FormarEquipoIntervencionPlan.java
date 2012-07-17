@@ -24,16 +24,7 @@ public class FormarEquipoIntervencionPlan extends CarontePlan{
 		
 		Resource[] agentes = env.getFreeResources();
 		if(agentes.length > 0){
-			Resource atiende = agentes[0];
-			for(int i = 1; i < agentes.length; i++){
-				double distAtiende = distancia(atiende.getLatitud(), atiende.getLongitud(), des.getLatitud(), des.getLongitud());
-				double distAgente = distancia(agentes[i].getLatitud(), agentes[i].getLongitud(), des.getLatitud(), des.getLongitud());
-				boolean mejorPlanta = mejorPlanta(agentes[i].getFloor(), atiende.getFloor(), des.getFloor());
-				if((agentes[i].getType().equals("gerocultor") && distAgente < distAtiende && mejorPlanta) ||
-						(agentes[i].getType().equals("gerocultor") == false && atiende.getType().equals("gerocultor") == false && distAgente < distAtiende && mejorPlanta)){
-					atiende = agentes[i];
-				}
-			}
+			Resource atiende = getAtiende(agentes, des);
 			
 			if(numEpi - epi.length > 0){
 				env.useResource(atiende.getId(), "EPI");
@@ -41,10 +32,29 @@ public class FormarEquipoIntervencionPlan extends CarontePlan{
 			}else{
 				env.useResource(atiende.getId(), "ESI");
 				getBeliefbase().getBeliefSet("esi").addFact(atiende.getId());
-			}
-			
+			}	
 		}else{
 			waitFor(2500);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param agentes
+	 * @param des
+	 * @return 
+	 */
+	private Resource getAtiende(Resource[] agentes, Disaster des){
+		Resource atiende = agentes[0];
+		for(int i = 1; i < agentes.length; i++){
+			double distAtiende = distancia(atiende.getLatitud(), atiende.getLongitud(), des.getLatitud(), des.getLongitud());
+			double distAgente = distancia(agentes[i].getLatitud(), agentes[i].getLongitud(), des.getLatitud(), des.getLongitud());
+			boolean mejorPlanta = mejorPlanta(agentes[i].getFloor(), atiende.getFloor(), des.getFloor());
+			if((agentes[i].getType().equals("gerocultor") && distAgente < distAtiende && mejorPlanta) ||
+					(agentes[i].getType().equals("gerocultor") == false && atiende.getType().equals("gerocultor") == false && distAgente < distAtiende && mejorPlanta)){
+				atiende = agentes[i];
+			}
+		}
+		return atiende;
 	}
 }

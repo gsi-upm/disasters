@@ -23,10 +23,6 @@ var hospitals = new Array();
 var policeStations = new Array();
 var firemenStations = new Array();
 var geriatricCenters = new Array();
-var hospIndex = 0;
-var policeIndex = 0;
-var fireIndex = 0;
-var geriatricIndex = 0;
 
 var localizacion = (navigator.geolocation != null);
 var residencia; // marcador de la imagen de la residencia
@@ -101,6 +97,9 @@ function initialize(){
 			}
 		});
 	});
+	/* PUSHLET ***************
+	p_join_listen('/events');
+	*************************/
 	
 	initialize2(); // en mapa_xxx.js
 	
@@ -117,7 +116,12 @@ function initialize(){
 /**
  * Actualiza el mapa
  */
-function actualizar(){
+function actualizar(){ //function onData(pushletEvent){ // Event Callback: display all events
+	/* PUSHLET ****************************************
+	var tipo = pushletEvent.get('p_subject');
+	ultimamodif = pushletEvent.get('fecha');
+	var data = $.parseJSON(pushletEvent.get('datos'));
+	**************************************************/
 	// cada 2 segundos hacemos la peticion actualizadora de json
 	$.getJSON('getpost/leeEventos.jsp', {
 		'fecha': ultimamodif,
@@ -131,7 +135,7 @@ function actualizar(){
 					entry.quantity, entry.name, entry.description, entry.info, entry.latitud,
 					entry.longitud, entry.address, entry.size, entry.traffic, entry.floor,
 					entry.state, entry.idAssigned, entry.date, entry.modified, entry.user, null);
-
+				
 				// pintamos los nuevos, para lo que comprobamos que no existian
 				if(marcadores_definitivos[nuevomarcador.id] == null){
 					if(nuevomarcador.estado != 'erased'){
@@ -184,37 +188,29 @@ function actualizar(){
  * @param mensaje Mensaje que muestra el bocadillo
  * @param latitud Latitud del edificio
  * @param longitud Longitud del edificio
+ * @param inicio true si se muestra al inicio
  * @return Marcador
  */
-function generateBuilding(type, mensaje, latitud, longitud){
+function generateBuilding(type, mensaje, latitud, longitud, inicio){
 	var imagen;
-	var matrix;
-	var matrixIndex;
 	if(type == 'hospital'){
 		imagen = 'ambulanceStation.png';
-		matrix = hospitals;
-		matrixIndex = hospIndex;
 	}else if(type == 'policeStation'){
 		imagen = 'policeStation.png';
-		matrix = policeStations;
-		matrixIndex = policeIndex;
 	}else if(type == 'firemenStation'){
 		imagen = 'firemenStation.png';
-		matrix = firemenStations;
-		matrixIndex = fireIndex;
 	}else if(type == 'geriatricCenter'){
 		imagen = 'geriatricCenter.png';
-		matrix = geriatricCenters;
-		matrixIndex = geriatricIndex;
 	}
-
+	
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(latitud, longitud),
-		icon: new google.maps.MarkerImage('markers/buildings/' + imagen)
+		icon: new google.maps.MarkerImage('markers/buildings/' + imagen),
+		map: (inicio) ? map : null
 	});
 	
 	google.maps.event.addListener(marker, 'click', function(){
-		if(infowWindow != null){
+		if(infoWindow != null){
 			infoWindow.close();
 		}
 		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">' + mensaje + '</div>'});
@@ -251,22 +247,14 @@ function generateBuilding(type, mensaje, latitud, longitud){
 		}*/
 	});
 	
-	marker.setMap(map);
-	matrix[matrixIndex] = marker;
-	matrixIndex++;
-
 	if(type == 'hospital'){
-		hospitals = matrix;
-		hospIndex = matrixIndex;
+		hospitals.push(marker);
 	}else if(type == 'policeStation'){
-		policeStations = matrix;
-		policeIndex = matrixIndex;
+		policeStations.push(marker);
 	}else if(type == 'firemenStation'){
-		firemenStations = matrix;
-		fireIndex = matrixIndex;
+		firemenStations.push(marker);
 	}else if(type == 'geriatricCenter'){
-		geriatricCenters = matrix;
-		geriatricIndex = matrixIndex;
+		geriatricCenters.push(marker);
 	}
 
 	return marker;
@@ -320,42 +308,40 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
 	if(proyecto == 'caronte'){
 		guardar(nuevomarcador);
 	}
-        
-        /** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent */
-        if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
-            
-            var type = 'AMBOS'; // Variable que establece si: 
-            // 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (REGISTRAR) <-- valores q toma type
-            // 2) estamos produciendo solo el evento (PRODUCIR)
-            // 3) estamos registrandonos a un evento y produciendo simultaneamente (AMBOS)
-            
-            var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
-            
-            $.ajax({
-                    url:'/caronte/recibeEvento',
-                    type: 'POST',
-                    data: {
-                        'type':type,
-                        'event':tipo,
-                        'size':size,
-                        'description':descTotal,
-                        'name':nombre,
-                        'longitude':longitud,
-                        'floor':planta,
-                        'latitude':latitud,   
-                        'date':fecha
-                    },
-                    success: function(data,status) { 
-                        console.log("Success!!");
-                        console.log("Datos devueltos por RecibeEventoServlet: "+data);
-                        console.log("Mensaje de response code de HTTP enviado por RecibeEvento: "+status);
-                    },
-                    error: function(xhr, desc, err) {
-                    console.log(xhr);
-                    console.log("Desc: " + desc + "\nErr:" + err);
-                    }
-                });
-        }
+	
+	/** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent */
+	if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
+		var type = 'AMBOS'; // Variable que establece si:
+		// 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (REGISTRAR) <-- valores q toma type
+		// 2) estamos produciendo solo el evento (PRODUCIR)
+		// 3) estamos registrandonos a un evento y produciendo simultaneamente (AMBOS)
+		
+		var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
+		$.ajax({
+			url: '/caronte/recibeEvento',
+			type: 'POST',
+			data: {
+				'type':type,
+				'event':tipo,
+				'size':size,
+				'description':descTotal,
+				'name':nombre,
+				'longitude':longitud,
+				'floor':planta,
+				'latitude':latitud,
+				'date':fecha
+			},
+			success: function(data,status){
+				console.log("Success!!");
+				console.log("Datos devueltos por RecibeEventoServlet: "+data);
+				console.log("Mensaje de response code de HTTP enviado por RecibeEvento: "+status);
+			},
+			error: function(xhr, desc, err){
+				console.log(xhr);
+				console.log("Desc: " + desc + "\nErr:" + err);
+			}
+		});
+	}
 }
 
 /**
@@ -366,68 +352,50 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
 function guardar(puntero){
 	eliminar(puntero, temporal);
 	// 1.Guardar el elemento en la base de datos
-	$.ajax({
-		type: 'POST',
-		url: 'getpost/guardaEvento.jsp',
-		data: {
-			'marcador':puntero.marcador,
-			'tipo':puntero.tipo,
-			'cantidad':puntero.cantidad,
-			'nombre':puntero.nombre,
-			'descripcion':puntero.descripcion,
-			'info':puntero.info,
-			'latitud':puntero.latitud,
-			'longitud':puntero.longitud,
-			'direccion':puntero.direccion,
-			'size':puntero.size,
-			'traffic':puntero.traffic,
-			'planta':puntero.planta,
-			'estado':puntero.estado,
-			'idAssigned':puntero.idAssigned,
-			'fecha':puntero.fecha,
-			'usuario':puntero.usuario
-		},
-		success: function(data){
-			$('#guardar').innerHTML = data;
-		},
-		async: false
-	});
-
-	for(var i = 0; i < emergenciasAsociadas.length; i++){
-		if(emergenciasAsociadas[i].valor == true){
-			$.ajax({
-				type: 'POST',
-				url: 'getpost/update.jsp',
-				data: {
+	$.post('getpost/guardaEvento.jsp', {
+		'marcador':puntero.marcador,
+		'tipo':puntero.tipo,
+		'cantidad':puntero.cantidad,
+		'nombre':puntero.nombre,
+		'descripcion':puntero.descripcion,
+		'info':puntero.info,
+		'latitud':puntero.latitud,
+		'longitud':puntero.longitud,
+		'direccion':puntero.direccion,
+		'size':puntero.size,
+		'traffic':puntero.traffic,
+		'planta':puntero.planta,
+		'estado':puntero.estado,
+		'idAssigned':puntero.idAssigned,
+		'fecha':puntero.fecha,
+		'usuario':puntero.usuario
+	}, function(data){
+		puntero.id = $.parseJSON(data).id;
+		for(var i = 0; i < emergenciasAsociadas.length; i++){
+			if(emergenciasAsociadas[i].valor == true){
+				$.post('getpost/update.jsp', {
 					'accion':'asociar',
 					'fecha':puntero.fecha,
 					'id_emergencia':emergenciasAsociadas[i].id
-				},
-				async: false
-			});
+				});
+			}
 		}
-	}
-	/*for(i = 0; i < sintomas.length; i++){
-		if(sintomas[i].valor == true){
-			$.ajax({
-				type: 'POST',
-				url: 'getpost/update.jsp',
-				data: {
+		/*for(i = 0; i < sintomas.length; i++){
+			if(sintomas[i].valor == true){
+				$.post('getpost/update.jsp', {
 					'accion':'annadirSintoma',
 					'fecha':puntero.fecha,
 					'tipo_sintoma':sintomas[i].tipo
-				},
-				async: false
-			});
+				});
+			}
+		}*/
+		if(proyecto == 'caronte'){
+			escribirMensaje(puntero, 'crear', 1);
+			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.fecha, 'crear');
+			limpiar = true;
+			limpiarLateral(puntero.marcador);
 		}
-	}*/
-
-	if(proyecto == 'caronte'){
-		escribirMensaje(puntero, 'crear', 1);
-		registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.fecha, 'crear');
-		limpiar = true;
-		limpiarLateral(puntero.marcador);
-	}
+	});
 
 	// 2.Borrar el elemento del mapa y la matriz temporal
 	delete marcadores_temporales[puntero.id];

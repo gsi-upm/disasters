@@ -10,23 +10,15 @@ import java.io.*;
  * @version 1.0
  */
 public class Connection{
-	private static final String URL_BASE = "http://localhost:" + Constantes.SERVER_PORT + "/" + Constantes.PROJECT + "/rest/";
+	public static final String URL_BASE = "http://localhost:" + Constantes.SERVER_PORT + "/" + Constantes.PROJECT + "/rest/";
 
 	/**
-	 * Getter
-	 * @return String with the URL
-	 */
-	public static String getURL(){
-		return URL_BASE;
-	}
-
-    /**
      * @param source URL to connect
      * @return String with the response from the URL
      *
      * Makes a connection
      */
-    public static String connect(String source) {
+    public static String connect(String source){
         try{
             URL direction = new URL(DisasterApplication.removeBlanks(source));
             URLConnection directionConnection = direction.openConnection();
@@ -52,12 +44,10 @@ public class Connection{
     }
 
     /**
-
-     *
      * Test to try this class
      */
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args){
+        try{
             URL yahoo = new URL("http://www.google.es"); //funciona
             URL yahoo1 = new URL(URL_BASE + "post/type=dead&name=Avio&info=Avion&description=ningun&quantity=5&address=Aeropuerto+Barajas,+madrid&size=big&traffic=low");
             URL yahoo2 = new URL(URL_BASE + "year/2001"); //funciona

@@ -83,21 +83,6 @@ function escribirMensaje(evento, accion, nivel){
 	if(evento.tipo == null){
 		evento = marcadores_definitivos[evento.id];
 	}
-	if(accion == 'crear'){
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: 'getpost/getMensajes.jsp',
-			data: {
-				'action':'idCreado',
-				'fecha':evento.fecha
-			},
-			success: function(data){
-				evento.id = data[0].id;
-			},
-			async: false
-		});
-	}
 
 	if(evento.tipo == 'slight' || evento.tipo == 'serious'){
 		mensaje = 'Herido ' + fmt(evento.tipo,'es').toLowerCase();

@@ -14,6 +14,8 @@ import org.json.me.*;
  *
  */
 public class EncontrarEmergenciaPlan extends CarontePlan{
+	private final int MAX = 8;
+	
 	/**
 	 * Cuerpo del plan.
 	 */
@@ -48,7 +50,7 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 						waitFor(2500);
 					}
 					
-					if(contador == 8){ // Mucho tiempo sin contestar
+					if(contador == MAX){ // Mucho tiempo sin contestar
 						cancelado = true;
 						env.printout("CANCEL", 0, idDA, true);
 						env.leaveResource(idDA);
@@ -83,7 +85,6 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 				getBeliefbase().getBelief("tipo_emergencia").setFact("herido");
 			}
 		}
-		waitFor(2500);
 	}
 	
 	/**

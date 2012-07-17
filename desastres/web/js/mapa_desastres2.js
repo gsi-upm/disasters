@@ -1,32 +1,17 @@
-function hideBuilding(type){
+function visualize(selected, type){
+	var mapa = (selected) ? map : null;
 	var matrix;
 	if(type == 'hospital'){
 		matrix = hospitals;
-		hospitals = new Array();
-		hospIndex = 0;
 	}else if(type == 'policeStation'){
 		matrix = policeStations;
-		policeStations = new Array();
-		policeIndex = 0;
 	}else if(type == 'firemenStation'){
 		matrix = firemenStations;
-		firemenStations = new Array();
-		fireIndex = 0;
 	}else if(type == 'geriatricCenter'){
 		matrix = geriatricCenters;
-		geriatricCenters = new Array();
-		geriatricIndex = 0;
 	}
 	for(var i = 0; i < matrix.length; i++){
-		map.removeOverlay(matrix[i]);
-	}
-}
-
-function visualize(selected, type){
-	if(selected == true){
-		showBuilding(type);
-	}else{
-		hideBuilding(type);
+		matrix[i].setMap(mapa);
 	}
 }
 

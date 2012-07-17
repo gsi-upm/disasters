@@ -8,8 +8,12 @@ import disasters.EnviarMensajePlan;
  * @author Juan Luis Molina
  */
 public abstract class CarontePlan extends EnviarMensajePlan{
+	/** circunferencia ecuatorial y polar de La Tierra en metros */
+	private double circE = 40075017;
+	private double circP = 40007863;
+	
 	/**
-	 * Distancia entre dos puntos.
+	 * Distancia en metros entre dos puntos.
 	 * 
 	 * @param lat1 Latitud coordenada 1
 	 * @param lng1 Longitud coordenada 1
@@ -18,7 +22,10 @@ public abstract class CarontePlan extends EnviarMensajePlan{
 	 * @return Distancia entre puntos
 	 */
 	public double distancia(double lat1, double lng1, double lat2, double lng2){
-		return Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lng1 - lng2, 2));
+		double alto = circP * (lat1-lat2) / 360;
+		double circLng = Math.cos((lat1+lat2)/2) * circE; // circunferencia de LONGITUDES segun la LATITUD (media)
+		double ancho = circLng * (lng1-lng2) / 360;
+		return Math.sqrt(Math.pow(alto, 2) + Math.pow(ancho, 2));
 	}
 	
 	/**

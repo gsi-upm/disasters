@@ -41,7 +41,7 @@ public class RunSimulation extends HttpServlet{
                 }else{
                     sim.runSimulation(victims0, fires0);
                 }
-            }catch(Exception e){
+            }catch(NumberFormatException e){
                 sim.runSimulation();
             }finally{
                 response.sendRedirect(URL_BASE + "index.jsp?alert=true");

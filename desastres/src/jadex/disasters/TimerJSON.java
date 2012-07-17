@@ -89,7 +89,7 @@ public class TimerJSON extends Thread{
 	public void timeout(){
 		System.out.println("## ENV: Actualizando el JSON...");
 		if(ent != null){
-			ent.actualiza();
+			//ent.actualiza();
 		}else if(env != null){
 			env.actualiza();
 		}

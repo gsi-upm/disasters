@@ -77,7 +77,7 @@
 								<option value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
-                                                                <option value="3"><fmt:message key="planta"/> 3</option>
+								<option value="3"><fmt:message key="planta"/> 3</option>
 							</select>
 						</td>
 					</tr>
@@ -178,6 +178,7 @@
 								<option value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
+								<option value="3"><fmt:message key="planta"/> 3</option>
 							</select>
 						</td>
 					</tr>
@@ -360,6 +361,7 @@
 								<option value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
+								<option value="3"><fmt:message key="planta"/> 3</option>
 							</select>
 						</td>
 					</tr>

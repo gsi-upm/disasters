@@ -125,34 +125,19 @@ function actualizar2(){
  * Genera los edificios que se muestran en el mapa al inicio
  */
 function buildingInit(){
-	showBuilding('hospital');
-	showBuilding('firemenStation');
-	showBuilding('policeStation');
-	showBuilding('geriatricCenter');
-}
-
-/**
- * Muestra en el mapa un tipo de edificio
- * 
- * @param type Tipo de edificio a mostrar
- */
-function showBuilding(type){
-	// Villajoyosa, Alicante
-	if(type == 'hospital'){
-		generateBuilding('hospital', 'Centro de salud', 38.506900, -0.231120); // Villajoyosa, Alicante
-		generateBuilding('hospital', 'Cruz Roja', 38.505760, -0.229290); // Villajoyosa, Alicante
-		//generateBuilding('hospital', 'Centro de salud', 38.228138, -1.706449); // Calasparra, Murcia
-	}else if(type == 'firemenStation'){
-		generateBuilding('firemenStation', 'Parque de bomberos', 38.505610, -0.233230); // Villajoyosa, Alicante
-		//generateBuilding('firemenStation', 'Parque de bomberos', 38.111020, -1.865018); // Caravaca de la Cruz, Murcia
-	}else if(type == 'policeStation'){
-		generateBuilding('policeStation', 'Polic&iacute;a municipal', 38.510400,-0.231850); // Villajoyosa, Alicante
-		generateBuilding('policeStation', 'Guardia Civil', 38.504640, -0.237360); // Villajoyosa, Alicante
-		//generateBuilding('policeStation', 'Ayuntamiento y Polic&iacute;a municipal', 38.231125, -1.697560); // Calasparra, Murcia
-	}else if(type == 'geriatricCenter'){
-		generateBuilding('geriatricCenter', 'Ballesol Costa Blanca Senior Resort', 38.523850, -0.170180); // Villajoyosa, Alicante
-		//generateBuilding('geriatricCenter', 'Residencia Virgen de la Esperanza', 38.232272, -1.698925); // Calasparra, Murcia
-	}
+	generateBuilding('geriatricCenter', 'Ballesol Costa Blanca Senior Resort', 38.523850, -0.170180, true); // Villajoyosa, Alicante
+	//generateBuilding('geriatricCenter', 'Residencia Virgen de la Esperanza', 38.232272, -1.698925, true); // Calasparra, Murcia
+	
+	generateBuilding('hospital', 'Centro de salud', 38.506900, -0.231120, true); // Villajoyosa, Alicante
+	generateBuilding('hospital', 'Cruz Roja', 38.505760, -0.229290, true); // Villajoyosa, Alicante
+	//generateBuilding('hospital', 'Centro de salud', 38.228138, -1.706449, true); // Calasparra, Murcia
+	
+	generateBuilding('firemenStation', 'Parque de bomberos', 38.505610, -0.233230, true); // Villajoyosa, Alicante
+	//generateBuilding('firemenStation', 'Parque de bomberos', 38.111020, -1.865018, true); // Caravaca de la Cruz, Murcia
+	
+	generateBuilding('policeStation', 'Polic&iacute;a municipal', 38.510400,-0.231850, true); // Villajoyosa, Alicante
+	generateBuilding('policeStation', 'Guardia Civil', 38.504640, -0.237360, true); // Villajoyosa, Alicante
+	//generateBuilding('policeStation', 'Ayuntamiento y Polic&iacute;a municipal', 38.231125, -1.697560, true); // Calasparra, Murcia
 }
 
 function esquinasResidencia(lat, lng){
@@ -185,116 +170,81 @@ function esquinasResidencia(lat, lng){
  * @return Opciones del marcador
  */
 function definirOpciones(evento){
-	var opciones;
-	var icono = new google.maps.MarkerImage(null);
-
-	// MAXIMO DE RECURSOS POR MARCADOR ES 10
-	var cantidad;
-	if(evento.cantidad > 10){
-		cantidad = 10;
-	}else{
-		cantidad = evento.cantidad;
-	}
-
+	var icono;
+	var mover;
 	if(evento.marcador == 'event'){ // Es un evento
+		mover = true; // Para que se pueda arrastrar
+		var control = (evento.estado == 'controlled') ? '_control' : '';
 		if(evento.tipo == 'fire'){ // Incendio
-			icono.url = 'markers/events/fuego.png';
-			if(evento.estado == 'controlled'){
-				icono.url ='markers/events/fuego_control.png';
-			}
+			icono ='markers/events/fuego' + control + '.png';
 		}else if(evento.tipo == 'flood'){// Inundacion
-			icono.url = 'markers/events/agua.png';
-			if(evento.estado == 'controlled'){
-				icono.url ='markers/events/agua_control.png';
-			}
+			icono ='markers/events/agua' + control + '.png';
 		}else if(evento.tipo == 'collapse'){ // derrumbamiento
-			icono.url = 'markers/events/casa.png';
-			if(evento.estado == 'controlled'){
-				icono.url ='markers/events/casa_control.png';
-			}
+			icono ='markers/events/casa' + control + '.png';
 		}else if(evento.tipo == 'lostPerson'){ // anciano perdido
-			icono.url = 'markers/events/personaPerdida.png';
-			if(evento.estado == 'controlled'){
-				icono.url ='markers/events/personaPerdida_control.png';
-			}
+			icono ='markers/events/personaPerdida' + control + '.png';
 		}else if(evento.tipo == 'injuredPerson'){ // anciano herido
-			icono.url = 'markers/events/personaHerida.png';
-			if(evento.estado == 'controlled'){
-				icono.url ='markers/events/personaHerida_control.png';
-			}
+			icono ='markers/events/personaHerida' + control + '.png';
 		}
-		opciones = {
-			icon: icono,
-			draggable: true // Para que se pueda arrastrar
-		};
 	}else if(evento.marcador == 'resource'){ // es un recurso
-		var actuando = '';
-		if(evento.estado == 'active'){
-			actuando = '_no';
-		}
-
+		mover = false; // No arrastrar...
+		var actuando = (evento.estado == 'active') ? '_no': '';
 		if(evento.nombre == userName){
-			icono.url = 'markers/resources/user' + actuando + '.png';
-		}else if(evento.tipo == 'police'){ // es un policia
-			icono.url = 'markers/resources/policia' + actuando + '.png';
+			mover = true; // ...excepto si soy yo
+			icono = 'markers/resources/user' + actuando + '.png';
+		}else if(evento.tipo == 'police'){ // es  // Arrastrar si soy youn policia
+			icono = 'markers/resources/policia' + actuando + '.png';
 		}else if(evento.tipo == 'firemen'){ // es un bombero
-			icono.url = 'markers/resources/bombero' + actuando + '.png';
+			icono = 'markers/resources/bombero' + actuando + '.png';
 		}else if(evento.tipo == 'ambulance' || evento.tipo == 'ambulancia'){ // es una ambulancia
-			icono.url = 'markers/resources/ambulancia' + actuando + '.png';
+			icono = 'markers/resources/ambulancia' + actuando + '.png';
 		}else if(evento.tipo == 'nurse'){ // es un enfermero
-			icono.url = 'markers/resources/enfermero' + actuando + '.png';
+			icono = 'markers/resources/enfermero' + actuando + '.png';
 		}else if(evento.tipo == 'gerocultor'){ // es un gerocultor
-			icono.url = 'markers/resources/gerocultor' + actuando + '.png';
+			icono = 'markers/resources/gerocultor' + actuando + '.png';
 		}else if(evento.tipo == 'assistant'){ // es un auxiliar
-			icono.url = 'markers/resources/auxiliar' + actuando + '.png';
+			icono = 'markers/resources/auxiliar' + actuando + '.png';
 		}else if(evento.tipo == 'coordinator'){ // es un coordinador
-			icono.url = 'markers/resources/coordinador' + actuando + '.png';
+			icono = 'markers/resources/coordinador' + actuando + '.png';
 		}else if(evento.tipo == 'orderly'){ // es un celador
-			icono.url = 'markers/resources/celador' + actuando + '.png';
+			icono = 'markers/resources/celador' + actuando + '.png';
 		}else if(evento.tipo == 'receptionist'){ // es un recepcionista
-			icono.url = 'markers/resources/recepcionista' + actuando + '.png';
+			icono = 'markers/resources/recepcionista' + actuando + '.png';
 		}else if(evento.tipo == 'otherStaff'){ // otro
-			icono.url = 'markers/resources/otroPersonal' + actuando + '.png';
+			icono = 'markers/resources/otroPersonal' + actuando + '.png';
 		}
-		opciones = {
-			icon: icono,
-			draggable: (evento.nombre == userName) // Arrastrar si soy yo
-		};
 	}else if(evento.marcador == 'people'){ // es una victima
+		mover = true; // Se pueden arrastrar para asociarlos
+		var cantidad = (evento.cantidad > 10) ? 10 : evento.cantidad; // Maximo de recursos por marcador es 10
+		var opts = (evento.estado == 'controlled') ? '_control' : cantidad;
 		if(evento.tipo == 'trapped'){ // personas atrapadas
-			icono.url = 'markers/people/trapped' + cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.url = 'markers/people/trapped_control.png';
-			}
+			icono = 'markers/people/trapped' + opts + '.png';
 		}else if(evento.tipo=='healthy'){ // sanos
-			icono.url = 'markers/people/sano' + cantidad + '.png';
-			if(evento.estado=='controlled'){
-				icono.url = 'markers/people/sano_control.png';
-			}
+			icono = 'markers/people/sano' + opts + '.png';
 		}else if(evento.tipo == 'slight'){ // heridos leves
-			icono.url = 'markers/people/leve' + cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.url = 'markers/people/leve_control.png';
-			}
+			icono = 'markers/people/leve' + opts + '.png';
 		}else if(evento.tipo == 'serious'){ // heridos graves
-			icono.url = 'markers/people/grave' + cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.url = 'markers/people/grave_control.png';
-			}
+			icono.url = 'markers/people/grave' + opts + '.png';
 		}else if(evento.tipo == 'dead'){ // muertos
-			icono.url = 'markers/people/muerto' + cantidad + '.png';
-			if(evento.estado == 'controlled'){
-				icono.url = 'markers/people/muerto_control.png';
-			}
+			icono = 'markers/people/muerto' + opts + '.png';
 		}
-		icono.size = new google.maps.Size(28, 43);
-		icono.anchor = new google.maps.Point(13, 43);
+	}
+	
+	var opciones;
+	if(evento.marcador != 'people'){
 		opciones = {
-			icon: icono,
-			draggable: true // Se pueden arrastrar para asociarlo
+			icon: new google.maps.MarkerImage(icono),
+			draggable: mover	
+		};
+	}else{
+		// MarkerImage(url, ?size, ?origin, ?anchor) // origin por defecto Point(0,0)
+		opciones = {
+			icon: new google.maps.MarkerImage(icono,
+				new google.maps.Size(28, 43), null, new google.maps.Point(13, 43)),
+			draggable: mover	
 		};
 	}
-
+	
 	return opciones;
 }
 
@@ -307,12 +257,11 @@ function definirOpciones(evento){
  * @retunr Marcador
  */
 function comportamientoMarcador(evento, caracter, opciones){
-	var opts = {
+	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(evento.latitud, evento.longitud),
 		icon: opciones.icon,
 		draggable: opciones.draggable
-	};
-	var marker = new google.maps.Marker(opts);
+	});
 	// Annadimos el comportamiento
 	google.maps.event.addListener(marker, 'click', function(){
 		var small = evento.nombre + '<br/>' + evento.descripcion;
@@ -356,7 +305,7 @@ function comportamientoMarcador(evento, caracter, opciones){
 		
 		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
 			'<span id="confirmar" class="pulsable azul" onclick="infoWindow.close(); guardar_posicion(' + evento.id +
-			',' + nuevaLat + ',' + nuevaLong + ')" >Confirmar</span>'+ ' - ' +
+			',' + nuevaLat + ',' + nuevaLong + ')">Confirmar</span>'+ ' - ' +
 			'<span id="cancelar" class="pulsable azul" onclick="infoWindow.close(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>'});
 		infoWindow.open(map, marker);
 		
