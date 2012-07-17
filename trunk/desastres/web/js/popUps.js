@@ -17,11 +17,9 @@ $(document).ready(function(){
 			$('#showSimOptions').slideDown();
 			$('#hideSimOptions').click(function(){
 				$('#showSimOptions').slideUp();
-				return false;
 			});
 			$('#submit_simulador').mouseup(function(){
 				$('#showSimOptions').slideUp();
-				return false;
 			})
 		},
 		function(){
@@ -30,11 +28,10 @@ $(document).ready(function(){
 	);
 
 	$('#minitab2').toggle(
-		function() {
+		function(){
 			$('#visualize').slideDown();
 			$('#hideVisualize').click(function(){
 				$('#visualize').slideUp();
-				return false;
 			});
 		},
 		function(){

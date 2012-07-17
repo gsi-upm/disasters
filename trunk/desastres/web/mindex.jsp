@@ -23,8 +23,8 @@
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css"/>
 			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
-			<script type="application/javascript" src="js/jquery-1.7.1.min.js"></script>
-			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=true&amp;region=ES"></script>
+			<script type="application/javascript" src="js/jquery-1.7.2.min.js"></script>
+			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.8&amp;sensor=true&amp;region=ES"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
 				var usuario_actual = ${usuario.id};
@@ -54,7 +54,7 @@
 			<script type="application/javascript" src="js/jquery-fieldselection.js"></script>
 			<script type="application/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>
 		</head>
-		<body onload="IniciarReloj24(); initialize(); if(document.getElementById('username')!=null){document.getElementById('username').focus();}"> <!-- dwr.engine.setActiveReverseAjax(true); -->
+		<body onload="initialize(); if(document.getElementById('username')!=null){document.getElementById('username').focus();}"> <!-- dwr.engine.setActiveReverseAjax(true); -->
 			<c:import url="jspf/cabecera.jsp"/>
 			<!-- If the user isn't autenticated, we show the login form -->
 			<c:if test="${usuario.nombre == null}">

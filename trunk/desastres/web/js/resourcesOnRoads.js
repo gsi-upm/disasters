@@ -6,7 +6,7 @@ var resourcesList;
 function moveAgents(){
 	getResources();
 	for(i in resourcesList){
-		roadsInfo[resourcesList[i]] = new ObjDirectionsInfo(new google.maps.DirectionsRenderer(), 5, null, null, null, 0, 0, null, null);
+		roadsInfo[resourcesList[i]] = new ObjDirectionsInfo(new google.maps.DirectionsRenderer({map: map}), 5, null, null, null, 0, 0, null, null);
 		myAddListener(resourcesList[i]);
 		if(marcadores_definitivos[indices[i]].tipo == "police"){
 			roadsInfo[resourcesList[i]].icon.url = "markers/resources/policia" + marcadores_definitivos[indices[i]].cantidad + ".png";
@@ -86,16 +86,16 @@ function getResources(){
 }
 
 function myAddListener(id){
-	GEvent.addListener(roadsInfo[id].dirn, "load", function() {
+	google.maps.event.addListener(roadsInfo[id].dirn, "load", function(){
 		roadsInfo[id].poly = roadsInfo[id].dirn.getPolyline();
 		roadsInfo[id].eol = roadsInfo[id].poly.Distance();
-		// map.addOverlay(new GMarker(roadsInfo[id].poly.getVertex(0),G_START_ICON));
-		// map.addOverlay(new GMarker(roadsInfo[id].poly.getVertex(roadsInfo[id].poly.getVertexCount()-1),G_END_ICON));
-		roadsInfo[id].marker = new GMarker(roadsInfo[id].poly.getVertex(0),{icon:roadsInfo[id].icon});
+		// new google.maps.Marker({location: roadsInfo[id].poly.getVertex(0), icon: G_START_ICON, map: map});
+		// new google.maps.Marker({location: roadsInfo[id].poly.getVertex(roadsInfo[id].poly.getVertexCount()-1), icon: G_END_ICON, map: map});
+		roadsInfo[id].marker = new google.maps.Marker({location: roadsInfo[id].poly.getVertex(0), icon: roadsInfo[id].icon});
 		roadsInfo[id].marker.setMap(map);
 	});
 
-	GEvent.addListener(roadsInfo[id].dirn, "error", function() {
+	google.maps.event.addListener(roadsInfo[id].dirn, "error", function(){
 		alert("Location(s) not recognised for id " + id + " " + starts[resourcesList[id]] + " " +
 			ends[resourcesList[id]] + "\nCode: " + roadsInfo[id].dirn.getStatus().code);
 	});
@@ -105,12 +105,12 @@ function myAddListener(id){
  * Moves the icon through the route.
  */
 function animate(dist, id){
-	if(dist>roadsInfo[id].eol){
+	if(dist > roadsInfo[id].eol){
 		return;
 	}
 	var p = roadsInfo[id].poly.GetPointAtDistance(dist);
 	roadsInfo[id].marker.setPoint(p);
-	if(roadsInfo[id].stepnum + 1 < roadsInfo[id].dirn.getRoute(0).getNumSteps()) {
+	if(roadsInfo[id].stepnum + 1 < roadsInfo[id].dirn.getRoute(0).getNumSteps()){
 		if(roadsInfo[id].dirn.getRoute(0).getStep(roadsInfo[id].stepnum).getPolylineIndex() < roadsInfo[id].poly.GetIndexAtDistance(dist)){
 			roadsInfo[id].stepnum++;
 			var stepdist = roadsInfo[id].dirn.getRoute(0).getStep(roadsInfo[id].stepnum-1).getDistance().meters;

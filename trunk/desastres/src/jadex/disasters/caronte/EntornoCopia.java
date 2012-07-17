@@ -3,6 +3,7 @@ package disasters.caronte;
 import disasters.*;
 import jadex.bridge.IComponentIdentifier;
 import jadex.commons.SimplePropertyChangeSupport;
+import java.sql.Timestamp;
 import java.util.*;
 import org.json.me.*;
 
@@ -12,7 +13,7 @@ import org.json.me.*;
  * @author aebeda
  * @author Juan Luis Molina
  */
-public class Entorno{
+public class EntornoCopia{
 	/** URL para REST. */
 	public static final String URL = "http://localhost:8080/caronte/rest/";
 	/** Agente coordinador. */
@@ -28,7 +29,9 @@ public class Entorno{
 	/**  */
 	public static final List<String> COMPONENTES = Arrays.asList(new String[]{
 		COORDINADOR, INTERVENCION_INCENDIOS, ATENCION_HERIDOS, EVACUACION});
-	
+	private static TimerJSON temporizador;
+	private final int tiempoJSON = 5000;
+	private String ahora;
 	/** Eventos (id -> Disaster). */
 	private HashMap<Integer,Disaster> disasters;
 	private HashMap<Integer,People> people;
@@ -82,10 +85,12 @@ public class Entorno{
 	public static final List<String> COMPONENTES2 = Arrays.asList(new String[]{
 		COORDINADOR_EMERGENCIAS, CENTRAL_EMERGENCIAS});
 
+	//---------------------
 	/**
 	 * Constructor del entorno.
 	 */
-	public Entorno(){
+	public EntornoCopia(){
+		//temporizador = new TimerJSON(tiempoJSON, this);
 		disasters = new HashMap<Integer,Disaster>();
 		people = new HashMap<Integer,People>();
 		resources = new HashMap<Integer,Resource>();
@@ -99,6 +104,359 @@ public class Entorno{
 		agentes = new HashMap<String,WorldObject>();
 		numAgentes = 0;
 		pcs = new SimplePropertyChangeSupport(this);
+
+		// Esto LA PRIMERA VEZ - recibo el json
+		try{
+			String eventos = Connection.connect(URL + "events");
+			JSONArray desastres = new JSONArray(eventos);
+
+			String victimas = Connection.connect(URL + "people");
+			JSONArray personas = new JSONArray(victimas);
+			
+			String recursos = Connection.connect(URL + "resources");
+			JSONArray usuarios = new JSONArray(recursos);
+			
+			String asocs = Connection.connect(URL + "associations");
+			JSONArray asociaciones = new JSONArray(asocs);
+			
+			String actis = Connection.connect(URL + "activities");
+			JSONArray actividades = new JSONArray(actis);
+
+			ahora = new Timestamp(new Date().getTime()).toString();
+
+			// Por cada desastre:
+			for(int i = 0; i < desastres.length(); i++){
+				JSONObject instancia = desastres.getJSONObject(i);
+				Disaster nuevo = new Disaster(
+					instancia.getInt("id"),
+					instancia.getString("type"),
+					instancia.getString("name"),
+					instancia.getString("info"),
+					instancia.getString("description"),
+					new Double(instancia.getString("latitud")),
+					new Double(instancia.getString("longitud")),
+					instancia.getString("address"),
+					instancia.getInt("floor"),
+					instancia.getString("size"),
+					instancia.getString("traffic"),
+					instancia.getString("state"));
+				System.out.println("- Nueva emergencia: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ")");
+				disasters.put(nuevo.getId(), nuevo);
+			}
+			// Por cada herido:
+			for(int i = 0; i < personas.length(); i++){
+				JSONObject instancia = personas.getJSONObject(i);
+				People nuevo = new People(
+					instancia.getInt("id"),
+					instancia.getString("type"),
+					instancia.getInt("quantity"),
+					instancia.getString("name"),
+					instancia.getString("info"),
+					instancia.getString("description"),
+					new Double(instancia.getString("latitud")),
+					new Double(instancia.getString("longitud")),
+					instancia.getString("address"),
+					instancia.getInt("floor"),
+					instancia.getString("size"),
+					instancia.getString("traffic"),
+					instancia.getString("state"),
+					instancia.getInt("idAssigned"));
+				people.put(nuevo.getId(), nuevo);
+				if(nuevo.getType().equals("healthy")){
+					System.out.println("- Nueva persona: " + nuevo.getName() + " (id:" + nuevo.getId() + ")");
+				}else{
+					System.out.println("- Nuevo herido: " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
+				}
+			}
+			// Por cada usuario logueado:
+			for(int i = 0; i < usuarios.length(); i++){
+				JSONObject instancia = usuarios.getJSONObject(i);
+				Resource nuevo = new Resource(
+					instancia.getInt("id"),
+					instancia.getString("type"),
+					instancia.getString("name"),
+					instancia.getString("info"),
+					instancia.getString("description"),
+					new Double(instancia.getString("latitud")),
+					new Double(instancia.getString("longitud")),
+					instancia.getString("address"),
+					instancia.getInt("floor"),
+					instancia.getString("state"),
+					instancia.getInt("idAssigned"));
+				resources.put(nuevo.getId(), nuevo);
+				System.out.println("- Nuevo usuario: " + nuevo.getName() + " - " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
+			}
+			// Por cada asociacion:
+			for(int i = 0; i < asociaciones.length(); i++){
+				JSONObject instancia = asociaciones.getJSONObject(i);
+				Association nuevo = new Association(
+					instancia.getInt("id"),
+					instancia.getInt("idInjured"),
+					instancia.getInt("idDisaster"),
+					instancia.getString("state"));
+				associations.put(nuevo.getId(), nuevo);
+				People herido = people.get(nuevo.getIdInjured());
+				Disaster emergencia = disasters.get(nuevo.getIdDisaster());
+				System.out.println("- Nueva asociacion: herido '" + herido.getName() + "' con emergencia '" + emergencia.getName() + "' (id:" + nuevo.getId() + ")");
+
+				if(herido.getType().equals("slight")){
+					emergencia.addSlight(herido);
+				}else if(herido.getType().equals("serious")){
+					emergencia.addSerious(herido);
+				}else if(herido.getType().equals("dead")){
+					emergencia.addDead(herido);
+				}else if(herido.getType().equals("trapped")){
+					emergencia.addTrapped(herido);
+				}
+				disasters.put(emergencia.getId(), emergencia);
+			}
+			// Por cada actividad:
+			for(int i = 0; i < actividades.length(); i++){
+				JSONObject instancia = actividades.getJSONObject(i);
+				Activity nuevo = new Activity(
+					instancia.getInt("id"),
+					instancia.getInt("idUser"),
+					instancia.getInt("idDisaster"),
+					instancia.getString("type"),
+					instancia.getString("state"));
+				activities.put(nuevo.getId(), nuevo);
+				Resource usuario = resources.get(nuevo.getIdUser());
+				Disaster emergencia = disasters.get(nuevo.getIdDisaster());
+				System.out.println("- Nueva actividad '" + nuevo.getType() + "' realizada por '" + usuario.getName() +
+					"' en emergencia '" + emergencia.getName() + "' (id:" + nuevo.getId() + ")");
+			}
+		}catch(JSONException e){
+			System.out.println("Error con JSON: " + e);
+		}
+
+		// Hacer una llamada cada pocos segundos al metodo actualiza()
+		temporizador.start();
+	}
+
+	/**
+	 * Actualizacion del entorno.
+	 */
+	public void actualiza(){
+		temporizador.reset();
+		// ESTO PARA ACTUALIZAR - recibo el json actualizador
+		try{
+			String eventos = Connection.connect(URL + "events/modified/" + ahora);
+			JSONArray desastres = new JSONArray(eventos);
+
+			String victimas = Connection.connect(URL + "people/modified/" + ahora);
+			JSONArray personas = new JSONArray(victimas);
+			
+			String recursos = Connection.connect(URL + "resources/modified/" + ahora);
+			JSONArray usuarios = new JSONArray(recursos);
+			
+			String asocs = Connection.connect(URL + "associations/modified/" + ahora);
+			JSONArray asociaciones = new JSONArray(asocs);
+			
+			String actis = Connection.connect(URL + "activities/modified/" + ahora);
+			JSONArray actividades = new JSONArray(actis);
+
+			ahora = new Timestamp(new Date().getTime()).toString();
+
+			// Por cada desastre:
+			for(int i = 0; i < desastres.length(); i++){
+				JSONObject instancia = desastres.getJSONObject(i);
+				Disaster nuevo = new Disaster(
+					instancia.getInt("id"),
+					instancia.getString("type"),
+					instancia.getString("name"),
+					instancia.getString("info"),
+					instancia.getString("description"),
+					new Double(instancia.getString("latitud")),
+					new Double(instancia.getString("longitud")),
+					instancia.getString("address"),
+					instancia.getInt("floor"),
+					instancia.getString("size"),
+					instancia.getString("traffic"),
+					instancia.getString("state"));
+				
+				// si ya existia actualizo el desastre existente
+				if(disasters.containsKey(nuevo.getId())){
+					// si se ha eliminado lo borro directamente
+					if(nuevo.getState().equals("erased")){
+						disasters.remove(nuevo.getId());
+						System.out.println("- Emergencia eliminada: " + nuevo.getName() + " (id:" + nuevo.getId() + ")");
+					}else{
+						disasters.put(nuevo.getId(), nuevo);
+						System.out.println("- Emergencia actualizada... " + nuevo.getName() + " - " + nuevo.getState() + " (id:" + nuevo.getId() + ")");
+					}
+				}else{
+					disasters.put(nuevo.getId(), nuevo);
+					System.out.println("- Nueva emergencia: " + nuevo.getType() + " - " + nuevo.getName() + " (id:" + nuevo.getId() + ")");
+				}
+			}
+			// Por cada herido:
+			for(int i = 0; i < personas.length(); i++){
+				JSONObject instancia = personas.getJSONObject(i);
+				People nuevo = new People(
+					instancia.getInt("id"),
+					instancia.getString("type"),
+					instancia.getInt("quantity"),
+					instancia.getString("name"),
+					instancia.getString("info"),
+					instancia.getString("description"),
+					new Double(instancia.getString("latitud")),
+					new Double(instancia.getString("longitud")),
+					instancia.getString("adreess"),
+					instancia.getInt("floor"),
+					instancia.getString("size"),
+					instancia.getString("traffic"),
+					instancia.getString("state"),
+					instancia.getInt("idAssigned"));
+				
+				if(people.containsKey(nuevo.getId())){
+					if(nuevo.getState().equals("erased")){
+						people.remove(nuevo.getId());
+						System.out.println("- Herido " + nuevo.getName() + " curado (id:" + nuevo.getId() + ")");
+					}else{
+						People antiguo = people.get(nuevo.getId());
+						people.put(nuevo.getId(), nuevo);
+						System.out.println("- Herido " + nuevo.getName() + " actualizado con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
+						
+						if(nuevo.getType().equals(antiguo.getType()) == false){
+							ArrayList<Disaster> emergencias = new ArrayList<Disaster>();
+							for(int j = 0; j < associations.size(); j++){
+								if(associations.get(j).getIdInjured() == nuevo.getId()){
+									emergencias.add(disasters.get(associations.get(j).getIdDisaster()));
+								}
+							}
+							if(emergencias.isEmpty() == false){
+								for(int j = 0; j < emergencias.size(); j++){
+									if(antiguo.getType().equals("slight")){
+										emergencias.get(j).removeSlight(antiguo);
+									}else if(antiguo.getType().equals("serious")){
+										emergencias.get(j).removeSerious(antiguo);
+									}else if(antiguo.getType().equals("dead")){
+										emergencias.get(j).removeDead(antiguo);
+									}else if(antiguo.getType().equals("trapped")){
+										emergencias.get(j).removeTrapped(antiguo);
+									}
+									if(nuevo.getType().equals("slight")){
+										emergencias.get(j).addSlight(nuevo);
+									}else if(nuevo.getType().equals("serious")){
+										emergencias.get(j).addSerious(nuevo);
+									}else if(nuevo.getType().equals("dead")){
+										emergencias.get(j).addDead(nuevo);
+									}else if(nuevo.getType().equals("trapped")){
+										emergencias.get(j).addTrapped(nuevo);
+									}
+									disasters.put(emergencias.get(j).getId(), emergencias.get(j));
+								}
+							}
+						}
+					}
+				}else{
+					people.put(nuevo.getId(), nuevo);
+					System.out.println("- Nuevo herido " + nuevo.getName() + " con estado " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
+				}
+			}
+			// Por cada usuario:
+			for(int i = 0; i < usuarios.length(); i++){
+				JSONObject instancia = usuarios.getJSONObject(i);
+				Resource nuevo = new Resource(
+					instancia.getInt("id"),
+					instancia.getString("type"),
+					instancia.getString("name"),
+					instancia.getString("info"),
+					instancia.getString("description"),
+					new Double(instancia.getString("latitud")),
+					new Double(instancia.getString("longitud")),
+					instancia.getString("address"),
+					instancia.getInt("floor"),
+					instancia.getString("state"),
+					instancia.getInt("idAssigned"));
+				
+				if(resources.containsKey(nuevo.getId())){
+					if(nuevo.getState().equals("erased")){
+						resources.remove(nuevo.getId());
+						System.out.println("- El usuario " + nuevo.getName() + " ha cerrado sesion");
+					}else{
+						resources.put(nuevo.getId(), nuevo);
+						System.out.println("- El usuario " + nuevo.getName() + " ha actualizado sus datos");
+					}
+				}else{
+					resources.put(nuevo.getId(), nuevo);
+					System.out.println("- Nuevo usuario: " + nuevo.getName() + " - " + nuevo.getType() + " (id:" + nuevo.getId() + ")");
+				}
+			}
+			// Por cada asociacion:
+			for(int i = 0; i < asociaciones.length(); i++){
+				JSONObject instancia = asociaciones.getJSONObject(i);
+				Association nuevo = new Association(
+					instancia.getInt("id"),
+					instancia.getInt("idInjured"),
+					instancia.getInt("idDisaster"),
+					instancia.getString("state"));
+				
+				People herido = people.get(nuevo.getIdInjured());
+				Disaster emergencia = disasters.get(nuevo.getIdDisaster());
+				if(nuevo.getState().equals("erased")){
+					associations.remove(nuevo.getId());
+					System.out.println("- Asociacion eliminada entre herido '" + herido.getName() + "' y emergencia '" + emergencia.getName() + "' (id:" + nuevo.getId() + ")");
+					if(emergencia != null){
+						if(herido.getType().equals("slight")){
+							emergencia.removeSlight(herido);
+						}else if(herido.getType().equals("serious")){
+							emergencia.removeSerious(herido);
+						}else if(herido.getType().equals("dead")){
+							emergencia.removeDead(herido);
+						}else if(herido.getType().equals("trapped")){
+							emergencia.removeTrapped(herido);
+						}
+						disasters.put(emergencia.getId(), emergencia);
+					}
+				}else{
+					associations.put(nuevo.getId(), nuevo);
+					System.out.println("- Nueva asociacion: herido '" + herido.getName() + "' con emergencia '" + emergencia.getName() + "' (id:" + nuevo.getId() + ")");
+					if(herido.getType().equals("slight")){
+						emergencia.addSlight(herido);
+					}else if(herido.getType().equals("serious")){
+						emergencia.addSerious(herido);
+					}else if(herido.getType().equals("dead")){
+						emergencia.addDead(herido);
+					}else if(herido.getType().equals("trapped")){
+						emergencia.addTrapped(herido);
+					}
+					disasters.put(emergencia.getId(), emergencia);
+				}
+			}
+			// Por cada actividad:
+			for(int i = 0; i < actividades.length(); i++){
+				JSONObject instancia = actividades.getJSONObject(i);
+				Activity nuevo = new Activity(
+					instancia.getInt("id"),
+					instancia.getInt("idUser"),
+					instancia.getInt("idDisaster"),
+					instancia.getString("type"),
+					instancia.getString("state"));
+				
+				String nombre = "";
+				if(disasters.containsKey(nuevo.getIdDisaster())){
+					nombre = "emergencia '" + disasters.get(nuevo.getIdDisaster()).getName() + "'";
+				}else if(people.containsKey(nuevo.getIdDisaster())){
+					nombre = "herido '" + people.get(nuevo.getIdDisaster()).getName() + "'";
+				}
+				
+				if(activities.containsKey(nuevo.getId())){
+					activities.remove(nuevo.getId());
+					System.out.println("- Actividad '" + nuevo.getType() + "' terminada en " + nombre + " (id:" + nuevo.getId() + ")");
+				}else{
+					if(nuevo.getState().equals("erased")){
+						activities.put(nuevo.getId(), nuevo);
+						System.out.println("- Actividad '" + nuevo.getType() + "' realizada en 'id:" + nuevo.getIdDisaster() + "' (id:" + nuevo.getId() + ")");
+					}else{
+						activities.put(nuevo.getId(), nuevo);
+						System.out.println("- Nueva actividad '" + nuevo.getType() + "' en " + nombre + " (id:" + nuevo.getId() + ")");
+					}
+				}
+			}
+		}catch(JSONException e){
+			System.out.println("Error con JSON: " + e);
+		}
 	}
 
 	/**
@@ -124,8 +482,10 @@ public class Entorno{
 	 * Borra la instancia del entorno (y para el temporizador).
 	 */
 	public static void clearInstance(){
+		//temporizador.reset();
+		temporizador = null;
 		instance = null;
-		System.out.println("Entorno borrado");
+		System.out.println("Entorno detenido");
 	}
 	
 	/**
@@ -299,10 +659,6 @@ public class Entorno{
 		assert disasters.containsKey(id);
 		return disasters.remove(id);
 	}
-	
-	public synchronized void putEvent(int id, Disaster event){
-		disasters.put(id, event);
-	}
 
 	/**
 	 * Devuelve un herido dado su id.
@@ -324,10 +680,6 @@ public class Entorno{
 	public synchronized People removePeople(int id){
 		assert people.containsKey(id);
 		return people.remove(id);
-	}
-	
-	public synchronized void putPeople(int id, People person){
-		people.put(id, person);
 	}
 
 	/**
@@ -351,10 +703,6 @@ public class Entorno{
 		assert resources.containsKey(id);
 		return resources.remove(id);
 	}
-	
-	public synchronized void putResource(int id, Resource resource){
-		resources.put(id, resource);
-	}
 
 	/**
 	 * Devuelve una asociacion dada su id.
@@ -377,10 +725,6 @@ public class Entorno{
 		assert associations.containsKey(id);
 		return associations.remove(id);
 	}
-	
-	public synchronized void putAssociation(int id, Association association){
-		associations.put(id, association);
-	}
 
 	/**
 	 * Devuelve una actividad dada su id.
@@ -402,10 +746,6 @@ public class Entorno{
 	public synchronized Activity removeActivity(int id){
 		assert activities.containsKey(id);
 		return activities.remove(id);
-	}
-	
-	public synchronized void putActivity(int id, Activity activity){
-		activities.put(id, activity);
 	}
 	
 	/**

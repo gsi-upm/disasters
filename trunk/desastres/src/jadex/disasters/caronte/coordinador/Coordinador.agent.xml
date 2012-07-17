@@ -33,7 +33,7 @@
 	</beliefs>
 
 	<goals>
-		<performgoal name="encontrar_emergencia" retry="true" exclude="never"/>
+		<performgoal name="encontrar_emergencia" retry="true" exclude="never" retrydelay="2500"/>
 		<achievegoal name="avisar_agentes"/>
 		<achievegoal name="esperar_solucion"/>
 	</goals>

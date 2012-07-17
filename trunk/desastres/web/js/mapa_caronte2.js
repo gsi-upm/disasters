@@ -237,49 +237,35 @@ function cargarLateral(evento){
 		emergenciasAsociadas = new Array();
 		//document.getElementById('listaSintomas').innerHTML = '';
 		//sintomas = new Array();
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: 'getpost/getAsociaciones.jsp',
-			data: {
-				'tipo':'asociadas',
-				'iden': evento.id,
-				'nivel':nivelMsg
-			},
-			success: function(data){
-				$.each(data, function(entryIndex, entry){
-					var checked = (entry.valor == 'true') ? ' checked="checked"' : '';
-					document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
-						'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"' + checked + '/>' +
-						entry.id + ' - ' + entry.nombre + '</li>';
-					emergenciasAsociadas.push({'id':entry.id, 'valor':entry.valor, 'valorBD':entry.valor});
-				});
-				if(document.getElementById('checkboxAsoc').innerHTML == ''){
-					document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
-				}else{
-					document.getElementById('textoAsoc').innerHTML = '&emsp;V';
-				}
-			},
-			async: false
-		});
-		/*$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: 'getpost/getSintomas.jsp',
-			data: {
-				'tipo':'sintomasSI',
-				'iden': evento.id
-			},
-			success: function(data){
+		$.getJSON('getpost/getAsociaciones.jsp', {
+			'tipo':'asociadas',
+			'iden': evento.id,
+			'nivel':nivelMsg
+		}, function(data){
+			$.each(data, function(entryIndex, entry){
 				var checked = (entry.valor == 'true') ? ' checked="checked"' : '';
-				$.each(data, function(entryIndex, entry){
-					document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
-						'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"' + checked + '/>' +
-						entry.descripcion + '</li>';
-					sintomas.push({'tipo':entry.tipo, 'valor':entry.valor, 'valorBD':entry.valor});
-				});
-			},
-			async: false
+				document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
+					'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"' + checked + '/>' +
+					entry.id + ' - ' + entry.nombre + '</li>';
+				emergenciasAsociadas.push({'id':entry.id, 'valor':entry.valor, 'valorBD':entry.valor});
+			});
+			if(document.getElementById('checkboxAsoc').innerHTML == ''){
+				document.getElementById('textoAsoc').innerHTML = '&thinsp;No hay emergencias para asociar';
+			}else{
+				document.getElementById('textoAsoc').innerHTML = '&emsp;V';
+			}
+		});
+		/*$.getJSON('getpost/getSintomas.jsp', {
+			'tipo':'sintomasSI',
+			'iden': evento.id
+		} function(data){
+			var checked = (entry.valor == 'true') ? ' checked="checked"' : '';
+			$.each(data, function(entryIndex, entry){
+				document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
+					'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"' + checked + '/>' +
+					entry.descripcion + '</li>';
+				sintomas.push({'tipo':entry.tipo, 'valor':entry.valor, 'valorBD':entry.valor});
+			});
 		});*/
 	}else if(evento.marcador == 'resource'){
 		noActualizar = evento.id;
@@ -418,15 +404,10 @@ function limpiarLateral(marcador, async){
 				if(async == null){
 					async = false;
 				}
-				$.ajax({
-					type: 'GET',
-					dataType: 'json',
-					url: 'getpost/getAsociaciones.jsp',
-					data: {
+				$.getJSON('getpost/getAsociaciones.jsp', {
 						'tipo':'emergencias',
 						'nivel':nivelMsg
-					},
-					success: function(data){
+					}, function(data){
 						$.each(data, function(entryIndex, entry){
 							document.getElementById('checkboxAsoc').innerHTML += '<li><input type="checkbox" name="assigned' + entry.id +
 								'" onclick="asociarEmergencia(' + entry.id + ', assigned' + entry.id + '.checked)"/>' +
@@ -438,25 +419,16 @@ function limpiarLateral(marcador, async){
 						}else{
 							document.getElementById('textoAsoc').innerHTML = '&emsp;V';
 						}
-					},
-					async: async
 				});
-				/*$.ajax({
-					type: 'GET',
-					dataType: 'json',
-					url: 'getpost/getSintomas.jsp',
-					data: {
-						'tipo':'sintomas'
-					},
-					success: function(data){
-						$.each(data, function(entryIndex, entry){
-							document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
-								'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"/>' +
-								entry.descripcion + '</li>';
-							sintomas.push({'tipo':entry.tipo, 'valor':false, 'valorBD':false});
-						});
-					},
-					async: async
+				/*$.getJSON('getpost/getSintomas.jsp', {
+					'tipo':'sintomas'
+				}, function(data){
+					$.each(data, function(entryIndex, entry){
+						document.getElementById('listaSintomas').innerHTML += '<li><input type="checkbox" name="' + entry.tipo +
+							'" onclick="annadirSintoma(\'' + entry.tipo + '\', ' + entry.tipo + '.checked)"/>' +
+							entry.descripcion + '</li>';
+						sintomas.push({'tipo':entry.tipo, 'valor':false, 'valorBD':false});
+					});
 				});*/
 			}
 		}
@@ -667,10 +639,12 @@ function findPos(lat, lng, dir){
 		puntoAux.setMap(null);
 	}
 	if(dir == ''){
-		localizar(new google.maps.LatLng(lat,lng));
+		localizar(new google.maps.LatLng(lat, lng));
 	}else{
-		localizador.geocode({address:dir}, function(respuesta){
-			localizar(respuesta[0].geometry.location);
+		localizador.geocode({address:dir}, function(respuesta, estado){
+			if(estado == google.maps.GeocoderStatus.OK){
+				localizar(respuesta[0].geometry.location);
+			}
 		});
 	}
 }
@@ -687,7 +661,7 @@ function localizar(punto){
 			document.getElementById('form-posicion').direccion.value = respuesta[0].formatted_address;
 			document.getElementById('form-posicion').latitud.value = latlng.lat();
 			document.getElementById('form-posicion').longitud.value = latlng.lng();
-			var coorAux = new google.maps.LatLng(latlng.lat(),latlng.lng());
+			var coorAux = new google.maps.LatLng(latlng.lat(), latlng.lng());
 			puntoAux = new google.maps.Marker({position:coorAux});
 			map.setCenter(coorAux, 14);
 			puntoAux.setMap(map);

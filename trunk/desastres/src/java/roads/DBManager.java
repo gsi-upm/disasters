@@ -1,16 +1,16 @@
 package roads;
 
 import gsi.rest.Connection;
-import java.util.*;
-import java.net.*;
 import java.io.*;
+import java.net.*;
+import java.util.StringTokenizer;
 
 public class DBManager {
 
     /**
      * URL for Caronte application REST interface
      **/
-	private static final String URL_BASE = Connection.getURL();
+	private static final String URL_BASE = Connection.URL_BASE;
 
     public DBManager() {
     }

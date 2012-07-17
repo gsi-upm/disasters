@@ -15,13 +15,12 @@
 		Integer number;
 		try{
 			number = Integer.parseInt(quantity);
-		}catch(Exception e){
+		}catch(NumberFormatException ex){
 			number = 1;
 		}
 		out.print(number);
 	</jsp:scriptlet>
 </c:set>
-
 <c:set var="idAssigned">
 	<jsp:scriptlet>
 		String assignment = request.getParameter("idAssigned");
@@ -31,24 +30,27 @@
 		Integer id;
 		try{
 			id = Integer.parseInt(assignment);
-		}catch (Exception e){
-			id = 1;
+		}catch(NumberFormatException ex){
+			id = 0;
 		}
 		out.print(id);
 	</jsp:scriptlet>
 </c:set>
-
 <c:set var="floor">
 	<jsp:scriptlet>
 		String planta = request.getParameter("floor");
-		int floor = -2;
-		if(planta != null){
+		if(planta == null){
+			planta = "-2";
+		}
+		Integer floor;
+		try{
 			floor = Integer.parseInt(planta);
+		}catch(NumberFormatException ex){
+			floor = -2;
 		}
 		out.print(floor);
 	</jsp:scriptlet>
 </c:set>
-
 <c:choose>
 	<c:when test="${param.latitud == null || param.longitud == null}">
 		<jsp:forward page="error.jsp">
@@ -58,7 +60,6 @@
 		</jsp:forward>
 	</c:when>
 </c:choose>
-
 <c:choose>
 	<c:when test="${param.type == null}">
 		<jsp:forward page="error.jsp">
@@ -92,7 +93,6 @@
 		</c:choose>
 	</c:otherwise>
 </c:choose>
-
 <c:catch var="errorUpdate">
 	<sql:update dataSource="${CatastrofesServer}">
 		INSERT INTO CATASTROFES(MARCADOR, TIPO, CANTIDAD, NOMBRE, DESCRIPCION, INFO, LATITUD,
@@ -118,11 +118,9 @@
 		<sql:param value="${param.user}"/>
 	</sql:update>
 </c:catch>
-
 <sql:query var="eventos" dataSource="${CatastrofesServer}">
 	SELECT ID FROM CATASTROFES ORDER BY ID DESC LIMIT 1
 </sql:query>
-
 <c:forEach var="evento" items="${eventos.rows}">
 	<json:object name="evento">
 		<json:property name="id" value="${evento.id}"/>

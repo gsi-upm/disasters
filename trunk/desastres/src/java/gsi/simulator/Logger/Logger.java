@@ -57,7 +57,7 @@ public class Logger {
     public static final int FINEST = 300;
 
     /**
-     * Nivel m�nimo de traza: se traza todo.
+     * Nivel minimo de traza: se traza todo.
      */
     public static final int ALL = Integer.MIN_VALUE;
 
@@ -106,9 +106,9 @@ public class Logger {
         }
         code = code.trim();
         // noinspection EmptyCatchBlock
-        try {
+        try{
             return Integer.parseInt(code);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
         }
         if (code.equalsIgnoreCase("OFF")) {
             return OFF;

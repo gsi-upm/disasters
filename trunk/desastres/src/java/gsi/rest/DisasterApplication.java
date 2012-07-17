@@ -688,35 +688,12 @@ public class DisasterApplication extends Application {
 			}
 		};
 
-		// Get the user projects
-		Restlet userProject = new Restlet(getContext()){
-			@Override
-			public void handle(Request request, Response response){
-				String user_name = (String) request.getAttributes().get("nombre_usuario");
-				String redirector = URL_BASE + "temporal.jsp?action=userProject&nombre_usuario=" + user_name;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
 		// Get the user role
 		Restlet userRole = new Restlet(getContext()){
 			@Override
 			public void handle(Request request, Response response){
 				String user_name = (String) request.getAttributes().get("nombre_usuario");
 				String redirector = URL_BASE + "temporal.jsp?action=userRole&nombre_usuario=" + user_name;
-				response.redirectTemporary(removeBlanks(redirector));
-			}
-		};
-
-		Restlet registrar = new Restlet(getContext()){
-			@Override
-			public void handle(Request request, Response response){
-				String user = (String) request.getAttributes().get("user");
-				String pass = (String) request.getAttributes().get("pass");
-				String nombre = (String) request.getAttributes().get("nombre");
-				String email = (String) request.getAttributes().get("email");
-				String redirector = URL_BASE + "temporal.jsp?action=registrar&user=" + user + "&pass=" + pass +
-					"&nombre=" + nombre + "&email=" + email;
 				response.redirectTemporary(removeBlanks(redirector));
 			}
 		};
@@ -738,9 +715,7 @@ public class DisasterApplication extends Application {
 		};
 		
 		router.attach("/user/{nombre_usuario}/{password}", user);
-		router.attach("/userProject/{nombre_usuario}", userProject);
 		router.attach("/userRole/{nombre_usuario}", userRole);
-		router.attach("/registrar/{user}/{pass}/{nombre}/{email}", registrar);
 		router.attach("/insertar/{type}/{name}/{description}/{info}/{latitud}/{longitud}/{planta}", insertar);
 		
 		//Redirector inicial = new Redirector (getContext(), "index.jsp", Redirector.MODE_CLIENT_TEMPORARY);

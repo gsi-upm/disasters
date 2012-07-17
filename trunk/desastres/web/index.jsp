@@ -25,8 +25,9 @@
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css"/>
 			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
-			<script type="application/javascript" src="js/jquery-1.7.1.min.js"></script>
-			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=true&amp;region=ES"></script>
+			<script type="application/javascript" src="js/jquery-1.7.2.min.js"></script>
+			<!--<script type="application/javascript" src="js/ajax-pushlet-client.js"></script>-->
+			<script type="application/javascript" src="https://maps.google.com/maps/api/js?v=3.8&amp;sensor=true&amp;region=ES"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
 				var usuario_actual = ${usuario.id};
@@ -44,17 +45,17 @@
 			<!--Hora y Fecha -->
 			<script type="application/javascript" src="js/hora_fecha.js"></script>
 			<!-- Formularios, parte grafica y logica -->
-			<script type="application/javascript" src="js/ajax.js"></script>
+			<!--<script type="application/javascript" src="js/ajax.js"></script>-->
 			<script type="application/javascript" src="js/tab-view.js"></script>
 			<script type="application/javascript" src="js/forms.js"></script>
 			<!-- jqModal Dependencies -->
 			<script type="application/javascript" src="js/jqModal.js"></script>
 			<!-- Optional Javascript for Drag'n'Resize -->
-			<script type="application/javascript" src="js/jqDnR.js"></script>
-			<script type="application/javascript" src="js/dimensions.js"></script>
+			<!--<script type="application/javascript" src="js/jqDnR.js"></script>-->
+			<!--<script type="application/javascript" src="js/dimensions.js"></script>-->
 			<!-- jQuery -->
-			<script type="application/javascript" src="js/jquery-fieldselection.js"></script>
-			<script type="application/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>
+			<!--<script type="application/javascript" src="js/jquery-fieldselection.js"></script>-->
+			<!--<script type="application/javascript" src="js/jquery-ui-personalized-1.5.2.min.js"></script>-->
 			<!-- DWR. These files are created in the runtime -->
 			<!-- <script type="application/javascript" src="/caronte/dwr/util.js"></script> -->
 			<!-- <script type="application/javascript" src="/caronte/dwr/interface/DirectionsBean.js"></script> -->
@@ -132,7 +133,7 @@
 			</table>
 			<%--
 				int[] rscs = recursos.getResourcesList();
-				for (int i = 0; i < rscs.length; i++) {
+				for(int i = 0; i < rscs.length; i++){
 					String st = "<input type=\"hidden\" id=\"start" + rscs[i] + "\"/>";
 					out.println(st);
 					String ed = "<input type=\"hidden\" id=\"end" + rscs[i] + "\"/>";

@@ -24,7 +24,7 @@ public class ReteDisasterDB {
 	/** Resources registered */
 	private static Hashtable<Integer,Resource> resourcesHash;
 	/** URL for Disasters2.0 application REST interface */
-	private static final String URL_BASE = Connection.getURL();
+	private static final String URL_BASE = Connection.URL_BASE;
 	/** TimeStamp for the last JSON Request */
 	private String now;
 	/** PrintWriter to show answers in web application */

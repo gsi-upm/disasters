@@ -17,7 +17,7 @@ function cambiaIcono(marcador, tipo, cantidad){
 			imagen = 'markers/events/personaHerida.png';
 		}
 		document.getElementById('icono_catastrofes').src = imagen;
-		document.getElementById('catastrofes').nombre.value = fmt(tipo,'es'); // en i18n.js
+		document.getElementById('catastrofes').nombre.value = fmt(tipo); // en i18n.js
 	}else if(marcador == 'resource'){
 		if(tipo == 'police'){
 			imagen = 'markers/resources/policia' + cantidad + '.png';
@@ -48,7 +48,7 @@ function cambiaIcono(marcador, tipo, cantidad){
 			imagen = 'markers/people/trapped' + cantidad + '.png';
 		}
 		document.getElementById('icono_heridos').src = imagen;
-		document.getElementById('heridos').nombre.value = fmt(tipo,'es'); // en i18n.js
+		document.getElementById('heridos').nombre.value = fmt(tipo); // en i18n.js
 		if(tipo == 'healthy'){
 			document.getElementById('cantidad').style.display = 'block';
 		}else{
@@ -56,7 +56,6 @@ function cambiaIcono(marcador, tipo, cantidad){
 			if(proyecto == 'caronte'){
 				document.getElementById('heridos').cantidad.value = 1;
 			}
-			
 		}
 	}	
 }
@@ -71,26 +70,19 @@ function cambiaFlecha(i, numero){
 	
 function validarDireccion(numero){
 	var direccion = document.getElementById('direccion' + numero).value;
-	localizador.getLatLng(direccion, function(point){
-		if(!point){
-			document.getElementById('error_texto').innerHTML = 'La siguiente direccion no ha podido ser encontrada: <i>' +
-				direccion + '</i>';
-			$('#error').jqm().jqmShow();
-			document.getElementById('validacion'+numero).src = 'images/iconos/no.png';
-		}else{
+	localizador.geocode({address:direccion}, function(resultado, estado){
+		if(estado == google.maps.GeocoderStatus.OK){
+			var point = resultado[0].geometry.location;
 			map.setCenter(point, 15);
 			document.getElementById('validacion' + numero).src = 'images/iconos/yes.png';
 			document.getElementById('validacion' + numero).alt = 'Direcci&oacute;n v&aacute;lida';
 			document.getElementById('latitud' + numero).value = point.lat();
 			document.getElementById('longitud' + numero).value = point.lng();
-			//Esto es el puntero provisional
-			/*
-			var marker = new google.maps.Marker({position:point});
-			marker.setMap(map);
-			infowindow.close();
-			infowindow = new InfoWindow({content:'<b>My house</b><br/>Calle embajadores, 181'});
-			infowindow.open(map, marker);
-			*/
+		}else{
+			document.getElementById('error_texto').innerHTML = 'La siguiente direccion no ha podido ser encontrada: <i>' +
+				direccion + '</i>';
+			$('#error').jqm().jqmShow();
+			document.getElementById('validacion' + numero).src = 'images/iconos/no.png';
 		}
 	});
 }

@@ -2,6 +2,7 @@
 <%@page isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
 
 <%@include file="../jspf/database.jspf"%>
 
@@ -29,7 +30,10 @@
 		<sql:param value="${param.fecha}"/>
 		<sql:param value="${param.usuario}"/>
 	</sql:update>
-	
+	<sql:query var="guardados" dataSource="${CatastrofesServer}">
+		SELECT ID FROM CATASTROFES WHERE FECHA = ?
+		<sql:param value="${param.fecha}"/>
+	</sql:query>
 	<%-- Uncomment this code in order to enable Twitter service for new disasters.
 		DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR --%>
 	<%--
@@ -50,3 +54,8 @@
 		twitt.updateStatus(msg);
 	--%>
 </c:catch>
+<c:forEach var="guardado" items="${guardados.rows}">
+	<json:object>
+		<json:property name="id" value="${guardado.id}"/>
+	</json:object>
+</c:forEach>

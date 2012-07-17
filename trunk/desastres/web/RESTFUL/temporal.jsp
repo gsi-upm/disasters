@@ -41,51 +41,16 @@
 			<sql:param value="${param.planta}"/>
 		</sql:update>
 	</c:when>
-	<%--<c:when test="${param.action == 'registrar'}">
-		<c:catch var="errorInsert">
-			<sql:update dataSource="${CatastrofesServer}">
-				INSERT INTO USUARIOS(NOMBRE_USUARIO, PASSWORD, TIPO_USUARIO, NOMBRE_REAL,
-					CORREO, LATITUD, LONGITUD, LOCALIZACION, PROYECTO)
-				VALUES(?, ?, 11, ?, ?, 0.0, 0.0, FALSE, 'caronte')
-				<sql:param value="${param.user}"/>
-				<sql:param value="${param.pass}"/>
-				<sql:param value="${param.nombre}"/>
-				<sql:param value="${param.email}"/>
-			</sql:update>
-		</c:catch>
-	</c:when>--%>
-	<c:otherwise>
-		<c:choose>
-			<c:when test="${param.action == 'user'}">
-				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT U.ID, TIPO, NOMBRE_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD, PLANTA
-					FROM USUARIOS U, TIPOS_USUARIOS T
-					WHERE NOMBRE_USUARIO = ?
-					AND PASSWORD = ?
-					AND TIPO_USUARIO = T.ID
-					<sql:param value="${param.nombre_usuario}"/>
-					<sql:param value="${param.password}"/>
-				</sql:query>
-			</c:when>
-			<c:when test="${param.action == 'userProject'}">
-				<sql:query var="proyectos" dataSource="${CatastrofesServer}">
-					SELECT U.ID, TIPO, NIVEL
-					FROM USUARIOS U, TIPOS_USUARIOS T
-					WHERE NOMBRE_USUARIO = ?
-					AND TIPO_USUARIO = T.ID
-					<sql:param value="${param.nombre_usuario}"/>
-				</sql:query>
-			</c:when>
-			<c:when test="${param.action == 'userRole'}">
-				<sql:query var="eventos" dataSource="${CatastrofesServer}">
-					SELECT U.ID, TIPO, NOMBRE_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD
-					FROM USUARIOS U, TIPOS_USUARIOS T
-					WHERE NOMBRE_USUARIO = ?
-					AND TIPO_USUARIO = T.ID
-					<sql:param value="${param.nombre_usuario}"/>
-				</sql:query>
-			</c:when>
-		</c:choose>
+	<c:when test="${param.action == 'user'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT U.ID, TIPO, NOMBRE_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD, PLANTA
+			FROM USUARIOS U, TIPOS_USUARIOS T
+			WHERE NOMBRE_USUARIO = ?
+			AND PASSWORD = ?
+			AND TIPO_USUARIO = T.ID
+			<sql:param value="${param.nombre_usuario}"/>
+			<sql:param value="${param.password}"/>
+		</sql:query>
 		<json:array>
 			<c:forEach var="evento" items="${eventos.rows}">
 				<json:object>
@@ -99,13 +64,24 @@
 					<json:property name="planta" value="${evento.planta}"/>
 				</json:object>
 			</c:forEach>
-			<c:forEach var="proyecto" items="${proyectos.rows}">
+		</json:array>
+	</c:when>
+	<c:when test="${param.action == 'userRole'}">
+		<sql:query var="eventos" dataSource="${CatastrofesServer}">
+			SELECT U.ID, TIPO, NIVEL
+			FROM USUARIOS U, TIPOS_USUARIOS T
+			WHERE NOMBRE_USUARIO = ?
+			AND TIPO_USUARIO = T.ID
+			<sql:param value="${param.nombre_usuario}"/>
+		</sql:query>
+		<json:array>
+			<c:forEach var="evento" items="${eventos.rows}">
 				<json:object>
-					<json:property name="id" value="${proyecto.id}"/>
-					<json:property name="rol" value="${proyecto.tipo}"/>
-					<json:property name="level" value="${proyecto.nivel}"/>
+					<json:property name="id" value="${evento.id}"/>
+					<json:property name="rol" value="${evento.tipo}"/>
+					<json:property name="level" value="${evento.nivel}"/>
 				</json:object>
 			</c:forEach>
 		</json:array>
-	</c:otherwise>
+	</c:when>
 </c:choose>
