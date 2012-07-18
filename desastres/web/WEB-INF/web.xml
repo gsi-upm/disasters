@@ -23,12 +23,12 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>RecibeEvento</servlet-name>
-        <servlet-class>gsi.envioOCP.RecibeEvento</servlet-class>
+        <servlet-name>ProcessEvent</servlet-name>
+        <servlet-class>gsi.sendToOCP.ProcessEvent</servlet-class>
     </servlet>
-     <servlet-mapping>
-        <servlet-name>RecibeEvento</servlet-name>
-        <url-pattern>/recibeEvento</url-pattern>
+    <servlet-mapping>
+        <servlet-name>ProcessEvent</servlet-name>
+        <url-pattern>/ProcessEvent</url-pattern>
     </servlet-mapping>
     <!-- DWR -->
     <!--<servlet>
