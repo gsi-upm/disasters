@@ -39,6 +39,8 @@ const roadmap = google.maps.MapTypeId.ROADMAP;
 var infoWindow;
 var infoWinMarker;
 
+var id = 0; // El id que le vamos a dar al evento que se envia a OCP a traves del paquete gsi.sendToOCP
+
 // variables userName, usuario_actual, usuario_actual_tipo, nivelMsg e idioma definidas en index.jsp
 
 /**
@@ -310,38 +312,43 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
 	}
 	
 	/** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent */
-	if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
-		var type = 'AMBOS'; // Variable que establece si:
-		// 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (REGISTRAR) <-- valores q toma type
-		// 2) estamos produciendo solo el evento (PRODUCIR)
-		// 3) estamos registrandonos a un evento y produciendo simultaneamente (AMBOS)
-		
-		var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
-		$.ajax({
-			url: '/caronte/recibeEvento',
-			type: 'POST',
-			data: {
-				'type':type,
-				'event':tipo,
-				'size':size,
-				'description':descTotal,
-				'name':nombre,
-				'longitude':longitud,
-				'floor':planta,
-				'latitude':latitud,
-				'date':fecha
-			},
-			success: function(data,status){
-				console.log("Success!!");
-				console.log("Datos devueltos por RecibeEventoServlet: "+data);
-				console.log("Mensaje de response code de HTTP enviado por RecibeEvento: "+status);
-			},
-			error: function(xhr, desc, err){
-				console.log(xhr);
-				console.log("Desc: " + desc + "\nErr:" + err);
-			}
-		});
-	}
+        if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
+            
+            var type = 'produce'; // solo toma el valor 'register' en el servlet que recibe este POST. Al menos por ahora.
+            //// Variable que establece si: 
+            // 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (register) <-- valores q toma type
+            // 2) estamos produciendo solo el evento (produce)
+
+            var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
+            
+            id++; // El id empieza desde el numero 1 se va incrementando cada vez que se genera un evento.
+            
+            $.ajax({
+                    url:'/caronte/ProcessEvent',
+                    type: 'POST',
+                    data: {
+                        'id':id,
+                        'type':type,
+                        'event':tipo,
+                        'size':size,
+                        'description':descTotal,
+                        'name':nombre,
+                        'longitude':longitud,
+                        'floor':planta,
+                        'latitude':latitud,   
+                        'date':fecha
+                    },
+                    success: function(data,status) { 
+                        console.log("Success!!");
+                        console.log("Datos devueltos por ProcessEvent: "+data);
+                        console.log("Mensaje de response code de HTTP enviado por ProcessEvent: "+status);
+                    },
+                    error: function(xhr, desc, err) {
+                    console.log(xhr);
+                    console.log("Desc: " + desc + "\nErr:" + err);
+                    }
+                });
+        }
 }
 
 /**
