@@ -12,9 +12,9 @@ import nl.justobjects.pushlet.util.PushletException;
 import org.json.me.*;
 
 /**
+ * PushletCaronte.
  * 
- * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  **/
 public class PushletCaronte extends Thread implements PushletClientListener, Protocol{
 	private PushletClient pushletClient;
@@ -23,11 +23,20 @@ public class PushletCaronte extends Thread implements PushletClientListener, Pro
 	private static final String SUBJECT = "/events";
 	private static final long PUBLISH_INTERVAL = 2000;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param aHost host
+	 * @param aPort port
+	 */
 	public PushletCaronte(String aHost, int aPort){
 		host = aHost;
 		port = aPort;
 	}
 
+	/**
+	 * Run.
+	 */
 	public void run(){
 		// Create and start a Pushlet client; we receive callbacks through onHeartbeat() and onData().
 		try{
@@ -117,17 +126,29 @@ public class PushletCaronte extends Thread implements PushletClientListener, Pro
 		return array;
 	}
 
-	/** Error occurred. */
+	/**
+	 * Error occurred.
+	 * 
+	 * @param message message
+	 */
 	public void onError(String message){
 		System.out.println(message);
 	}
 
-	/** Abort event from server. */
+	/**
+	 * Abort event from server.
+	 * 
+	 * @param theEvent theEvent
+	 */
 	public void onAbort(Event theEvent){
 		System.out.println("onAbort received: " + theEvent);
 	}
 
-	/** Data event from server. */
+	/**
+	 * Data event from server.
+	 * 
+	 * @param theEvent theEvent
+	 */
 	public void onData(Event theEvent){
 		// Calculate round trip delay
 		String fecha = theEvent.getField("fecha");
@@ -140,12 +161,20 @@ public class PushletCaronte extends Thread implements PushletClientListener, Pro
 		System.out.println("onData: tammano " + datos.length() + " a fecha " + fecha);
 	}
 
-	/** Heartbeat event from server. */
+	/**
+	 * Heartbeat event from server.
+	 * 
+	 * @param theEvent theEvent
+	 */
 	public void onHeartbeat(Event theEvent){
 		System.out.println("onHeartbeat received: " + theEvent);
 	}
 
-	/** Main program. */
+	/**
+	 * Main program.
+	 * 
+	 * @param args [0]:host, [1]:port
+	 */
 	public static void main(String[] args){
 		String servidor = (args.length > 0) ? args[0] : "localhost/caronte";
 		int puerto = (args.length > 1) ? Integer.parseInt(args[1]) : 8080;

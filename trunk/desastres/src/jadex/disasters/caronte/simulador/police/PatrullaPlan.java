@@ -5,14 +5,16 @@ import disasters.caronte.Entorno;
 import jadex.bdi.runtime.Plan;
 
 /**
- * Plan del POLICIA para mover de forma aleatoria un agente.
- * @author Nuria Siguero y Juan Luis Molina
+ * Plan del POLIC&Iacute;A para mover de forma aleatoria un agente.
+ * 
+ * @author Nuria Siguero
+ * @author Juan Luis Molina Nogales
  */
 public class PatrullaPlan extends Plan{
 
 	/**
-	 * Cuerpo del plan
-	 * Falta mover el agente a esa posicion.
+	 * Cuerpo del plan.</br>
+	 * Falta mover el agente a esa posici&oacute;n.
 	 */
 	public void body(){
 		//Obtenemos un objeto de la clase entorno para poder usar sus metodos.

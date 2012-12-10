@@ -69,7 +69,7 @@ import org.securityfilter.realm.*;
  * return a Principal object and this class does the conversions for you.
  *
  * @author Max Cooper (max@maxcooper.com)
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  * @version $Revision: 1.7 $ $Date: 2003/01/06 00:17:25 $
  */
 public class MySecurityRealm implements SecurityRealmInterface{

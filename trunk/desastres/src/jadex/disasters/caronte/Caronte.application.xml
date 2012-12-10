@@ -5,49 +5,42 @@
 	Lanza los agentes de Caronte.
 -->
 <applicationtype xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-application-2.0.xsd"
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-application-2.2.xsd"
 		name="Caronte" package="disasters.caronte">
 	<componenttypes>
 		<componenttype name="Entorno" filename="disasters/caronte/Entorno.agent.xml" master="true"/>
 		<componenttype name="Coordinador" filename="disasters/caronte/coordinador/Coordinador.agent.xml"/>
 		<componenttype name="Intervencion" filename="disasters/caronte/intervencionincendios/IntervencionIncendios.agent.xml"/>
 		<componenttype name="Atencion" filename="disasters/caronte/atencionheridos/AtencionHeridos.agent.xml"/>
-		<!--<componenttype name="Evacuacion" filename="disasters/caronte/evacuacion/EvacuacionResidencia.agent.xml"/>-->
-		<!--<componenttype name="Jefe" filename="disasters/caronte/simulador/jefe/Jefe.agent.xml"/>
-		<componenttype name="Enfermero" filename="disasters/caronte/simulador/enfermero/Enfermero.agent.xml"/>
-		<componenttype name="Gerocultor" filename="disasters/caronte/simulador/gerocultor/Gerocultor.agent.xml"/>
-		<componenttype name="Celador" filename="disasters/caronte/simulador/celador/Celador.agent.xml"/>
-		<componenttype name="Auxiliar" filename="disasters/caronte/simulador/auxiliar/Auxiliar.agent.xml"/>
-		<componenttype name="Recepcionista" filename="disasters/caronte/simulador/recepcionista/Recepcionista.agent.xml"/>
-		<componenttype name="Ambulancia" filename="disasters/caronte/simulador/ambulancia/Ambulancia.agent.xml"/>
-		<componenttype name="Bombero" filename="disasters/caronte/simulador/bombero/Bombero.agent.xml"/>-->
+		<componenttype name="Evacuacion" filename="disasters/caronte/evacuacion/EvacuacionResidencia.agent.xml"/>
+		<componenttype name="Agente" filename="disasters/caronte/simulador/Agente.agent.xml"/>
 	</componenttypes>
 	
 	<configurations>
-		<configuration name="default">
+		<configuration name="Default">
 			<components>
 				<component type="Entorno"/>
 				<component type="Coordinador"/>
 				<component type="Intervencion"/>
 				<component type="Atencion"/>
-				<!--<component type="Evacuacion"/>-->
+				<component type="Evacuacion"/>
 			</components>
 		</configuration>
-		<configuration name="simulator">
+		<configuration name="Simulator">
 			<components>
 				<component type="Entorno"/>
 				<component type="Coordinador"/>
 				<component type="Intervencion"/>
 				<component type="Atencion"/>
-				<!--<component type="Evacuacion"/>-->
-				<!--<component type="Jefe" number="1"/>
-				<component type="Enfermero" number="1"/>
-				<component type="Gerocultor" number="1"/>
-				<component type="Celador" number="1"/>
-				<component type="Auxiliar" number="1"/>
-				<component type="Recepcionista" number="1"/>
-				<component type="Ambulancia" number="1"/>
-				<component type="Bombero" number="1"/>-->
+				<component type="Evacuacion"/>
+				<component type="Agente" configuration="jefe" name="Jefe" number="1"/>
+				<component type="Agente" configuration="enfermero" name="Enfermero" number="1"/>
+				<component type="Agente" configuration="gerocultor" name="Gerocultor" number="1"/>
+				<component type="Agente" configuration="celador" name="Celador" number="1"/>
+				<component type="Agente" configuration="auxiliar" name="Auxiliar" number="1"/>
+				<component type="Agente" configuration="recepcionista" name="Recepcionista" number="1"/>
+				<component type="Agente" configuration="ambulancia" name="Ambulancia" number="1"/>
+				<component type="Agente" configuration="bombero" name="Bombero" number="1"/>
 			</components>
 		</configuration>
 	</configurations>

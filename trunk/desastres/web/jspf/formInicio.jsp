@@ -4,7 +4,7 @@
 
 <fmt:bundle basename="fmt.eji8n">
 	<h2><fmt:message key="iniciarsesion"/></h2>
-	<form id="<%=SecurityConstants.LOGIN_FORM_ID%>" action="<%=response.encodeURL(SecurityConstants.LOGIN_FORM_ACTION)%>" method="POST">
+	<form name="<%=SecurityConstants.LOGIN_FORM_ID%>" action="<%=response.encodeURL(SecurityConstants.LOGIN_FORM_ACTION)%>" method="POST">
 		<table>
 			<tr><td id="regMsg" class="verde" colspan="2"></td></tr>
 			<tr>

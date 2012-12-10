@@ -7,19 +7,15 @@
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
                 <library dirs="200">
-                    <file>${file.reference.commons-beanutils.jar}</file>
+                    <file>${file.reference.commons-beanutils-1.8.3.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.commons-collections.jar}</file>
+                    <file>${file.reference.commons-digester-2.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.commons-digester.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.commons-logging.jar}</file>
+                    <file>${file.reference.commons-logging-1.1.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -31,7 +27,7 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jakarta-oro.jar}</file>
+                    <file>${file.reference.jakarta-oro-2.0.8.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -55,7 +51,7 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.mysql-connector-java-5.1.18-bin.jar}</file>
+                    <file>${file.reference.mysql-connector-java-5.1.22-bin.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -79,109 +75,110 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-applib-bdi-2.0.jar}</file>
+                    <file>${file.reference.jadex-bridge-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-applications-bdi-2.0.jar}</file>
+                    <file>${file.reference.jadex-commons-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-applications-bdibpmn-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-bdi-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-applications-bpmn-2.0.jar}</file>
+                    <file>${file.reference.jadex-applib-bdi-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-applications-gpmn-2.0.jar}</file>
+                    <file>${file.reference.jadex-applications-bdi-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-applications-micro-2.0.jar}</file>
+                    <file>${file.reference.jadex-applications-bdibpmn-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-bridge-2.0.jar}</file>
+                    <file>${file.reference.jadex-applications-bpmn-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-commons-2.0.jar}</file>
+                    <file>${file.reference.jadex-applications-gpmn-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-javaparser-2.0.jar}</file>
+                    <file>${file.reference.jadex-applications-micro-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-application-2.0.jar}</file>
+                    <file>${file.reference.jadex-javaparser-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-base-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-application-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-bdi-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-base-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-bdibpmn-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-bdibpmn-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-bpmn-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-bpmn-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-component-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-component-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-extension-agr-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-extension-agr-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-extension-envsupport-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-extension-envsupport-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-extension-envsupport-opengl-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-extension-envsupport-opengl-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-gpmn-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-gpmn-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-kernel-micro-2.0.jar}</file>
+                    <file>${file.reference.jadex-kernel-micro-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-nuggets-2.0.jar}</file>
+                    <file>${file.reference.jadex-nuggets-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-platform-base-2.0.jar}</file>
+                    <file>${file.reference.jadex-platform-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-platform-standalone-2.0.jar}</file>
+                    <file>${file.reference.jadex-platform-standalone-launch-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-platform-standalone-launch-2.0.jar}</file>
+                    <file>${file.reference.jadex-rules-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-rules-2.0.jar}</file>
+                    <file>${file.reference.jadex-rules-applications-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-rules-applications-2.0.jar}</file>
+                    <file>${file.reference.jadex-rules-tools-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-rules-tools-2.0.jar}</file>
+                    <file>${file.reference.jadex-runtimetools-swing-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-runtimetools-2.0.jar}</file>
+                    <file>${file.reference.jadex-tools-base-swing-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-tools-bdi-2.0.jar}</file>
+                    <file>${file.reference.jadex-tools-bdi-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-tools-bpmn-2.0.jar}</file>
+                    <file>${file.reference.jadex-tools-bpmn-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-tools-comanalyzer-2.0.jar}</file>
+                    <file>${file.reference.jadex-tools-comanalyzer-2.2.1.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jadex-xml-2.0.jar}</file>
+                    <file>${file.reference.jadex-xml-2.2.1.jar}</file>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.dir" name="Source Packages"/>
                 <root id="src.jadex.dir" name="Jadex Agents"/>
+                <root id="src.mobile.dir" name="Mojax Application"/>
             </source-roots>
             <test-roots>
-                <root id="test.src.dir"/>
+                <root id="test.src.dir" name="Test Packages"/>
             </test-roots>
         </data>
     </configuration>

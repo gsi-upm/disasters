@@ -13,23 +13,27 @@ import disasters.desastres.Environment;
  * property, or through the constructor. The length represents
  * the length of the timer in milliseconds.
  *
- * @author	David Reilly
+ * @author David Reilly
  */
 public class TimerJSON extends Thread{
 
-	/** Rate at which timer is checked */
+	/** Rate at which timer is checked. */
 	protected int m_rate = 100;
-	/** Length of timeout */
+	/** Length of timeout. */
 	private int m_length;
-	/** Time elapsed */
+	/** Time elapsed. */
 	private int m_elapsed;
 	
+	/** Entorno de caronte. */
 	private Entorno ent;
+	/** Entorno de desastres. */
 	private Environment env;
 
 	/**
-	 * Creates a timer of a specified length
-	 * @param length Length of time before timeout occurs
+	 * Creates a timer of a specified length.
+	 * 
+	 * @param length length of time before timeout occurs
+	 * @param ent entorno de caronte
 	 */
 	public TimerJSON(int length, Entorno ent){
 		// Assign to member variable
@@ -42,8 +46,10 @@ public class TimerJSON extends Thread{
 	}
 	
 	/**
-	 * Creates a timer of a specified length
-	 * @param length Length of time before timeout occurs
+	 * Creates a timer of a specified length.
+	 * 
+	 * @param length length of time before timeout occurs
+	 * @param env entorno de desastres
 	 */
 	public TimerJSON(int length, Environment env){
 		// Assign to member variable
@@ -55,12 +61,16 @@ public class TimerJSON extends Thread{
 		this.env = env;
 	}
 
-	/** Resets the timer back to zero */
+	/**
+	 * Resets the timer back to zero.
+	 */
 	public synchronized void reset(){
 		m_elapsed = 0;
 	}
 
-	/** Performs timer specific code */
+	/**
+	 * Performs timer specific code.
+	 */
 	public void run(){
 		// Keep looping
 		for(;;){
@@ -86,6 +96,9 @@ public class TimerJSON extends Thread{
 	}
 
 	// Override this to provide custom functionality
+	/**
+	 * Timeout.
+	 */
 	public void timeout(){
 		System.out.println("## ENV: Actualizando el JSON...");
 		if(ent != null){

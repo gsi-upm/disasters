@@ -4,13 +4,13 @@ import disasters.*;
 import disasters.caronte.*;
 
 /**
- * Plan para formar el equipo de intervencion.
+ * Plan para formar el equipo de intervenci&oacute;n.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class FormarEquipoIntervencionPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan AvisarAgentes.
+	 * Cuerpo del plan FormarequipoIntervencion.
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
@@ -40,9 +40,10 @@ public class FormarEquipoIntervencionPlan extends CarontePlan{
 	
 	/**
 	 * 
-	 * @param agentes
-	 * @param des
-	 * @return 
+	 * 
+	 * @param agentes agentes
+	 * @param des desastre
+	 * @return recurso
 	 */
 	private Resource getAtiende(Resource[] agentes, Disaster des){
 		Resource atiende = agentes[0];

@@ -2,23 +2,23 @@ package disasters.caronte.simulador.nurse;
 
 import disasters.*;
 import disasters.caronte.Entorno;
+import disasters.caronte.simulador.ontology.Desastre;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.json.me.*;
 
 /**
- * Plan de ENFERMERO
+ * Plan de ENFERMERO.
  * 
- * @author Juan Luis Molina
- * 
+ * @author Juan Luis Molina Nogales
  */
 public class AtenderHeridosPlan extends EnviarMensajePlan{
 
 	Entorno env;
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Entorno para poder usar sus metodos
@@ -146,9 +146,10 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 *
-	 * @param des Desastre
-	 * @return Herido
+	 * Coge un herido.
+	 * 
+	 * @param des desastre
+	 * @return herido
 	 */
 	private People getHerido(Disaster des){
 		People herido = null;
@@ -167,8 +168,9 @@ public class AtenderHeridosPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 *
-	 * @param sintomas Sintomas
+	 * Busca posibles enfermedades en Freebase dados unos s&iacute;ntomas.
+	 * 
+	 * @param sintomas s&iacute;ntomas
 	 */
 	private void freebase(ArrayList<String> sintomas){
 		String queryText = "[{\"/common/topic/article\":{\"guid\":null,\"limit\":1,\"optional\":true},"

@@ -1,5 +1,6 @@
 <%@page contentType="application/x-sql" pageEncoding="UTF-8"%>
 <%@page isELIgnored="false"%>
+<%--<%@page import="winterwell.jtwitter.Twitter, gsi.twitter.StreetLocator"%>--%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
@@ -34,25 +35,21 @@
 		SELECT ID FROM CATASTROFES WHERE FECHA = ?
 		<sql:param value="${param.fecha}"/>
 	</sql:query>
+
 	<%-- Uncomment this code in order to enable Twitter service for new disasters.
 		DO NOT FORGET TO INSERT YOUR TWITTER LOGIN AND PASSWORD IN THE TWITTER CONSTRUCTOR --%>
-	<%--
-		Twitter twitt = new Twitter("your_username_here","your_password_here");
+	<%--<%
+		Twitter twitt = new Twitter("your_username_here", "your_password_here");
 		StreetLocator st = new StreetLocator();
 		double lat = Double.parseDouble(request.getParameter("latitud"));
 		double lon = Double.parseDouble(request.getParameter("longitud"));
-		String msg = "New ";
-		msg += request.getParameter("tipo");
-		msg += " at ";
-		msg +=st.getAddress(lat, lon);
-		msg += " on ";
-		msg += new Date();
-		msg += " Size: " + request.getParameter("size");
-		if( msg.length() > 140){
-			msg = msg.substring(0, 134) +"(...)";
+		String msg = "New " + request.getParameter("tipo") + " at " + st.getAddress(lat, lon) +
+				" on " + new Date() + " Size: " + request.getParameter("size");
+		if(msg.length() > 140){
+			msg = msg.substring(0, 134) + "(...)";
 		}
 		twitt.updateStatus(msg);
-	--%>
+	%>--%>
 </c:catch>
 <c:forEach var="guardado" items="${guardados.rows}">
 	<json:object>

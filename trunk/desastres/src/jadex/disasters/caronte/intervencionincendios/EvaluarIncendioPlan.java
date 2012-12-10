@@ -1,16 +1,17 @@
 package disasters.caronte.intervencionincendios;
 
-import disasters.caronte.CarontePlan;
+import disasters.caronte.*;
 import disasters.caronte.ontology.Incendio;
 import jadex.bdi.runtime.IGoal;
 
 /**
- *
+ * Plan de recomendaci&oacute;n para evacuar un incendio.
+ * 
  * @author Juan Luis Molina Nogales
  */
 public class EvaluarIncendioPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan.
+	 * Cuerpo del plan EvaluarIncendio.
 	 */
 	public void body(){
 		System.out.println("Evaluando incendio");

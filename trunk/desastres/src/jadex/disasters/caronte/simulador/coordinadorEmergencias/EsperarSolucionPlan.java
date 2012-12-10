@@ -4,15 +4,15 @@ import disasters.EnviarMensajePlan;
 import disasters.caronte.Entorno;
 
 /**
- * Plan de la central que espera que un agente ha solucionado un desastre
+ * Plan de la central que espera que un agente ha solucionado un desastre.
  * 
- * @author Ivan y Juan Luis Molina
- * 
+ * @author Iv&aacute;n Rojo
+ * @author Juan Luis Molina Nogales
  */
 public class EsperarSolucionPlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();

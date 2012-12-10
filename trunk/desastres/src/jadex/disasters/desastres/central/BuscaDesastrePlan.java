@@ -1,6 +1,5 @@
 package disasters.desastres.central;
 
-import disasters.WorldObject;
 import disasters.*;
 import disasters.desastres.*;
 import jadex.bdi.runtime.IGoal;
@@ -9,17 +8,17 @@ import java.util.*;
 /**
  * Plan de la central para avisar al resto de los agentes.
  *
- * @author Ivan Rojo y Juan Luis Molina
- *
+ * @author Iv&aacute;n Rojo
+ * @author Juan Luis Molina Nogales
  */
 public class BuscaDesastrePlan extends EnviarMensajePlan{
-
+	
+	private Disaster desastreAtendido;
+	private Disaster desastreEvaluado;
+	
 	/**
 	 * Cuerpo del plan.
 	 */
-	private Disaster desastreAtendido;
-	private Disaster desastreEvaluado;
-
 	public void body(){
 		// Obtenemos un objeto de la clase entorno para poder usar sus metodos.
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
@@ -79,7 +78,12 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 		dispatchSubgoalAndWait(esperaSolucion);
 	}
 
-
+	/**
+	 * Encuentra un desastre.
+	 * 
+	 * @param env entorno
+	 * @return desastre
+	 */
 	private Disaster findDisaster(Environment env){
 		//System.out.println("$$ central: Comenzamos a buscar la emergencia mas grave... ");
 		Iterator it = env.getEvents().entrySet().iterator();
@@ -170,7 +174,11 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 		return desastreAtendido;
 	}
 
-	// devuelve true si hemos encontrado otro mas grave
+	/**
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
+	 */
 	private boolean compruebaGrave(){
 
 		if(desastreAtendido.getSerious() != null && desastreEvaluado.getSerious() != null){
@@ -205,7 +213,11 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 		return false;
 	}
 
-	// devuelve true si hemos encontrado otro mas grave
+	/**
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
+	 */
 	private boolean compruebaAtrapado(){
 		if(desastreAtendido.getTrapped() != null && desastreEvaluado.getTrapped() != null){
 			boolean atendActivo = desastreAtendido.getTrapped().getState().equals("active");
@@ -239,7 +251,11 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 		return false;
 	}
 
-	// devuelve true si hemos encontrado otra mas grave
+	/**
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
+	 */
 	private boolean compruebaLeve(){
 		if(desastreAtendido.getSlight() != null && desastreEvaluado.getSlight() != null){
 			boolean atendActivo = desastreAtendido.getSlight().getState().equals("active");
@@ -273,7 +289,11 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 		return false;
 	}
 
-	// devuelve true si hemos encontrado otra mas grave
+	/**
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
+	 */
 	private boolean compruebaMuerto(){
 		if(desastreAtendido.getDead() != null && desastreEvaluado.getDead() != null){
 			boolean atendActivo = desastreAtendido.getDead().getState().equals("active");
@@ -307,6 +327,13 @@ public class BuscaDesastrePlan extends EnviarMensajePlan{
 		return false;
 	}
 
+	/**
+	 * Devuelve un agente.
+	 * 
+	 * @param env entorno
+	 * @param tipo tipo
+	 * @return agente
+	 */
 	private String giveMeAgent(Environment env, String tipo){
 		Iterator it = env.getAgents().entrySet().iterator();
 		while(it.hasNext()){

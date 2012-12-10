@@ -3,13 +3,14 @@ package disasters.desastres.sanitarios.coordinadorMedico;
 import disasters.EnviarMensajePlan;
 
 /**
- * Determinar el numero de ambulancias y personal que debe ir a la zona del desastre
+ * Determinar el n&uacute;mero de ambulancias y personal que debe ir a la zona del desastre.
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class OrganizarRecursosMedicosPlan extends EnviarMensajePlan{
+
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		enviarRespuesta("ack_aviso", "Aviso recibido");

@@ -5,18 +5,18 @@ import disasters.desastres.Environment;
 import jadex.bdi.runtime.IGoal;
 
 /**
- * Se comprueba que es correcto el triage realizado sobre las victimas trasladadas
- * desde la zona de Rescate y se asigna la tarjeta de triage a cada victima
+ * Se comprueba que es correcto el triage realizado sobre las v&iacute;ctimas trasladadas
+ * desde la zona de Rescate y se asigna la tarjeta de triage a cada v&iacute;ctima.
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class RevisionTriagePlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
-		// Obtenemos un objeto de la clase Environment para poder usar susmetodos
+		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		enviarRespuesta("ack_triage", "Aviso recibido");

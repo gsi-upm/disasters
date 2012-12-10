@@ -101,7 +101,7 @@ function escribirMensaje(evento, accion, nivel){
 	}
 	
 	if(evento.marcador == 'event'){
-		mensaje += ' de tamaño ' + fmt(evento.size,'es');
+		mensaje += ' de tama&ntilde;o ' + fmt(evento.size,'es');
 	}else{
 		if(evento.size != 'indefinido' && evento.traffic != 'indefinida'){
 			mensaje += ' de peso ' + evento.size + ' y movilidad ' + evento.traffic;
@@ -129,16 +129,16 @@ function escribirMensaje(evento, accion, nivel){
 		mensaje += ' creado';
 		if(evento.info != ''){
 			if(evento.info.length <= 40){
-				mensaje += '<br/>-Información: ' + evento.info;
+				mensaje += '<br/>-Informaci&oacute;n: ' + evento.info;
 			}else{
-				mensaje += '<br/>-Información: ' + evento.info.substring(0,40) + '...';
+				mensaje += '<br/>-Informaci&oacute;n: ' + evento.info.substring(0,40) + '...';
 			}
 		}
 		if(evento.descripcion != ''){
 			if(evento.info.length <= 40){
-				mensaje += '<br/>-Descripción: ' + evento.descripcion;
+				mensaje += '<br/>-Descripci&oacute;n: ' + evento.descripcion;
 			}else{
-				mensaje += '<br/>-Descripción: ' + evento.descripcion.substring(0,40) + '...';
+				mensaje += '<br/>-Descripci&oacute;n: ' + evento.descripcion.substring(0,40) + '...';
 			}
 		}
 	}else if(accion == 'modificar'){
@@ -146,16 +146,16 @@ function escribirMensaje(evento, accion, nivel){
 		var anterior = marcadores_definitivos[evento.id];
 		if(evento.info != '' && evento.info != anterior.info){
 			if(evento.info.length <= 40){
-				mensaje += '<br/>-Información: ' + evento.info;
+				mensaje += '<br/>-Informaci&oacute;n: ' + evento.info;
 			}else{
-				mensaje += '<br/>-Información: ' + evento.info.substring(0,40) + '...';
+				mensaje += '<br/>-Informaci&oacute;n: ' + evento.info.substring(0,40) + '...';
 			}
 		}
 		if(evento.descripcion != '' && evento.descripcion != anterior.descripcion){
 			if(evento.info.length <= 40){
-				mensaje += '<br/>-Descripción: ' + evento.descripcion;
+				mensaje += '<br/>-Descripci&oacute;n: ' + evento.descripcion;
 			}else{
-				mensaje += '<br/>-Descripción: ' + evento.descripcion.substring(0,40) + '...';
+				mensaje += '<br/>-Descripci&oacute;n: ' + evento.descripcion.substring(0,40) + '...';
 			}
 		}
 	}else if(accion == 'eliminar'){

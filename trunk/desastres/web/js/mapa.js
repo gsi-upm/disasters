@@ -1,5 +1,5 @@
-const tiempoActualizacion = 2000;
-const tiempoInicial = 2000;
+var TIEMPO_ACTUALIZACION = 2000; // const
+var TIEMPO_INICIAL = 2000; // const
 var contador = 0;
 
 var localizador;
@@ -16,8 +16,8 @@ var pos_indices = 0;
 
 var puntero_temp;
 var caracter_temp;
-const temporal = 0;
-const definitivo = 1;
+var TEMPORAL = 0; // const
+var DEFINITIVO = 1; // const
 
 var hospitals = new Array();
 var policeStations = new Array();
@@ -34,7 +34,7 @@ var limpiar = true;
 var noActualizar = 0;
 var markerId;
 
-const roadmap = google.maps.MapTypeId.ROADMAP;
+var ROADMAP = google.maps.MapTypeId.ROADMAP; // const
 
 var infoWindow;
 var infoWinMarker;
@@ -44,7 +44,7 @@ var id = 0; // El id que le vamos a dar al evento que se envia a OCP a traves de
 // variables userName, usuario_actual, usuario_actual_tipo, nivelMsg e idioma definidas en index.jsp
 
 /**
- * Funcion que se ejecuta para iniciar el mapa cuando se abre el navegador 
+ * Funcion que se ejecuta para iniciar el mapa cuando se abre el navegador.
  */
 function initialize(){
 	if(document.getElementById('username') != null){
@@ -56,7 +56,7 @@ function initialize(){
 	var myOptions = {
 		center: centro.center,
 		zoom: centro.zoom,
-		mapTypeId: roadmap,
+		mapTypeId: ROADMAP,
 		mapTypeControlOptions: {
 			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
 		},
@@ -90,7 +90,7 @@ function initialize(){
 				entry.quantity, entry.name, entry.description, entry.info, entry.latitud,
 				entry.longitud, entry.address, entry.size, entry.traffic, entry.floor,
 				entry.state, entry.idAssigned, entry.date, entry.modified, entry.user, null);
-			nuevomarcador.marker = generaMarcador(nuevomarcador, definitivo);
+			nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 			marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 			indices[pos_indices] = nuevomarcador.id;
 			pos_indices++;
@@ -112,11 +112,11 @@ function initialize(){
 	
 	ultimamodif = obtiene_fecha(true);
 	// setTimeout('moveAgents()', 2000);
-	setTimeout('actualizar()', tiempoInicial);
+	setTimeout('actualizar()', TIEMPO_INICIAL);
 }
 
 /**
- * Actualiza el mapa
+ * Actualiza el mapa.
  */
 function actualizar(){ //function onData(pushletEvent){ // Event Callback: display all events
 	/* PUSHLET ****************************************
@@ -141,7 +141,7 @@ function actualizar(){ //function onData(pushletEvent){ // Event Callback: displ
 				// pintamos los nuevos, para lo que comprobamos que no existian
 				if(marcadores_definitivos[nuevomarcador.id] == null){
 					if(nuevomarcador.estado != 'erased'){
-						nuevomarcador.marker = generaMarcador(nuevomarcador, definitivo);
+						nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 						indices[pos_indices] = nuevomarcador.id;
 						pos_indices++;
@@ -150,7 +150,7 @@ function actualizar(){ //function onData(pushletEvent){ // Event Callback: displ
 					// si se ha modificado algun dato se actualiza
 					if(nuevomarcador.estado != 'erased'){
 						marcadores_definitivos[nuevomarcador.id].marker.setMap(null);
-						nuevomarcador.marker = generaMarcador(nuevomarcador, definitivo);
+						nuevomarcador.marker = generaMarcador(nuevomarcador, DEFINITIVO);
 						marcadores_definitivos[nuevomarcador.id] = nuevomarcador;
 					}else{ // si se ha eliminado un marcador
 						marcadores_definitivos[nuevomarcador.id].marker.setMap(null);
@@ -180,18 +180,18 @@ function actualizar(){ //function onData(pushletEvent){ // Event Callback: displ
 	actualizar2(); // en mapa_xxx.js
 	
 	ultimamodif = obtiene_fecha(false);
-	setTimeout('actualizar()', tiempoActualizacion);
+	setTimeout('actualizar()', TIEMPO_ACTUALIZACION);
 }
 
 /**
- * Marca en el mapa un edificio
+ * Marca en el mapa un edificio.
  *
- * @param type Tipo de edificio
- * @param mensaje Mensaje que muestra el bocadillo
- * @param latitud Latitud del edificio
- * @param longitud Longitud del edificio
+ * @param type tipo de edificio
+ * @param mensaje mensaje que muestra el bocadillo
+ * @param latitud latitud del edificio
+ * @param longitud longitud del edificio
  * @param inicio true si se muestra al inicio
- * @return Marcador
+ * @return marcador
  */
 function generateBuilding(type, mensaje, latitud, longitud, inicio){
 	var imagen;
@@ -263,11 +263,11 @@ function generateBuilding(type, mensaje, latitud, longitud, inicio){
 }
 
 /**
- * Obtiene los datos de un marcador
+ * Obtiene los datos de un marcador.
  * 
- * @param evento Indica si es emergencia (event), herido (people) o usuario (resource)
- * @param caracter Indica si es temporal o definitivo
- * @return Marcador
+ * @param evento indica si es emergencia (event), herido (people) o usuario (resource)
+ * @param caracter indica si es temporal o definitivo
+ * @return marcador
  */
 function generaMarcador(evento, caracter){
 	var opciones = definirOpciones(evento); // en mapa_xxx.js
@@ -276,22 +276,22 @@ function generaMarcador(evento, caracter){
 }
 
 /**
- * Crea una nueva catastrofe
+ * Crea una nueva catastrofe.
  * 
- * @param marcador
- * @param tipo
- * @param cantidad
- * @param nombre
- * @param info
- * @param descripcion
- * @param direccion
- * @param longitud
- * @param latitud
- * @param estado
- * @param size
- * @param traffic
- * @param idAssigned
- * @param planta
+ * @param marcador marcador
+ * @param tipo tipo
+ * @param cantidad cantidad
+ * @param nombre nombre
+ * @param info informacion
+ * @param descripcion descripcion
+ * @param direccion direccion
+ * @param longitud longitud
+ * @param latitud latitud
+ * @param estado estado
+ * @param size tamanno
+ * @param traffic trafico
+ * @param idAssigned id asignada
+ * @param planta planta
  */
 function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, direccion, longitud, latitud, estado, size,traffic, idAssigned, planta){
 	var fecha = obtiene_fecha();
@@ -304,60 +304,59 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
 	}
 	
 	pos_temp++;
-	nuevomarcador.marker = generaMarcador(nuevomarcador, temporal);
-    marcadores_temporales[nuevomarcador.id] = nuevomarcador;
+	nuevomarcador.marker = generaMarcador(nuevomarcador, TEMPORAL);
+	marcadores_temporales[nuevomarcador.id] = nuevomarcador;
 	
-	if(proyecto == 'caronte'){
+	if(PROYECTO == 'caronte'){
 		guardar(nuevomarcador);
 	}
 	
-	/** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent */
-        if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
-            
-            var type = 'produce'; // solo toma el valor 'register' en el servlet que recibe este POST. Al menos por ahora.
-            //// Variable que establece si: 
-            // 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (register) <-- valores q toma type
-            // 2) estamos produciendo solo el evento (produce)
+	/* Hacer POST de las variables de la ontologia hacia el servlet para enviar a OCP. En este caso para un FireEvent */
+	if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
+		var type = 'produce'; // solo toma el valor 'register' en el servlet que recibe este POST. Al menos por ahora.
+		// Variable que establece si: 
+		// 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (register) <-- valores q toma type
+		// 2) estamos produciendo solo el evento (produce)
 
-            var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
-            
-            id++; // El id empieza desde el numero 1 se va incrementando cada vez que se genera un evento.
-            
-            $.ajax({
-                    url:'/caronte/ProcessEvent',
-                    type: 'POST',
-                    data: {
-                        'id':id,
-                        'type':type,
-                        'event':tipo,
-                        'size':size,
-                        'description':descTotal,
-                        'name':nombre,
-                        'longitude':longitud,
-                        'floor':planta,
-                        'latitude':latitud,   
-                        'date':fecha
-                    },
-                    success: function(data,status) { 
-                        console.log("Success!!");
-                        console.log("Datos devueltos por ProcessEvent: "+data);
-                        console.log("Mensaje de response code de HTTP enviado por ProcessEvent: "+status);
-                    },
-                    error: function(xhr, desc, err) {
-                    console.log(xhr);
-                    console.log("Desc: " + desc + "\nErr:" + err);
-                    }
-                });
-        }
+		var descTotal = info + ' ' + descripcion; // La descripcion son ambos campos
+		
+		id++; // El id empieza desde el numero 1 se va incrementando cada vez que se genera un evento.
+		
+		$.ajax({
+			url: '/caronte/ProcessEvent',
+			type: 'POST',
+			data: {
+				'id':id,
+				'type':type,
+				'event':tipo,
+				'size':size,
+				'description':descTotal,
+				'name':nombre,
+				'longitude':longitud,
+				'floor':planta,
+				'latitude':latitud,
+				'date':fecha
+			},
+			success: function(data, status){
+				console.log('Success!!');
+				console.log('Datos devueltos por ProcessEvent: ' + data);
+				console.log('Mensaje de response code de HTTP enviado por ProcessEvent: ' + status);
+			},
+			error: function(xhr, desc, err){
+				console.log(xhr);
+				console.log('Desc: ' + desc + '\nErr: ' + err);
+			}
+		});
+	}
 }
 
 /**
- * Guarda en la base de datos el marcador pasado como parametro
+ * Guarda en la base de datos el marcador pasado como parametro.
  * 
- * @param puntero Marcador que se va a guardar
+ * @param puntero marcador que se va a guardar
  */
 function guardar(puntero){
-	eliminar(puntero, temporal);
+	eliminar(puntero, TEMPORAL);
 	// 1.Guardar el elemento en la base de datos
 	$.post('getpost/guardaEvento.jsp', {
 		'marcador':puntero.marcador,
@@ -396,7 +395,7 @@ function guardar(puntero){
 				});
 			}
 		}*/
-		if(proyecto == 'caronte'){
+		if(PROYECTO == 'caronte'){
 			escribirMensaje(puntero, 'crear', 1);
 			registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.fecha, 'crear');
 			limpiar = true;
@@ -412,29 +411,29 @@ function guardar(puntero){
 }
 
 /**
- * Modifica los datos de un marcador (funcion usada en 'desastres')
+ * Modifica los datos de un marcador (funcion usada en 'desastres').
  * 
- * @param id
- * @param cantidad
- * @param nombre
- * @param descripcion
- * @param info
- * @param latitud
- * @param longitud
- * @param direccion
- * @param size
- * @param traffic
- * @param estado
- * @param idAssigned
+ * @param id identificador
+ * @param cantidad cantidad
+ * @param nombre nombre
+ * @param descripcion descripcion
+ * @param info informacion
+ * @param latitud latitud
+ * @param longitud longitud
+ * @param direccion direccion
+ * @param size tamanno
+ * @param traffic trafico
+ * @param estado estado
+ * @param idAssigned id asignada
  */
 function modificar(id, cantidad, nombre, descripcion, info, latitud, longitud, direccion, size, traffic, estado, idAssigned){
 	// utiliza la variable puntero_temp accesible por todos y cargada por cargarModificar
-	if(caracter_temp == temporal){
+	if(caracter_temp == TEMPORAL){
 		// Actualizar la matriz temporal
-		eliminar(marcadores_temporales[id], temporal);
+		eliminar(marcadores_temporales[id], TEMPORAL);
 		crearCatastrofe(puntero_temp.marcador, puntero_temp.tipo, cantidad, nombre, info, descripcion,
 			direccion, longitud, latitud, estado, size, traffic, idAssigned, -2);
-	}else if(caracter_temp == definitivo){
+	}else if(caracter_temp == DEFINITIVO){
 		// hay que hacer un update a la base de datos
 		$.post('getpost/update.jsp',{
 			'accion':'modificar',
@@ -460,19 +459,19 @@ function modificar(id, cantidad, nombre, descripcion, info, latitud, longitud, d
 }
 
 /**
- * Modifica los datos de un marcador (funcion usada en 'caronte')
+ * Modifica los datos de un marcador (funcion usada en 'caronte').
  * 
- * @param id
- * @param tipo
- * @param cantidad
- * @param nombre
- * @param descripcion
- * @param info
- * @param direccion
- * @param tamanno
- * @param trafico
- * @param planta
- * @param idAssigned
+ * @param id identificador
+ * @param tipo tipo
+ * @param cantidad cantidad
+ * @param nombre nombre
+ * @param descripcion descripcion
+ * @param info informacion
+ * @param direccion direccion
+ * @param tamanno tamanno
+ * @param trafico trafico
+ * @param planta planta
+ * @param idAssigned id asignada
  */
 function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, tamanno, trafico, planta, idAssigned){
 	var puntero = marcadores_definitivos[id];
@@ -542,7 +541,7 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 		}
 	}*/
 
-	if(puntero.cantidad-cantidad > 0 && tipo != 'healthy'){
+	if(puntero.cantidad - cantidad > 0 && tipo != 'healthy'){
 		for(i = 0; i < emergenciasAsociadas.length; i++){
 			emergenciasAsociadas[i].valor = emergenciasAsociadas[i].valorBD;
 		}
@@ -555,7 +554,7 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 
 	var evento = {'id':id, 'marcador':puntero.marcador, 'tipo':tipo, 'cantidad':cantidad, 'nombre':nombre,
 		'info':info, 'descripcion':descripcion, 'size':tamanno, 'traffic':trafico, 'planta':planta}
-	if(proyecto == 'caronte'){
+	if(PROYECTO == 'caronte'){
 		escribirMensaje(evento, 'modificar', 2);
 		registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 		limpiarLateral(puntero.marcador);
@@ -563,15 +562,15 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 }
 
 /**
- * Elimina un marcador de la base de datos
+ * Elimina un marcador de la base de datos.
  * 
- * @param puntero
- * @param caracter
+ * @param puntero puntero
+ * @param caracter caracter
  */
 function eliminar(puntero, caracter){
-	if(caracter == temporal){
+	if(caracter == TEMPORAL){
 		puntero.marker.setMap(null);
-	}else if(caracter == definitivo){
+	}else if(caracter == DEFINITIVO){
 		// hay que hacer un update
 		if(puntero.marcador == 'people' && puntero.tipo != 'healthy'){
 			$.post('getpost/update.jsp',{
@@ -594,7 +593,7 @@ function eliminar(puntero, caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
-			if(proyecto == 'caronte'){
+			if(PROYECTO == 'caronte'){
 				escribirMensaje(puntero, 'eliminar', 1);
 				registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'modificar');
 				limpiarLateral(puntero.marcador);
@@ -620,7 +619,7 @@ function eliminar(puntero, caracter){
 				'fecha':puntero.fecha,
 				'usuario':usuario_actual
 			});
-			if(proyecto == 'caronte'){
+			if(PROYECTO == 'caronte'){
 				escribirMensaje(puntero, 'eliminar', 1);
 				registrarHistorial(userName, puntero.marcador, puntero.tipo, puntero.id, 'eliminar');
 				limpiarLateral(puntero.marcador);
@@ -630,22 +629,22 @@ function eliminar(puntero, caracter){
 }
 
 /**
- * Cancela la asociacion entre un herido y una emergencia
+ * Cancela la asociacion entre un herido y una emergencia.
  * 
- * @param id Identificador del marcador
+ * @param id identificador del marcador
  */
 function cancelar_asignacion(id){
 	// borro la posicion actual y lo dibujo en la antigua
 	marcadores_definitivos[id].marker.setMap(null);
-	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], definitivo);
+	marcadores_definitivos[id].marker = generaMarcador(marcadores_definitivos[id], DEFINITIVO);
 	noActualizar = 0;
 }
 
 /**
- * Obtiene la hora
+ * Obtiene la hora.
  * 
- * @param sinc True si sincroniza la hora con el servidor
- * @return Hora
+ * @param sinc true si sincroniza la hora con el servidor
+ * @return hora
  */
 function obtiene_fecha(sinc) {
 	// La hora se obtiene en local

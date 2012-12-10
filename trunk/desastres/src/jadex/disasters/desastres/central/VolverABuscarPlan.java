@@ -4,11 +4,15 @@ import disasters.EnviarMensajePlan;
 import jadex.bdi.runtime.IGoal;
 
 /**
- *
- * @author Juan Luis Molina
+ * Plan de la central para volver a buscar.
+ * 
+ * @author Juan Luis Molina Nogales
  */
 public class VolverABuscarPlan extends EnviarMensajePlan{
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		enviarRespuesta("ack_terminado", "Terminado recibido");
 		System.out.println("$$ central: Ack mandado");

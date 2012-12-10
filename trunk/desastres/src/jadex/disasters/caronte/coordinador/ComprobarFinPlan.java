@@ -2,20 +2,20 @@ package disasters.caronte.coordinador;
 
 import disasters.*;
 import disasters.caronte.*;
-import jadex.base.fipa.SFipa;
 import jadex.bdi.runtime.IMessageEvent;
+import jadex.bridge.fipa.SFipa;
 //import java.sql.Timestamp;
 //import java.util.Date;
 //import org.json.me.*;
 
 /**
- * Plan para avisar a los agentes.
+ * Plan para comprobar el final.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class ComprobarFinPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan AvisarAgentes.
+	 * Cuerpo del plan ComprobarFin.
 	 */
 	public void body(){
 		IMessageEvent solReq = (IMessageEvent) getReason();

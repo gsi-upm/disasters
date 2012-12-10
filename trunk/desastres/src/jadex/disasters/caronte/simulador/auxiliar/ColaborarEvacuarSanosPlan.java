@@ -5,13 +5,17 @@ import disasters.caronte.Entorno;
 import org.json.me.*;
 
 /**
- *
- * @author Lorena Lopez Lebon
+ * Plan de AUXILIAR.
+ * 
+ * @author Lorena L&oacute;pez Leb&oacute;n
  */
 public class ColaborarEvacuarSanosPlan extends EnviarMensajePlan{
 
 	Entorno env;
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		Position posResi = (Position)getBeliefbase().getBelief("residencia").getFact();
@@ -45,8 +49,9 @@ public class ColaborarEvacuarSanosPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 *
-	 * @param persona Persona a evacuar
+	 * Evacua una persona.
+	 * 
+	 * @param persona persona a evacuar
 	 */
 	private void evacuar(JSONObject persona){
 		double dif = 0.0006;

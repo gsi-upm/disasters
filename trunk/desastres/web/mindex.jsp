@@ -23,8 +23,8 @@
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css"/>
 			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
-			<script type="application/javascript" src="js/jquery-1.7.2.min.js"></script>
-			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.8&amp;sensor=true&amp;region=ES"></script>
+			<script type="application/javascript" src="js/jquery-1.8.3.min.js"></script>
+			<script type="application/javascript" src="http://maps.google.com/maps/api/js?v=3.10&amp;sensor=true&amp;region=ES"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
 				var usuario_actual = ${usuario.id};

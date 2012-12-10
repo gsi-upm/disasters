@@ -5,8 +5,8 @@ import jadex.bdi.runtime.Plan;
 /**
  * Plan de BOMBEROS para llevar al bombero a la estacion de bomberos.
  * 
- * @author Ivan Rojo y Juan Luis Molina
- * 
+ * @author Iv&aacute;n Rojo
+ * @author Juan Luis Molina Nogales
  */
 public class EstacionBomberosPlan extends Plan{
 

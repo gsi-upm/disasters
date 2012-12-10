@@ -9,7 +9,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>USUARIOS</title>
-		<script type="application/javascript" src="../js/jquery-1.7.1.min.js"></script>
+		<script type="application/javascript" src="../js/jquery-1.8.3.min.js"></script>
 		<script type="application/javascript" src="usuarios.js"></script>
 		<style type="text/css">
 			table, th, td{

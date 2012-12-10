@@ -4,30 +4,34 @@ import disasters.caronte.Entorno;
 import disasters.desastres.Environment;
 import jadex.bridge.IComponentIdentifier;
 
+/**
+ * WorldObject.
+ */
 public class WorldObject{
-	/** Nombre */
+	/** Nombre. */
 	protected String name;
-	/** Tipo */
+	/** Tipo. */
 	protected String type;
-	/** Posicion */
+	/** Posici&oacute;n. */
 	protected Position pos;
-	/** Info */
+	/** Info. */
 	protected String info;
-	/** id */
+	/** ID. */
 	protected int id;
-	/** componentID */
+	/** ComponentID. */
 	protected IComponentIdentifier agentId;
 
 	/**
-	 * Constructor de objeto
+	 * Constructor de objeto.
 	 * 
-	 * @param name Nombre
-	 * @param type Tipo
-	 * @param pos Posicion
-	 * @param info Informacion
+	 * @param name nombre
+	 * @param type tipo
+	 * @param pos posici&oacute;n
+	 * @param info informaci&oacute;n
+	 * @param agentId ID del agente
 	 */
 	public WorldObject(String name, String type, Position pos, String info, IComponentIdentifier agentId){
-		//Comprobamos que el tipo del agente sea correcto.
+		// Comprobamos que el tipo del agente sea correcto.
 		boolean ent = false;
 		boolean env = false;
 		try{
@@ -48,82 +52,91 @@ public class WorldObject{
 	}
 
 	/**
-	 * Devuelve el nombre
+	 * Devuelve el nombre.
 	 * 
-	 * @return Nombre
+	 * @return nombre
 	 */
 	public String getName(){
 		return name;
 	}
 
 	/**
-	 * Devuelve el tipo
+	 * Devuelve el tipo.
 	 * 
-	 * @return Tipo
+	 * @return tipo
 	 */
 	public String getType(){
 		return type;
 	}
 
 	/**
-	 * Devuelve la posicion
+	 * Devuelve la posici&oacute;n.
 	 * 
-	 * @return Posicion
+	 * @return posici&oacute;n
 	 */
 	public Position getPosition(){
 		return pos;
 	}
 
 	/**
-	 * Establece la posicion
+	 * Establece la posici&oacute;n.
 	 * 
-	 * @param pos Posicion
+	 * @param pos posici&oacute;n
 	 */
 	public void setPosition(Position pos){
 		this.pos = pos;
 	}
 
 	/**
-	 * Devuelve la info
+	 * Devuelve la info.
 	 * 
-	 * @return Informacion
+	 * @return informaci&oacute;n
 	 */
 	public String getInfo(){
 		return info;
 	}
 
 	/**
+	 * Establece la info.
 	 * 
-	 * Establece la info
-	 * 
-	 * @param info Informacion
+	 * @param info informaci&oacute;n
 	 */
 	public void setInfo(String info){
 		this.info = info;
 	}
 
 	/**
-	 * Devuelve el id
+	 * Devuelve el id.
 	 * 
-	 * @return Identificador
+	 * @return identificador
 	 */
 	public int getId(){
 		return id;
 	}
 
 	/**
-	 * Establece el id
+	 * Establece el id.
 	 * 
-	 * @param id Identificador
+	 * @param id identificador
 	 */
 	public void setId(int id){
 		this.id = id;
 	}
 	
+	/**
+	 * Devuelve el id del agente.
+	 * 
+	 * @return ID del agente
+	 */
 	public IComponentIdentifier getAgentId(){
 		return agentId;
 	}
-
+	
+	/**
+	 * Establece el id del agente.
+	 * 
+	 * @param agentId ID del agente
+	 */
 	public void setAgentId(IComponentIdentifier agentId){
 		this.agentId = agentId;
 	}

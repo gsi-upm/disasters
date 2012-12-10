@@ -3,82 +3,82 @@ package disasters;
 import java.util.ArrayList;
 
 /**
- * Class that represents a disaster
+ * Class that represents a disaster.
  * 
- * @author julio camarero
+ * @author Julio Camarero
  * @version 1.0
  */
 public class Disaster{
-	/** Disaster id */
+	/** Disaster id. */
 	private int id;
-	/** type of disaster (fire, flood, collapse, lostPerson, injuredPerson) */
+	/** type of disaster (fire, flood, collapse, lostPerson, injuredPerson). */
 	private String type;
-	/** Name of the Disaster */
+	/** Name of the Disaster. */
 	private String name;
-	/** Name of the Information */
+	/** Name of the Information. */
 	private String info;
-	/** Name of the Description */
+	/** Name of the Description. */
 	private String description;
-	/** Longitude */
+	/** Longitude. */
 	private double longitud;
-	/** Latitude */
+	/** Latitude. */
 	private double latitud;
-	/** Address (to represent disasters in a map) */
+	/** Address (to represent disasters in a map). */
 	private String address;
-	/** Floor */
+	/** Floor. */
 	private int floor;
-	/** Size of the Disaster */
+	/** Size of the Disaster. */
 	private String size;
-	/** Density of traffic (high, medium, low) */
+	/** Density of traffic (high, medium, low). */
 	private String traffic;
-	/** state of the disaster (active, controlled, erased) */
+	/** state of the disaster (active, controlled, erased). */
 	private String state;
-	/** id of the user who added the disaster */
+	/** id of the user who added the disaster. */
 	private int user;
-	/** Number of policemen cars assigned */
+	/** Number of policemen cars assigned. */
 	private int policemen;
-	/** Number of firemen cars assigned */
+	/** Number of firemen cars assigned. */
 	private int firemen;
-	/** Number of ambulances assigned */
+	/** Number of ambulances assigned. */
 	private int ambulances;
-	/** id police marker already in the map */
+	/** ID police marker already in the map. */
 	private int policeMarker;
-	/** id police marker already in the map */
+	/** ID police marker already in the map. */
 	private int firemenMarker;
-	/** id police marker already in the map */
+	/** ID police marker already in the map. */
 	private int ambulanceMarker;
-	/** Number of slight injuries */
+	/** Number of slight injuries. */
 	private int numSlight;
-	/** Number of serious injuries */
+	/** Number of serious injuries. */
 	private int numSerious;
-	/** Number of dead people */
+	/** Number of dead people. */
 	private int numDead;
-	/** Number of trapped people */
+	/** Number of trapped people. */
 	private int numTrapped;
-	/** List of slight injuries */
+	/** List of slight injuries. */
 	private ArrayList<People> slight;
-	/** List of serious injuries */
+	/** List of serious injuries. */
 	private ArrayList<People> serious;
-	/** List of dead people */
+	/** List of dead people. */
 	private ArrayList<People> dead;
-	/** List of trapped people */
+	/** List of trapped people. */
 	private ArrayList<People> trapped;
 
 	/**
-	 * Constructor de desastre
+	 * Constructor de desastre.
 	 * 
-	 * @param id Identificador
-	 * @param type Tipo
-	 * @param name Nombre
-	 * @param info Informacion
-	 * @param description Descripcion
-	 * @param longitud Longitud
-	 * @param latitud Latitud
-	 * @param address Direccion
-	 * @param floor Planta
-	 * @param size Tamanno
-	 * @param traffic Traffico
-	 * @param state Estado
+	 * @param id identificador
+	 * @param type tipo
+	 * @param name nombre
+	 * @param info informaci&oacute;n
+	 * @param description Descripci&oacute;n
+	 * @param longitud longitud
+	 * @param latitud latitud
+	 * @param address direcci&oacute;n
+	 * @param floor planta
+	 * @param size tama&ntilde;o
+	 * @param traffic trafico
+	 * @param state estado
 	 */
 	public Disaster(int id, String type, String name, String info, String description, double latitud,
 			 double longitud, String address, int floor, String size, String traffic, String state){
@@ -119,7 +119,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el identificador
+	 * Devuelve el identificador.
 	 * 
 	 * @return the id
 	 */
@@ -128,7 +128,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el identificador
+	 * Establece el identificador.
 	 * 
 	 * @param id the id to set
 	 */
@@ -137,7 +137,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el tipo
+	 * Devuelve el tipo.
 	 * 
 	 * @return the type
 	 */
@@ -146,7 +146,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el tipo
+	 * Establece el tipo.
 	 * 
 	 * @param type the type to set
 	 */
@@ -155,7 +155,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el nombre
+	 * Devuelve el nombre.
 	 * 
 	 * @return the name
 	 */
@@ -164,7 +164,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el nombre
+	 * Establece el nombre.
 	 * 
 	 * @param name the name to set
 	 */
@@ -173,7 +173,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve la informacion
+	 * Devuelve la informaci&oacute;n.
 	 * 
 	 * @return the info
 	 */
@@ -182,7 +182,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece la informacion
+	 * Establece la informaci&oacute;n.
 	 * 
 	 * @param info the info to set
 	 */
@@ -191,7 +191,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve la descripcion
+	 * Devuelve la descripci&oacute;n.
 	 * 
 	 * @return the description
 	 */
@@ -200,7 +200,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece la descripcion
+	 * Establece la descripci&oacute;n.
 	 * 
 	 * @param description the description to set
 	 */
@@ -209,7 +209,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve la latitud
+	 * Devuelve la latitud.
 	 * 
 	 * @return the latitud
 	 */
@@ -218,7 +218,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece la latitud
+	 * Establece la latitud.
 	 * 
 	 * @param latitud the latitud to set
 	 */
@@ -227,7 +227,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve la longitud
+	 * Devuelve la longitud.
 	 * 
 	 * @return the longitud
 	 */
@@ -236,7 +236,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece la longitud
+	 * Establece la longitud.
 	 * 
 	 * @param longitud the longitud to set
 	 */
@@ -245,7 +245,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve la direccion
+	 * Devuelve la direcci&oacute;n.
 	 * 
 	 * @return the address
 	 */
@@ -254,7 +254,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece la direccion
+	 * Establece la direcci&oacute;n.
 	 * 
 	 * @param address the address to set
 	 */
@@ -263,23 +263,25 @@ public class Disaster{
 	}
 	
 	/**
+	 * Devuelve la planta.
 	 * 
-	 * @return 
+	 * @return the floor
 	 */
 	public int getFloor(){
 		return floor;
 	}
 	
 	/**
+	 * Establece la planta.
 	 * 
-	 * @param floor 
+	 * @param floor the floor to set
 	 */
 	public void setFloor(int floor){
 		this.floor = floor;
 	}
 
 	/**
-	 * Devuelve el tamanno
+	 * Devuelve el tama&ntilde;o.
 	 * 
 	 * @return the size
 	 */
@@ -288,7 +290,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el tamanno
+	 * Establece el tama&ntilde;o.
 	 * 
 	 * @param size the size to set
 	 */
@@ -297,7 +299,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el trafico
+	 * Devuelve el tr&aacute;fico.
 	 * 
 	 * @return the traffic
 	 */
@@ -306,7 +308,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el trafico
+	 * Establece el tr&aacute;fico.
 	 * 
 	 * @param traffic the traffic to set
 	 */
@@ -315,7 +317,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el estado
+	 * Devuelve el estado.
 	 * 
 	 * @return the state
 	 */
@@ -324,7 +326,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el estado
+	 * Establece el estado.
 	 * 
 	 * @param state the state to set
 	 */
@@ -333,7 +335,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el usuario
+	 * Devuelve el usuario.
 	 * 
 	 * @return the user
 	 */
@@ -342,7 +344,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el usuario
+	 * Establece el usuario.
 	 * 
 	 * @param user the user to set
 	 */
@@ -351,7 +353,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve los policias
+	 * Devuelve los polic&iacute;as.
 	 * 
 	 * @return the policemen
 	 */
@@ -360,7 +362,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece los policias
+	 * Establece los polic&iacute;as.
 	 * 
 	 * @param policemen the policemen to set
 	 */
@@ -369,7 +371,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve los bomberos
+	 * Devuelve los bomberos.
 	 * 
 	 * @return the firemen
 	 */
@@ -378,7 +380,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece los bomberos
+	 * Establece los bomberos.
 	 * 
 	 * @param firemen the firemen to set
 	 */
@@ -387,7 +389,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve las ambulancias
+	 * Devuelve las ambulancias.
 	 * 
 	 * @return the ambulances
 	 */
@@ -396,7 +398,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece las ambulancias
+	 * Establece las ambulancias.
 	 * 
 	 * @param ambulances the ambulances to set
 	 */
@@ -405,7 +407,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el marcador de la policia
+	 * Devuelve el marcador de la polic&iacute;a
 	 * 
 	 * @return the police marker
 	 */
@@ -414,7 +416,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el marcador de la policia
+	 * Establece el marcador de la polic&iacute;a.
 	 * 
 	 * @param policeMarker the police marker to ser
 	 */
@@ -423,7 +425,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el marcador de los bomberos
+	 * Devuelve el marcador de los bomberos.
 	 * 
 	 * @return the firemen marker
 	 */
@@ -432,7 +434,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el marcador de los bomberos
+	 * Establece el marcador de los bomberos.
 	 * 
 	 * @param firemenMarker the firemen marker to set
 	 */
@@ -441,7 +443,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el marcador de la ambulancia
+	 * Devuelve el marcador de la ambulancia.
 	 * 
 	 * @return the ambulance marker
 	 */
@@ -450,7 +452,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece el marcador de la ambulancia
+	 * Establece el marcador de la ambulancia.
 	 * 
 	 * @param ambulanceMarker the ambulance marker to set
 	 */
@@ -459,7 +461,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Devuelve el ultimo herido leve
+	 * Devuelve el ultimo herido leve.
 	 * 
 	 * @return the slight
 	 */
@@ -468,7 +470,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Elimina el ultimo herido leve
+	 * Elimina el &uacute;ltimo herido leve.
 	 */
 	public void setSlight(){
 		slight.remove(numSlight);
@@ -478,7 +480,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece un herido leve
+	 * Establece un herido leve.
 	 * 
 	 * @param people the slight to set
 	 */
@@ -500,7 +502,7 @@ public class Disaster{
 	}
 	
 	/**
-	 * Elimina un herido leve
+	 * Elimina un herido leve.
 	 * 
 	 * @param people the slight to remove
 	 */
@@ -523,7 +525,7 @@ public class Disaster{
 	} 
 
 	/**
-	 * Devuelve el ultimo herido grave
+	 * Devuelve el &uacute;ltimo herido grave.
 	 * 
 	 * @return the serious
 	 */
@@ -532,7 +534,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Elimina el ultimo herido grave
+	 * Elimina el &uacute;ltimo herido grave.
 	 */
 	public void setSerious(){
 		serious.remove(numSerious);
@@ -542,7 +544,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece un herido grave
+	 * Establece un herido grave.
 	 * 
 	 * @param people the serious to set
 	 */
@@ -564,7 +566,7 @@ public class Disaster{
 	}
 	
 	/**
-	 * Elimina un herido grave
+	 * Elimina un herido grave.
 	 * 
 	 * @param people the serious to remove
 	 */
@@ -587,7 +589,7 @@ public class Disaster{
 	} 
 
 	/**
-	 * Devuelve el ultimo muerto
+	 * Devuelve el &uacute;ltimo muerto.
 	 * 
 	 * @return the dead
 	 */
@@ -596,7 +598,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Elimina el ultimo muerto
+	 * Elimina el &uacute;ltimo muerto.
 	 */
 	public void setDead(){
 		dead.remove(numDead);
@@ -606,7 +608,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece un muerto
+	 * Establece un muerto.
 	 * 
 	 * @param people the dead to set
 	 */
@@ -628,7 +630,7 @@ public class Disaster{
 	}
 	
 	/**
-	 * Elimina un muerto
+	 * Elimina un muerto.
 	 * 
 	 * @param people the dead to remove
 	 */
@@ -651,7 +653,7 @@ public class Disaster{
 	} 
 
 	/**
-	 * Devuelve el ultimo atrapado
+	 * Devuelve el &uacute;ltimo atrapado.
 	 * 
 	 * @return the trapped
 	 */
@@ -660,7 +662,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Elimina el ultimo atrapado
+	 * Elimina el &uacute;ltimo atrapado.
 	 */
 	public void setTrapped(){
 		trapped.remove(numTrapped);
@@ -670,7 +672,7 @@ public class Disaster{
 	}
 
 	/**
-	 * Establece un atrapado
+	 * Establece un atrapado.
 	 * 
 	 * @param people the trapped to set
 	 */
@@ -692,7 +694,7 @@ public class Disaster{
 	}
 	
 	/**
-	 * Elimina un atrapado
+	 * Elimina un atrapado.
 	 * 
 	 * @param people the trapped to remove
 	 */
@@ -714,6 +716,11 @@ public class Disaster{
 		}
 	}
 	
+	/**
+	 * Indica si hay heridos.
+	 * 
+	 * @return <code>true</code> si hay heridos
+	 */
 	public boolean hasInjured(){
 		boolean has = slight.size() > 0 || serious.size() > 0 ||
 				dead.size() > 0 || trapped.size() > 0;

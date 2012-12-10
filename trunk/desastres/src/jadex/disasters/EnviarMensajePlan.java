@@ -2,26 +2,26 @@ package disasters;
 
 import disasters.caronte.Entorno;
 import disasters.desastres.Environment;
-import jadex.base.fipa.SFipa;
 import jadex.bdi.runtime.IMessageEvent;
 import jadex.bdi.runtime.Plan;
 import jadex.bridge.IComponentIdentifier;
+import jadex.bridge.fipa.SFipa;
 
 /**
  * Plan que permite enviar mensajes a otros agentes.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public abstract class EnviarMensajePlan extends Plan{
 
 	/**
-	 * Envia un mensaje de tipo string y recibe una respuesta.
+	 * Env&iacute;a un mensaje de tipo string y recibe una respuesta.
 	 * 
-	 * @param agente Agente al que se le envia el mensaje
-	 * @param evento Nombre del evento de mensaje
-	 * @param contenido Contenido del mensaje
-	 * @param respuesta True si espera una respuesta
-	 * @return Respuesta del mensaje enviado
+	 * @param agente agente al que se le env&iacute;a el mensaje
+	 * @param evento nombre del evento de mensaje
+	 * @param contenido contenido del mensaje
+	 * @param respuesta <code>true</code> si espera una respuesta
+	 * @return respuesta del mensaje enviado
 	 */
 	protected String enviarMensaje(String agente, String evento, String contenido, boolean respuesta){
 		IComponentIdentifier a = buscarAgente(agente);
@@ -40,11 +40,11 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 * Envia una respuesta a un mensaje previamente recibido y devuelve el posible ack.
+	 * Env&iacute;a una respuesta a un mensaje previamente recibido y devuelve el posible ack.
 	 * 
-	 * @param evento Nombre del evento de mensaje de la respuesta a enviar
-	 * @param respuesta Contenido de la respuesta a enviar
-	 * @return Respuesta del emisor
+	 * @param evento nombre del evento de mensaje de la respuesta a enviar
+	 * @param respuesta contenido de la respuesta a enviar
+	 * @return respuesta del emisor
 	 */
 	protected String enviarRespuesta(String evento, String respuesta){
 		IMessageEvent solReq = (IMessageEvent) getReason();
@@ -56,11 +56,11 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 * Espera la llegada de un determinado tipo de mensaje, envia una repuesta y muestra el posible ack.
+	 * Espera la llegada de un determinado tipo de mensaje, env&iacute;a una repuesta y muestra el posible ack.
 	 * 
-	 * @param evento Nombre del evento de mensaje que se recibe
-	 * @param respuesta Contenido de la respuesta a enviar
-	 * @return Respuesta del emisor
+	 * @param evento nombre del evento de mensaje que se recibe
+	 * @param respuesta contenido de la respuesta a enviar
+	 * @return respuesta del emisor
 	 */
 	protected String esperarYEnviarRespuesta(String evento, String respuesta){
 		IMessageEvent solReq = waitForMessageEvent(evento);
@@ -72,13 +72,13 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 * Envia un mensaje con un objeto y recibe una respuesta.
+	 * Env&iacute;a un mensaje con un objeto y recibe una respuesta.
 	 * 
-	 * @param agente Agente al que se le envia el mensaje
-	 * @param evento Nombre del evento de mensaje
-	 * @param contenido Contenido del mensaje
-	 * @param respuesta True si espera una respuesta
-	 * @return Respuesta del mensaje enviado
+	 * @param agente agente al que se le env&iacute;a el mensaje
+	 * @param evento nombre del evento de mensaje
+	 * @param contenido contenido del mensaje
+	 * @param respuesta <code>true</code> si espera una respuesta
+	 * @return respuesta del mensaje enviado
 	 */
 	protected String enviarObjeto(String agente, String evento, Object contenido, boolean respuesta){
 		IComponentIdentifier a = buscarAgente(agente);
@@ -96,11 +96,11 @@ public abstract class EnviarMensajePlan extends Plan{
 	}
 
 	/**
-	 * Envia una respuesta a un mensaje con objeto previamente recibido y devuelve el posible ack.
+	 * Env&iacute;a una respuesta a un mensaje con objeto previamente recibido y devuelve el posible ack.
 	 * 
-	 * @param evento Nombre del evento de mensaje de la respuesta a enviar
-	 * @param respuesta Contenido de la respuesta a enviar
-	 * @return Respuesta del emisor
+	 * @param evento nombre del evento de mensaje de la respuesta a enviar
+	 * @param respuesta contenido de la respuesta a enviar
+	 * @return respuesta del emisor
 	 */
 	protected Object enviarRespuestaObjeto(String evento, String respuesta){
 		IMessageEvent solReq = (IMessageEvent) getReason();
@@ -114,8 +114,8 @@ public abstract class EnviarMensajePlan extends Plan{
 	/**
 	 * Busca un agente.
 	 * 
-	 * @param agente Agente a buscar
-	 * @return Identificador del agente
+	 * @param agente agente a buscar
+	 * @return identificador del agente
 	 */
 	private IComponentIdentifier buscarAgente(String agente){
 		Object env = getBeliefbase().getBelief("env").getFact();

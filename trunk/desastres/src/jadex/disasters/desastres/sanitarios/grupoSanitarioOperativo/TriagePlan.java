@@ -5,17 +5,18 @@ import disasters.desastres.Environment;
 import jadex.bdi.runtime.IGoal;
 
 /**
- * Es fundamental la primera evaluacion de la gravedad por parte de medicos o personal sanitario avanzado
+ * Es fundamental la primera evaluaci&oacute;n de la gravedad por parte de
+ * m&eacute;dicos o personal sanitario avanzado.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class TriagePlan extends EnviarMensajePlan{
 	
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
-		// Obtenemos un objeto de la clase Environment para poder usar susmetodos
+		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		enviarRespuesta("ack_aviso_coor", "Aviso recibido");

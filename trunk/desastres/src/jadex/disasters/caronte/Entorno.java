@@ -7,29 +7,29 @@ import java.util.*;
 import org.json.me.*;
 
 /**
- * Clase para modelar el entorno, proporcionando metodos para interactuar con el.
+ * Clase para modelar el entorno, proporcionando m&eacute;todos para interactuar con &eacute;l.
  * 
  * @author aebeda
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class Entorno{
 	/** URL para REST. */
 	public static final String URL = "http://localhost:8080/caronte/rest/";
 	/** Agente coordinador. */
 	public static final String COORDINADOR = "Coordinador";
-	/** Agente intervencion en incendios. */
+	/** Agente intervenci&oacute;n en incendios. */
 	public static final String INTERVENCION_INCENDIOS = "IntervencionIncendios";
-	/** Agente atencion de heridos. */
+	/** Agente atenci&oacute;n de heridos. */
 	public static final String ATENCION_HERIDOS = "AtencionHeridos";
-	/** Agente evacuacion. */
+	/** Agente evacuaci&oacute;n. */
 	public static final String EVACUACION = "EvacuacionResidencia";
 	/** Agente apoyo externo. */
 	public static final String APOYO_EXTERNO = "ApoyoExterno";
-	/**  */
+	/** Listado de agentes. */
 	public static final List<String> COMPONENTES = Arrays.asList(new String[]{
 		COORDINADOR, INTERVENCION_INCENDIOS, ATENCION_HERIDOS, EVACUACION});
 	
-	/** Eventos (id -> Disaster). */
+	// Eventos (id -> Disaster)
 	private HashMap<Integer,Disaster> disasters;
 	private HashMap<Integer,People> people;
 	private HashMap<Integer,Resource> resources;
@@ -37,15 +37,15 @@ public class Entorno{
 	private HashMap<Integer,Activity> activities;
 	private HashMap<Integer,String> usedResources;
 	private ArrayList<Integer> inactiveResources;
-	/** Emergencias que se deben atender. */
+	// Emergencias que se deben atender
 	private ArrayList<Integer> tablonEventos;
 	private ArrayList<Integer> tablonHeridos;
 	
-	/** Agentes (nombre -> WorldObject). */
+	// Agentes (nombre -> WorldObject)
 	private HashMap<String,WorldObject> agentes;
-	/** Numero de agentes creados, no tienen por que estar activos. */
+	// Numero de agentes creados, no tienen por que estar activos
 	private int numAgentes;
-	/** Objeto para notificar cambios. */
+	// Objeto para notificar cambios
 	private SimplePropertyChangeSupport pcs;
 	
 	private static Entorno instance;
@@ -61,6 +61,8 @@ public class Entorno{
 	public static final String GEROCULTOR = "gerocultor";
 	/** Agente auxiliar. */
 	public static final String AUXILIAR = "assistant";
+	/** Agente jefe. */
+	public static final String JEFE = "chief";
 	/** Agente recepcionista. */
 	public static final String RECEPCIONISTA = "receptionist";
 	/** Agente otro personal. */
@@ -73,12 +75,13 @@ public class Entorno{
 	public static final String AMBULANCIA = "ambulance";
 	/** Agente bombero. */
 	public static final String BOMBERO = "firemen";
-	/** Agente policia. */
+	/** Agente polic&iacute;a. */
 	public static final String POLICIA = "police";
-	/**  */
+	/** Listado de agentes (simulaci&oacute;n). */
 	public static final List<String> AGENTES = Arrays.asList(new String[]{
 		ENFERMERO, CELADOR, GEROCULTOR, AUXILIAR, RECEPCIONISTA,
 		OTRO_PERSONAL, CIUDADANO, AMBULANCIA, BOMBERO, POLICIA});
+	/** Listado de agentes (simulaci&oacute;n - no mapa). */
 	public static final List<String> COMPONENTES2 = Arrays.asList(new String[]{
 		COORDINADOR_EMERGENCIAS, CENTRAL_EMERGENCIAS});
 
@@ -102,12 +105,13 @@ public class Entorno{
 	}
 
 	/**
-	 * Obtener una instancia del entorno, para asi poder interactuar sobre el.
+	 * Obtener una instancia del entorno, para as&iacute; poder interactuar sobre &eacute;l.
 	 * 
-	 * @param tipo Tipo
-	 * @param nombre Nombre
-	 * @param pos Posicion
-	 * @return Instancia de entorno
+	 * @param tipo tipo
+	 * @param nombre nombre
+	 * @param pos posici&oacute;n
+	 * @param agentId ID del agente
+	 * @return instancia de entorno
 	 */
 	public static Entorno getInstance(String tipo, String nombre, Position pos, IComponentIdentifier agentId){
 		// La primera vez que se llama a este metodo (el agente Entorno), instance vale null
@@ -129,13 +133,13 @@ public class Entorno{
 	}
 	
 	/**
-	 * Annade un objeto al entorno.
+	 * A&ntilde;ade un objeto al entorno.
 	 * 
-	 * @param type Tipo
-	 * @param name Nombre
-	 * @param position Posicion
-	 * @param info Informacion
-	 * @param agentId Identificador del agente
+	 * @param type tipo
+	 * @param name nombre
+	 * @param position posici&oacute;n
+	 * @param info informaci&oacute;n
+	 * @param agentId identificador del agente
 	 */
 	public void addWorldObject(String type, String name, Position position, String info, IComponentIdentifier agentId){
 		WorldObject wo = new WorldObject(name, type, position, info, agentId);
@@ -149,7 +153,7 @@ public class Entorno{
 			String resultado = Connection.connect(URL + "post/type=" + type + "&name=" + name +
 				"&info=" + info + "&latitud=" + position.getLat() + "&longitud=" + position.getLng());
 			try{
-				//JSON -> guardo el id
+				// JSON -> guardo el id
 				JSONObject idJson = new JSONObject(resultado);
 				int id = idJson.getInt("id");
 				wo.setId(id);
@@ -168,10 +172,10 @@ public class Entorno{
 	}
 	
 	/**
-	 * Elimina un objeto del entorno
+	 * Elimina un objeto del entorno.
 	 * 
-	 * @param type Tipo
-	 * @param name Nombre
+	 * @param type tipo
+	 * @param name nombre
 	 */
 	public void removeWorldObject(String type, String name){
 		if(AGENTES.contains(type)){
@@ -186,17 +190,17 @@ public class Entorno{
 	/**
 	 * Devuelve todos los agentes.
 	 * 
-	 * @return Todos los agentes
+	 * @return todos los agentes
 	 */
 	public HashMap<String,WorldObject> getAgents(){
 		return agentes;
 	}
 	
 	/**
-	 * Devuelve un agente dado su nombre (el nombre de los agentes es unico).
+	 * Devuelve un agente dado su nombre (el nombre de los agentes es &uacute;nico).
 	 * 
-	 * @param name Nombre
-	 * @return Agente
+	 * @param name nombre
+	 * @return agente
 	 */
 	public synchronized WorldObject getAgent(String name){
 		assert agentes.containsKey(name);
@@ -204,10 +208,10 @@ public class Entorno{
 	}
 
 	/**
-	 * Elimina un agente dado su nombre (el nombre de los agentes es unico).
+	 * Elimina un agente dado su nombre (el nombre de los agentes es &uacute;nico).
 	 * 
-	 * @param name Nombre
-	 * @return Agente eliminado
+	 * @param name nombre
+	 * @return agente eliminado
 	 */
 	public synchronized WorldObject removeAgent(String name){
 		assert agentes.containsKey(name);
@@ -217,7 +221,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los agentes.
 	 * 
-	 * @return Todos los agentes
+	 * @return todos los agentes
 	 */
 	public WorldObject[] getAgentes(){
 		Collection<WorldObject> col = agentes.values();
@@ -225,9 +229,9 @@ public class Entorno{
 	}
 
 	/**
-	 * Devuelve el numero total de agentes creados.
+	 * Devuelve el n&uacute;mero total de agentes creados.
 	 * 
-	 * @return Numero total de agentes creados
+	 * @return n&uacute;mero total de agentes creados
 	 */
 	public int getNumAgentes(){
 		return numAgentes;
@@ -236,7 +240,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los desastres.
 	 * 
-	 * @return Todos los desastres
+	 * @return todos los desastres
 	 */
 	public HashMap<Integer,Disaster> getEvents(){
 		return disasters;
@@ -245,7 +249,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los heridos.
 	 * 
-	 * @return Todos los heridos
+	 * @return todos los heridos
 	 */
 	public HashMap<Integer,People> getPeople(){
 		return people;
@@ -254,7 +258,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los recursos.
 	 * 
-	 * @return Todos los recursos
+	 * @return todos los recursos
 	 */
 	public HashMap<Integer,Resource> getResources(){
 		return resources;
@@ -263,7 +267,7 @@ public class Entorno{
 	/**
 	 * Devuelve todas las asociaciones.
 	 * 
-	 * @return Todas las asociaciones
+	 * @return todas las asociaciones
 	 */
 	public HashMap<Integer,Association> getAssociations(){
 		return associations;
@@ -272,7 +276,7 @@ public class Entorno{
 	/**
 	 * Devuelve todas las actividades.
 	 * 
-	 * @return Todas las actividades
+	 * @return todas las actividades
 	 */
 	public HashMap<Integer,Activity> getActivities(){
 		return activities;
@@ -281,8 +285,8 @@ public class Entorno{
 	/**
 	 * Devuelve un evento dado su id.
 	 * 
-	 * @param id Identificador
-	 * @return Desastre
+	 * @param id identificador
+	 * @return desastre
 	 */
 	public synchronized Disaster getEvent(int id){
 		assert disasters.containsKey(id);
@@ -292,14 +296,20 @@ public class Entorno{
 	/**
 	 * Elimina un evento dado su id.
 	 * 
-	 * @param id Identificador
-	 * @return Evento eliminado
+	 * @param id identificador
+	 * @return evento eliminado
 	 */
 	public synchronized Disaster removeEvent(int id){
 		assert disasters.containsKey(id);
 		return disasters.remove(id);
 	}
 	
+	/**
+	 * A&ntilde;ade un evento.
+	 * 
+	 * @param id identificador
+	 * @param event evento
+	 */
 	public synchronized void putEvent(int id, Disaster event){
 		disasters.put(id, event);
 	}
@@ -307,8 +317,8 @@ public class Entorno{
 	/**
 	 * Devuelve un herido dado su id.
 	 * 
-	 * @param id Identificador
-	 * @return Herido
+	 * @param id identificador
+	 * @return herido
 	 */
 	public synchronized People getPeople(int id){
 		assert people.containsKey(id);
@@ -318,14 +328,20 @@ public class Entorno{
 	/**
 	 * Elimina un herido dado su id.
 	 * 
-	 * @param id Identificador
-	 * @return Herido eliminado
+	 * @param id identificador
+	 * @return herido eliminado
 	 */
 	public synchronized People removePeople(int id){
 		assert people.containsKey(id);
 		return people.remove(id);
 	}
 	
+	/**
+	 * A&ntilde;ade un herido.
+	 * 
+	 * @param id identificador
+	 * @param person herido
+	 */
 	public synchronized void putPeople(int id, People person){
 		people.put(id, person);
 	}
@@ -333,8 +349,8 @@ public class Entorno{
 	/**
 	 * Devuelve un recurso dado su id.
 	 * 
-	 * @param id Identificador
-	 * @return Recurso
+	 * @param id identificador
+	 * @return recurso
 	 */
 	public synchronized Resource getResource(int id){
 		assert resources.containsKey(id);
@@ -344,23 +360,29 @@ public class Entorno{
 	/**
 	 * Elimina un recurso dado su id.
 	 * 
-	 * @param id Identificador
-	 * @return Recurso eliminado
+	 * @param id identificador
+	 * @return recurso eliminado
 	 */
 	public synchronized Resource removeResource(int id){
 		assert resources.containsKey(id);
 		return resources.remove(id);
 	}
 	
+	/**
+	 * A&ntilde;ade un recurso.
+	 * 
+	 * @param id identificador
+	 * @param resource recurso
+	 */
 	public synchronized void putResource(int id, Resource resource){
 		resources.put(id, resource);
 	}
 
 	/**
-	 * Devuelve una asociacion dada su id.
+	 * Devuelve una asociaci&oacute;n dada su id.
 	 * 
-	 * @param id Identificador
-	 * @return Asociacion
+	 * @param id identificador
+	 * @return asociaci&oacute;n
 	 */
 	public synchronized Association getAssociation(int id){
 		assert associations.containsKey(id);
@@ -368,16 +390,22 @@ public class Entorno{
 	}
 
 	/**
-	 * Elimina una asociacion dada su id.
+	 * Elimina una asociaci&oacute;n dada su id.
 	 * 
-	 * @param id Identificador
-	 * @return Asociacion eliminada
+	 * @param id identificador
+	 * @return asociaci&oacute;n eliminada
 	 */
 	public synchronized Association removeAssociation(int id){
 		assert associations.containsKey(id);
 		return associations.remove(id);
 	}
 	
+	/**
+	 * A&ntilde;ade una asociaci&oacute;n.
+	 * 
+	 * @param id identificador
+	 * @param association asociaci&oacute;n
+	 */
 	public synchronized void putAssociation(int id, Association association){
 		associations.put(id, association);
 	}
@@ -385,8 +413,8 @@ public class Entorno{
 	/**
 	 * Devuelve una actividad dada su id.
 	 * 
-	 * @param id Identificador
-	 * @return Actividad
+	 * @param id identificador
+	 * @return actividad
 	 */
 	public synchronized Activity getActivity(int id){
 		assert activities.containsKey(id);
@@ -396,14 +424,20 @@ public class Entorno{
 	/**
 	 * Elimina una actividad dada su id.
 	 * 
-	 * @param id Identificador
-	 * @return Actividad eliminado
+	 * @param id identificador
+	 * @return actividad eliminado
 	 */
 	public synchronized Activity removeActivity(int id){
 		assert activities.containsKey(id);
 		return activities.remove(id);
 	}
 	
+	/**
+	 * A&ntilde;ade una actividad.
+	 * 
+	 * @param id identificador
+	 * @param activity actividad
+	 */
 	public synchronized void putActivity(int id, Activity activity){
 		activities.put(id, activity);
 	}
@@ -411,7 +445,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los eventos.
 	 * 
-	 * @return Todos los eventos
+	 * @return todos los eventos
 	 */
 	public Disaster[] getEventsArray(){
 		Collection<Disaster> col = disasters.values();
@@ -421,7 +455,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los heridos.
 	 * 
-	 * @return Todos los heridos
+	 * @return todos los heridos
 	 */
 	public People[] getPeopleArray(){
 		Collection<People> col = people.values();
@@ -431,7 +465,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los recursos.
 	 * 
-	 * @return Todos los recursos
+	 * @return todos los recursos
 	 */
 	public Resource[] getResourcesArray(){
 		Collection<Resource> col = resources.values();
@@ -441,7 +475,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los eventos.
 	 * 
-	 * @return Todos los eventos
+	 * @return todos los eventos
 	 */
 	public Association[] getAssociationsArray(){
 		Collection<Association> col = associations.values();
@@ -451,7 +485,7 @@ public class Entorno{
 	/**
 	 * Devuelve todos los eventos.
 	 * 
-	 * @return Todos los eventos
+	 * @return todos los eventos
 	 */
 	public Activity[] getActivitiesArray(){
 		Collection<Activity> col = activities.values();
@@ -461,7 +495,7 @@ public class Entorno{
 	/**
 	 * Devuelve la lista de emergencias que se deben atender.
 	 * 
-	 * @return the tablon
+	 * @return el tabl&oacute;n
 	 */
 	public ArrayList<Integer> getTablonEventos(){
 		return tablonEventos;
@@ -470,7 +504,7 @@ public class Entorno{
 	/**
 	 * Establece la emergencia que se debe atender.
 	 * 
-	 * @param tablon the tablon to set
+	 * @param idEmergencia emergencia a atender
 	 */
 	public void setTablonEventos(int idEmergencia){
 		tablonEventos.add(idEmergencia);
@@ -479,7 +513,7 @@ public class Entorno{
 	/**
 	 * Elimina la emergencia atendida.
 	 * 
-	 * @param tablon the tablon to remove
+	 * @param idEmergencia emergencia a eliminar
 	 */
 	public void removeTablonEventos(Integer idEmergencia){
 		tablonEventos.remove(idEmergencia);
@@ -489,7 +523,7 @@ public class Entorno{
 	/**
 	 * Devuelve la lista de emergencias que se deben atender.
 	 * 
-	 * @return the tablon
+	 * @return el tabl&oacute;n
 	 */
 	public ArrayList<Integer> getTablonHeridos(){
 		return tablonHeridos;
@@ -498,7 +532,7 @@ public class Entorno{
 	/**
 	 * Establece la emergencia que se debe atender.
 	 * 
-	 * @param tablon the tablon to set
+	 * @param idEmergencia emergencia a atender
 	 */
 	public void setTablonHeridos(int idEmergencia){
 		tablonHeridos.add(idEmergencia);
@@ -507,13 +541,18 @@ public class Entorno{
 	/**
 	 * Elimina la emergencia atendida.
 	 * 
-	 * @param tablon the tablon to remove
+	 * @param idEmergencia emergencia a eliminar
 	 */
 	public void removeTablonHeridos(Integer idEmergencia){
 		tablonHeridos.remove(idEmergencia);
 		tablonHeridos.trimToSize();
 	}
 	
+	/**
+	 * Devuelve los eventos sin atender.
+	 * 
+	 * @return eventos sin atender
+	 */
 	public Disaster[] getEventosSin(){
 		HashMap<Integer,Disaster> disastersAux = (HashMap<Integer,Disaster>) disasters.clone();
 		ArrayList<Integer> tablonAux = (ArrayList<Integer>) tablonEventos.clone();
@@ -524,6 +563,11 @@ public class Entorno{
 		return col.toArray(new Disaster[col.size()]);
 	}
 	
+	/**
+	 * Devuelve los heridos sin atender.
+	 * 
+	 * @return heridos sin atender
+	 */
 	public People[] getHeridosSin(){
 		HashMap<Integer,People> peopleAux = (HashMap<Integer,People>) people.clone();
 		ArrayList<Integer> tablonAux = (ArrayList<Integer>) tablonHeridos.clone();
@@ -534,6 +578,13 @@ public class Entorno{
 		return col.toArray(new People[col.size()]);
 	}
 	
+	/**
+	 * Coge un recurso si no est&aacute; siendo usado.
+	 * 
+	 * @param id
+	 * @param equipo
+	 * @return <code>true</code> si es usado
+	 */
 	public synchronized boolean useResource(int id, String equipo){
 		boolean usado = usedResources.containsKey(id);
 		if(usado == false){
@@ -545,18 +596,38 @@ public class Entorno{
 		return !usado;
 	}
 	
+	/**
+	 * Deja de usar un recurso.
+	 * 
+	 * @param id identificador del recurso
+	 */
 	public synchronized void leaveResource(int id){
 		usedResources.remove(id);
 	}
 	
+	/**
+	 * Pone un recurso como inactivo.
+	 * 
+	 * @param id identificador del recurso
+	 */
 	public synchronized void addInactiveResource(Integer id){
 		inactiveResources.add(id);
 	}
 	
+	/**
+	 * Quita un recurso como inactivo.
+	 * 
+	 * @param id identificador del recurso
+	 */
 	public synchronized void removeInactiveResource(Integer id){
 		inactiveResources.remove(id);
 	}
 	
+	/**
+	 * Devuelve los recursos libres.
+	 * 
+	 * @return recursos libres
+	 */
 	public Resource[] getFreeResources(){
 		HashMap<Integer,Resource> recursosLibres = (HashMap<Integer,Resource>) resources.clone();
 		Integer[] keySet = usedResources.keySet().toArray(new Integer[usedResources.size()]);
@@ -573,15 +644,15 @@ public class Entorno{
 	}
 	
 	/**
-	 * Imprime un String por pantalla y lo envia para mostrar en la web.
+	 * Imprime un String por pantalla y lo env&iacute;a para mostrar en la web.
 	 *
 	 * @param valor String a imprimir
-	 * @param tipo Tipo de receptor (0 oculto, 1 directo y 2 a grupo)
-	 * @param receptor ID del receptor (Si tipo=2 --> 0 todos los usuarios, 1 todos los conectados,...)
-	 * @param println true para mostrarlo en el terminal
+	 * @param tipo tipo de receptor (0 oculto, 1 directo y 2 a grupo)
+	 * @param receptor ID del receptor (Si tipo = 2 --> 0 todos los usuarios, 1 todos los conectados,...)
+	 * @param println <code>true</code> para mostrarlo en el terminal
 	 */
 	public final void printout(String valor, int tipo, int receptor, boolean println){
-		Connection.connect(Entorno.URL + "message/" + tipo + "/" + receptor + "/" + valor);
+		Connection.connect(Entorno.URL + "put/message/" + tipo + "/" + receptor + "/" + valor);
 		if(println){
 			System.out.println(valor);
 		}
@@ -590,13 +661,13 @@ public class Entorno{
 	// SIMULADOR ************************************************************ //
 	
 	/**
-	 * Modifica la posicion de un agente.
+	 * Modifica la posici&oacute;n de un agente.
 	 * 
-	 * @param name Nombre
-	 * @param inicial Posicion inicial
-	 * @param dest Destino
-	 * @param desastre Identificador del desastre
-	 * @param herido Identificador del herido
+	 * @param name nombre
+	 * @param inicial posici&oacute;n inicial
+	 * @param dest destino
+	 * @param desastre identificador del desastre
+	 * @param herido identificador del herido
 	 * @throws InterruptedException 
 	 */
 	public void andar(String name, Position inicial, Position dest, int desastre, int herido) throws InterruptedException{
@@ -679,10 +750,10 @@ public class Entorno{
 	}
 
 	/**
-	 * Cambia la posicion de un agente. Los eventos no se mueven de posicion.
+	 * Cambia la posici&oacute;n de un agente. Los eventos no se mueven de posici&oacute;n.
 	 * 
-	 * @param name Nombre
-	 * @param pos Posicion
+	 * @param name nombre
+	 * @param pos posici&oacute;n
 	 */
 	public void go(String name, Position pos){
 		Position oldPos;
@@ -704,10 +775,10 @@ public class Entorno{
 	/**
 	 * Pinta el movimiento de un agente en el mapa mediante REST.
 	 * 
-	 * @param id Identificador del agente
-	 * @param idHerido Identificador del herido
+	 * @param id identificador del agente
+	 * @param idHerido identificador del herido
 	 * @param latitud latitud
-	 * @param longitud Longitud
+	 * @param longitud longitud
 	 * @throws InterruptedException 
 	 */
 	public void pinta(int id, int idHerido, double latitud, double longitud) throws InterruptedException{
@@ -719,10 +790,10 @@ public class Entorno{
 	}
 
 	/**
-	 * Devuelve una posicion aleatoria conociendo la ciudad.
-	 * Puesto que de momento solo tenemos Calasparra en la lista, no hace falta especificar la ciudad.
+	 * Devuelve una posici&oacute;n aleatoria conociendo la ciudad.
+	 * Puesto que de momento s&oacute;lo tenemos Calasparra en la lista, no hace falta especificar la ciudad.
 	 * 
-	 * @return Posicion aleatoria
+	 * @return posici&oacute;n aleatoria
 	 */
 	public Position getRandomPosition(){
 		// Las dos posiciones que se crean son las esquinas superior derecha e inferior izquierda del marco que contiene a Calasparra

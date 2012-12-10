@@ -5,11 +5,15 @@ import disasters.caronte.Entorno;
 import org.json.me.*;
 
 /**
- *
- * @author Lorena Lopez Lebon
+ * Plan de AUXILIAR.
+ * 
+ * @author Lorena L&oacute;pez Leb&oacute;n
  */
 public class EvacuarHeridosPlan extends EnviarMensajePlan{
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		int idDes = (Integer) getBeliefbase().getBelief("idEmergencia").getFact();

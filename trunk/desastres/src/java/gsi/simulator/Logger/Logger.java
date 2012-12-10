@@ -218,7 +218,7 @@ public class Logger {
     }
 
     /**
-     * Marca un nivel de aceptaci�n de trazas.
+     * Marca un nivel de aceptacion de trazas.
      * Se imprimen en fichero las trazas de nivel
      * mayor o igual que el marcado.
      *
@@ -412,31 +412,31 @@ public class Logger {
     }
 
     /**
-     * Chequeo de si una traza de un cierto nivel aparecer�a en consola.
+     * Chequeo de si una traza de un cierto nivel apareceria en consola.
      *
      * @param level Nivel por el que se pregunta.
-     * @return TRUE si aparecer�a en consola.
+     * @return TRUE si apareceria en consola.
      */
     public final boolean inConsole(int level) {
         return level >= console_level;
     }
 
     /**
-     * Chequeo de si una traza de un cierto nivel aparecer�a en fichero.
+     * Chequeo de si una traza de un cierto nivel apareceria en fichero.
      *
      * @param level Nivel por el que se pregunta.
-     * @return TRUE si aparecer�a en el fichero.
+     * @return TRUE si apareceria en el fichero.
      */
     public final boolean inFile(int level) {
         return level >= file_level;
     }
 
     /**
-     * Chequeo de si una traza de un cierto nivel aparecer�a
+     * Chequeo de si una traza de un cierto nivel apareceria
      * en consola o en fichero.
      *
      * @param level Nivel por el que se pregunta.
-     * @return TRUE si aparecer�a en consola o en fichero.
+     * @return TRUE si apareceria en consola o en fichero.
      */
     public final boolean inAny(int level) {
         return inConsole(level) || inFile(level);
@@ -513,7 +513,7 @@ public class Logger {
      *
      * @param level     Nivel de la traza.
      * @param msg       Mensaje de la traza.
-     * @param throwable Excepci�n que se quiere trazar.
+     * @param throwable Excepcion que se quiere trazar.
      */
     public final void log(int level, String msg, Throwable throwable) {
         if (level >= console_level) {

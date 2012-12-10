@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	<h3>Evacuacion.</h3>
+	<h3>Evacuaci&oacute;n de la residencia.</h3>
 
-	Agente que coordina la evacuacion de la residencia.
+	Agente que coordina la evacuaci&oacute;n de la residencia.
 -->
 <agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"	
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.2.xsd"	
 		name="EvacuacionResidencia" package="disasters.caronte.evacuacion">
 	<imports>
 		<import>disasters.*</import>
 		<import>disasters.caronte.*</import>
-		<import>disasters.caronte.ontology.CaronteOntology</import>
-		<import>jadex.base.fipa.SFipa</import>
+		<import>disasters.caronte.ontology.*</import>
+		<import>jadex.bridge.fipa.SFipa</import>
 		<import>java.util.HashMap</import>
 	</imports>
 
@@ -33,8 +33,10 @@
 		<belief name="numero_eae" class="int">
 			<fact>0</fact>
 		</belief>
+		<beliefset name="personas_sanas" class="Integer"/>
 		<beliefset name="eae" class="Integer"/>
-		<belief name="atendiendo" class="HashMap">
+		<beliefset name="bomberos" class="Integer"/>
+		<belief name="evacuando" class="HashMap">
 			<fact>new HashMap()</fact>
 		</belief>
 	</beliefs>

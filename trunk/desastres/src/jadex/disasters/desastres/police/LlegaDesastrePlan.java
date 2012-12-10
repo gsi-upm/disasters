@@ -4,15 +4,15 @@ import disasters.*;
 import disasters.desastres.Environment;
 
 /**
- * Plan de la POLICIA
+ * Plan de la POLIC&Iacute;A.
  * 
- * @author Nuria y Juan Luis Molina
- * 
+ * @author Nuria Siguero
+ * @author Juan Luis Molina Nogales
  */
 public class LlegaDesastrePlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 

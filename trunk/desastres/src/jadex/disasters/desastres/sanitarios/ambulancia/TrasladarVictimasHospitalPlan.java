@@ -4,10 +4,10 @@ import disasters.*;
 import disasters.desastres.Environment;
 
 /**
- * Siguiendo las indicaciones del coordinador medico general sobre el lugar al que realizar el traslado
+ * Siguiendo las indicaciones del coordinador m&eacute;dico general sobre el lugar al que realizar el traslado.
  *
- * @author Juan Luis Molina y Olimpia Hernandez
- *
+ * @author Juan Luis Molina Nogales
+ * @author Olimpia Hern&aacute;ndez
  */
 public class TrasladarVictimasHospitalPlan extends EnviarMensajePlan{
 

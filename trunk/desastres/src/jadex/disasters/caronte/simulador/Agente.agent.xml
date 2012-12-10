@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	<h3>Agente de simulaci&oacute;n.</h3>
+
+	Agente que simula el tipo indicado en la configuraci&oacute;n.
+-->
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.2.xsd"	
+		name="Agente" package="disasters.caronte.simulador">
+	<imports>
+		<import>disasters.*</import>
+		<import>disasters.caronte.*</import>
+		<import>jadex.bridge.fipa.SFipa</import>
+	</imports>
+
+	<beliefs>
+		<belief name="tipo" class="String">
+			<fact>""</fact>
+		</belief>
+		<belief name="env" class="Entorno">
+			<fact>Entorno.getInstance($beliefbase.tipo, $scope.getAgentName(), $beliefbase.residencia, $scope.getComponentIdentifier())</fact>
+		</belief>
+		<belief name="residencia" class="Position">
+			<fact>new Position(38.232272, -1.698925)</fact>
+		</belief>
+	</beliefs>
+
+	<goals>
+		<maintaingoal name="jefe_goal" retry="true" exclude="never"/>
+		<maintaingoal name="enfermero_goal" retry="true" exclude="never"/>
+		<maintaingoal name="gerocultor_goal" retry="true" exclude="never"/>
+		<maintaingoal name="celador_goal" retry="true" exclude="never"/>
+		<maintaingoal name="auxiliar_goal" retry="true" exclude="never"/>
+		<maintaingoal name="recepcionista_goal" retry="true" exclude="never"/>
+		<maintaingoal name="ambulancia_goal" retry="true" exclude="never"/>
+		<maintaingoal name="bombero_goal" retry="true" exclude="never"/>
+	</goals>
+
+	<plans>
+		<plan name="jefe_plan">
+			<body class="JefePlan"/>
+			<trigger>
+				<goal ref="jefe_goal"/>
+			</trigger>
+		</plan>
+		<plan name="enfermero_plan">
+			<body class="EnfermeroPlan"/>
+			<trigger>
+				<goal ref="enfermero_goal"/>
+			</trigger>
+		</plan>
+		<plan name="gerocultor_plan">
+			<body class="GerocultorPlan"/>
+			<trigger>
+				<goal ref="gerocultor_goal"/>
+			</trigger>
+		</plan>
+		<plan name="celador_plan">
+			<body class="CeladorPlan"/>
+			<trigger>
+				<goal ref="celador_goal"/>
+			</trigger>
+		</plan>
+		<plan name="auxiliar_plan">
+			<body class="AuxiliarPlan"/>
+			<trigger>
+				<goal ref="auxiliar_goal"/>
+			</trigger>
+		</plan>
+		<plan name="recepcionista_plan">
+			<body class="RecepcionistaPlan"/>
+			<trigger>
+				<goal ref="recepcionista_goal"/>
+			</trigger>
+		</plan>
+		<plan name="ambulancia_plan">
+			<body class="AmbulanciaPlan"/>
+			<trigger>
+				<goal ref="ambulancia_goal"/>
+			</trigger>
+		</plan>
+		<plan name="bombero_plan">
+			<body class="BomberoPlan"/>
+			<trigger>
+				<goal ref="bombero_goal"/>
+			</trigger>
+		</plan>
+	</plans>
+
+	<events>
+	</events>
+
+	<configurations>
+		<configuration name="jefe">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.JEFE</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="jefe_goal"/>
+			</goals>
+		</configuration>
+		<configuration name="enfermero">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.ENFERMERO</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="enfermero_goal"/>
+			</goals>
+		</configuration>
+		<configuration name="gerocultor">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.GEROCULTOR</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="gerocultor_goal"/>
+			</goals>
+		</configuration>
+		<configuration name="celador">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.CELADOR</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="celador_goal"/>
+			</goals>
+		</configuration>
+		<configuration name="auxiliar">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.AUXILIAR</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="auxiliar_goal"/>
+			</goals>
+		</configuration>
+		<configuration name="recepcionista">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.RECEPCIONISTA</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="recepcionista_goal"/>
+			</goals>
+		</configuration>
+		<configuration name="ambulancia">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.AMBULANCIA</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="ambulancia_goal"/>
+			</goals>
+		</configuration>
+		<configuration name="bombero">
+			<beliefs>
+				<initialbelief ref="tipo">
+					<fact>Entorno.BOMBERO</fact>
+				</initialbelief>
+			</beliefs>
+			<goals>
+				<initialgoal ref="bombero_goal"/>
+			</goals>
+		</configuration>
+	</configurations>
+</agent>

@@ -7,13 +7,18 @@ import java.sql.*;
 import org.json.me.*;
 
 /**
- *
- * @author Juan Luis Molina
+ * JavaBean del usuario.
+ * 
+ * @author Juan Luis Molina Nogales
  */
 public class UserBean implements Serializable{
+	/** Nombre. */
 	public static final String NOMBRE = "nombre";
+	/** Identificador. */
 	public static final String ID = "id";
+	/** Rol. */
 	public static final String ROL = "rol";
+	/** Nivel de mensaje. */
 	public static final String NIVEL_MSG = "nivelMsg";
 	
 	private PropertyChangeSupport propertySupport;
@@ -21,6 +26,9 @@ public class UserBean implements Serializable{
 	private String nombre, rol;
 	private int id, nivelMsg;
 
+	/**
+	 * Constructor.
+	 */
 	public UserBean(){
 		propertySupport = new PropertyChangeSupport(this);
 		nombre = "";
@@ -29,10 +37,20 @@ public class UserBean implements Serializable{
 		nivelMsg = 0;
 	}
 
+	/**
+	 * Getter de nombre.
+	 * 
+	 * @return nombre
+	 */
 	public String getNombre(){
 		return nombre;
 	}
 
+	/**
+	 * Setter de nombre.
+	 * 
+	 * @param value nombre
+	 */
 	public void setNombre(String value){
 		String oldValue = nombre;
 		nombre = value;
@@ -71,40 +89,80 @@ public class UserBean implements Serializable{
 		}
 	}
 
+	/**
+	 * Getter de id
+	 * 
+	 * @return id
+	 */
 	public int getId(){
 		return id;
 	}
 
+	/**
+	 * Setter de id.
+	 * 
+	 * @param value id 
+	 */
 	public void setId(int value){
 		int oldValue = id;
 		id = value;
 		propertySupport.firePropertyChange(ID, oldValue, id);
 	}
 
+	/**
+	 * Getter de rol.
+	 * 
+	 * @return rol
+	 */
 	public String getRol(){
 		return rol;
 	}
 
+	/**
+	 * Setter de rol.
+	 * 
+	 * @param value rol
+	 */
 	public void setRol(String value){
 		String oldValue = rol;
 		rol = value;
 		propertySupport.firePropertyChange(ROL, oldValue, rol);
 	}
 
+	/**
+	 * Getter de nivel de mensaje.
+	 * 
+	 * @return nivel de mensaje
+	 */
 	public int getNivelMsg(){
 		return nivelMsg;
 	}
 
+	/**
+	 * Setter de nivel de mensaje.
+	 * 
+	 * @param value nivel de mensaje
+	 */
 	public void setNivelMsg(int value){
 		int oldValue = nivelMsg;
 		nivelMsg = value;
 		propertySupport.firePropertyChange(NIVEL_MSG, oldValue, nivelMsg);
 	}
 
+	/**
+	 * Adds a PropertyChangeListener.
+	 * 
+	 * @param listener listener
+	 */
 	public void addPropertyChangeListener(PropertyChangeListener listener){
 		propertySupport.addPropertyChangeListener(listener);
 	}
 
+	/**
+	 * Removes a PropertyChangeListener.
+	 * 
+	 * @param listener listener
+	 */
 	public void removePropertyChangeListener(PropertyChangeListener listener){
 		propertySupport.removePropertyChangeListener(listener);
 	}

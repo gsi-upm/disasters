@@ -9,18 +9,16 @@ import nl.justobjects.pushlet.core.*;
 import org.json.me.*;
 
 /**
- * 
+ * CarontePushSources.
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class CarontePushSources{
 	/**
 	 * Produces events from Caronte.
 	 */
 	static public class CaronteEventPushSource implements EventSource, Runnable{
-		/**
-		 * Here we get our stocks from.
-		 */
+		// Here we get our stocks from
 		Thread thread = null;
 		volatile boolean active = false;
 
@@ -30,6 +28,9 @@ public class CarontePushSources{
 		
 		private String fecha;
 
+		/**
+		 * Constructor.
+		 */
 		public CaronteEventPushSource(){
 			fecha = "1992-01-01 00:00:01.000";
 		}
@@ -63,6 +64,9 @@ public class CarontePushSources{
 			active = false;
 		}
 
+		/**
+		 * Run.
+		 */
 		public void run(){
 			while(active){
 				try{
@@ -154,6 +158,11 @@ public class CarontePushSources{
 		}
 	}
 	
+	/**
+	 * Main.
+	 * 
+	 * @param args no 
+	 */
 	public static void main(String[] args){
 		// new CarontePushSources$CaronteEventPushSource();
 	}

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	<h3>Intervencion en incendios.</h3>
+	<h3>Intervenci&oacute;n en incendios.</h3>
 
-	Agente que coordina la intervencion en incendios.
+	Agente que coordina la intervenci&oacute;n en incendios.
 -->
 <agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"	
+		xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.2.xsd"	
 		name="IntervencionIncendios" package="disasters.caronte.intervencionincendios">
 	<imports>
 		<import>disasters.*</import>
 		<import>disasters.caronte.*</import>
 		<import>disasters.caronte.ontology.*</import>
-		<import>jadex.base.fipa.SFipa</import>
+		<import>jadex.bridge.fipa.SFipa</import>
 		<import>java.util.HashMap</import>
 	</imports>
 
@@ -33,6 +33,7 @@
 		</belief>
 		<beliefset name="epi" class="Integer"/>
 		<beliefset name="esi" class="Integer"/>
+		<beliefset name="bomberos" class="Integer"/>
 		<belief name="apagando" class="HashMap">
 			<fact>new HashMap()</fact>
 		</belief>

@@ -2,14 +2,18 @@ package disasters.caronte.simulador.coordinadorEmergencias;
 
 import disasters.*;
 import disasters.caronte.Entorno;
+import disasters.caronte.simulador.ontology.Desastre;
 import jadex.bdi.runtime.IGoal;
 
 /**
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class AvisarAgentesPlan extends EnviarMensajePlan{
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Entorno para poder usar sus metodos
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
@@ -53,15 +57,16 @@ public class AvisarAgentesPlan extends EnviarMensajePlan{
 			env.printout("OO coordinador: Respuesta recibida de central: " + resultado, 2, 3, true);
 		}
 
-		//Creamos un nuevo objetivo.
+		// Creamos un nuevo objetivo.
 		IGoal esperaSolucion = createGoal("esperarSolucion");
 		dispatchSubgoalAndWait(esperaSolucion);
 	}
 
 	/**
-	 *
-	 * @param des Desastre
-	 * @return Herido
+	 * Busca un herido.
+	 * 
+	 * @param des desastre
+	 * @return herido
 	 */
 	private People getHerido(Disaster des){
 		People herido = null;

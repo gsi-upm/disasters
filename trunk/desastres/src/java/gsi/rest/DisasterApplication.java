@@ -8,21 +8,23 @@ import org.restlet.data.MediaType;
 import org.restlet.routing.Router;
 
 /**
- * Class used to define routes and Restlets
- * @author julio camarero
+ * Class used to define routes and Restlets.
+ * 
+ * @author Julio Camarero
  * @version 1.0
  */
-public class DisasterApplication extends Application {
+public class DisasterApplication extends Application{
 
 	private static final String URL_BASE = "/" + Constantes.PROJECT + "/RESTFUL/";
 
 	/**
-	 * Constructor (not used)
+	 * Constructor (not used).
 	 */
 	public DisasterApplication(){}
 	
 	/**
-	 * Method used to remove the blanks in a String (useful for URLs)
+	 * Method used to remove the blanks in a String (useful for URLs).
+	 * 
 	 * @param cadena with the original text
 	 * @return the String without blanks
 	 */
@@ -43,6 +45,8 @@ public class DisasterApplication extends Application {
 
 	/**
 	 * Creates a root Restlet that will receive all incoming calls.
+	 * 
+	 * @return router
 	 */
 	@Override
 	public Restlet createInboundRoot(){
@@ -619,7 +623,7 @@ public class DisasterApplication extends Application {
 		router.attach("/people/modified/{dateTime}", peopleModified);
 		router.attach("/resources/modified/{dateTime}", resourcesModified);
 
-		//PARA el XML
+		// PARA el XML ***********************************************************
 		router.attach("/xml/events/modified/{dateTime}", eventsModifiedXML);
 		router.attach("/xml/people/modified/{dateTime}", peopleModifiedXML);
 		router.attach("/xml/resources/modified/{dateTime}", resourcesModifiedXML);
@@ -627,15 +631,13 @@ public class DisasterApplication extends Application {
 		router.attach("/xml/events", eventsXML);
 		router.attach("/xml/people", peopleXML);
 		router.attach("/xml/resources", resourcesXML);
-
+		//************************************************************************
 
 		router.attach("/events/year/{year}", eventYear);
 		router.attach("/resources/year/{year}", resourceYear);
 		router.attach("/people/year/{year}", peopleYear);
 
 		router.attach("/events/date/{date}", eventDate);
-
-
 		router.attach("/resources/date/{date}", resourceDate);
 		router.attach("/people/date/{date}", peopleDate);
 		router.attach("/events/date/{year}/{month}/{day}", eventDate);
@@ -648,7 +650,6 @@ public class DisasterApplication extends Application {
 
 		router.attach("/people", persona);
 		router.attach("/people/{people}", persona);
-
 
 		router.attach("/delete/id/{id}", delId);
 		router.attach("/delete/events", delEvents);

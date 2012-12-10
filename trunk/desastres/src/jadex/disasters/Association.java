@@ -1,28 +1,27 @@
 package disasters;
 
 /**
- * Class that represents an association
+ * Class that represents an association.
  * 
- * @author Juan Luis Molina
- * @version 1.0
+ * @author Juan Luis Molina Nogales
  */
 public class Association{
-	/** Association id */
+	/** Association id. */
 	private int id;
-	/** Person injured id */
+	/** Person injured id. */
 	private int idInjured;
-	/** Disaster or emergency id */
+	/** Disaster or emergency id. */
 	private int idDisaster;
-	/** State of the association */
+	/** State of the association. */
 	private String state;
 
 	/**
-	 * Constructor de la asociacion
+	 * Constructor de la asociacion.
 	 * 
-	 * @param id Identificador de la asociacion
-	 * @param idInjured Identificador del herido
-	 * @param idDisaster Identificador de la emergencia
-	 * @param state Estado de la asociacion
+	 * @param id identificador de la asociaci&oacute;n
+	 * @param idInjured identificador del herido
+	 * @param idDisaster identificador de la emergencia
+	 * @param state estado de la asociacion
 	 */
 	public Association(int id, int idInjured, int idDisaster, String state){
 		super();
@@ -33,25 +32,25 @@ public class Association{
 	}
 
 	/**
-	 * Getter del ID
+	 * Getter del ID.
 	 * 
-	 * @return Identificador
+	 * @return identificador
 	 */
 	public int getId(){
 		return id;
 	}
 
 	/**
-	 * Setter del ID
+	 * Setter del ID.
 	 * 
-	 * @param id Identificador
+	 * @param id identificador
 	 */
 	public void setId(int id){
 		this.id = id;
 	}
 
 	/**
-	 * Getter del ID del herido
+	 * Getter del ID del herido.
 	 * 
 	 * @return ID del herido
 	 */
@@ -60,7 +59,7 @@ public class Association{
 	}
 
 	/**
-	 * Setter del ID del herido
+	 * Setter del ID del herido.
 	 * 
 	 * @param idInjured ID del herido
 	 */
@@ -69,7 +68,7 @@ public class Association{
 	}
 	
 	/**
-	 * Getter del ID de la emergencia
+	 * Getter del ID de la emergencia.
 	 * 
 	 * @return ID de la emergencia
 	 */
@@ -78,7 +77,7 @@ public class Association{
 	}
 
 	/**
-	 * Setter del ID de la emergencia
+	 * Setter del ID de la emergencia.
 	 * 
 	 * @param idDisaster ID de la emergencia
 	 */
@@ -87,18 +86,18 @@ public class Association{
 	}
 	
 	/**
-	 * Getter del estado de la asociacion
+	 * Getter del estado de la asociaci&oacute;n.
 	 * 
-	 * @return Estado de la asociacion
+	 * @return estado de la asociaci&oacute;n
 	 */
 	public String getState(){
 		return state;
 	}
 
 	/**
-	 * Setter del estado de la asociacion
+	 * Setter del estado de la asociaci&oacute;n
 	 * 
-	 * @param state Estado de la asociacion
+	 * @param state estado de la asociaci&oacute;n
 	 */
 	public void setState(String state){
 		this.state = state;

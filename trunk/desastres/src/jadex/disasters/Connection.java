@@ -4,16 +4,16 @@ import java.io.*;
 import java.net.*;
 
 /**
- * Clase para conectarse mediante una URL a Desastres 2.0
+ * Clase para conectarse mediante una URL a Desastres 2.0.
  * 
- * @author juliocamarero
+ * @author Julio Camarero
  */
 public class Connection{
 	/**
-	 * Conecta a la URL dada y devuelve en un String el resultado dado por el servidor
+	 * Conecta a la URL dada y devuelve en un String el resultado dado por el servidor.
 	 * 
-	 * @param source URL a la que realiza la conexion
-	 * @return Respuesta del servidor
+	 * @param source URL a la que realiza la conexi&oacute;n
+	 * @return respuesta del servidor
 	 */
 	public static String connect(String source){
 		try{
@@ -39,10 +39,10 @@ public class Connection{
 	}
 
 	/**
-	 * Elimina los espacios cambiandolos por '+'
+	 * Elimina los espacios cambiandolos por '+'.
 	 * 
-	 * @param cadena Texto a formatear
-	 * @return Texto formateado
+	 * @param cadena texto a formatear
+	 * @return texto formateado
 	 */
 	public static String removeBlanks(String cadena){
 		String nueva = "";

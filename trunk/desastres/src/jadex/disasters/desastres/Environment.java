@@ -9,71 +9,89 @@ import java.util.*;
 import org.json.me.*;
 
 /**
- * Clase para modelar el entorno, proporcionando metodos para interactuar con el.
+ * Clase para modelar el entorno, proporcionando m&eacute;todos para interactuar con &eacute;l.
  * 
  * @author aebeda
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class Environment{
 	//------constantes ----
-
-	/** Los nombres de los agentes */
-	public static final String AMBULANCIA = "ambulance";
-	public static final String BOMBERO = "firemen";
-	public static final String POLICIA = "police";
-	public static final String AMBULANCIA2 = "ambulance";
-	public static final String GSO = "grupoSanitarioOperativo";
-	public static final String MEDICO_CACH = "medicoCACH";
-	public static final String COORDINADOR_HOSPITAL = "coordinadorHospital";
-	public static final String COORDINADOR_MEDICO = "coordinadorMedico";
-	public static final String CENTRAL = "central";
-	private static final String[] AGENTES_AUX = {AMBULANCIA, BOMBERO, POLICIA, AMBULANCIA2};
-	public static final List<String> AGENTES = Arrays.asList(AGENTES_AUX);
-	private static final String[] COMPONENTES_AUX = {GSO, MEDICO_CACH, COORDINADOR_HOSPITAL, COORDINADOR_MEDICO, CENTRAL};
-	public static final List<String> COMPONENTES = Arrays.asList(COMPONENTES_AUX);
-	public static final String APOCALIPSIS = "apocalypse";
-	/** Los nombres de los eventos provocados sobre el mapa */
-	public static final String FUEGO = "fire";
-	public static final String TERREMOTO = "collapse";
-	public static final String INUNDACION = "flood";
-	public static final String HERIDO_LEVE = "slight";
-	public static final String HERIDO_GRAVE = "serious";
-	public static final String HERIDO_MUERTO = "dead";
-	public static final String HERIDO_ATRAPADO = "trapped";
-	private static final String[] EVENTOS_AUX = {FUEGO, TERREMOTO, INUNDACION, HERIDO_LEVE, HERIDO_GRAVE, HERIDO_MUERTO, HERIDO_ATRAPADO};
-	public static final List<String> EVENTOS = Arrays.asList(EVENTOS_AUX);
-	
+	/** URL para REST. */
 	public static final String URL = "http://localhost:8080/desastres/rest/";
+	
+	// Los nombres de los agentes
+	/** Agente ambulancia. */
+	public static final String AMBULANCIA = "ambulance";
+	/** Agente bombero. */
+	public static final String BOMBERO = "firemen";
+	/** Agente polic&iacute;a. */
+	public static final String POLICIA = "police";
+	/** Agente ambulancia (bis). */
+	public static final String AMBULANCIA2 = "ambulance";
+	/** Agente grupo sanitario operativo. */
+	public static final String GSO = "grupoSanitarioOperativo";
+	/** Agente m&eacute;dico del centro de atenci&oacute;n y clasificaci&oacute;n de heridos. */
+	public static final String MEDICO_CACH = "medicoCACH";
+	/** Agente coordinador del hospital. */
+	public static final String COORDINADOR_HOSPITAL = "coordinadorHospital";
+	/** Agente coordinador m&eacute;dico. */
+	public static final String COORDINADOR_MEDICO = "coordinadorMedico";
+	/** Agente central de emergencias. */
+	public static final String CENTRAL = "central";
+	/** Listado de agentes. */
+	public static final List<String> AGENTES = Arrays.asList(new String[]{
+		AMBULANCIA, BOMBERO, POLICIA, AMBULANCIA2});
+	/** Listado de componentes. */
+	public static final List<String> COMPONENTES = Arrays.asList(new String[]{
+		GSO, MEDICO_CACH, COORDINADOR_HOSPITAL, COORDINADOR_MEDICO, CENTRAL});
+	/** Apocalipsis. */
+	public static final String APOCALIPSIS = "apocalypse";
+	
+	// Los nombres de los eventos provocados sobre el mapa
+	/** Evento fuego. */
+	public static final String FUEGO = "fire";
+	/** Evento terremoto. */
+	public static final String TERREMOTO = "collapse";
+	/** Evento inundaci&oacute;n. */
+	public static final String INUNDACION = "flood";
+	/** Evento herido leve. */
+	public static final String HERIDO_LEVE = "slight";
+	/** Evento herido grave. */
+	public static final String HERIDO_GRAVE = "serious";
+	/** Evento muerto. */
+	public static final String HERIDO_MUERTO = "dead";
+	/** Evento atrapado. */
+	public static final String HERIDO_ATRAPADO = "trapped";
+	/** Listado de eventos. */
+	public static final List<String> EVENTOS = Arrays.asList(new String[]{
+		FUEGO, TERREMOTO, INUNDACION, HERIDO_LEVE, HERIDO_GRAVE, HERIDO_MUERTO, HERIDO_ATRAPADO});
+	
 	//------- atributos ---
 	private final int tiempoJSON = 5000;
 	private static TimerJSON temporizador;
 	private String ahora;
-	/** Agentes (nombre -> WorldObject) */
+	// Agentes (nombre -> WorldObject)
 	private HashMap<String,WorldObject> agentes;
-	/** Eventos (id -> WorldObject) */
+	// Eventos (id -> WorldObject)
 	private HashMap<Integer,Disaster> disasters;
 	private HashMap<Integer,People> people;
 	private HashMap<Integer,Resource> resources;
-	/** Agentes y Eventos (Pos -> WorldObject) */
+	// Agentes y Eventos (Pos -> WorldObject)
 	private MultiCollection objetos;
-	/**
-	 * Numero de agentes creados, no tienen por que estar activos
-	 * No ha sido usado
-	 */
+	// Numero de agentes creados, no tienen por que estar activos. No ha sido usado
 	private Integer numAgentes;
-	/**
-	 * Numero de eventos creados, no tienen por que estar activos
-	 * Usado para poder dar un nombre distinto a los eventos en las tablas Hash
-	 */
+	// Numero de eventos creados, no tienen por que estar activos.
+	// Usado para poder dar un nombre distinto a los eventos en las tablas Hash
 	private Integer numEventos;
 	private int tablon;
 	private static Environment instance;
-	/** Objeto para notificar de cambios */
+	// Objeto para notificar de cambios
 	private SimplePropertyChangeSupport pcs;
 	
 	//---------------------
+	
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public Environment(){
 		temporizador = new TimerJSON(tiempoJSON, this);
@@ -251,7 +269,7 @@ public class Environment{
 	}
 
 	/**
-	 * Actualizacion del entorno
+	 * Actualizaci&oacute;n del entorno.
 	 */
 	public void actualiza(){
 		temporizador.reset();
@@ -458,13 +476,14 @@ public class Environment{
 	}
 
 	/**
-	 * Obtener una instancia del entorno, para asi poder interactuar sobre el.
-	 * NOTA: se puede crear un parque de bomberos, desde el cual salgan, => Si es un bombero, tiene posicion inicial fija.
+	 * Obtener una instancia del entorno, para as&iacute; poder interactuar sobre &eacute;l.</br>
+	 * NOTA: se puede crear un parque de bomberos, desde el cual salgan => Si es un bombero, tiene posici&oacute;n inicial fija.
 	 * 
-	 * @param tipo Tipo
-	 * @param nombre Nombre
-	 * @param pos Posicion
-	 * @return Instancia de entorno
+	 * @param tipo tipo
+	 * @param nombre nombre
+	 * @param pos posici&oacute;n
+	 * @param agentId identificador del agente
+	 * @return instancia de entorno
 	 */
 	public static Environment getInstance(String tipo, String nombre, Position pos, IComponentIdentifier agentId){
 		// La primera vez que se llama a este metodo (el agente Environment), instance vale null
@@ -487,13 +506,13 @@ public class Environment{
 	}
 
 	/**
-	 * Annade un objeto al entorno.
+	 * A&ntilde;de un objeto al entorno.
 	 * 
-	 * @param type Tipo
-	 * @param name Nombre
-	 * @param position Posicion
-	 * @param info Informacion
-	 * @param agentId Identificador del agente
+	 * @param type yipo
+	 * @param name nombre
+	 * @param position posici&oacute;n
+	 * @param info informaci&oacute;n
+	 * @param agentId identificador del agente
 	 */
 	public void addWorldObject(String type, String name, Position position, String info, IComponentIdentifier agentId){
 		WorldObject wo = new WorldObject(name, type, position, info, agentId);
@@ -525,10 +544,10 @@ public class Environment{
 	}
 	
 	/**
-	 * Elimina un objeto del entorno
+	 * Elimina un objeto del entorno.
 	 * 
-	 * @param type Tipo
-	 * @param name Nombre
+	 * @param type tipo
+	 * @param name nombre
 	 */
 	public void removeWorldObject(String type, String name){
 		WorldObject wo = getAgent(name);
@@ -549,11 +568,11 @@ public class Environment{
 	}
 	
 	/**
-	 * Cambia la posicion de un agente.
-	 * Los eventos no se mueven de posicion.
+	 * Cambia la posici&oacute;n de un agente.
+	 * Los eventos no se mueven de posici&oacute;n.
 	 * 
-	 * @param name Nombre
-	 * @param pos Posicion
+	 * @param name nombre
+	 * @param pos posici&oacute;n
 	 */
 	public void go(String name, Position pos){
 		Position oldPos;
@@ -576,13 +595,13 @@ public class Environment{
 	}
 
 	/**
-	 * Modifica la posicion de un agente
+	 * Modifica la posici&oacute;n de un agente.
 	 * 
-	 * @param name Nombre
-	 * @param inicial Posicion inicial
-	 * @param dest Destino
-	 * @param desastre Identificador del desastre
-	 * @param herido Identificador del herido
+	 * @param name nombre
+	 * @param inicial posici&oacute;n inicial
+	 * @param dest destino
+	 * @param desastre identificador del desastre
+	 * @param herido identificador del herido
 	 * @throws InterruptedException 
 	 */
 	public void andar(String name, Position inicial, Position dest, int desastre, int herido) throws InterruptedException{
@@ -671,10 +690,10 @@ public class Environment{
 	/**
 	 * Pinta el movimiento de un agente en el mapa mediante REST.
 	 * 
-	 * @param id Identificador del agente
-	 * @param idHerido Identificador del herido
+	 * @param id identificador del agente
+	 * @param idHerido identificador del herido
 	 * @param latitud latitud
-	 * @param longitud Longitud
+	 * @param longitud longitud
 	 * @throws InterruptedException 
 	 */
 	public void pinta(int id, int idHerido, double latitud, double longitud) throws InterruptedException{
@@ -688,7 +707,7 @@ public class Environment{
 	/**
 	 * Devuelve todos los agentes.
 	 * 
-	 * @return Todos los agentes
+	 * @return todos los agentes
 	 */
 	public HashMap<String,WorldObject> getAgents(){
 		return agentes;
@@ -697,17 +716,17 @@ public class Environment{
 	/**
 	 * Devuelve todos los desastres.
 	 * 
-	 * @return Todos los desastres
+	 * @return todos los desastres
 	 */
 	public HashMap<Integer,Disaster> getEvents(){
 		return disasters;
 	}
 	
 	/**
-	 * Devuelve un agente dado su nombre (el nombre de los agentes es unico).
+	 * Devuelve un agente dado su nombre (el nombre de los agentes es &uacute;nico).
 	 * 
-	 * @param name Nombre
-	 * @return Agente
+	 * @param name nombre
+	 * @return agente
 	 */
 	public synchronized WorldObject getAgent(String name){
 		assert agentes.containsKey(name);
@@ -715,10 +734,10 @@ public class Environment{
 	}
 
 	/**
-	 * Elimina un agente dado su nombre (el nombre de los agentes es unico).
+	 * Elimina un agente dado su nombre (el nombre de los agentes es &uacute;nico).
 	 * 
 	 * @param name nombre
-	 * @return Agente eliminado
+	 * @return agente eliminado
 	 */
 	public synchronized WorldObject removeAgent(String name){
 		assert agentes.containsKey(name);
@@ -726,10 +745,10 @@ public class Environment{
 	}
 
 	/**
-	 * Devuelve la posicion de un agente dado su nombre (el nombre de los agentes es unico).
+	 * Devuelve la posici&oacute;n de un agente dado su nombre (el nombre de los agentes es &uacute;nico).
 	 * 
-	 * @param name Nombre
-	 * @return Posicion del agente
+	 * @param name nombre
+	 * @return posici&oacute;n del agente
 	 */
 	public synchronized Position getAgentPosition(String name){
 		assert agentes.containsKey(name);
@@ -737,10 +756,10 @@ public class Environment{
 	}
 
 	/**
-	 * Devuelve un evento dado su id (el id de los eventos es unico).
+	 * Devuelve un evento dado su id (el id de los eventos es &uacute;nico).
 	 * 
-	 * @param id Identificador
-	 * @return Desastre
+	 * @param id identificador
+	 * @return desastre
 	 */
 	public synchronized Disaster getEvent(int id){
 		assert disasters.containsKey(id);
@@ -748,10 +767,10 @@ public class Environment{
 	}
 
 	/**
-	 * Elimina un evento dado su id (el id de los eventos es unico).
+	 * Elimina un evento dado su id (el id de los eventos es &uacute;nico).
 	 * 
-	 * @param id Identificador
-	 * @return Evento eliminado
+	 * @param id identificador
+	 * @return evento eliminado
 	 */
 	public synchronized Disaster removeEvent(int id){
 		assert disasters.containsKey(id);
@@ -759,10 +778,10 @@ public class Environment{
 	}
 
 	/**
-	 * Devuelve la posicion de un evento dado su id.
+	 * Devuelve la posici&oacute;n de un evento dado su id.
 	 * 
-	 * @param id Identificador
-	 * @return Posicion del evento
+	 * @param id identificador
+	 * @return posici&oacute;n del evento
 	 */
 	public synchronized Position getEventPosition(int id){
 		assert disasters.containsKey(id);
@@ -770,10 +789,10 @@ public class Environment{
 	}
 
 	/**
-	 * Devuelve todos los objetos que haya en una posicion.
+	 * Devuelve todos los objetos que haya en una posici&oacute;n.
 	 * 
-	 * @param pos Posicion
-	 * @return Todos los objetos de la posicion
+	 * @param pos posici&oacute;n
+	 * @return todos los objetos de la posici&oacute;n
 	 */
 	public WorldObject[] getWorldObjects(Position pos){
 		Collection col = objetos.getCollection(pos);
@@ -784,7 +803,7 @@ public class Environment{
 	/**
 	 * Devuelve todos los agentes.
 	 * 
-	 * @return Todos los agentes
+	 * @return todos los agentes
 	 */
 	public WorldObject[] getAgentes(){
 		Collection<WorldObject> col = agentes.values();
@@ -794,7 +813,7 @@ public class Environment{
 	/**
 	 * Devuelve todos los eventos.
 	 * 
-	 * @return Todos los eventos
+	 * @return todos los eventos
 	 */
 	public Disaster[] getEventos(){
 		Collection<Disaster> col = disasters.values();
@@ -802,28 +821,28 @@ public class Environment{
 	}
 
 	/**
-	 * Devuelve el numero total de agentes creados.
+	 * Devuelve el n&uacute;mero total de agentes creados.
 	 * 
-	 * @return numero total de agentes creados.
+	 * @return n&uacute;mero total de agentes creados.
 	 */
 	public int getNumAgentes(){
 		return numAgentes;
 	}
 
 	/**
-	 * Devuelve el numero total de eventos creados.
+	 * Devuelve el n&uacute;mero total de eventos creados.
 	 * 
-	 * @return numero total de eventos creados.
+	 * @return n&uacute;mero total de eventos creados.
 	 */
 	public int getNumEventos(){
 		return numEventos;
 	}
 
 	/**
-	 * Devuelve una posicion aleatoria conociendo la ciudad.
+	 * Devuelve una posici&oacute;n aleatoria conociendo la ciudad.</br>
 	 * Puesto que de momento solo tenemos Calasparra en la lista, no hace falta especificar la ciudad.
 	 * 
-	 * @return Posicion aleatoria
+	 * @return posici&oacute;n aleatoria
 	 */
 	public Position getRandomPosition(){
 		// Las dos posiciones que se crean son las esquinas superior derecha e inferior izquierda del marco que contiene a Calasparra
@@ -847,7 +866,7 @@ public class Environment{
 	/**
 	 * Devuelve el desastre que se debe atender.
 	 * 
-	 * @return the tablon.
+	 * @return el tabl&oacute;n
 	 */
 	public int getTablon(){
 		return tablon;
@@ -856,17 +875,17 @@ public class Environment{
 	/**
 	 * Establece el desastre que se debe atender.
 	 * 
-	 * @param tablon the tablon to set.
+	 * @param tablon el tabl&oacute;n
 	 */
 	public void setTablon(int tablon){
 		this.tablon = tablon;
 	}
 	
 	/**
-	 * Imprime un String por pantalla y lo envia para mostrar en la web.
+	 * Imprime un String por pantalla y lo env&iacute;a para mostrar en la web.
 	 *
-	 * @param valor String a imprimir.
-	 * @param nivel Nivel del mensaje (0 todos los usuarios, 1 todos los conectados,...).
+	 * @param valor String a imprimir
+	 * @param nivel nivel del mensaje (0 todos los usuarios, 1 todos los conectados,...)
 	 */
 	public final void printout(String valor, int nivel){
 		Connection.connect(Environment.URL + "message/2/" + nivel + "/" + valor);

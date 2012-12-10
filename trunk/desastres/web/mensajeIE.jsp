@@ -19,17 +19,20 @@
 			<script type="application/javascript" src="js/hora_fecha.js"></script>
 		</head>
 		<body onload="IniciarReloj24()">
-			<div>
-				<c:import url="jspf/cabecera.jsp"/>
-			</div>
-			<p class="error">
-				<fmt:message key="mensajeIE"/>
-				<a href="http://www.mozilla-europe.org/firefox/">Firefox</a>,
-				<a href="http://www.google.com/chrome">Chrome</a>,
-				<a href="http://www.opera.com/browser">Opera</a>
-				<fmt:message key="o"/>
-				<a href="http://www.apple.com/safari/download">Safari</a>.
-			</p>
+			<table class="tabla_body">
+				<tr >
+					<td><c:import url="jspf/cabecera.jsp"/></td>
+				</tr>
+				<tr>
+					<td class="error">
+						<fmt:message key="mensajeIE"/>
+						<a href="http://www.mozilla.org/firefox/">Firefox</a>,
+						<a href="http://www.google.com/chrome">Chrome</a>
+						<fmt:message key="o"/>
+						<a href="http://www.opera.com/browser">Opera</a>.
+					</td>
+				</tr>
+			</table>
 		</body>
 	</fmt:bundle>
 </html>

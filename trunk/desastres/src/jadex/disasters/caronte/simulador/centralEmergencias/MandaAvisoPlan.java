@@ -2,13 +2,13 @@ package disasters.caronte.simulador.centralEmergencias;
 
 import disasters.*;
 import disasters.caronte.Entorno;
+import disasters.caronte.simulador.ontology.Desastre;
 import jadex.bdi.runtime.IGoal;
 
 /**
  * Plan de la central para avisar al resto de los agentes.
  *
- * @author Juan Luis Molina
- *
+ * @author Juan Luis Molina Nogales
  */
 public class MandaAvisoPlan extends EnviarMensajePlan{
 

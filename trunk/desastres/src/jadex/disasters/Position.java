@@ -1,17 +1,17 @@
 package disasters;
 
 /**
- * Posicion
+ * Posici&oacute;n.
  */
 public class Position{
 	private double latitud;
 	private double longitud;
 	
 	/**
-	 * Constructor de Position
+	 * Constructor de Position.
 	 * 
-	 * @param latitud Parametro latitud
-	 * @param longitud Parametro longitud
+	 * @param latitud par&aacute;metro latitud
+	 * @param longitud par&aacute;metro longitud
 	 */
 	public Position(double latitud, double longitud){
 		this.latitud = latitud;
@@ -19,18 +19,18 @@ public class Position{
 	}
 	
 	/**
-	 * Getter de la latitud
+	 * Getter de la latitud.
 	 * 
-	 * @return Latitud de la posicion
+	 * @return latitud de la posici&oacute;n
 	 */
 	public double getLat(){
 		return latitud;
 	}
 	
 	/**
-	 * Getter de la longitud
+	 * Getter de la longitud.
 	 * 
-	 * @retur Longitud de la posicion
+	 * @return longitud de la posici&oacute;n
 	 */
 	public double getLng(){
 		return longitud;

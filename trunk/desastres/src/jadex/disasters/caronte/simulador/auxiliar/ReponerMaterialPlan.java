@@ -1,14 +1,18 @@
 package disasters.caronte.simulador.auxiliar;
 
-import disasters.caronte.Entorno;
 import disasters.*;
+import disasters.caronte.Entorno;
 
 /**
- *
- * @author Lorena Lopez Lebon
+ * Plan de AUXILIAR.
+ * 
+ * @author Lorena L&oacute;pez Leb&oacute;n
  */
 public class ReponerMaterialPlan extends EnviarMensajePlan{
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 

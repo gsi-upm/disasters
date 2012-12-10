@@ -1,62 +1,62 @@
 package disasters;
 
 /**
- * Class that represents a disaster
+ * Class that represents a disaster.
  * 
- * @author julio camarero
+ * @author Julio Camarero
  * @version 1.0
  */
 public class People{
-	/** Resource id */
+	/** Resource id. */
 	private int id;
-	/** type of injured (slight, serious, dead, trapped) */
+	/** Type of injured (slight, serious, dead, trapped). */
 	private String type;
-	/** Size of the Disaster */
+	/** Size of the disaster. */
 	private int quantity;
-	/** Name of the resource */
+	/** Name of the resource. */
 	private String name;
-	/** Info about the resource */
+	/** Info about the resource. */
 	private String info;
-	/** Description for the resource */
+	/** Description for the resource. */
 	private String description;
-	/**  */
+	/** Latitude of the resource. */
 	private double latitud;
-	/**  */
+	/** Longitude of the resource. */
 	private double longitud;
-	/**  */
+	/** Address of the resource. */
 	private String address;
-	/**  */
+	/** Floor of the resource. */
 	private int floor;
-	/**  */
+	/** Size of the resource. */
 	private String size;
-	/**  */
+	/** Traffic of the area. */
 	private String traffic;
-	/** state of the resource (usually active) */
+	/** State of the resource (usually active). */
 	private String state;
-	/** assigned Resource id */
+	/** Assigned Resource id. */
 	private int idAssigned;
-	/** id of the user who added the injured */
+	/** ID of the user who added the injured. */
 	private int user;
-	/** true si hay alguna ambulancia yendo a por el */
+	/** <code>true</code> si hay alguna ambulancia yendo a por &eacute;l. */
 	private boolean atendido;
 
 	/**
-	 * Constructor de grupo de personas
+	 * Constructor de grupo de personas.
 	 * 
-	 * @param id Identificador
-	 * @param type Tipo
-	 * @param quantity Cantidad de personas
-	 * @param name Nombre
-	 * @param info Informacion
-	 * @param description Descripcion
-	 * @param latitud Latitud
-	 * @param longitud Longitud
-	 * @param address Direccion
-	 * @param floor Planta
-	 * @param size Tamanno
-	 * @param traffic Trafico
-	 * @param state Estado
-	 * @param idAssigned Identificador de desastre asignado
+	 * @param id identificador
+	 * @param type tipo
+	 * @param quantity cantidad de personas
+	 * @param name nombre
+	 * @param info informaci&oacute;n
+	 * @param description descripci&oacute;n
+	 * @param latitud latitud
+	 * @param longitud longitud
+	 * @param address direcci&oacute;n
+	 * @param floor planta
+	 * @param size tama&ntilde;o
+	 * @param traffic tr&aacute;fico
+	 * @param state estado
+	 * @param idAssigned identificador de desastre asignado
 	 */
 	public People(int id, String type, int quantity, String name, String info, String description, double latitud,
 			double longitud, String address, int floor, String size, String traffic, String state, int idAssigned){
@@ -81,7 +81,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve el id
+	 * Devuelve el id.
 	 * 
 	 * @return the id
 	 */
@@ -90,7 +90,7 @@ public class People{
 	}
 
 	/**
-	 * Establece el id
+	 * Establece el id.
 	 * 
 	 * @param id the id to set
 	 */
@@ -99,7 +99,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve el tipo
+	 * Devuelve el tipo.
 	 * 
 	 * @return the type
 	 */
@@ -108,7 +108,7 @@ public class People{
 	}
 
 	/**
-	 * Establece el tipo
+	 * Establece el tipo.
 	 * 
 	 * @param type the type to set
 	 */
@@ -117,7 +117,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve la cantidad
+	 * Devuelve la cantidad.
 	 * 
 	 * @return the quantity
 	 */
@@ -126,7 +126,7 @@ public class People{
 	}
 
 	/**
-	 * Establece la cantidad
+	 * Establece la cantidad.
 	 * 
 	 * @param quantity the quantity to set
 	 */
@@ -135,7 +135,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve el nombre
+	 * Devuelve el nombre.
 	 * 
 	 * @return the name
 	 */
@@ -144,7 +144,7 @@ public class People{
 	}
 
 	/**
-	 * Establece el nombre
+	 * Establece el nombre.
 	 * 
 	 * @param name the name to set
 	 */
@@ -153,7 +153,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve la informacion
+	 * Devuelve la informaci&oacute;n.
 	 * 
 	 * @return the info
 	 */
@@ -162,7 +162,7 @@ public class People{
 	}
 
 	/**
-	 * Establece la informacion
+	 * Establece la informaci&oacute;n.
 	 * 
 	 * @param info the info to set
 	 */
@@ -171,7 +171,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve la descripcion
+	 * Devuelve la descripci&oacute;n.
 	 * 
 	 * @return the description
 	 */
@@ -180,7 +180,7 @@ public class People{
 	}
 
 	/**
-	 * Establece la descripcion
+	 * Establece la descripci&oacute;n.
 	 * 
 	 * @param description the description to set
 	 */
@@ -189,114 +189,114 @@ public class People{
 	}
 	
 	/**
-	 * Devuelve la latitud
+	 * Devuelve la latitud.
 	 * 
-	 * @return Latitud 
+	 * @return latitud 
 	 */
 	public double getLatitud(){
 		return latitud;
 	}
 	
 	/**
-	 * Establece la latitud
+	 * Establece la latitud.
 	 * 
-	 * @param latitud Latitud
+	 * @param latitud latitud
 	 */
 	public void setLatitud(double latitud){
 		this.latitud = latitud;
 	}
 	
 	/**
-	 * Devuelve la longitud
+	 * Devuelve la longitud.
 	 * 
-	 * @return Longitud 
+	 * @return longitud 
 	 */
 	public double getLongitud(){
 		return longitud;
 	}
 	
 	/**
-	 * Establece la longitud
+	 * Establece la longitud.
 	 * 
-	 * @param longitud Longitud
+	 * @param longitud longitud
 	 */
 	public void setLongitud(double longitud){
 		this.longitud = longitud;
 	}
 	
 	/**
-	 * Devuelve la direccion
+	 * Devuelve la direcci&oacute;n.
 	 * 
-	 * @return Direccion
+	 * @return direcci&oacute;n
 	 */
 	public String getAddres(){
 		return address;
 	}
 	
 	/**
-	 * Establece la direccion
+	 * Establece la direcci&oacute;n.
 	 * 
-	 * @param address Direccion
+	 * @param address direcci&oacute;n
 	 */
 	public void setAddress(String address){
 		this.address = address;
 	}
 	
 	/**
-	 * Devuelve la planta
+	 * Devuelve la planta.
 	 * 
-	 * @return Planta
+	 * @return planta
 	 */
 	public int getFloor(){
 		return floor;
 	}
 	
 	/**
-	 * Establece la planta
+	 * Establece la planta.
 	 * 
-	 * @param floor Planta
+	 * @param floor planta
 	 */
 	public void setFloor(int floor){
 		this.floor = floor;
 	}
 	
 	/**
-	 * Devuelve el tamanno
-	 * @return Tamanno
+	 * Devuelve el tama&ntilde;o.
+	 * @return tama&ntilde;o
 	 */
 	public String getSize(){
 		return size;
 	}
 	
 	/**
-	 * Establece el tamanno
+	 * Establece el tama&ntilde;o.
 	 * 
-	 * @param size Tamanno
+	 * @param size tama&ntilde;o
 	 */
 	public void setSize(String size){
 		this.size = size;
 	}
 	
 	/**
-	 * Devuelve el trafico
+	 * Devuelve el tr&aacute;fico.
 	 * 
-	 * @return Trafico
+	 * @return tr&aacute;fico
 	 */
 	public String getTraffic(){
 		return traffic;
 	}
 	
 	/**
-	 * Establece el trafico
+	 * Establece el tr&aacute;fico.
 	 * 
-	 * @param traffic 
+	 * @param traffic tr&aacute;fico
 	 */
 	public void setTraffic(String traffic){
 		this.traffic = traffic;
 	}
 	
 	/**
-	 * Devulve el estado
+	 * Devulve el estado.
 	 * 
 	 * @return the state
 	 */
@@ -305,7 +305,7 @@ public class People{
 	}
 
 	/**
-	 * Establece el estado
+	 * Establece el estado.
 	 * 
 	 * @param state the state to set
 	 */
@@ -314,7 +314,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve la idAssigned
+	 * Devuelve la idAssigned.
 	 * 
 	 * @return the idAssigned
 	 */
@@ -323,7 +323,7 @@ public class People{
 	}
 
 	/**
-	 * Establece la idAssigned
+	 * Establece la idAssigned.
 	 * 
 	 * @param idAssigned the idAssigned to set
 	 */
@@ -332,7 +332,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve el usuario
+	 * Devuelve el usuario.
 	 * 
 	 * @return the user
 	 */
@@ -341,7 +341,7 @@ public class People{
 	}
 
 	/**
-	 * Establece el usuario
+	 * Establece el usuario.
 	 * 
 	 * @param user the user to set
 	 */
@@ -350,7 +350,7 @@ public class People{
 	}
 
 	/**
-	 * Devuelve si es atendido
+	 * Devuelve si es atendido.
 	 * 
 	 * @return the atendido
 	 */
@@ -359,7 +359,7 @@ public class People{
 	}
 
 	/**
-	 * Establece si es atendido
+	 * Establece si es atendido.
 	 * 
 	 * @param atendido the atendido to set
 	 */

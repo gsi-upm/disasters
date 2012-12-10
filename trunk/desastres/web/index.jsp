@@ -25,9 +25,9 @@
 			<link type="text/css" rel="stylesheet" href="css/tab-view.css"/>
 			<link type="text/css" rel="stylesheet" href="css/jqModal.css"/>
 			<script type="application/javascript" src="js/i18n.js"></script>
-			<script type="application/javascript" src="js/jquery-1.7.2.min.js"></script>
+			<script type="application/javascript" src="js/jquery-1.8.3.min.js"></script>
 			<!--<script type="application/javascript" src="js/ajax-pushlet-client.js"></script>-->
-			<script type="application/javascript" src="https://maps.google.com/maps/api/js?v=3.8&amp;sensor=true&amp;region=ES"></script>
+			<script type="application/javascript" src="https://maps.google.com/maps/api/js?v=3.10&amp;sensor=true&amp;region=ES"></script>
 			<script type="application/javascript">
 				var userName = '${usuario.nombre}';
 				var usuario_actual = ${usuario.id};
@@ -45,7 +45,7 @@
 			<!--Hora y Fecha -->
 			<script type="application/javascript" src="js/hora_fecha.js"></script>
 			<!-- Formularios, parte grafica y logica -->
-			<!--<script type="application/javascript" src="js/ajax.js"></script>-->
+			<script type="application/javascript" src="js/tw-sack.js"></script>
 			<script type="application/javascript" src="js/tab-view.js"></script>
 			<script type="application/javascript" src="js/forms.js"></script>
 			<!-- jqModal Dependencies -->

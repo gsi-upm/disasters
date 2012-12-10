@@ -20,8 +20,8 @@ function verMas(id){
 	var complete = evento.nombre + '<br/>' + evento.info + '<br/>' +evento.descripcion + '<br/>Direccion: ' + evento.direccion + '<br/>';
 	var links;
 	if(nivelMsg > 1){
-		links = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo)">Modificar</span>' + ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo)">Eliminar</span>' + ' - ' +
+		links = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], DEFINITIVO)">Modificar</span>' + ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], DEFINITIVO)">Eliminar</span>' + ' - ' +
 			'<span id="ver_menos" class="pulsable azul" onclick="verMenos(' + evento.id + ')">Ver menos</span>';
 	}else{
 		links = '<span id="ver_menos" class="pulsable azul" onclick="verMenos(' + evento.id + ')">Ver menos</span>';
@@ -34,8 +34,8 @@ function verMenos(id){
 	var small = evento.nombre + '<br/>' + evento.descripcion;
 	var links;
 	if(nivelMsg > 1){
-		links = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], definitivo)">Modificar</span>' + ' - ' +
-			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], definitivo)">Eliminar</span>' + ' - ' +
+		links = '<span id="modificar" class="pulsable azul" onclick="cargarModificar(marcadores_definitivos[' + evento.id + '], DEFINITIVO)">Modificar</span>' + ' - ' +
+			'<span id="eliminar" class="pulsable azul" onclick="eliminar(marcadores_definitivos[' + evento.id + '], DEFINITIVO)">Eliminar</span>' + ' - ' +
 			'<span id="ver_mas" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
 	}else{
 		links = '<span id="ver_mas" class="pulsable azul" onclick="verMas(' + evento.id + ');return false;">Ver m&aacute;s</span>';
@@ -140,7 +140,7 @@ function guardar_asociacion(idEvento, idRecurso){
 	else if(recurso.tipo == 'dead'){nueva_latitud=latitud+0.00005; nueva_longitud=longitud+0.0001;}
 
 	// actualizar las modificaciones con el metodo modificar
-	caracter_temp = definitivo;
+	caracter_temp = DEFINITIVO;
 	puntero_temp = recurso;
 	modificar(idRecurso, recurso.cantidad, recurso.nombre, recurso.descripcion, 'Asociado a ' + evento.nombre + '. ' + recurso.info,
 		nueva_latitud, nueva_longitud, evento.direccion, recurso.size, recurso.traffic, recurso.estado, idEvento);

@@ -5,13 +5,15 @@ import disasters.desastres.Environment;
 import jadex.bdi.runtime.Plan;
 
 /**
- * Plan del POLICIA para mover de forma aleatoria un agente.
- * @author Nuria Siguero y Juan Luis Molina
+ * Plan del POLIC&Iacute;A para mover de forma aleatoria un agente.
+ * 
+ * @author Nuria Siguero
+ * @author Juan Luis Molina Nogales
  */
 public class PatrullaPlan extends Plan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.</br>
 	 * Falta mover el agente a esa posicion.
 	 */
 	public void body(){
