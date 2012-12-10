@@ -1,18 +1,27 @@
 package disasters.otros;
 
-import jadex.base.fipa.SFipa;
 import jadex.bdi.runtime.*;
+import jadex.bridge.fipa.SFipa;
 //import roads.*;
 
+/**
+ * Moving plan.
+ */
 public class MovingPlan extends Plan{
     //Plan attributes.
     //DirectionsBean dirn;
 
-    public MovingPlan(){
+	/**
+	 * Constructor.
+	 */
+	public MovingPlan(){
         // Initialization code.
         System.out.println("Created: " + this);
     }
 
+	/**
+	 * Cuerpo del plan.
+	 */
     public void body(){
         //Plan code.
         while(true){

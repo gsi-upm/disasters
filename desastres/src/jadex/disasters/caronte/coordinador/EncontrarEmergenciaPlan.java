@@ -10,14 +10,15 @@ import org.json.me.*;
 /**
  * Plan del coordinador de emergencias para encontrar emergencias.
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  *
  */
 public class EncontrarEmergenciaPlan extends CarontePlan{
+	/** Intentos m&aacute;ximos. */
 	private final int MAX = 8;
 	
 	/**
-	 * Cuerpo del plan.
+	 * Cuerpo del plan EncontrarEmergencia.
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
@@ -88,9 +89,9 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	}
 	
 	/**
-	 * Busca un evento para atender entre las emergencias y heridos.
+	 * Busca un evento para atender entre las emergencias.
 	 * 
-	 * @param env Entorno
+	 * @param env entorno
 	 */
 	private Disaster buscarEventos(Entorno env){
 		Disaster atender = null;
@@ -126,9 +127,9 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	}
 	
 	/**
-	 * Busca un evento para atender entre las emergencias y heridos.
+	 * Busca un evento para atender entre los heridos.
 	 * 
-	 * @param env Entorno
+	 * @param env entorno
 	 */
 	private People buscarHeridos(Entorno env){
 		People atender = null;
@@ -152,11 +153,11 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	}
 	
 	/**
-	 * Comprueba si un nuevo desastre es mas grave que el anterior guardado.
+	 * Comprueba si un nuevo desastre es m&aacute;s grave que el anterior guardado.
 	 * 
-	 * @param compruebo Desastre que compruebo
-	 * @param atendiendo Desastre que hasta ahora era el mas grave
-	 * @return True si es mas grave 
+	 * @param compruebo desastre que compruebo
+	 * @param atendiendo desastre que hasta ahora era el m&aacute;s grave
+	 * @return <code>true</code> si es m&aacute;s grave 
 	 */
 	private boolean masGrave(Disaster compruebo, Disaster atendiendo){
 		boolean masGrave = false;
@@ -171,11 +172,11 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	}
 	
 	/**
-	 * Comprueba si un nuevo herido es mas grave que el anterior guardado.
+	 * Comprueba si un nuevo herido es m&aacute;s grave que el anterior guardado.
 	 * 
-	 * @param compruebo Heridos que compruebo
-	 * @param atendiendo Heridos que hasta ahora era el mas grave
-	 * @return True si es mas grave 
+	 * @param compruebo heridos que compruebo
+	 * @param atendiendo heridos que hasta ahora era el &aacute;s grave
+	 * @return <code>true</code> si es m&aacute;s grave 
 	 */
 	private boolean masGrave(People compruebo, People atendiendo){
 		boolean masGrave = false;
@@ -189,11 +190,11 @@ public class EncontrarEmergenciaPlan extends CarontePlan{
 	}
 	
 	/**
-	 * Busca al director de actuacion.
+	 * Busca al director de actuaci&oacute;n.
 	 * 
-	 * @param env Entorno
-	 * @param des Emergencia
-	 * @return Director de actuacion
+	 * @param env entorno
+	 * @param des emergencia
+	 * @return director de actuaci&oacute;n
 	 */
 	private Resource directorActuacion(Entorno env, Disaster des){
 		Resource directorActuacion = null;

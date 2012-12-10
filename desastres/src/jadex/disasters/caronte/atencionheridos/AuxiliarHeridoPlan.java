@@ -5,15 +5,15 @@ import disasters.caronte.*;
 import java.util.*;
 
 /**
- * Plan de recomendacion para atender a un herido.
+ * Plan de recomendaci&oacute;n para auxiliar a un herido.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class AuxiliarHeridoPlan extends CarontePlan{
 	private final int MAX = 8;
 	
 	/**
-	 * Cuerpo del plan AvisarAgentes.
+	 * Cuerpo del plan AuxiliarHerido.
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();

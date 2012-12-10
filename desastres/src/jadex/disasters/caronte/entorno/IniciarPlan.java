@@ -7,14 +7,14 @@ import java.util.Date;
 import org.json.me.*;
 
 /**
- * Clase para modelar el entorno, proporcionando metodos para interactuar con el.
+ * Clase para modelar el entorno, proporcionando metodos para interactuar con &eacute;l.
  * 
  * @author aebeda
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class IniciarPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan.
+	 * Cuerpo del plan Iniciar.
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();
@@ -34,7 +34,7 @@ public class IniciarPlan extends CarontePlan{
 			String actis = Connection.connect(Entorno.URL + "activities");
 			JSONArray actividades = new JSONArray(actis);
 
-			getBeliefbase().getBelief("fecha").setFact(new Timestamp(new Date().getTime()).toString());
+			getBeliefbase().getBelief("fecha").setFact(new Timestamp(new Date().getTime()));
 
 			// Por cada desastre:
 			for(int i = 0; i < desastres.length(); i++){

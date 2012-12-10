@@ -4,15 +4,15 @@ import disasters.*;
 import disasters.desastres.Environment;
 
 /**
- * Es fundamental la primera evaluacion de la gravedad por parte de los medicos o personal sanitario
+ * Es fundamental la primera evaluaci&oacute;n de la gravedad por parte de los m&eacute;dicos o personal sanitario.
  *
- * @author Juan Luis Molina y Olimpia Hernandez
- *
+ * @author Juan Luis Molina Nogales
+ * @author Olimpia Hern&aacute;ndez
  */
 public class RecogerHeridosPlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos

@@ -4,18 +4,18 @@ import disasters.*;
 import disasters.desastres.Environment;
 
 /**
- * Primeros auxilios sobre aquellas victimas que necesiten de una accion inmediata.
- * En cuanto se estabilicen, se debe producir su traslado inmediato
+ * Primeros auxilios sobre aquellas v&iacute;ctimas que necesiten de una acci&oacute;n inmediata.</br>
+ * En cuanto se estabilicen, se debe producir su traslado inmediato.
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class EstabilizacionVictimasPlan extends EnviarMensajePlan{
 	
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
-		// Obtenemos un objeto de la clase Environment para poder usar susmetodos
+		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		int idDes = env.getTablon();

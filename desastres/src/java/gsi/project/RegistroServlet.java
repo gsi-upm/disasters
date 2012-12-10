@@ -7,8 +7,9 @@ import javax.servlet.http.*;
 import security.HashAlgorithm;
 
 /**
- *
- * @author Juan Luis Molina
+ * Servlet para registrar un nuevo usuario.
+ * 
+ * @author Juan Luis Molina Nogales
  */
 public class RegistroServlet extends HttpServlet{
 

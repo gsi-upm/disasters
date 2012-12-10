@@ -1,13 +1,12 @@
 package disasters.caronte.coordinador;
 
-import disasters.Association;
 import disasters.caronte.*;
 import disasters.caronte.ontology.*;
 
 /**
  * Plan para avisar a los agentes.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class AvisarAgentesPlan extends CarontePlan{
 	/**

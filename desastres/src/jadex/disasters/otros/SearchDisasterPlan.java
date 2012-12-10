@@ -6,12 +6,15 @@ import jadex.bdi.runtime.*;
 import java.util.*;
 
 /** 
- *
+ * Search disaster plan.
  */
 public class SearchDisasterPlan extends Plan{
+	/** Environment. */
+    private Environment env;
 
-    Environment env;
-
+	/**
+	 * Cuerpo del plan.
+	 */
     public void body(){
         // Obtenemos un objeto de la clase entorno para poder usar sus metodos.
         env = (Environment)getBeliefbase().getBelief("env").getFact();
@@ -22,8 +25,8 @@ public class SearchDisasterPlan extends Plan{
     }
 
     /**
-     * Iterates through the disasters, looking for unattended ones. When one is found,
-     * a new goal is created to expand it.
+     * Iterates through the disasters, looking for unattended ones.
+	 * When one is found, a new goal is created to expand it.
      */
     private synchronized void checkDisasters(){
         Iterator it = env.getEvents().entrySet().iterator();

@@ -9,14 +9,14 @@ import java.util.Random;
 /**
  * Calcula diferentes tipos de hash para un texto.
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class HashAlgorithm{
 	/**
 	 * Devuelde el hash MD5.
 	 * 
-	 * @param valor Texto normal
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @return texto codificado
 	 */
 	public static String MD5(String valor){
 		return Hash(valor, "", "MD5");
@@ -25,9 +25,9 @@ public class HashAlgorithm{
 	/**
 	 * Devuelde el hash MD5.
 	 * 
-	 * @param valor Texto normal
-	 * @param sal Sal para el texto
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @param sal sal para el texto
+	 * @return texto codificado
 	 */
 	public static String MD5(String valor, String sal){
 		return Hash(valor, sal, "MD5");
@@ -36,8 +36,8 @@ public class HashAlgorithm{
 	/**
 	 * Devuelde el hash SHA-1.
 	 * 
-	 * @param valor Texto normal
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @return texto codificado
 	 */
 	public static String SHA1(String valor){
 		return Hash(valor, "", "SHA-1");
@@ -46,9 +46,9 @@ public class HashAlgorithm{
 	/**
 	 * Devuelde el hash SHA-1.
 	 * 
-	 * @param valor Texto normal
-	 * @param sal Sal para el texto
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @param sal sal para el texto
+	 * @return texto codificado
 	 */
 	public static String SHA1(String valor, String sal){
 		return Hash(valor, sal, "SHA-1");
@@ -57,8 +57,8 @@ public class HashAlgorithm{
 	/**
 	 * Devuelde el hash SHA-256.
 	 * 
-	 * @param valor Texto normal
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @return texto codificado
 	 */
 	public static String SHA256(String valor){
 		return Hash(valor, "", "SHA-256");
@@ -67,9 +67,9 @@ public class HashAlgorithm{
 	/**
 	 * Devuelde el hash SHA-256.
 	 * 
-	 * @param valor Texto normal
-	 * @param sal Sal para el texto
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @param sal sal para el texto
+	 * @return texto codificado
 	 */
 	public static String SHA256(String valor, String sal){
 		return Hash(valor, sal, "SHA-256");
@@ -78,8 +78,8 @@ public class HashAlgorithm{
 	/**
 	 * Devuelde el hash SHA-512.
 	 * 
-	 * @param valor Texto normal
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @return texto codificado
 	 */
 	public static String SHA512(String valor){
 		return Hash(valor, "", "SHA-512");
@@ -88,9 +88,9 @@ public class HashAlgorithm{
 	/**
 	 * Devuelde el hash SHA-512.
 	 * 
-	 * @param valor Texto normal
-	 * @param sal Sal para el texto
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @param sal sal para el texto
+	 * @return texto codificado
 	 */
 	public static String SHA512(String valor, String sal){
 		return Hash(valor, sal, "SHA-512");
@@ -101,13 +101,13 @@ public class HashAlgorithm{
 	 * 
 	 * IMPORTANTE!!
 	 * Si se modifica el modo de insertar la sal
-	 * o si se agrega un valor fijo a la encriptacion
-	 * hay que cambiar las contrasennas de la base de datos.
+	 * o si se agrega un valor fijo a la encriptaci&oacute;n
+	 * hay que cambiar las contrase&ntilde;as de la base de datos.
 	 * 
-	 * @param valor Texto normal
-	 * @param sal Sal para el texto
-	 * @param tipo Tipo de algoritmo
-	 * @return Texto codificado
+	 * @param valor texto normal
+	 * @param sal sal para el texto
+	 * @param tipo tipo de algoritmo
+	 * @return texto codificado
 	 */
 	private static String Hash(String valor, String sal, String tipo){
 		String hash = "";
@@ -129,10 +129,10 @@ public class HashAlgorithm{
 	}
 	
 	/**
-	 * Genera un texto pseudoaleatorio para agregar a la contrasenna.
+	 * Genera un texto pseudoaleatorio para agregar a la contrase&ntilde;a.
 	 * 
-	 * @param longitud Longitud del texto
-	 * @return Texto aleatorio
+	 * @param longitud longitud del texto
+	 * @return texto aleatorio
 	 */
 	public static String newSalt(int longitud){
 		Random rnd = new Random(new Date().getTime());

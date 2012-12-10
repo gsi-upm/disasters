@@ -5,14 +5,18 @@ import disasters.caronte.Entorno;
 import org.json.me.*;
 
 /**
- * Plan de GEROCULTOR
+ * Plan de GEROCULTOR.
  *
- * @author Lorena Lopez Lebon y Juan Luis Molina
+ * @author Lorena L&oacute;pez Leb&oacute;n
+ * @author Juan Luis Molina Nogales
  */
 public class EvacuarResidenciaPlan extends EnviarMensajePlan{
 
 	Entorno env;
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		Position posResi = (Position)getBeliefbase().getBelief("residencia").getFact();
@@ -69,9 +73,10 @@ public class EvacuarResidenciaPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 *
-	 * @param persona Persona a evacuar
-	 * @param dir Accion: 0=sacar, 1=meter
+	 * Evacuar una persona.
+	 * 
+	 * @param persona persona a evacuar
+	 * @param dir accion: 0=sacar, 1=meter
 	 */
 	private void evacuar(JSONObject persona, int dir){
 		double dif1 = 0.0;

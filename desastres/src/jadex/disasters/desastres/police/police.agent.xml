@@ -4,13 +4,13 @@
   Agente que patrulla y acude a los desastres en Calasparra
 -->
 <agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.0.xsd"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-bdi-2.2.xsd"
 	name="police" package="disasters.desastres.police">
 
 	<imports>
 		<import>disasters.*</import>
-		<import>disasters.desastres.Environment</import>
-		<import>jadex.base.fipa.SFipa</import>
+		<import>disasters.desastres.*</import>
+		<import>jadex.bridge.fipa.SFipa</import>
 	</imports>
 
 	<beliefs>

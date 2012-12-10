@@ -1,16 +1,17 @@
 package disasters.caronte.atencionheridos;
 
-import disasters.caronte.CarontePlan;
+import disasters.caronte.*;
 import disasters.caronte.ontology.*;
 import jadex.bdi.runtime.IGoal;
 
 /**
- *
+ * Plan de recomendaci&oacute;n para evaluar a un herido.
+ * 
  * @author Juan Luis Molina Nogales
  */
 public class EvaluarHeridoPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan.
+	 * Cuerpo del plan EvaluarHerido.
 	 */
 	public void body(){
 		Object msg = enviarRespuestaObjeto("ack_atender_herido", "OK");

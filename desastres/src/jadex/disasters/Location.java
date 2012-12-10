@@ -7,19 +7,19 @@ package disasters;
  * @author aebeda
  */
 public class Location{
-	/** Nombre */
+	/** Nombre. */
 	private String name;
-	/** Esquina superior derecha */
+	/** Esquina superior derecha. */
 	private Position esd;
-	/** Esquina inferior izquierda */
+	/** Esquina inferior izquierda. */
 	private Position eii;
 	
 	/**
-	 * Constructor de localidad
+	 * Constructor de localidad.
 	 * 
-	 * @param name Nombre
-	 * @param esd Esquina superior derecha
-	 * @param eii Esquina inferior izquierda
+	 * @param name nombre
+	 * @param esd esquina superior derecha
+	 * @param eii esquina inferior izquierda
 	 */
 	public Location(String name, Position esd, Position eii){
 		this.name = name;
@@ -28,27 +28,27 @@ public class Location{
 	}
 	
 	/**
-	 * Getter del nombre
+	 * Getter del nombre.
 	 * 
-	 * @return Nombre
+	 * @return nombre
 	 */
 	public String getName(){
 		return name;
 	}
 
 	/**
-	 * Getter de la esquina superior derecha
+	 * Getter de la esquina superior derecha.
 	 * 
-	 * @return Esquina superior derecha
+	 * @return esquina superior derecha
 	 */
 	public Position getESD(){
 		return esd;
 	}
 
 	/**
-	 * Getter de la esquin inferior izquierda
+	 * Getter de la esquina inferior izquierda.
 	 * 
-	 * @return Esquina inferior izquierda
+	 * @return esquina inferior izquierda
 	 */
 	public Position getEII(){
 		return eii;

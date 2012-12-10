@@ -5,15 +5,15 @@ import disasters.caronte.*;
 import java.util.*;
 
 /**
- * Plan de recomendacion para apagar un incendio.
+ * Plan de recomendaci&oacute;n para apagar un incendio.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class ApagarIncendioPlan extends CarontePlan{
 	private final int MAX = 8;
 	
 	/**
-	 * Cuerpo del plan AvisarAgentes.
+	 * Cuerpo del plan ApagarIncendio.
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();

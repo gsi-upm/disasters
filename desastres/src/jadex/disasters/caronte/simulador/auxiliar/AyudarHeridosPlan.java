@@ -2,18 +2,18 @@ package disasters.caronte.simulador.auxiliar;
 
 import disasters.*;
 import disasters.caronte.Entorno;
+import disasters.caronte.simulador.ontology.Desastre;
 import jadex.bdi.runtime.IGoal;
 
 /**
- * Plan de AUXILIAR
+ * Plan de AUXILIAR.
  * 
- * @author Juan Luis Molina
- * 
+ * @author Juan Luis Molina Nogales
  */
 public class AyudarHeridosPlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Entorno para poder usar sus metodos
@@ -69,9 +69,10 @@ public class AyudarHeridosPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 *
-	 * @param des Desastre
-	 * @return Herido
+	 * Coge un herido.
+	 * 
+	 * @param des desastre
+	 * @return herido
 	 */
 	private People getHerido(Disaster des){
 		People herido = null;

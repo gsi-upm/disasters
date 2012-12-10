@@ -8,19 +8,15 @@ import java.util.*;
 /**
  * Plan del coordinador de emergencias para avisar al centro de emergencias.
  *
- * @author Juan Luis Molina
- *
+ * @author Juan Luis Molina Nogales
  */
 public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 
-	/**
-	 * Cuerpo del plan.
-	 */
 	private Disaster desastreAtendido;
 	private Disaster desastreEvaluado;
 
 	/**
-	 * 
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase entorno para poder usar sus metodos
@@ -68,9 +64,10 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	}
 
 	/**
+	 * Encuentra un desastre.
 	 * 
-	 * @param env
-	 * @return 
+	 * @param env entorno
+	 * @return desastre
 	 */
 	private Disaster findDisaster(Entorno env){
 		//System.out.println("OO coordinador: Comenzamos a buscar la emergencia mas grave...");
@@ -163,8 +160,9 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 * Devuelve true si hemos encontrado otro mas grave
-	 * @return 
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
 	 */
 	private boolean compruebaGrave(){
 		if(desastreAtendido.getSerious() != null && desastreEvaluado.getSerious() != null){
@@ -200,8 +198,9 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 * Devuelve true si hemos encontrado otro mas grave
-	 * @return 
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
 	 */
 	private boolean compruebaAtrapado(){
 		if(desastreAtendido.getTrapped() != null && desastreEvaluado.getTrapped() != null){
@@ -237,8 +236,9 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 * Devuelve true si hemos encontrado otra mas grave
-	 * @return 
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
 	 */
 	private boolean compruebaLeve(){
 		if(desastreAtendido.getSlight() != null && desastreEvaluado.getSlight() != null){
@@ -274,8 +274,9 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	}
 
 	/**
-	 * Devuelve true si hemos encontrado otra mas grave
-	 * @return 
+	 * Devuelve <code>true</code> si hemos encontrado otro m&aacute;s grave.
+	 * 
+	 * @return <code>true</code> si hemos encontrado otro m&aacute;s grave
 	 */
 	private boolean compruebaMuerto(){
 		if(desastreAtendido.getDead() != null && desastreEvaluado.getDead() != null){
@@ -311,10 +312,11 @@ public class EncontrarEmergenciaPlan extends EnviarMensajePlan{
 	}
 
 	/**
+	 * Devuelve un agente.
 	 * 
-	 * @param env
-	 * @param tipo
-	 * @return 
+	 * @param env entorno
+	 * @param tipo tipo
+	 * @return agente
 	 */
 	private String giveMeAgent(Entorno env, String tipo){
 		Iterator it = env.getAgents().entrySet().iterator();

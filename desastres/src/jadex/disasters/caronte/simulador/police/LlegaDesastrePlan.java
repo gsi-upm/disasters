@@ -2,17 +2,19 @@ package disasters.caronte.simulador.police;
 
 import disasters.*;
 import disasters.caronte.Entorno;
+import disasters.caronte.simulador.ontology.Desastre;
 
 /**
- * Plan de la POLICIA
+ * Plan de la POLIC&Iacute;A.
  * 
- * @author Nuria y Juan Luis Molina
+ * @author Nuria Siguero
+ * @author Juan Luis Molina Nogales
  * 
  */
 public class LlegaDesastrePlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		//Obtenemos un objeto de la clase Entorno para poder usar sus metodos

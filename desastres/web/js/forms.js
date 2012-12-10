@@ -53,7 +53,7 @@ function cambiaIcono(marcador, tipo, cantidad){
 			document.getElementById('cantidad').style.display = 'block';
 		}else{
 			document.getElementById('cantidad').style.display = 'none';
-			if(proyecto == 'caronte'){
+			if(PROYECTO == 'caronte'){
 				document.getElementById('heridos').cantidad.value = 1;
 			}
 		}

@@ -1,15 +1,15 @@
 package disasters.caronte.evacuacion;
 
-import disasters.caronte.CarontePlan;
+import disasters.caronte.*;
 
 /**
- * Plan de recomendacion para evacuar la residencia.
+ * Plan de recomendaci&oacute;n para evacuar la residencia.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class EvacuarResidenciaPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan AvisarAgentes.
+	 * Cuerpo del plan EvacuarResidencia.
 	 */
 	public void body(){
 		

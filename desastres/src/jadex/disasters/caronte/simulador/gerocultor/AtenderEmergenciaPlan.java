@@ -2,18 +2,18 @@ package disasters.caronte.simulador.gerocultor;
 
 import disasters.*;
 import disasters.caronte.Entorno;
+import disasters.caronte.simulador.ontology.Desastre;
 import jadex.bdi.runtime.IGoal;
 
 /**
- * Plan de GEROCULTOR
+ * Plan de GEROCULTOR.
  * 
- * @author Juan Luis Molina
- * 
+ * @author Juan Luis Molina Nogales
  */
 public class AtenderEmergenciaPlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body() {
 		// Obtenemos un objeto de la clase Entorno para poder usar sus metodos

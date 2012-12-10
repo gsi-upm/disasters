@@ -32,7 +32,7 @@ function registrar(user, pass1, pass2, nombre, email){
 				}
 			});
 		}else{
-			document.getElementById('passError').innerHTML = 'CONTRASEÑAS DISTINTAS!';
+			document.getElementById('passError').innerHTML = 'CONTRASE&Ntilde;AS DISTINTAS!';
 			document.getElementById('pass1').style.color = 'red';
 			document.getElementById('pass2').style.color = 'red';
 		}
@@ -43,7 +43,7 @@ function registrar(user, pass1, pass2, nombre, email){
 		if(nombre == '') document.getElementById('nombre').style.color = 'red';
 		if(email == '') document.getElementById('email').style.color = 'red';
 		if(pass1 != pass2){
-			document.getElementById('passError').innerHTML = 'CONTRASEÑAS DISTINTAS!';
+			document.getElementById('passError').innerHTML = 'CONTRASE&Ntilde;AS DISTINTAS!';
 			document.getElementById('pass1').style.color = 'red';
 			document.getElementById('pass2').style.color = 'red';
 		}

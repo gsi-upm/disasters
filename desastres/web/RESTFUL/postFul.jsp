@@ -7,7 +7,7 @@
 <%@include file="../jspf/database.jspf"%>
 
 <c:set var="number">
-	<jsp:scriptlet>
+	<%
 		String quantity = request.getParameter("quantity");
 		if(quantity == null || quantity.equals("0")){
 			quantity = "1";
@@ -19,10 +19,10 @@
 			number = 1;
 		}
 		out.print(number);
-	</jsp:scriptlet>
+	%>
 </c:set>
 <c:set var="idAssigned">
-	<jsp:scriptlet>
+	<%
 		String assignment = request.getParameter("idAssigned");
 		if(assignment == null){
 			assignment = "0";
@@ -34,10 +34,10 @@
 			id = 0;
 		}
 		out.print(id);
-	</jsp:scriptlet>
+	%>
 </c:set>
 <c:set var="floor">
-	<jsp:scriptlet>
+	<%
 		String planta = request.getParameter("floor");
 		if(planta == null){
 			planta = "-2";
@@ -49,7 +49,7 @@
 			floor = -2;
 		}
 		out.print(floor);
-	</jsp:scriptlet>
+	%>
 </c:set>
 <c:choose>
 	<c:when test="${param.latitud == null || param.longitud == null}">
@@ -70,17 +70,20 @@
 	</c:when>
 	<c:otherwise>
 		<c:choose>
-			<c:when test="${param.type=='fire'||param.type=='flood'||param.type=='collapse'||param.type=='lostPerson'||param.type=='injuredPerson'}">
+			<c:when test="${param.type == 'fire' || param.type == 'flood' || param.type == 'collapse' ||
+					param.type == 'lostPerson' || param.type == 'injuredPerson'}">
 				<c:set var="item" value="event"/>
 			</c:when>
-			<c:when test="${param.type=='police'||param.type=='firemen'||param.type=='ambulance'||param.type=='ambulancia'||
-					param.type=='nurse'||param.type=='gerocultor'||param.type=='assistant'||param.type=='otherStaff'||param.type=='citizen'}">
+			<c:when test="${param.type == 'police' || param.type == 'firemen' || param.type == 'ambulance' ||
+					param.type=='ambulancia'|| param.type=='nurse' || param.type == 'gerocultor' ||
+					param.type == 'assistant' || param.type == 'otherStaff' || param.type == 'citizen'}">
 				<c:set var="item" value="resource"/>
 			</c:when>
-			<c:when test="${param.type=='slight'||param.type=='serious'||param.type=='dead'||param.type=='trapped'||param.type=='healthy'}">
+			<c:when test="${param.type == 'slight' || param.type == 'serious' || param.type == 'dead'||
+					param.type == 'trapped' || param.type == 'healthy'}">
 				<c:set var="item" value="people"/>
 			</c:when>
-			<c:when test="${param.type=='user'}">
+			<c:when test="${param.type == 'user'}">
 				<c:set var="item" value="user"/>
 			</c:when>
 			<c:otherwise>

@@ -4,12 +4,15 @@ import disasters.caronte.Entorno;
 import jadex.bdi.runtime.Plan;
 
 /**
- * Plan de ENFERMERO
+ * Plan de ENFERMERO.
  *
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class ReponerMaterialPlan extends Plan{
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 		

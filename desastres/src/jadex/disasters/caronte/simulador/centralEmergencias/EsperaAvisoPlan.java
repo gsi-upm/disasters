@@ -3,10 +3,9 @@ package disasters.caronte.simulador.centralEmergencias;
 import jadex.bdi.runtime.Plan;
 
 /**
- * Plan
+ * Plan de la CENTRAL DE EMERGENCIAS.
  *
- * @author Juan Luis Molina
- *
+ * @author Juan Luis Molina Nogales
  */
 public class EsperaAvisoPlan extends Plan{
 

@@ -1,22 +1,24 @@
 package gsi.rest;
 
 import gsi.project.Constantes;
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
 /**
- * Class used to connect to websites
- * @author julio camarero
+ * Class used to connect to websites.
+ * 
+ * @author Julio Camarero
  * @version 1.0
  */
 public class Connection{
+	/** URL base. */
 	public static final String URL_BASE = "http://localhost:" + Constantes.SERVER_PORT + "/" + Constantes.PROJECT + "/rest/";
 
 	/**
+     * Makes a connection.
+	 * 
      * @param source URL to connect
      * @return String with the response from the URL
-     *
-     * Makes a connection
      */
     public static String connect(String source){
         try{
@@ -44,7 +46,9 @@ public class Connection{
     }
 
     /**
-     * Test to try this class
+     * Test to try this class.
+	 * 
+	 * @param args argumentos (no se usa)
      */
     public static void main(String[] args){
         try{
@@ -59,7 +63,7 @@ public class Connection{
             URL yahoo8 = new URL(URL_BASE + "post/type=ambulance&name=SAMUR&info=Coche+115-F&description=Servicio+de+Urgencia&address=Plaza+del+Encuentro,1,madrid&latitud=40.416878&longitud=-3.703748");
             URL yahoo9 = new URL(URL_BASE + "post/type=ambulance&address=burgos");
             URLConnection yahooConnection = yahoo8.openConnection();
-            //DataInputStream dis = new DataInputStream(yahooConnection.getInputStream());
+            // DataInputStream dis = new DataInputStream(yahooConnection.getInputStream());
             String inputLine;
             StringBuffer buff = new StringBuffer();
 

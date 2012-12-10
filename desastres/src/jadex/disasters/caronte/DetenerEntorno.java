@@ -3,13 +3,14 @@ package disasters.caronte;
 import jadex.bdi.runtime.Plan;
 
 /**
- *
- * @author Juan Luis Molina
+ * Detiene el entorno.
+ * 
+ * @author Juan Luis Molina Nogales
  */
 public class DetenerEntorno extends Plan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public synchronized void body(){
 		Entorno.clearInstance();

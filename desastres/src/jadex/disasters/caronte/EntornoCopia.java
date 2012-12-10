@@ -11,7 +11,7 @@ import org.json.me.*;
  * Clase para modelar el entorno, proporcionando metodos para interactuar con el.
  * 
  * @author aebeda
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class EntornoCopia{
 	/** URL para REST. */
@@ -82,6 +82,7 @@ public class EntornoCopia{
 	public static final List<String> AGENTES = Arrays.asList(new String[]{
 		ENFERMERO, CELADOR, GEROCULTOR, AUXILIAR, RECEPCIONISTA,
 		OTRO_PERSONAL, CIUDADANO, AMBULANCIA, BOMBERO, POLICIA});
+	/**  */
 	public static final List<String> COMPONENTES2 = Arrays.asList(new String[]{
 		COORDINADOR_EMERGENCIAS, CENTRAL_EMERGENCIAS});
 
@@ -465,6 +466,7 @@ public class EntornoCopia{
 	 * @param tipo Tipo
 	 * @param nombre Nombre
 	 * @param pos Posicion
+	 * @param agentId 
 	 * @return Instancia de entorno
 	 */
 	public static Entorno getInstance(String tipo, String nombre, Position pos, IComponentIdentifier agentId){
@@ -810,7 +812,7 @@ public class EntornoCopia{
 	/**
 	 * Establece la emergencia que se debe atender.
 	 * 
-	 * @param tablon the tablon to set
+	 * @param idEmergencia the tablon to set
 	 */
 	public void setTablonEventos(int idEmergencia){
 		tablonEventos.add(idEmergencia);
@@ -819,7 +821,7 @@ public class EntornoCopia{
 	/**
 	 * Elimina la emergencia atendida.
 	 * 
-	 * @param tablon the tablon to remove
+	 * @param idEmergencia the tablon to remove
 	 */
 	public void removeTablonEventos(Integer idEmergencia){
 		tablonEventos.remove(idEmergencia);
@@ -838,7 +840,7 @@ public class EntornoCopia{
 	/**
 	 * Establece la emergencia que se debe atender.
 	 * 
-	 * @param tablon the tablon to set
+	 * @param idEmergencia the tablon to set
 	 */
 	public void setTablonHeridos(int idEmergencia){
 		tablonHeridos.add(idEmergencia);
@@ -847,13 +849,17 @@ public class EntornoCopia{
 	/**
 	 * Elimina la emergencia atendida.
 	 * 
-	 * @param tablon the tablon to remove
+	 * @param idEmergencia the tablon to remove
 	 */
 	public void removeTablonHeridos(Integer idEmergencia){
 		tablonHeridos.remove(idEmergencia);
 		tablonHeridos.trimToSize();
 	}
 	
+	/**
+	 * 
+	 * @return eventos sin atender
+	 */
 	public Disaster[] getEventosSin(){
 		HashMap<Integer,Disaster> disastersAux = (HashMap<Integer,Disaster>) disasters.clone();
 		ArrayList<Integer> tablonAux = (ArrayList<Integer>) tablonEventos.clone();
@@ -864,6 +870,10 @@ public class EntornoCopia{
 		return col.toArray(new Disaster[col.size()]);
 	}
 	
+	/**
+	 * 
+	 * @return heridos sin atender
+	 */
 	public People[] getHeridosSin(){
 		HashMap<Integer,People> peopleAux = (HashMap<Integer,People>) people.clone();
 		ArrayList<Integer> tablonAux = (ArrayList<Integer>) tablonHeridos.clone();
@@ -874,6 +884,12 @@ public class EntornoCopia{
 		return col.toArray(new People[col.size()]);
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @param equipo
+	 * @return <code>true</code> si es usado
+	 */
 	public synchronized boolean useResource(int id, String equipo){
 		boolean usado = usedResources.containsKey(id);
 		if(usado == false){
@@ -885,18 +901,34 @@ public class EntornoCopia{
 		return !usado;
 	}
 	
+	/**
+	 * 
+	 * @param id 
+	 */
 	public synchronized void leaveResource(int id){
 		usedResources.remove(id);
 	}
 	
+	/**
+	 * 
+	 * @param id 
+	 */
 	public synchronized void addInactiveResource(Integer id){
 		inactiveResources.add(id);
 	}
 	
+	/**
+	 * 
+	 * @param id 
+	 */
 	public synchronized void removeInactiveResource(Integer id){
 		inactiveResources.remove(id);
 	}
 	
+	/**
+	 * 
+	 * @return recursos libres
+	 */
 	public Resource[] getFreeResources(){
 		HashMap<Integer,Resource> recursosLibres = (HashMap<Integer,Resource>) resources.clone();
 		Integer[] keySet = usedResources.keySet().toArray(new Integer[usedResources.size()]);

@@ -2,17 +2,19 @@ package disasters.caronte.simulador.ambulance;
 
 import disasters.*;
 import disasters.caronte.Entorno;
+import disasters.caronte.simulador.ontology.Desastre;
 import org.json.me.*;
 
 /**
  * Plan de la AMBULANCIA para recoger heridos.
  *
- * @author Olimpia Hernandez y Juan Luis Molina
+ * @author Olimpia Hern&aacute;ndez
+ * @author Juan Luis Molina Nogales
  */
 public class RecogeHeridosPlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Entorno para poder usar sus metodos
@@ -97,6 +99,12 @@ public class RecogeHeridosPlan extends EnviarMensajePlan{
 		}
 	}
 
+	/**
+	 * Coge un herido.
+	 * 
+	 * @param des desastre
+	 * @return herido
+	 */
 	private People getHerido(Disaster des){
 		People herido = null;
 

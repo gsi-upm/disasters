@@ -4,15 +4,15 @@ import disasters.*;
 import disasters.desastres.Environment;
 
 /**
- * Plan de BOMBEROS
+ * Plan de BOMBEROS.
  * 
- * @author Ivan y Juan Luis Molina
- * 
+ * @author Iv&aacute;n Rojo
+ * @author Juan Luis Molina Nogales
  */
 public class BomberoEnDesastrePlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos

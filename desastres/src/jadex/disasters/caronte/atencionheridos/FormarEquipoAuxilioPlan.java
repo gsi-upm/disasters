@@ -6,11 +6,11 @@ import disasters.caronte.*;
 /**
  * Plan para formar el equipo de primeros auxilios.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class FormarEquipoAuxilioPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan AvisarAgentes.
+	 * Cuerpo del plan FormarEquipoAuxilio.
 	 */
 	public void body(){
 		Entorno env = (Entorno) getBeliefbase().getBelief("env").getFact();

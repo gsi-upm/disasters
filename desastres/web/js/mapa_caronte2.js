@@ -2,9 +2,9 @@ var centroAux = new Array();
 var puntoAux;
 
 /**
- * Obtiene las coordenadas del usuario y actualiza su posicion
+ * Obtiene las coordenadas del usuario y actualiza su posicion.
  * 
- * @param pos Posicion devuelta
+ * @param pos posicion devuelta
  */
 function coordenadasUsuario(pos){
 	var latitud = pos.coords.latitude.toFixed(6); // (38.523387 + (2*Math.random()-1)*0.0001).toFixed(6);
@@ -30,10 +30,10 @@ function coordenadasUsuario(pos){
 }
 
 /**
- * Indica el numero de agentes, emergencias y heridos en la residencia
+ * Indica el numero de agentes, emergencias y heridos en la residencia.
  * 
- * @param planta Planta de la residencia
- * @param inicio True si es la carga de inicio
+ * @param planta planta de la residencia
+ * @param inicio true si es la carga de inicio
  */
 function numeroMarcadores(planta, inicio){
 	if(inicio == null){
@@ -99,11 +99,11 @@ function numeroMarcadores(planta, inicio){
 }
 
 /**
- * Obtiene las acciones que se pueden realizar o se estan llevando a cabo sobre una emergencia o herido y
- * las envia en forma de menu para mostrarlas en un bocadillo
+ * Obtiene las acciones que se pueden realizar o se estan llevando a cabo sobre una emergencia o
+ * herido y las envia en forma de menu para mostrarlas en un bocadillo.
  * 
- * @param puntero Marcador pulsado
- * @return Menu de acciones
+ * @param puntero marcador pulsado
+ * @return menu de acciones
  */
 function cargarMenuAcciones(puntero){
 	var menu = '';
@@ -162,10 +162,10 @@ function cargarMenuAcciones(puntero){
 
 /**
  * Obtiene las actividades que esta realizando un agente y
- * las devuelve en forma de menu para mostrarlas en un bocadillo
+ * las devuelve en forma de menu para mostrarlas en un bocadillo.
  * 
- * @param evento
- * @return Menu de actividades
+ * @param evento evento
+ * @return menu de actividades
  */
 function cargarListaActividades(evento){
 	var menu = '';
@@ -199,9 +199,9 @@ function cargarListaActividades(evento){
 }
 
 /**
- * Edita los datos de las pestannas de la izquierda y la muestra
+ * Edita los datos de las pestannas de la izquierda y la muestra.
  * 
- * @param evento Marcador del que se va a cargar su pestanna
+ * @param evento marcador del que se va a cargar su pestanna
  */
 function cargarLateral(evento){
 	var lateral;
@@ -346,10 +346,10 @@ function cargarLateral(evento){
 }
 
 /**
- * Pone los valores por defecto en la pestanna indicada
+ * Pone los valores por defecto en la pestanna indicada.
  * 
- * @param marcador Tipo de marcador del que se va a limpiar su pestanna
- * @param async Indica si la limpieza es asincrona
+ * @param marcador yipo de marcador del que se va a limpiar su pestanna
+ * @param async indica si la limpieza es asincrona
  */
 function limpiarLateral(marcador, async){
 	noActualizar = 0;
@@ -443,10 +443,10 @@ function limpiarLateral(marcador, async){
 }
 
 /**
+ * Asocia una emergencia.
  * 
- * 
- * @param id 
- * @param valor 
+ * @param id identificador
+ * @param valor valor
  */
 function asociarEmergencia(id, valor){
 	for(var i = 0; i < emergenciasAsociadas.length; i++){
@@ -457,10 +457,10 @@ function asociarEmergencia(id, valor){
 }
 
 /**
- * Annade un sintoma a un herido
+ * Annade un sintoma a un herido.
  * 
- * @param tipo 
- * @param valor 
+ * @param tipo tipo
+ * @param valor valor
  */
 function annadirSintoma(tipo, valor){
 	for(var i = 0; i < sintomas.length; i++){
@@ -471,11 +471,11 @@ function annadirSintoma(tipo, valor){
 }
 
 /**
- * Guarda en la base de datos que un agente actua sobre una emergencia o herido
+ * Guarda en la base de datos que un agente actua sobre una emergencia o herido.
  * 
- * @param idEvento Identificador de la actividad
+ * @param idEvento identificador de la actividad
  * @param nombreUsuario nombre del usuario
- * @param accionAux Accion a realizar
+ * @param accionAux accion a realizar
  */
 function actuar(idEvento, nombreUsuario, accionAux){
 	var accion;
@@ -517,11 +517,11 @@ function actuar(idEvento, nombreUsuario, accionAux){
 }
 
 /**
- * Detiene la actividad que un agente sete realizando sobre una emergencia
+ * Detiene la actividad que un agente sete realizando sobre una emergencia.
  * 
- * @param idEvento Identificador de la actividad realiada
- * @param idEmergencia Identificador de la emergencia
- * @param nombreUsuario Nombre del usuario
+ * @param idEvento identificador de la actividad realiada
+ * @param idEmergencia identificador de la emergencia
+ * @param nombreUsuario nombre del usuario
  */
 function detener(idEvento, idEmergencia, nombreUsuario){
 	$.post('getpost/updateEstado.jsp',{
@@ -533,11 +533,11 @@ function detener(idEvento, idEmergencia, nombreUsuario){
 }
 
 /**
- * Actualiza la posicion de un marcador
+ * Actualiza la posicion de un marcador.
  * 
- * @param id Identificador del marcador
- * @param lat Latitud
- * @param lng Longitud
+ * @param id identificador del marcador
+ * @param lat latitud
+ * @param lng longitud
  */
 function guardar_posicion(id, lat, lng){
 	var marcador = marcadores_definitivos[id];
@@ -552,9 +552,9 @@ function guardar_posicion(id, lat, lng){
 }
 
 /**
- * Cambia la planta de la residencia en el mapa
+ * Cambia la planta de la residencia en el mapa.
  * 
- * @paran num Numero de planta
+ * @paran num numero de planta
  */
 function cambiarPlanta(num){
 	residencia.setMap(null);
@@ -579,7 +579,7 @@ function cambiarPlanta(num){
 		var url = 'markers/residencia/planta' + num + '.png';
 		var limites = residencia.getBounds();
 		residencia = new google.maps.GroundOverlay(url, limites, {clickable: false});
-		if(map.getZoom() >= zoomMax && map.getMapTypeId() == roadmap){
+		if(map.getZoom() >= zoomMax && map.getMapTypeId() == ROADMAP){
 			residencia.setMap(map);
 		}
 	}
@@ -596,9 +596,9 @@ function cambiarPlanta(num){
 }
 
 /**
- * Muestra los marcadores asociados a personas sanas
+ * Muestra los marcadores asociados a personas sanas.
  * 
- * @param mostrar True para mostrar, false para ocultar
+ * @param mostrar true para mostrar, false para ocultar
  */
 function mostrarSanos(mostrar){
 	verSanos = mostrar;
@@ -614,9 +614,9 @@ function mostrarSanos(mostrar){
 }
 
 /**
- * Modifica la opcion de ser localizado o no
+ * Modifica la opcion de ser localizado o no.
  * 
- * @param valor Indica si el usuario quiere ser localizado
+ * @param valor indica si el usuario quiere ser localizado
  */
 function cambiarGeolocalizacion(valor){
 	localizacion = valor;
@@ -627,11 +627,11 @@ function cambiarGeolocalizacion(valor){
 }
 
 /**
- * Encuentra la posicion de una direccion o de su latitud y longitud
+ * Encuentra la posicion de una direccion o de su latitud y longitud.
  * 
- * @param lat Latitud
- * @param lng Longitud
- * @param dir Direccion
+ * @param lat latitud
+ * @param lng longitud
+ * @param dir direccion
  */
 function findPos(lat, lng, dir){
 	limpiar = false;
@@ -650,9 +650,9 @@ function findPos(lat, lng, dir){
 }
 
 /**
- * Muestra en el mapa el punto que se quiere localizar
+ * Muestra en el mapa el punto que se quiere localizar.
  * 
- * @param punto Coordenadas del punto a localizar
+ * @param punto coordenadas del punto a localizar
  */
 function localizar(punto){
 	localizador.geocode({location:punto}, function(respuesta, estado){
@@ -677,11 +677,11 @@ function localizar(punto){
 }
 
 /**
- * Guarda la nueva posicion del usuario
+ * Guarda la nueva posicion del usuario.
  * 
- * @param lat Latitud
- * @param lng Longitud
- * @param porDefecto Indica si se quiere guardar esa posicion como la de por defecto del usuario
+ * @param lat latitud
+ * @param lng longitud
+ * @param porDefecto indica si se quiere guardar esa posicion como la de por defecto del usuario
  */
 function newPos(lat, lng, porDefecto){
 	if(porDefecto == true){
@@ -703,10 +703,10 @@ function newPos(lat, lng, porDefecto){
 }
 
 /**
- * Guarda la nueva planta donde esta situado el agente
+ * Guarda la nueva planta donde esta situado el agente.
  * 
- * @param planta Planta
- * @param porDefecto Indica si la planta sera la de por defecto del agente
+ * @param planta planta
+ * @param porDefecto indica si la planta sera la de por defecto del agente
  */
 function editPlanta(planta, porDefecto){
 	$.post('getpost/updateLatLong.jsp',{

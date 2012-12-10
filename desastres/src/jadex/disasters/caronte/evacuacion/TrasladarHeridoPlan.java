@@ -1,15 +1,15 @@
 package disasters.caronte.evacuacion;
 
-import disasters.caronte.CarontePlan;
+import disasters.caronte.*;
 
 /**
- * Plan de recomendacion para trasladar un herido.
+ * Plan de recomendaci&oacute;n para trasladar un herido.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class TrasladarHeridoPlan extends CarontePlan{
 	/**
-	 * Cuerpo del plan AvisarAgentes.
+	 * Cuerpo del plan trasladarHerido.
 	 */
 	public void body(){
 		

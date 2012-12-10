@@ -6,12 +6,13 @@ import disasters.desastres.Environment;
 /**
  * Plan de la AMBULANCIA para recoger heridos.
  *
- * @author Olimpia Hernandez y Juan Luis Molina
+ * @author Olimpia Hern&aacute;ndez
+ * @author Juan Luis Molina Nogales
  */
 public class RecogeHeridosPlan extends EnviarMensajePlan{
 
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		// Obtenemos un objeto de la clase Environment para poder usar sus metodos

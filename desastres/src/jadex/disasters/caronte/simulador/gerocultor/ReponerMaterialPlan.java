@@ -4,12 +4,15 @@ import disasters.caronte.Entorno;
 import jadex.bdi.runtime.Plan;
 
 /**
- * Plan de GEROCULTOR
+ * Plan de GEROCULTOR.
  *
- * @author Lorena Lopez Lebon
+ * @author Lorena L&oacute;pez Leb&oacute;n
  */
 public class ReponerMaterialPlan extends Plan{
 
+	/**
+	 * Cuerpo del plan.
+	 */
 	public void body(){
 		Entorno env = (Entorno)getBeliefbase().getBelief("env").getFact();
 

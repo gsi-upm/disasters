@@ -3,14 +3,14 @@ package disasters.desastres.sanitarios.coordinadorHospital;
 import disasters.EnviarMensajePlan;
 
 /**
- * Los camilleros trasladan a las victimas mas urgentes al Area de Socorro
+ * Los camilleros trasladan a las v&iacute;ctimas m&aacute;s urgentes al &Aacute;rea de Socorro.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class GestionAccesoHospitalPlan extends EnviarMensajePlan{
 	
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
 		enviarRespuesta("ack_hospital", "Aviso recibido");

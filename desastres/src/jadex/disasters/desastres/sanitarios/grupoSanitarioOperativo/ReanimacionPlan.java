@@ -5,17 +5,17 @@ import disasters.desastres.Environment;
 import jadex.bdi.runtime.Plan;
 
 /**
- * Siguiendo los procesos de prioridad que marque el triage
+ * Siguiendo los procesos de prioridad que marque el triage.
  * 
- * @author Juan Luis Molina
+ * @author Juan Luis Molina Nogales
  */
 public class ReanimacionPlan extends Plan{
 	
 	/**
-	 * Cuerpo del plan
+	 * Cuerpo del plan.
 	 */
 	public void body(){
-		// Obtenemos un objeto de la clase Environment para poder usar susmetodos
+		// Obtenemos un objeto de la clase Environment para poder usar sus metodos
 		Environment env = (Environment)getBeliefbase().getBelief("env").getFact();
 
 		int idDes = env.getTablon();

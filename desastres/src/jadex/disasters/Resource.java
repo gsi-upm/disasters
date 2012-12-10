@@ -1,50 +1,51 @@
 package disasters;
 
 /**
- * Class that represents a disaster
+ * Class that represents a disaster.
  * 
- * @author julio camarero
+ * @author Julio Camarero
  * @version 1.0
  */
 public class Resource{
-	/** Resource id */
+	/** Resource id. */
 	private int id;
-	/** type of resource (firemen, policemen, ambulance) */
+	/** Type of resource (firemen, policemen, ambulance). */
 	private String type;
-	/** Name of the resource */
+	/** Name of the resource. */
 	private String name;
-	/** Info about the resource */
+	/** Info about the resource. */
 	private String info;
-	/** Description for the resource */
+	/** Description for the resource. */
 	private String description;
-	/** Longitud */
+	/** Longitude. */
 	private double longitud;
-	/** Latitud */
+	/** Latitude. */
 	private double latitud;
-	/** Address (to represent resources in a map) */
+	/** Address (to represent resources in a map). */
 	private String address;
-	/** Floor of the building */
+	/** Floor of the building. */
 	private int floor;
-	/** state of the resource (usually active) */
+	/** State of the resource (usually active). */
 	private String state;
-	/** assigned Resource id */
+	/** Assigned Resource id. */
 	private int idAssigned;
-	/** id of the user who added the resource */
+	/** ID of the user who added the resource. */
 	private int user;
 
 	/**
-	 * Constructor de un recurso
-	 * @param id Identificador
-	 * @param type Tipo
-	 * @param name Nombre
-	 * @param info Informacion
-	 * @param description Descripcion
-	 * @param latitud Latitud
-	 * @param longitud Longitud
-	 * @param address Direccion
-	 * @param floor Planta
-	 * @param state Estado
-	 * @param idAssigned Identificador de la emergencia atendida
+	 * Constructor de un recurso.
+	 * 
+	 * @param id identificador
+	 * @param type tipo
+	 * @param name nombre
+	 * @param info informaci&oacute;n
+	 * @param description descripci&oacute;n
+	 * @param latitud latitud
+	 * @param longitud longitud
+	 * @param address direcci&oacute;n
+	 * @param floor planta
+	 * @param state estado
+	 * @param idAssigned identificador de la emergencia atendida
 	 */
 	public Resource(int id, String type, String name, String info, String description, double latitud,
 			double longitud, String address, int floor, String state, int idAssigned){
@@ -64,7 +65,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve el id
+	 * Devuelve el id.
 	 * 
 	 * @return the id
 	 */
@@ -73,7 +74,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece el id
+	 * Establece el id.
 	 * 
 	 * @param id the id to set
 	 */
@@ -82,7 +83,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve el tipo
+	 * Devuelve el tipo.
 	 * 
 	 * @return the type
 	 */
@@ -91,7 +92,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece el tipo
+	 * Establece el tipo.
 	 * 
 	 * @param type the type to set
 	 */
@@ -100,7 +101,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve el nombre
+	 * Devuelve el nombre.
 	 * 
 	 * @return the name
 	 */
@@ -109,7 +110,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece el nombre
+	 * Establece el nombre.
 	 * 
 	 * @param name the name to set
 	 */
@@ -118,7 +119,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve la informacion
+	 * Devuelve la informaci&oacute;n.
 	 * 
 	 * @return the info
 	 */
@@ -127,7 +128,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece la informacion
+	 * Establece la informaci&oacute;n.
 	 * 
 	 * @param info the info to set
 	 */
@@ -136,7 +137,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve la descripcion
+	 * Devuelve la descripci&oacute;n.
 	 * 
 	 * @return the description
 	 */
@@ -145,7 +146,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece la descripcion
+	 * Establece la descripci&oacute;n.
 	 * 
 	 * @param description the description to set
 	 */
@@ -154,43 +155,43 @@ public class Resource{
 	}
 	
 	/**
-	 * Devuelve la latitud
+	 * Devuelve la latitud.
 	 * 
-	 * @return Latitud
+	 * @return the latitude
 	 */
 	public double getLatitud(){
 		return latitud;
 	}
 	
 	/**
-	 * Establece la latitud
+	 * Establece la latitud.
 	 * 
-	 * @param latitud 
+	 * @param latitud the latitude to set
 	 */
 	public void setLatitud(double latitud){
 		this.latitud = latitud;
 	}
 	
 	/**
-	 * Devuelve la longitud
+	 * Devuelve la longitud.
 	 * 
-	 * @return Longitud
+	 * @return the longitude
 	 */
 	public double getLongitud(){
 		return longitud;
 	}
 	
 	/**
-	 * Establece la longitud
+	 * Establece la longitud.
 	 * 
-	 * @param longitud 
+	 * @param longitud the longitude to set
 	 */
 	public void setLongitud(double longitud){
 		this.longitud = longitud;
 	}
 
 	/**
-	 * Devuelve la direccion
+	 * Devuelve la direcci&oacute;n.
 	 * 
 	 * @return the address
 	 */
@@ -199,16 +200,16 @@ public class Resource{
 	}
 	
 	/**
-	 * Establece la direccion
+	 * Establece la direcci&oacute;n.
 	 * 
-	 * @param address 
+	 * @param address the address to set
 	 */
 	public void setAddress(String address){
 		this.address = address;
 	}
 
 	/**
-	 * Devuelve la planta
+	 * Devuelve la planta.
 	 * 
 	 * @return the floor
 	 */
@@ -217,7 +218,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece la planta
+	 * Establece la planta.
 	 * 
 	 * @param floor the floor to set
 	 */
@@ -226,7 +227,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve el estado
+	 * Devuelve el estado.
 	 * 
 	 * @return the state
 	 */
@@ -235,7 +236,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece el estado
+	 * Establece el estado.
 	 * 
 	 * @param state the state to set
 	 */
@@ -244,7 +245,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve el id asignado
+	 * Devuelve el id asignado.
 	 * 
 	 * @return the idAssigned
 	 */
@@ -253,7 +254,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece el id asignado
+	 * Establece el id asignado.
 	 * 
 	 * @param idAssigned the idAssigned to set
 	 */
@@ -262,7 +263,7 @@ public class Resource{
 	}
 
 	/**
-	 * Devuelve el usuario
+	 * Devuelve el usuario.
 	 * 
 	 * @return the user
 	 */
@@ -271,7 +272,7 @@ public class Resource{
 	}
 
 	/**
-	 * Establece el usuario
+	 * Establece el usuario.
 	 * 
 	 * @param user the user to set
 	 */

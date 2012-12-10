@@ -1,10 +1,10 @@
-const proyecto = 'caronte';
+var PROYECTO = 'caronte'; // const
 var zoomMax = 17;
 
 /**
- * Devuelve los valores iniciales del centro del mapa y su zoom
+ * Devuelve los valores iniciales del centro del mapa y su zoom.
  * 
- * @return Centro y zoom
+ * @return centro y zoom
  */
 function mapInit(){
 	var center = new google.maps.LatLng(38.523390, -0.170110); // Villajoyosa, Alicante
@@ -13,7 +13,7 @@ function mapInit(){
 }
 
 /**
- * Ejecucion adicional a initialize()
+ * Ejecucion adicional a initialize().
  */
 function initialize2(){
 	mostrarMensajes(); // en mensajes.js
@@ -34,7 +34,7 @@ function initialize2(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
 			var newZoom = map.getZoom();
-			if(newZoom >= zoomMax && tipoMapa == roadmap && plantaResidencia >= 0){
+			if(newZoom >= zoomMax && tipoMapa == ROADMAP && plantaResidencia >= 0){
 				residencia.setMap(map);
 			}else if(newZoom < zoomMax && plantaResidencia != -2){
 				cambiarPlanta(-2);
@@ -44,7 +44,7 @@ function initialize2(){
 		google.maps.event.addListener(map, 'maptypeid_changed', function(){
 			residencia.setMap(null);
 			var tipoMapa = map.getMapTypeId();
-			if(map.getZoom() >= zoomMax && tipoMapa == roadmap && plantaResidencia >= 0){
+			if(map.getZoom() >= zoomMax && tipoMapa == ROADMAP && plantaResidencia >= 0){
 				residencia.setMap(map);
 			}
 		});
@@ -103,7 +103,7 @@ function initialize2(){
 }
 
 /**
- * Ejecucion adicional a actualizar()
+ * Ejecucion adicional a actualizar().
  */
 function actualizar2(){
 	mostrarMensajes2(); // en mensajes.js
@@ -122,7 +122,7 @@ function actualizar2(){
 }
 
 /**
- * Genera los edificios que se muestran en el mapa al inicio
+ * Genera los edificios que se muestran en el mapa al inicio.
  */
 function buildingInit(){
 	generateBuilding('geriatricCenter', 'Ballesol Costa Blanca Senior Resort', 38.523850, -0.170180, true); // Villajoyosa, Alicante
@@ -164,10 +164,10 @@ function esquinasResidencia(lat, lng){
 }
 
 /**
- * Define las opciones de un tipo de marcador segun sea el evento
+ * Define las opciones de un tipo de marcador segun sea el evento.
  * 
- * @param evento Objeto marcador del que se quieren las opciones
- * @return Opciones del marcador
+ * @param evento objeto marcador del que se quieren las opciones
+ * @return opciones del marcador
  */
 function definirOpciones(evento){
 	var icono;
@@ -249,12 +249,12 @@ function definirOpciones(evento){
 }
 
 /**
- * Crea un marcador y le dota de diferentes eventos
+ * Crea un marcador y le dota de diferentes eventos.
  * 
- * @param evento Objeto marcador con el que se generara el marcador
- * @param caracter Si el marcador es definitivo o temporal
- * @param opciones Opcones del marcador
- * @retunr Marcador
+ * @param evento objeto marcador con el que se generara el marcador
+ * @param caracter si el marcador es definitivo o temporal
+ * @param opciones opcones del marcador
+ * @return marcador
  */
 function comportamientoMarcador(evento, caracter, opciones){
 	var marker = new google.maps.Marker({
