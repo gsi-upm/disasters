@@ -21,7 +21,8 @@ public class ProduceEvent {
      * 
      */
     public static String postData(String url,String queryString) throws MalformedURLException,IOException,ProtocolException{
-
+  
+        
         /** Parametros HTTP de conexion */
         HttpURLConnection urlc = (HttpURLConnection) (new URL(url)).openConnection();
         urlc.setRequestMethod("POST");
