@@ -12,6 +12,7 @@ import javax.servlet.http.*;
 public class ProcessEvent extends HttpServlet {
  
     private static boolean registered = false;
+    private static boolean enviarOCP = false;
     String id = "1";
     
     /** 
@@ -56,25 +57,26 @@ public class ProcessEvent extends HttpServlet {
             String remoteServletResponseRegister = "";
 
              try{
-                
-                //Si estaba registrado a la entidad (en nuestro caso FirePlan) no hacer nada.
-                if(!registered){
-                    //Si no estaba registrado, registrar!
-                    registered = true; //--> Lo comento para que le llegue todo el rato(para pruebas)
-                    // Enviamos mensaje para registrarnos a consumir un evento determinado
-                    remoteServletResponseRegister = BuildStringData.DataRegisterBuilder(paramsPost, "FirePlan");
-                    
-                    //En periodo de prueba realizamos un registro a FireEvent para comprobar que lo que ellos reciben es lo mismo  que yo envio.
-                    remoteServletResponseRegister = BuildStringData.DataRegisterBuilder(paramsPost, "FireEvent");
-                    
+              
+                if(enviarOCP){ //En caso de no querer enviar eventos a OCP
+                    //Si estaba registrado a la entidad (en nuestro caso FirePlan) no hacer nada.
+                    if(!registered){
+                        //Si no estaba registrado, registrar!
+                        registered = true; //--> Lo comento para que le llegue todo el rato(para pruebas)
+                        // Enviamos mensaje para registrarnos a consumir un evento determinado
+                        remoteServletResponseRegister = BuildStringData.DataRegisterBuilder(paramsPost, "FirePlan");
+
+                        //En periodo de prueba realizamos un registro a FireEvent para comprobar que lo que ellos reciben es lo mismo  que yo envio.
+                        remoteServletResponseRegister = BuildStringData.DataRegisterBuilder(paramsPost, "FireEvent");
+
+                    }
+
+                    if(!(i==1)){ //Si ID ha mantenido su valor defecto, no nos interesa hacer el POST.
+                        // type = produce-new --> Enviamos el evento generado
+                        // type = produce-modify --> Enviamos el evento modificado y si size="-1" el evento eliminado
+                        remoteServletResponseData = BuildStringData.DataProduceBuilder(paramsPost, urlDB); // Creamos el JSON data a enviar y lo enviamos, obteniendo la respuesta del OCP
+                    }
                 }
-                 
-                if(!(i==1)){ //Si ID ha mantenido su valor defecto, no nos interesa hacer el POST.
-                    // type = produce-new --> Enviamos el evento generado
-                    // type = produce-modify --> Enviamos el evento modificado y si size="-1" el evento eliminado
-                    remoteServletResponseData = BuildStringData.DataProduceBuilder(paramsPost, urlDB); // Creamos el JSON data a enviar y lo enviamos, obteniendo la respuesta del OCP
-                }
-         
             }catch(Exception e){
                 System.err.println("\nError en invocacion a objeto de ProduceEvent que hace el POST al servlet remoto: "+e);
             }
