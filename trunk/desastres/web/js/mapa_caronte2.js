@@ -150,7 +150,9 @@ function cargarMenuAcciones(puntero){
 				'</td></tr>';
 				if(entryIndex == data.length-1){
 					menu += '<tr><td>' +
-					'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(' + puntero.id + ',\'' + userName + '\',accion); infoWindow.close();"/>' +
+					'<input id="aceptarAccion" type="button" value="Aceptar" onclick="actuar(' + puntero.id + ',\''+ puntero.tipo +'\',\''+ puntero.info 
+                                             +'\',\''+ puntero.descripcion +'\',\''+ puntero.nombre +'\',\''+ puntero.longitud +'\',\''+ puntero.planta 
+                                             +'\',\''+ puntero.latitud +'\',\'' + userName + '\',accion); infoWindow.close();"/>' +
 					'</td></tr></table>';
 				}
 			});
@@ -389,7 +391,8 @@ function limpiarLateral(marcador, async){
 			lateral.direccion.value = '';
 			lateral.iden.value = '';
 			if(usuario_actual_tipo != 'citizen'){
-				lateral.planta[0].selected = 'selected';
+				//lateral.planta[0].selected = 'selected';
+                                //No lo borramos para que coincida con el ultimo plano mostrado.
 			}
 			if(marcador == 'event'){
 				lateral.tamanno[0].selected = 'selected';
@@ -474,10 +477,17 @@ function annadirSintoma(tipo, valor){
  * Guarda en la base de datos que un agente actua sobre una emergencia o herido.
  * 
  * @param idEvento identificador de la actividad
+ * @param tipo Tipo actividad
+ * @param info
+ * @param descripcion
+ * @param nombre
+ * @param longitud
+ * @param planta
+ * @param latitud
  * @param nombreUsuario nombre del usuario
  * @param accionAux accion a realizar
  */
-function actuar(idEvento, nombreUsuario, accionAux){
+function actuar(idEvento, tipo, info, descripcion, nombre, longitud, planta, latitud, nombreUsuario, accionAux){
 	var accion;
 	var estadoEvento;
 	var estadoUsuario;
@@ -500,6 +510,37 @@ function actuar(idEvento, nombreUsuario, accionAux){
 			estadoEvento = 'erased';
 			estadoUsuario = 'active';
 			escribirMensaje({'id':idEvento}, 'eliminar', 1);
+                        
+                        if(accion == 'apagado'){
+                            
+                            var type = 'produce-modify'; //Informamos a OCP de la accion eliminar
+                            var descTotal = info+" "+descripcion;
+                            
+                            $.ajax({
+                                    url:'/caronte/ProcessEvent',
+                                    type: 'POST',
+                                    data: {
+                                        'type':type,
+                                        'event':tipo,
+                                        'size':'-1',
+                                        'description':descTotal,
+                                        'name':nombre,
+                                        'longitude':longitud,
+                                        'floor':planta,
+                                        'latitude':latitud   
+                                    },
+                                    success: function(data,status) { 
+                                        console.log("Success!!");
+                                        console.log("Datos devueltos a actuar() en mapa_caronte2.js por ProcessEvent: "+data);
+                                        console.log("Mensaje de response code de HTTP enviado por ProcessEvent: "+status);
+                                    },
+                                    error: function(xhr, desc, err) {
+                                    console.log(xhr);
+                                    console.log("Desc: " + desc + "\nErr:" + err);
+                                    }
+                                });
+                        }
+                        
 		}else if(accion=='vuelto' || accion=='trasladado' || accion=='dejar'){
 			estadoEvento = 'active';
 			estadoUsuario = 'active';
@@ -549,6 +590,38 @@ function guardar_posicion(id, lat, lng){
 	});
 	registrarHistorial(userName, marcador.marcador, marcador.tipo, id, 'mover');
 	noActualizar = 0;
+        
+        /** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso modificar un FireEvent */
+        if(marcador.marcador == 'event' && marcador.tipo == 'fire' && marcador.estado == 'active'){
+            
+            var type = 'produce-modify';
+            var descTotal = marcador.info+" "+marcador.descripcion;  // La descripcion son ambos campos
+            
+            $.ajax({
+                    url:'/caronte/ProcessEvent',
+                    type: 'POST',
+                    data: {
+                        'type':type,
+                        'event':marcador.tipo,
+                        'size':marcador.size,
+                        'description':descTotal,
+                        'name':marcador.nombre,
+                        'longitude':lng, //Esta es la que cambia
+                        'floor':marcador.planta,
+                        'latitude':lat, //Esta es la que cambia  
+                        'date':marcador.fecha
+                    },
+                    success: function(data,status) { 
+                        console.log("Success!!");
+                        console.log("Datos devueltos por ProcessEvent a guardar_posicion en mapa_caronte2.js: "+data);
+                        console.log("Mensaje de response code de HTTP enviado por ProcessEvent: "+status);
+                    },
+                    error: function(xhr, desc, err) {
+                    console.log(xhr);
+                    console.log("Desc: " + desc + "\nErr:" + err);
+                    }
+                });
+        }
 }
 
 /**
@@ -593,6 +666,7 @@ function cambiarPlanta(num){
 	}
 
 	numeroMarcadores(num);
+        selectFloorInJSP(num);
 }
 
 /**
@@ -715,4 +789,70 @@ function editPlanta(planta, porDefecto){
 		'plantaPorDefecto':porDefecto
 	});
 	infoWindow.close();
+}
+
+/**
+ * Cambia la planta de la residencia en el mapa y ademas cambia la planta que se 
+ * muestra en el dropdown menu al cambiar el mapa.
+ * 
+ * @paran num Numero de planta
+ */
+function cambiarPlanta2(num){
+	residencia.setMap(null);
+	if(infoWindow != null){
+		infoWindow.close();
+		infoWindow = null;
+		if(infoWinMarker != 'building'){
+			limpiarLateral(infoWinMarker);
+		}
+		infoWinMarker = null;
+	}
+	document.getElementById('planta' + plantaResidencia).style.fontWeight = 'normal';
+	document.getElementById('planta' + plantaResidencia).style.textDecoration = 'none';
+
+	plantaResidencia = num;
+
+	document.getElementById('planta' + num).style.fontWeight = 'bold';
+	document.getElementById('planta' + num).style.textDecoration = 'underline';
+	if(num >= 0){
+		document.getElementById('planoResidencia').src = 'markers/residencia/planta' + num + '.jpg';
+		document.getElementById('plantaPlano').innerHTML = num;
+		var url = 'markers/residencia/planta' + num + '.png';
+		var limites = residencia.getBounds();
+		residencia = new google.maps.GroundOverlay(url, limites, {clickable: false});
+		if(map.getZoom() >= zoomMax && map.getMapTypeId() == roadmap){
+			residencia.setMap(map);
+		}
+	}
+
+	for(var i in marcadores_definitivos){
+		marcadores_definitivos[i].marker.setMap(null);
+		if((num == -2 || marcadores_definitivos[i].planta == num || marcadores_definitivos[i].planta == -2) &&
+				(marcadores_definitivos[i].tipo != 'healthy' || verSanos == true)){
+			marcadores_definitivos[i].marker.setMap(map);
+		}
+	}
+
+	numeroMarcadores(num);
+}
+
+/**
+ * Segun se seleccina en menu_caronte_admin.jsp(y variantes) una planta en el 
+ * dropdown menu, se cambia el mapa que se muestra.
+ * 
+ */
+function selectFloorFromJSP(){
+    var selectBox = document.getElementById("select-planta1");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    cambiarPlanta2(selectedValue);
+}
+
+/**
+ * Segun se seleccione la planta en residencia.jsp se cambia la planta mostrada
+ * en el dropdown menu de menu_caronte_admin.jsp(y variantes) 
+ * 
+ * @param number Planta
+ */
+function selectFloorInJSP(number){
+    document.getElementById("select-planta1").selectedIndex = number+1;
 }

@@ -39,7 +39,7 @@ var ROADMAP = google.maps.MapTypeId.ROADMAP; // const
 var infoWindow;
 var infoWinMarker;
 
-var id = 0; // El id que le vamos a dar al evento que se envia a OCP a traves del paquete gsi.sendToOCP
+//var id = 0; // El id que le vamos a dar al evento que se envia a OCP a traves del paquete gsi.sendToOCP
 
 // variables userName, usuario_actual, usuario_actual_tipo, nivelMsg e idioma definidas en index.jsp
 
@@ -311,43 +311,44 @@ function crearCatastrofe(marcador, tipo, cantidad, nombre, info, descripcion, di
 		guardar(nuevomarcador);
 	}
 	
-	/* Hacer POST de las variables de la ontologia hacia el servlet para enviar a OCP. En este caso para un FireEvent */
-	if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
-		var type = 'produce'; // solo toma el valor 'register' en el servlet que recibe este POST. Al menos por ahora.
-		// Variable que establece si: 
-		// 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (register) <-- valores q toma type
-		// 2) estamos produciendo solo el evento (produce)
+	/** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent */
+        if(marcador == 'event' && tipo == 'fire' && estado == 'active'){
+            
+            var type = 'produce-new'; // solo toma el valor 'register' en el servlet que recibe este POST. Al menos por ahora.
+            //// Variable que establece si: 
+            // 1) nos estamos registrando para el evento que viene marcado por el value de "tipo" (register) <-- valores q toma type
+            // 2) estamos produciendo solo el evento (produce)
 
-		var descTotal = info + ' ' + descripcion; // La descripcion son ambos campos
-		
-		id++; // El id empieza desde el numero 1 se va incrementando cada vez que se genera un evento.
-		
-		$.ajax({
-			url: '/caronte/ProcessEvent',
-			type: 'POST',
-			data: {
-				'id':id,
-				'type':type,
-				'event':tipo,
-				'size':size,
-				'description':descTotal,
-				'name':nombre,
-				'longitude':longitud,
-				'floor':planta,
-				'latitude':latitud,
-				'date':fecha
-			},
-			success: function(data, status){
-				console.log('Success!!');
-				console.log('Datos devueltos por ProcessEvent: ' + data);
-				console.log('Mensaje de response code de HTTP enviado por ProcessEvent: ' + status);
-			},
-			error: function(xhr, desc, err){
-				console.log(xhr);
-				console.log('Desc: ' + desc + '\nErr: ' + err);
-			}
-		});
-	}
+            var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
+            
+            //id++; // El id empieza desde el numero 1 se va incrementando cada vez que se genera un evento.
+            
+            $.ajax({
+                    url:'/caronte/ProcessEvent',
+                    type: 'POST',
+                    data: {
+                        //'id':id,
+                        'type':type,
+                        'event':tipo,
+                        'size':size,
+                        'description':descTotal,
+                        'name':nombre,
+                        'longitude':longitud,
+                        'floor':planta,
+                        'latitude':latitud,   
+                        'date':fecha
+                    },
+                    success: function(data,status) { 
+                        console.log("Success!!");
+                        console.log("Datos devueltos por ProcessEvent: "+data);
+                        console.log("Mensaje de response code de HTTP enviado por ProcessEvent: "+status);
+                    },
+                    error: function(xhr, desc, err) {
+                    console.log(xhr);
+                    console.log("Desc: " + desc + "\nErr:" + err);
+                    }
+                });
+        }
 }
 
 /**
@@ -559,7 +560,42 @@ function modificar2(id, tipo, cantidad, nombre, descripcion, info, direccion, ta
 		registrarHistorial(userName, puntero.marcador, tipo, id, 'modificar');
 		limpiarLateral(puntero.marcador);
 	}
+        
+        
+        /** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent modificado */
+        if(puntero.marcador == 'event' && tipo == 'fire'){
+            
+            var type = 'produce-modify'; //Informamos a OCP del tipo de accion.
+
+            var descTotal = info+" "+descripcion;  // La descripcion son ambos campos
+            
+            $.ajax({
+                    url:'/caronte/ProcessEvent',
+                    type: 'POST',
+                    data: {
+                        'type':type,
+                        'event':tipo,
+                        'size':tamanno,
+                        'description':descTotal,
+                        'name':nombre,
+                        'longitude':puntero.longitud,
+                        'floor':planta,
+                        'latitude':puntero.latitud,   
+                        'date':puntero.fecha
+                    },
+                    success: function(data,status) { 
+                        console.log("Success!!");
+                        console.log("Datos devueltos a modificar2 por ProcessEvent: "+data);
+                        console.log("Mensaje de response code de HTTP enviado por ProcessEvent: "+status);
+                    },
+                    error: function(xhr, desc, err) {
+                    console.log(xhr);
+                    console.log("Desc: " + desc + "\nErr:" + err);
+                    }
+                });
+        }   
 }
+
 
 /**
  * Elimina un marcador de la base de datos.
@@ -626,6 +662,107 @@ function eliminar(puntero, caracter){
 			}
 		}
 	}
+}        
+
+/**
+ * Elimina un marcador de la base de datos. Solo se accede a este metodo desde
+ * el boton eliminar_boton de menu_caronte_admin.jsp y variantes.
+ * 
+ * @param punteros
+ * @param caracteres
+ */
+function boton_eliminar(punteros, caracteres){
+	if(caracteres == temporal){
+		punteros.marker.setMap(null);
+	}else if(caracteres == definitivo){
+		// hay que hacer un update
+		if(punteros.marcador == 'people' && punteros.tipo != 'healthy'){
+			$.post('getpost/update.jsp',{
+				'accion':'eliminar',
+				'id':punteros.id,
+				'marcador':punteros.marcador,
+				'tipo':'healthy',
+				'cantidad':punteros.cantidad,
+				'nombre':punteros.nombre,
+				'descripcion':punteros.descripcion,
+				'info':punteros.info,
+				'latitud':punteros.latitud,
+				'longitud':punteros.longitud,
+				'direccion':punteros.direccion,
+				'size':punteros.size,
+				'traffic':punteros.traffic,
+				'planta':punteros.planta,
+				'estado':'active',
+				'idAssigned':punteros.idAssigned,
+				'fecha':punteros.fecha,
+				'usuario':usuario_actual
+			});
+			if(proyecto == 'caronte'){
+				escribirMensaje(punteros, 'eliminar', 1);
+				registrarHistorial(userName, punteros.marcador, punteros.tipo, punteros.id, 'modificar');
+				limpiarLateral(punteros.marcador);
+			}
+		}else{
+			$.post('getpost/update.jsp',{
+				'accion':'eliminar',
+				'id':punteros.id,
+				'marcador':punteros.marcador,
+				'tipo':punteros.tipo,
+				'cantidad':punteros.cantidad,
+				'nombre':punteros.nombre,
+				'descripcion':punteros.descripcion,
+				'info':punteros.info,
+				'latitud':punteros.latitud,
+				'longitud':punteros.longitud,
+				'direccion':punteros.direccion,
+				'size':punteros.size,
+				'traffic':punteros.traffic,
+				'planta':punteros.planta,
+				'estado':'erased',
+				'idAssigned':punteros.idAssigned,
+				'fecha':punteros.fecha,
+				'usuario':usuario_actual
+			});
+			if(proyecto == 'caronte'){
+				escribirMensaje(punteros, 'eliminar', 1);
+				registrarHistorial(userName, punteros.marcador, punteros.tipo, punteros.id, 'eliminar');
+				limpiarLateral(punteros.marcador);
+			}
+		}
+	}
+        
+        /** Hacer POST de las variables de la ontología hacia el servlet para enviar a OCP. En este caso para un FireEvent modificado */
+        if(punteros.marcador == 'event' && punteros.tipo == 'fire'){
+            
+            var type = 'produce-modify'; //Informamos a OCP del tipo de accion: eliminar.
+
+            var descTotal = punteros.info+" "+punteros.descripcion;  // La descripcion son ambos campos
+            
+            $.ajax({
+                    url:'/caronte/ProcessEvent',
+                    type: 'POST',
+                    data: {
+                        'type':type,
+                        'event':punteros.tipo,
+                        'size':'-1', //Por consenso en OCP entienden que -1 significa que se elimina.
+                        'description':descTotal,
+                        'name':punteros.nombre,
+                        'longitude':punteros.longitud,
+                        'floor':punteros.planta,
+                        'latitude':punteros.latitud,   
+                        'date':punteros.fecha
+                    },
+                    success: function(data,status) { 
+                        console.log("Success!!");
+                        console.log("Datos devueltos a eliminar1 por ProcessEvent: "+data);
+                        console.log("Mensaje de response code de HTTP enviado por ProcessEvent: "+status);
+                    },
+                    error: function(xhr, desc, err) {
+                    console.log(xhr);
+                    console.log("Desc: " + desc + "\nErr:" + err);
+                    }
+                });
+        }   
 }
 
 /**

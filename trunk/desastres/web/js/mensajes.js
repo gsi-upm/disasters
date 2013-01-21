@@ -1,3 +1,10 @@
+var lastFirePlan = -1;
+var presentFirePlan = -1;
+var lastTask = -1;
+var presentTask = -1;
+var firstPerson = true;
+var firstTask = true;
+
 $(document).ready(function(){
 	$('#accion').hide();
 	$('#open_messages').hide();
@@ -38,6 +45,7 @@ function mostrarMensajes(){
 			document.getElementById('audio').play();
 		}
 	});
+        mostrarFirePlan();
 }
 
 function mostrarMensajes2(){
@@ -51,7 +59,7 @@ function mostrarMensajes2(){
 		var tamanno = data.length;
 		$.each(data, function(entryIndex, entry){
 			var mensaje = entry.mensaje.split('&lt;').join('<').split('&gt;').join('>');//.split('&quot;').join('"').split('&apos;').join('\'').split('&amp;').join('&');
-			var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
+                        var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
 			// var fecha = entry.fecha.split(' ')[1].split(':',2).join(':'); // HH:MM
 			if(entry.tipo_receptor == '0'){ // Si el mensaje es tipo pregunta (tipo_receptor = 0)
 				if(mensaje != 'CANCEL'){
@@ -75,6 +83,112 @@ function mostrarMensajes2(){
 			msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
 			document.getElementById('audio').play();
 		}
+	});
+        
+        mostrarFirePlans2();
+}
+
+function mostrarFirePlan(){
+    var msgs = document.getElementById('messages');
+    $.getJSON('getpost/getFirePlan.jsp',{
+		'action':'firstTime',
+		'receptor':usuario_actual
+	}, function(data){
+		var tamanno = data.length;
+		$.each(data, function(entryIndex, entry){
+                    var fireplan = entry.fireplan;
+                    var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
+                    
+                    msgs.innerHTML += '(' + fecha + ')'+fireplan+'';
+                    
+                    //Para sacar la informacion parseada de JSONparser.java
+                    /*presentFirePlan = entry.id_fireplan;
+                    presentTask = entry.task;
+                    var description = entry.desc;
+                    var name = entry.idname;
+                    var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
+                    // var fecha = entry.fecha.split(' ')[1].split(':',2).join(':'); // HH:MM
+
+                    if(lastFirePlan == -1 || lastFirePlan != presentFirePlan){
+                        lastTask = presentTask;
+                        lastFirePlan = presentFirePlan;
+                        firstPerson = true;
+                        firstTask = true;
+                    }else if(lastTask != presentTask){
+                        lastTask = presentTask;
+                        firstPerson = true;
+                    }
+
+                    if(firstPerson && firstTask){
+                        firstPerson = false;
+                        firstTask = false;
+                        msgs.innerHTML += '(' + fecha + ') Fireplan ' + presentFirePlan + ': '+description+'. Personas involucradas en Task '+presentTask+': '+name;
+                    }else if(!firstPerson){
+                        msgs.innerHTML += ', '+name;
+                    }else if(!firstTask && firstPerson){
+                        firstPerson  = false;
+                        msgs.innerHTML += ' y en Task '+presentTask+': '+name+' ';   
+                    }*/
+		});
+		if(tamanno > 0){
+			msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
+			document.getElementById('audio').play();
+		}
+	});
+}
+
+
+function mostrarFirePlans2(){
+        
+        var msgs = document.getElementById('messages');
+        
+	$.getJSON('getpost/getFirePlan.jsp',{
+		'action':'notFirst',
+		'receptor':usuario_actual,
+		'fecha':ultimamodif
+	}, function(data){
+		var tamanno = data.length;
+		$.each(data, function(entryIndex, entry){
+                    var fireplan = entry.fireplan;
+                    var fecha = entry.date.split(' ')[1].split('.')[0]; // HH:MM:SS
+                    
+                    msgs.innerHTML += '(' + fecha + ')'+fireplan+'';
+                    
+                    //Para sacar la informacion parseada de JSONparser.java
+                    /*presentFirePlan = entry.id_fireplan;
+                    presentTask = entry.task;
+                    var description = entry.desc;
+                    var name = entry.idname;
+                    var fecha = entry.fecha.split(' ')[1].split('.')[0]; // HH:MM:SS
+                    // var fecha = entry.fecha.split(' ')[1].split(':',2).join(':'); // HH:MM
+
+                    if(lastFirePlan == -1 || lastFirePlan != presentFirePlan){
+                        lastTask = presentTask;
+                        lastFirePlan = presentFirePlan;
+                        firstPerson = true;
+                        firstTask = true;
+                    }else if(lastTask != presentTask){
+                        lastTask = presentTask;
+                        firstPerson = true;
+                    }
+
+                    if(firstPerson && firstTask){
+                        firstPerson = false;
+                        firstTask = false;
+                        msgs.innerHTML += '(' + fecha + ') Fireplan ' + presentFirePlan + ': '+description+' \n\
+                                       <p>Personas involucradas en Task '+presentTask+': '+name+' ';
+                    }else if(!firstPerson){
+                        msgs.innerHTML += ' '+name+' ';
+                    }else if(!firstTask && firstPerson){
+                        firstPerson  = false;
+                        msgs.innerHTML += 'y en Task '+presentTask+': '+name+' ';   
+                    }*/
+		});
+		if(tamanno > 0){
+			msgs.scrollTop = msgs.scrollHeight + msgs.offsetHeight;
+			document.getElementById('audio').play();
+		}
+                
 	});
 }
 
