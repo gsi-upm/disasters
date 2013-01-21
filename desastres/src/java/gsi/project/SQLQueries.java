@@ -82,4 +82,14 @@ public class SQLQueries{
 		return "INSERT INTO USUARIOS(NOMBRE_USUARIO, PASSWORD, TIPO_USUARIO, NOMBRE_REAL, CORREO, LATITUD, LONGITUD, LOCALIZACION, PROYECTO) " +
 			"VALUES('" + usuario + "', '" + contra + "', (SELECT ID FROM TIPOS_USUARIOS WHERE TIPO = 'citizen'), '" + nombre + "', '" + email + "', 0.0, 0.0, FALSE, 'caronte')";
 	}
+        
+        
+        /**
+	 * 
+	 * @param jsonString
+	 * @return 
+	 */
+	public static String insertJSON(String jsonString){
+		return "INSERT INTO json (jsonstring) VALUES ('" + jsonString + "')";
+	}
 }

@@ -29,7 +29,7 @@ public class RegistroServlet extends HttpServlet{
 		String contra = HashAlgorithm.SHA256(pass, usuario);
 		String nombre = request.getParameter("nombre");
 		String email = request.getParameter("email");
-		
+	
 		String url = Constantes.DB_URL;
 		if(Constantes.DB.equals("hsqldb")){
 			url += getServletContext().getRealPath("/WEB-INF/db/" + Constantes.PROJECT);

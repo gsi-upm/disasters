@@ -2,6 +2,17 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<script>
+$(document).ready(function(){
+  $("#submit11").click(function(){
+    map.setOptions({ draggableCursor : 'url(images/iconos/target.cur), auto' });
+  });
+  $("#submit21").click(function(){
+    map.setOptions({ draggableCursor : 'url(images/iconos/target.cur), auto' });
+  });
+});
+</script>
+
 <fmt:bundle basename="fmt.eji8n">
 	<div id="dhtmlgoodies_tabView1">
 		<div class="dhtmlgoodies_aTab">
@@ -71,14 +82,16 @@
 					<tr>
 						<td><fmt:message key="planta"/></td>
 						<td>
-							<select name="planta" id="select-planta1">
-								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
+							<select name="planta" id="select-planta1" onchange="selectFloorFromJSP();">
 								<option value="-1"><fmt:message key="exterior"/></option>
-								<option value="0"><fmt:message key="planta"/> 0</option>
+								<option id ="plantaInicial" value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
 								<option value="3"><fmt:message key="planta"/> 3</option>
 							</select>
+                                                        <script>
+                                                                document.getElementById("plantaInicial").defaultSelected = true;
+                                                        </script>
 						</td>
 					</tr>
 					<tr>
@@ -111,7 +124,7 @@
 				<input type="button" id="submit10" class="btn oculto" value="<fmt:message key="modificar"/>" onclick="
 					modificar2(iden.value,seleccionRadio(this.form,0),1,nombre.value,descripcion.value,info.value,
 						direccion.value,tamanno.value,trafico.value,planta.value,0); return false;"/>
-				<input type="button" id="eliminar1" class="btn oculto" value="Eliminar" onclick="eliminar(marcadores_definitivos[iden.value],DEFINITIVO);"/>
+				<input type="button" id="eliminar1" class="btn oculto" value="Eliminar" onclick="eliminar1(marcadores_definitivos[iden.value],definitivo);"/>
 				<div class="jqmWindow" id="dialog1">
 					<p><fmt:message key="confirmarMarcador"/></p>
 					<p class="centrado">
@@ -173,13 +186,15 @@
 						<td><fmt:message key="planta"/></td>
 						<td>
 							<select name="planta" id="select-planta2">
-								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
 								<option value="-1"><fmt:message key="exterior"/></option>
-								<option value="0"><fmt:message key="planta"/> 0</option>
+								<option id ="plantaInicial2" value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
 								<option value="3"><fmt:message key="planta"/> 3</option>
 							</select>
+                                                        <script>
+                                                                document.getElementById("plantaInicial2").defaultSelected = true;
+                                                        </script>
 						</td>
 					</tr>
 					<tr>
@@ -356,13 +371,15 @@
 						<td><fmt:message key="planta"/></td>
 						<td>
 							<select name="planta" id="select-planta3">
-								<option value="-2" selected="selected"><fmt:message key="visionGeneral"/></option>
 								<option value="-1"><fmt:message key="exterior"/></option>
-								<option value="0"><fmt:message key="planta"/> 0</option>
+								<option id ="plantaInicial3" value="0"><fmt:message key="planta"/> 0</option>
 								<option value="1"><fmt:message key="planta"/> 1</option>
 								<option value="2"><fmt:message key="planta"/> 2</option>
 								<option value="3"><fmt:message key="planta"/> 3</option>
 							</select>
+                                                        <script>
+                                                                document.getElementById("plantaInicial3").defaultSelected = true;
+                                                        </script>
 						</td>
 					</tr>
 					<tr>

@@ -1,26 +1,24 @@
-package gsi.sendToOCP;
+package gsi.consumeFromOCP;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
- * Produce event.
  *
- * @author Lara Lorna Jiménez Jiménez
+ * @author lara
  */
-public class ProduceEvent {
-   
-    private static final String charset = "UTF-8";
-   
-    /**
-     * 
-     * @param url, data
-     * @throws MalformedURLException
-     * @throws IOException
-     * @throws ProtocolException
-     * 
-     */
-    public static String postData(String url,String queryString) throws MalformedURLException,IOException,ProtocolException{
+public class HTTPToFile {
+    
+    private String charset = "UTF-8";
+    
+    public String sendJSONData(String url, String query) throws Exception{
+
+        String queryString = "Param="+query;
 
         /** Parametros HTTP de conexion */
         HttpURLConnection urlc = (HttpURLConnection) (new URL(url)).openConnection();
@@ -45,9 +43,9 @@ public class ProduceEvent {
         String respMessage = urlc.getResponseMessage();
         int respCode = urlc.getResponseCode();
 
-        //System.out.println("\nMensaje en ProduceEvento");
-        //System.out.println("Response Code - Response Code Message enviado por servlet remoto OCP: "+Integer.toString(respCode)+" - "+respMessage);
-        
+        System.out.println("\nMensaje en HTTPToFile");
+        System.out.println("Response Code - Response Code Message enviado por servlet remoto HTTPServidor en Fano: "+Integer.toString(respCode)+" - "+respMessage);
+
         /** Leer la respuesta del servidor a la peticion POST mandada */
         BufferedReader bfreader = new BufferedReader(new InputStreamReader(urlc.getInputStream())); 
         StringBuilder builder = new StringBuilder(100);
@@ -60,8 +58,10 @@ public class ProduceEvent {
         /** hacer return con la respuesta del servidor */
         return builder.toString();
 
-    }
-
-    public static void main(String []args){}
+    } 
+    
+    public static void main(String[] args){}
     
 }
+
+

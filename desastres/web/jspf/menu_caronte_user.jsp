@@ -2,6 +2,17 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<script>
+$(document).ready(function(){
+  $("#submit11").click(function(){
+    map.setOptions({ draggableCursor : 'url(images/iconos/target.cur), auto' });
+  });
+  $("#submit21").click(function(){
+    map.setOptions({ draggableCursor : 'url(images/iconos/target.cur), auto' });
+  });
+});
+</script>
+
 <fmt:bundle basename="fmt.eji8n">
 	<div id="dhtmlgoodies_tabView1">
 		<div class="dhtmlgoodies_aTab">

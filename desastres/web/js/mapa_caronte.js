@@ -257,6 +257,7 @@ function definirOpciones(evento){
  * @return marcador
  */
 function comportamientoMarcador(evento, caracter, opciones){
+        
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(evento.latitud, evento.longitud),
 		icon: opciones.icon,
@@ -300,12 +301,13 @@ function comportamientoMarcador(evento, caracter, opciones){
 	});
 
 	google.maps.event.addListener(marker, 'dragend', function(punto){
+                
 		var nuevaLat = punto.latLng.lat().toFixed(6);
 		var nuevaLong = punto.latLng.lng().toFixed(6);
-		
+                
 		infoWindow = new google.maps.InfoWindow({content:'<div id="bocadillo">&iquest;Confirmar cambio de posici&oacute;n?<br/><br/>' +
 			'<span id="confirmar" class="pulsable azul" onclick="infoWindow.close(); guardar_posicion(' + evento.id +
-			',' + nuevaLat + ',' + nuevaLong + ')">Confirmar</span>'+ ' - ' +
+			',' + nuevaLat + ',' + nuevaLong +'); ">Confirmar</span>'+ ' - ' +
 			'<span id="cancelar" class="pulsable azul" onclick="infoWindow.close(); cancelar_asignacion(' + evento.id + ');">Cancelar</span></div>'});
 		infoWindow.open(map, marker);
 		

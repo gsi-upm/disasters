@@ -25,12 +25,12 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>RegistroServlet</servlet-name>
-        <servlet-class>gsi.project.RegistroServlet</servlet-class>
+        <servlet-name>PathServlet</servlet-name>
+        <servlet-class>gsi.sendToOCP.PathServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RegistroServlet</servlet-name>
-        <url-pattern>/registro</url-pattern>
+        <servlet-name>PathServlet</servlet-name>
+        <url-pattern>/PathServlet</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>ProcessEvent</servlet-name>
@@ -39,6 +39,14 @@
     <servlet-mapping>
         <servlet-name>ProcessEvent</servlet-name>
         <url-pattern>/ProcessEvent</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ReceiveFirePlan</servlet-name>
+        <servlet-class>gsi.consumeFromOCP.ReceiveFirePlan</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReceiveFirePlan</servlet-name>
+        <url-pattern>/ReceiveFirePlan</url-pattern>
     </servlet-mapping>
     <!-- DWR -->
     <!--<servlet>

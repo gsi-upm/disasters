@@ -91,12 +91,13 @@ function pinchaMapa(numero){
 	limpiar = false;
 	if(numero == 0){
 		$('#modificar').jqm().jqmHide();
-	}
+	} 
 	var handler = google.maps.event.addListener(map, 'click', function(point) {
 		document.getElementById('latitud' + numero).value = point.latLng.lat().toFixed(6);
 		document.getElementById('longitud' + numero).value = point.latLng.lng().toFixed(6);
 		if(numero != 0){
 			$('#dialog'+numero).jqm().jqmShow();
+                        map.setOptions({draggableCursor:'url(images/iconos/openhand.cur), auto'});
 		}else{
 			$('#modificar').jqm().jqmShow();
 			document.getElementById('pincha').innerHTML = 'Posici&oacute;n guardada. &iquest;Otra vez?';
